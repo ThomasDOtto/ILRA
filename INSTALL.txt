@@ -13,13 +13,15 @@ Following software is needed to run ILRA. We would suggest to first install the 
 * fastq-info
 * fastqc
 * pigz
-* centrifuge
-* recentrifuge
 * quast
 * ncbi-tools
+* bedtools
+
+The light mode (argument '-l yes') does not include the decontamination step (Centrifuge and blast according to DDBJ/ENA/Genbank requirements), which also requires: 
 * vecscreen
 * gawk + VSlistTo1HitPerLine.awk
-* bedtools
+* centrifuge
+* recentrifuge
 
 Please be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang statements (first line #!) so everything works in your system. The software and dependencies above are automatically checked and the pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly. You may also need to make scripts executable (chmod) and to make source or export so that the PATH variable and others are available for all scripts.
 
