@@ -1,5 +1,5 @@
 # ILRA
-Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing) by cleaning and merging contigs, correct homopolymer tracks and circulate plastids.   We also have the code preinstalled on a virtual Linux machine.  
+Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing) by cleaning and merging contigs, correcting homopolymer tracks and circularizing plastids. We also have the code preinstalled on a virtual Linux machine.  
 
 ## Installation
 ILRA is based on several standard tools. Please find the list of software you need to install in the INSTALL.txt file.
