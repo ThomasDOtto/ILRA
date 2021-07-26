@@ -1,0 +1,22 @@
+Following software is needed to run ILRA. We would suggest to first install the VM and then lift the full installation to your system. 
+
+* conda + mamba
+* blast
+* blast-legacy
+* samtools
+* smalt
+* abacas2
+* iCORN2 + java 1.7.0
+* fastaq
+* minimap2
+* circlator
+* gtool.py
+* fastq-info
+* pigz
+* centrifuge
+* recentrifuge
+* quast
+* ncbi-tools
+* vecscreen
+* gawk + VSlistTo1HitPerLine.awk
+* bedtools
