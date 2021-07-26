@@ -1,6 +1,6 @@
 #!/bin/bash
-# Authors: José Luis Ruiz & Thomas Dan Otto  (APPROPRIATE ORDER?)
-# License: GNU General Public License v3.0 (APPROPRIATE? I REMOVED GENOME RESEARCH STATEMENTS? ALSO DO THE SAME IN THE HEADER OF THE REST OF FILES?)
+# Authors: José Luis Ruiz & Thomas Dan Otto
+# License: GNU General Public License v3.0
 # https://github.com/ThomasDOtto/ILRA
 
 
@@ -223,22 +223,23 @@ type gtool.py >/dev/null 2>&1 || { echo >&2 "I require gtool.py for getting GC c
 type assembly-stats >/dev/null 2>&1 || { echo >&2 "I require assembly-stats but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type fastq_info.sh >/dev/null 2>&1 || { echo >&2 "I require fastq_info.sh but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type pigz >/dev/null 2>&1 || { echo >&2 "I require pigz but it's not installed or available in the PATH. Aborting..."; exit 1; }
-type centrifuge >/dev/null 2>&1 || { echo >&2 "I require centrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
-type retaxdump >/dev/null 2>&1 || { echo >&2 "I require recentrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
-type rcf >/dev/null 2>&1 || { echo >&2 "I require recentrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
-type rextract >/dev/null 2>&1 || { echo >&2 "I require recentrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type fastqc >/dev/null 2>&1 || { echo >&2 "I require fastqc but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type quast.py >/dev/null 2>&1 || { echo >&2 "I require quast but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type makeblastdb >/dev/null 2>&1 || { echo >&2 "I require makeblastdb but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type blastn >/dev/null 2>&1 || { echo >&2 "I require blastn but it's not installed or available in the PATH. Aborting..."; exit 1; }
-type vecscreen >/dev/null 2>&1 || { echo >&2 "I require vecscreen but it's not installed or available in the PATH. Aborting..."; exit 1; }
-type VSlistTo1HitPerLine.awk >/dev/null 2>&1 || { echo >&2 "I require VSlistTo1HitPerLine.awk but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type bedtools >/dev/null 2>&1 || { echo >&2 "I require bedtools but it's not installed or available in the PATH. Aborting..."; exit 1; }
 
 
 if [ "$doDecontamination" -eq 1 ] ; then
 	databases=$(dirname $0)/databases; mkdir -p $databases
-	##### Checking the installed databases:
+	##### Checking the required software for decontamination steps and the installed databases:
+	type centrifuge >/dev/null 2>&1 || { echo >&2 "I require centrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
+	type retaxdump >/dev/null 2>&1 || { echo >&2 "I require recentrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
+	type rcf >/dev/null 2>&1 || { echo >&2 "I require recentrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
+	type rextract >/dev/null 2>&1 || { echo >&2 "I require recentrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
+	type vecscreen >/dev/null 2>&1 || { echo >&2 "I require vecscreen but it's not installed or available in the PATH. Aborting..."; exit 1; }
+	type VSlistTo1HitPerLine.awk >/dev/null 2>&1 || { echo >&2 "I require VSlistTo1HitPerLine.awk but it's not installed or available in the PATH. Aborting..."; exit 1; }
+
 	echo -e "\nPlease note some local databases for the decontamination step (Centrifuge and blast according to DDBJ/ENA/Genbank requirements) are needed"
 	echo -e "These databases are large, so please be aware that the RAM memory usage at the step 6 of ILRA may reach hundreds of GBs (100-150GB, more depending on the genome assembly size)"
 	echo -e "ILRA is now going to give you instructions so the databases are downloaded and placed in the corresponding folders (main folder where you have placed ILRA folder, under the directory databases that has been automatically created). ILRA will exit until these steps are performed:"
@@ -599,53 +600,3 @@ echo -e "\nILRA IS DONE"; echo -e "Current date/time: $(date)\n"
 end=`date +%s`; runtime=$((end-start))
 echo -e "\nCores: $cores"
 echo -e "Final runtime (secs): $runtime"
-
-
-
-######## BETA:
-#### 8. GATK4 comparison with the reference:
-# if [ -z "$reference" ] ; then
-# echo -e "\nSkipping comparison with the reference based in GATK4 due to the lack of reference"
-# else
-# echo -e "\n\nSTEP 8: GATK4 HaplotypeCaller starting...\n"
-# mkdir -p $dir/8.GATK; cd $dir/8.GATK
-# Mapping to reference: ### PENDING TO UPDATE, IN THE BWA-MEM UPDATES BY THE SAME AUTHOR, UNIMAP IS NOW RECOMMENDED FOR MAPPING AN ASSEMBLY TO A REFERENCE (and no conversion to fq needed)
-# perl -S fasta_to_fastq.pl ../$name.ILRA.fasta ? > $name.ILRA.fasta.fq # assuming default "fake" quality 30 (? symbol, https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
-# cp $reference ref.fa
-# bwa index ref.fa; bwa mem -t $cores -x intractg ref.fa $name.ILRA.fasta.fq | samtools sort -@ $cores -o Mapped.assembly.ref.bam -
-# samtools view -@ $cores -F 0x800 Mapped.assembly.ref.bam -o Mapped.assembly.prim.ref.bam # only primary alignments
-# Preparing for Variant calling
-# samtools faidx ref.fa
-
-# PICARD_PATH="/export/projects/III-data/otto/jr331e/software"
-
-# java -XX:ParallelGCThreads=$cores -jar $PICARD_PATH/picard.jar CreateSequenceDictionary R=ref.fa O=ref.dict
-# java -XX:ParallelGCThreads=$cores -jar $PICARD_PATH/picard.jar AddOrReplaceReadGroups I=Mapped.assembly.prim.ref.bam O=Mapped.assembly.ref.with.RG.bam RGLB=ILRA_1 RGPL=ILRA_2 RGPU=barcode RGSM=INFO_2
-# gatk MarkDuplicatesSpark -I Mapped.assembly.ref.with.RG.bam -O Mapped.assembly.ref.marked.duplicates.bam -M marked.dup.metrics.txt --spark-master local[$cores] --conf 'spark.executor.cores='$cores
-# GATK Best Practice Data Pre-processing
-# https://software.broadinstitute.org/gatk/best-practices/workflow?id=11165
-# HaplotypeCaller
-# https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_walkers_haplotypecaller_HaplotypeCaller.php
-# Variant Calling
-# gatk HaplotypeCaller -R ref.fa -I Mapped.assembly.ref.marked.duplicates.bam -O output_HaplotypeCaller.vcf -ERC GVCF --native-pair-hmm-threads $cores
-# gatk CountVariants -V output_HaplotypeCaller.vcf | tail -n 2 > GATK_CountVariants_output_number.txt
-# gatk VariantsToTable -V output_HaplotypeCaller.vcf -F CHROM -F POS -F END -F REF -F ALT -O GATK_Variants_final_table.txt
-# gatk HaplotypeCallerSpark -R ref.fa -I Mapped.assembly.ref.marked.duplicates.bam -O output_HaplotypeCallerSpark.vcf -ERC GVCF --native-pair-hmm-threads $cores --spark-master local[$cores] --conf 'spark.executor.cores='$cores
-# For now the version that can be multithreaded is HaplotypeCallerSpark, still in beta version:
-# https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_HaplotypeCallerSpark.php
-# https://javadoc.io/doc/org.broadinstitute/gatk/latest/org/broadinstitute/hellbender/tools/HaplotypeCallerSpark.html
-# echo -e "\n\nSTEP 8: DONE\n"
-# fi
-
-#### 9. Busco
-# echo -e "\n\nSTEP 9: Busco starting...\n"
-# mkdir -p $dir/9.busco; cd $dir/9.busco
-# https://busco.ezlab.org/busco_userguide.html
-
-# source activate bioinf_jlr
-
-# busco -m genome -i ../$name.ILRA.fasta -o OUTPUT_busco_1 -l plasmodium_odb10 --cpu $cores
-# busco -m genome -i ../$name.ILRA.fasta -o OUTPUT_busco_2 --auto-lineage-euk --cpu $cores
-# busco -m genome -i ../$name.ILRA.fasta -o OUTPUT_busco_3 --auto-lineage-prok --cpu $cores
-# busco -m genome -i ../$name.ILRA.fasta -o OUTPUT_busco_4 --auto-lineage --cpu $cores
-# echo -e "\n\nSTEP 9: DONE\n"
