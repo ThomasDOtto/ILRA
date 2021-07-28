@@ -1,4 +1,6 @@
 Following software is needed to run ILRA. We would suggest to first install the VM and then lift the full installation to your system. 
+* perl
+* python
 * blast
 * blast-legacy
 * samtools
