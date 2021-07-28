@@ -4,7 +4,7 @@ Following software is needed to run ILRA. We would suggest to first install the 
 * blast-legacy
 * samtools
 * smalt
-* abacas2
+* abacas2 + mummer
 * iCORN2 + java 1.7.0
 * fastaq
 * minimap2
