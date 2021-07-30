@@ -18,5 +18,6 @@ ILLU_READS=$input_folder/Illumina_short_reads_Pf_test_subset
 ASSEMBLY=$input_folder/assembly_Pf_test.fasta
 CORRECTED_READS=$input_folder/corrected_reads_Pf_test_subset.fastq.gz
 OUTPUT_FOLDER_ILRA=/path/to/folder/out_ILRA_subset_test_data
+mkdir -p $OUTPUT_FOLDER_ILRA
 
 ILRA.sh -a $ASSEMBLY -o $OUTPUT_FOLDER_ILRA -c $CORRECTED_READS -n subset_test -r $REFERENCE -I $ILLU_READS -t $CORES -g $GFF_REF_FILE -L pb &> $OUTPUT_FOLDER_ILRA/output_terminal_ILRA_subset_test.txt
