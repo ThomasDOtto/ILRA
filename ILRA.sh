@@ -59,8 +59,8 @@ for argument in $options; do
 done
 export name; export telomere_seq_1; export telomere_seq_2
 
-echo -e "Check help with parameter '-h' or the read '/path/to/ILRA/test_data/README.txt' for full example usage"
-echo -e "In case you want to test ILRA with a smaller subset of example reads, check the subfolder /path/to/ILRA/test_data"
+echo -e "Check help with parameter '-h' or read '/path/to/ILRA/test_data/README' for full example usage"
+echo -e "We strongly recommend to first test ILRA with a smaller subset of example reads, check the subfolder /path/to/ILRA/test_data"
 
 
 ##### Checking Arguments / Variables:
