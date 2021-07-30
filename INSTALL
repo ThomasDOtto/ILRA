@@ -18,7 +18,6 @@ The following software is needed to run ILRA:
 * bedtools
 
 We would suggest to install the VM or to use the 'external_software' folder to lift the full installation to your system.
-
 The light mode (argument '-m light') does not include the decontamination step (Centrifuge and blast according to DDBJ/ENA/Genbank requirements), which also requires: 
 * vecscreen
 * gawk + VSlistTo1HitPerLine.awk
