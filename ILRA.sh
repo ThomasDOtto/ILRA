@@ -119,7 +119,7 @@ else
 	doAbacas2=1
 fi
 
-if [ -z "mode" ]; then
+if [ -z "$mode" ]; then
 	mode="light"
 	echo "Ligth mode activated, steps for decontamination and preparation for online databases steps will be skipped ..."
 else
