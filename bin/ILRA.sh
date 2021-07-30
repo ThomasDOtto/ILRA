@@ -38,7 +38,7 @@ for argument in $options; do
 		-o | -output # Output folder (full pathway)
 		-n | -name # Base name of the output file
 		-t | -threads # Number of cores to use in multithreaded steps
-		-l | -light_mode # Add 'yes' to execute ILRA in light mode and skip steps for decontamination and preparation for online databases" && exit 1;;
+		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by Centrifuge, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)" && exit 1;;
 		-a*) assembly=${arguments[index]} ;;
 		-o*) dir=${arguments[index]} ;;
 		-c*) correctedReads=${arguments[index]} ;;
@@ -56,7 +56,7 @@ for argument in $options; do
 		-e*) telomere_seq_1=${arguments[index]} ;;
 		-E*) telomere_seq_2=${arguments[index]} ;;
 		-L*) seq_technology=${arguments[index]} ;;
-		-l*) light_mode=${arguments[index]} ;;
+		-m*) mode=${arguments[index]} ;;
 	esac
 done
 export name; export telomere_seq_1; export telomere_seq_2
@@ -121,11 +121,11 @@ else
 	doAbacas2=1
 fi
 
-if [ -z "$light_mode" ]; then
-	doDecontamination=1
-else
+if [ -z "mode" ]; then
+	mode="light"
 	echo "Ligth mode activated, steps for decontamination and preparation for online databases steps will be skipped ..."
-	doDecontamination=0
+else
+	echo "ILRA execution mode (-m) is: " $mode
 fi
 
 echo -e "Final arguments used:"
@@ -230,7 +230,7 @@ type blastn >/dev/null 2>&1 || { echo >&2 "I require blastn but it's not install
 type bedtools >/dev/null 2>&1 || { echo >&2 "I require bedtools but it's not installed or available in the PATH. Aborting..."; exit 1; }
 
 
-if [ "$doDecontamination" -eq 1 ] ; then
+if [ $mode == "taxon" ] || [ $mode == "both" ] ; then
 	databases=$(dirname $0)/databases; mkdir -p $databases
 	##### Checking the required software for decontamination steps and the installed databases:
 	type centrifuge >/dev/null 2>&1 || { echo >&2 "I require centrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
@@ -241,13 +241,20 @@ if [ "$doDecontamination" -eq 1 ] ; then
 	type VSlistTo1HitPerLine.awk >/dev/null 2>&1 || { echo >&2 "I require VSlistTo1HitPerLine.awk but it's not installed or available in the PATH. Aborting..."; exit 1; }
 
 	echo -e "\nPlease note some local databases for the decontamination step (Centrifuge and blast according to DDBJ/ENA/Genbank requirements) are needed"
-	echo -e "These databases are large, so please be aware that the RAM memory usage at the step 6 of ILRA may reach hundreds of GBs (100-150GB, more depending on the genome assembly size)"
+	echo -e "These databases are large, so please be aware that the RAM memory usage at the step 6 of ILRA may reach hundreds of GBs (100-150GB for P. falciparum, more depending on the genome assembly size)"
 	echo -e "ILRA is now going to give you instructions so the databases are downloaded and placed in the corresponding folders (main folder where you have placed ILRA folder, under the directory databases that has been automatically created). ILRA will exit until these steps are performed:"
 	echo -e "The NCBI nucleotide non-redundant sequences database (64GB) has to be downloaded and uncompressed by the user"
 	echo -e "It can be downloaded from NCBI or from the Centrifuge's webpage. The commands would be: cd /path/ILRA_folder/databases/ && wget https://genome-idx.s3.amazonaws.com/centrifuge/nt_2018_3_3.tar.gz && tar -xvzf nt_2018_3_3.tar.gz"
 	echo -e "Alternatively, please execute: cd /path/to/ILRA/databases/ && wget https://ftp.ncbi.nlm.nih.gov/blast/db/nt.*.tar.gz && tar -xvzf nt.*.tar.gz"
 	echo -e "The databases names.dmp and nodes.dmp has to be downloaded by the user executing the command from Recentrifuge: cd /path/ILRA_folder/databases/ && retaxdump"
 	echo -e "Alternatively, please execute: mkdir -p /path/to/ILRA/databases/taxdump && cd /path/to/ILRA/databases/taxdump && wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip && unzip taxdmp.zip"
+	if [[ -f $databases/nt.1.cf ]] && [[ -f $databases/nt.2.cf ]] && [[ -f $databases/nt.3.cf ]] && [[ -f $databases/nt.4.cf ]] && [[ -f $databases/taxdump/names.dmp ]] && [[ $databases/taxdump/nodes.dmp ]] ; then
+	  echo -e "Good, ILRA is detecting all of the required databases "
+	else
+	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions printed in the log"
+		exit 1
+	fi
+elif [ $mode == "blast" ] || [ $mode == "both" ] ; then
 	echo -e "Several databases for conforming to DDBJ/ENA/Genbank requirements are needed, please execute:"
 	echo -e "cd /path/to/ILRA/databases/"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -d -k -c -p $cores contam_in_euks.fa.gz | makeblastdb -in - -dbtype nucl"
@@ -256,7 +263,7 @@ if [ "$doDecontamination" -eq 1 ] ; then
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/adaptors_for_screening_proks.fa && formatdb -p F -i adaptors_for_screening_proks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/blast/db/mito.tar.gz && tar -xvzf mito.tar.gz"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -d -k -c -p $cores rrna.gz | makeblastdb -in - -dbtype nucl"
-	if [ -f $databases/nt.1.cf ] && [[ -f $databases/nt.2.cf ]] && [[ -f $databases/nt.3.cf ]] && [[ -f $databases/nt.4.cf ]] && [[ -f $databases/taxdump/names.dmp ]] && [[ $databases/taxdump/nodes.dmp ]] && [[ $databases/contam_in_euks.fa ]] && [[ $databases/contam_in_prok.fa ]] && [[ $databases/adaptors_for_screening_euks.fa ]] && [[ $databases/adaptors_for_screening_proks.fa ]] && [[ $databases/mito.ndb ]] && [[ $databases/taxdb.btd ]] && [[ $databases/rrna ]]; then
+	if [[ $databases/contam_in_euks.fa ]] && [[ $databases/contam_in_prok.fa ]] && [[ $databases/adaptors_for_screening_euks.fa ]] && [[ $databases/adaptors_for_screening_proks.fa ]] && [[ $databases/mito.ndb ]] && [[ $databases/taxdb.btd ]] && [[ $databases/rrna ]] ; then
 	  echo -e "Good, ILRA is detecting all of the required databases "
 	else
 	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions printed in the log"
@@ -273,8 +280,8 @@ fi
 # 3.  ABACAS2 with overlap checking (resolve trivial gaps, reorder contigs, get the chromosome names, rename the sequences...)
 # 4.  iCORN2 - error correction
 # 5.  Circularization or organelles or any sequence reqired
-# 6.  Decontamination. Taxonomic classification (Centrifuge/recentrifuge)
-# 7.  Rename sequences, evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files, final filtering for databases upload...
+# 6.  Decontamination. Taxonomic classification (Centrifuge/recentrifuge)/final filtering for databases upload
+# 7.  Rename sequences, evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
 
 #### 1. Discard contigs smaller than a threshold:
 echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"
@@ -365,17 +372,17 @@ if [ -f $illuminaReads\_1.fastq ]; then
 	echo -e "Be aware that a particular version of Java, 1.7.0, is required for iCORN2. Users must look for and install 'jdk1.7.0_80'. Any iCORN2 error may be due to incorrect Java version, including newer\n"
 	iCORN2_fragmentSize=500
 	echo "The iCORN2 fragment size used is iCORN2_fragmentSize="$iCORN2_fragmentSize. "Please check iCORN2 help and change manually within the pipeline (section 4) if needed"
-	echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.stats/07.iCORN2.final_corrections.results.txt. But a preview of the corrections is:"
+	echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt. But a preview of the corrections is:"
 	icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn &> icorn2.serial_bowtie2.sh_log_out.txt
 # Cleaned assembly:
 	ln -s ICORN2.03b.assembly.fa.[$(expr $number_iterations_icorn + 1)] 04.assembly.fa
 # Summary of iCORN2 results:
-	mkdir -p $dir/7.stats; icorn2.collectResults.pl $PWD > ../7.stats/07.iCORN2.final_corrections.results.txt
-	echo -e "### Total SNP: " >> ../7.stats/07.iCORN2.final_corrections.results.txt; cat ../7.stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$6;} END{print sum;}' >> ../7.stats/07.iCORN2.final_corrections.results.txt
-	echo -e "### Total INS: " >> ../7.stats/07.iCORN2.final_corrections.results.txt; cat ../7.stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$7;} END{print sum;}' >> ../7.stats/07.iCORN2.final_corrections.results.txt
-	echo -e "### Total DEL: " >> ../7.stats/07.iCORN2.final_corrections.results.txt; cat ../7.stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$8;} END{print sum;}' >> ../7.stats/07.iCORN2.final_corrections.results.txt
-	echo -e "### Total HETERO: " >> ../7.stats/07.iCORN2.final_corrections.results.txt; cat ../7.stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$9;} END{print sum;}' >> ../7.stats/07.iCORN2.final_corrections.results.txt
-	cat ../7.stats/07.iCORN2.final_corrections.results.txt
+	mkdir -p $dir/7.Stats; icorn2.collectResults.pl $PWD > ../7.Stats/07.iCORN2.final_corrections.results.txt
+	echo -e "### Total SNP: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$6;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
+	echo -e "### Total INS: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$7;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
+	echo -e "### Total DEL: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$8;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
+	echo -e "### Total HETERO: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$9;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
+	cat ../7.Stats/07.iCORN2.final_corrections.results.txt
 else
 # Bypass if Illumina reads not provided
 	echo -e "Illumina reads not provided and iCORN2 not executed\n"
@@ -428,10 +435,10 @@ fi
 echo -e "\n\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
 
 
-#### 6. Decontamination/taxonomic classification
-if [ "$doDecontamination" -eq 1 ] ; then
+#### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload
+if [ $mode == "taxon" ] || [ $mode == "both" ] ; then
 	echo -e "\n\nSTEP 6: Centrifuge and decontamination starting..."; echo -e "Current date/time: $(date)\n"
-	mkdir -p $dir/6.Centrifuge; cd $dir/6.Centrifuge
+	mkdir -p $dir/6.Decontamination; cd $dir/6.Decontamination
 	echo -e "\nLog of Centrifuge:"
 	centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100
 	cat report.txt
@@ -447,34 +454,62 @@ if [ "$doDecontamination" -eq 1 ] ; then
 	comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
 	if [ -s 06.assembly.fa ]
 	then
-	        echo -e "Centrifuge seems to have run fine. Please check the report file to assess the contigs that corresponded to contamination. ILRA has helped with this, but it is recommended to run Centrifuge/Recentrifuge on the raw sequencing reads to decontaminate and then reassemble and rerun ILRA, if possible"
+		echo -e "Centrifuge seems to have run fine. Please check the report file to assess the contigs that corresponded to contamination. ILRA has helped with this, but it is recommended to run Centrifuge/Recentrifuge on the raw sequencing reads to decontaminate and then reassemble and rerun ILRA, if possible"
+		# Renaming and making single-line fasta
+		if [ -z "$reference" ]; then
+			cat $dir/6.Decontamination/06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_".$n } else { print }' | ILRA.fasta2singleLine.pl - > ../$name.ILRA.fasta
+		else
+			cat $dir/6.Decontamination/06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - > ../$name.ILRA.fasta
+		fi
 	else
-	# Bypass if Centrifuge failed and didn't end
-			echo -e "\nBypassing decontamination step because Centrifuge has been killed due to RAM usage or it failed due to other reasons..."
-			ln -f -s $dir/5.Circlator/05.assembly.fa 06.assembly.fa
+		# Bypass if Centrifuge failed and didn't end
+		echo -e "\nBypassing decontamination step because Centrifuge has been killed due to RAM usage or it failed due to other reasons..."
+		ln -f -s $dir/5.Circlator/05.assembly.fa 06.assembly.fa
 	fi
-	echo -e "\n\nSTEP 6: DONE"; echo -e "Current date/time: $(date)\n"
+	echo -e "\n\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)\n"
+elif [ $mode == "blast" ] || [ $mode == "both" ] ; then
+	# Final filtering, masking and reformatting to conform the requirements of DDBJ/ENA/Genbank
+	mkdir -p $dir/6.Decontamination/Genbank_upload; cd $dir/6.Decontamination/Genbank_upload
+	echo -e "\nPlease note the assembly .ILRA_GenBank.fasta is the final assembly with some conversions such as masking or editing the header of mitochondrial sequences, together with other requirements to ease the upload of the genomes to DDBJ/ENA/Genbank"
+	# BLAST to screen the submitted sequences against:
+	# 1. Common contaminants database that contains vector sequences, bacterial insertion sequences, E. coli and phage genomes...
+	blastn -query ../../$name.ILRA.fasta -db $databases/contam_in_euks.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $cores | awk '($3>=98.0 && $4>=50)||($3>=94.0 && $4>=100)||($3>=90.0 && $4>=200)' > contam_in_euks_genbank.out
+	blastn -query ../../$name.ILRA.fasta -db $databases/contam_in_prok.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $cores | awk '($3>=98.0 && $4>=50)||($3>=94.0 && $4>=100)||($3>=90.0 && $4>=200)' > contam_in_proks_genbank.out
+	# 2. A database of adaptors linkers and primers
+	vecscreen -d $databases/adaptors_for_screening_euks.fa -f3 -i ../../$name.ILRA.fasta -o vecscreen_in_euks_genbank
+	vecscreen -d $databases/adaptors_for_screening_proks.fa -f3 -i ../../$name.ILRA.fasta -o vecscreen_in_proks_genbank
+	VSlistTo1HitPerLine.awk suspect=0 weak=0 vecscreen_in_euks_genbank > vecscreen_in_euks_genbank.out
+	VSlistTo1HitPerLine.awk suspect=0 weak=0 vecscreen_in_proks_genbank > vecscreen_in_proks_genbank.out
+	# 3. A database of mitochondrial genomes
+	blastn -query ../../$name.ILRA.fasta -db $databases/mito -out mito_sequences -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 98.6 -soft_masking true -outfmt 7 -num_threads $cores
+	awk '$4>=120' mito_sequences > mito_sequences.out
+	# 4. A database of ribosomal RNA genes
+	blastn -query ../../$name.ILRA.fasta -db $databases/rrna -task megablast -template_length 18 -template_type coding -window_size 120 -word_size 12 -xdrop_gap 20 -no_greedy -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 1E-9 -gapextend 2 -gapopen 4 -penalty -4 -perc_identity 95 -reward 3 -soft_masking true -outfmt 7 -num_threads $cores | awk '$4>=100' > rrna_genbank.out
+	# 5. The chromosomes of unrelated organisms. Foreign organisms are those that belong to a different taxonomic group compared to the organism whose sequences are being screened.
+	# This is a requirement by the databases but we skipped it here, because ILRA can alternatively use Centrifuge/Recentrifuge to get rid of contamination of other organisms.
+	# Process the result and get the final files:
+	awk ' NF>2 {print $1"\t"$7"\t"$8} ' *genbank.out | grep -v "#" | bedtools sort -i - > sequences_from_blast_to_mask.bed
+	bedtools maskfasta -fi ../../$name.ILRA.fasta -bed sequences_from_blast_to_mask.bed -fo $name.ILRA_masked.fasta -fullHeader
+	awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' $name.ILRA_masked.fasta > $name.ILRA_GenBank.fasta
+	for i in $(awk ' NF>2 {print $1} ' mito_sequences.out | grep -v "#" | uniq); do
+		sed -i "s/${i}/${i} [location=mitochondrion]/" ../../$name.ILRA_GenBank.fasta
+	done
+	mv $name.ILRA_GenBank.fasta ../../
+	echo -e "\n\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
 else
 	echo -e "\n\nLight mode activated. STEP 6: Skipped"; echo -e "Current date/time: $(date)\n"
-fi
-
-#### 7. Rename sequences, evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files, final amasking and filtering for databases upload...
-echo -e "\n\nSTEP 7: Renaming, gathering stats and evaluation starting..."; echo -e "Current date/time: $(date)\n"
-mkdir -p $dir/7.stats; cd $dir/7.stats
-# Renaming and making single-line fasta
-if [ "$doDecontamination" -eq 1 ] ; then
-	if [ -z "$reference" ]; then
-		cat $dir/6.Centrifuge/06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_".$n } else { print }' | ILRA.fasta2singleLine.pl - > ../$name.ILRA.fasta
-	else
-		cat $dir/6.Centrifuge/06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - > ../$name.ILRA.fasta
-	fi
-else
+	# Renaming and making single-line fasta
 	if [ -z "$reference" ]; then
 		cat $dir/5.Circlator/05.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_".$n } else { print }' | ILRA.fasta2singleLine.pl - > ../$name.ILRA.fasta
 	else
 		cat $dir/5.Circlator/05.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - > ../$name.ILRA.fasta
 	fi
 fi
+
+
+#### 7. Rename sequences, evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
+echo -e "\n\nSTEP 7: Renaming, gathering stats and evaluation starting..."; echo -e "Current date/time: $(date)\n"
+mkdir -p $dir/7.Stats; cd $dir/7.Stats
 # Evaluating the assemblies:
 assembly-stats $assembly | head -n 3
 assembly-stats $assembly > 07.assembly_stats_original_correction_ILRA.txt
@@ -562,37 +597,6 @@ echo -e "\nIf needed, for converting compressed .cram files back to .bam apply t
 # Cleaning up:
 cd $dir; rm $(find . -regex ".*\.\(bam\|sam\)"); rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
 
-# Final filtering, masking and reformatting to conform the requirements of DDBJ/ENA/Genbank
-if [ "$doDecontamination" -eq 1 ] ; then
-mkdir -p $dir/7.stats/Genbank_upload; cd $dir/7.stats/Genbank_upload
-echo -e "\nPlease note the assembly .ILRA_GenBank.fasta is the final assembly with some conversions such as masking or editing the header of mitochondrial sequences, together with other requirements to ease the upload of the genomes to DDBJ/ENA/Genbank"
-# BLAST to screen the submitted sequences against:
-# 1. Common contaminants database that contains vector sequences, bacterial insertion sequences, E. coli and phage genomes...
-blastn -query ../../$name.ILRA.fasta -db $databases/contam_in_euks.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $cores | awk '($3>=98.0 && $4>=50)||($3>=94.0 && $4>=100)||($3>=90.0 && $4>=200)' > contam_in_euks_genbank.out
-blastn -query ../../$name.ILRA.fasta -db $databases/contam_in_prok.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $cores | awk '($3>=98.0 && $4>=50)||($3>=94.0 && $4>=100)||($3>=90.0 && $4>=200)' > contam_in_proks_genbank.out
-# 2. A database of adaptors linkers and primers
-vecscreen -d $databases/adaptors_for_screening_euks.fa -f3 -i ../../$name.ILRA.fasta -o vecscreen_in_euks_genbank
-vecscreen -d $databases/adaptors_for_screening_proks.fa -f3 -i ../../$name.ILRA.fasta -o vecscreen_in_proks_genbank
-VSlistTo1HitPerLine.awk suspect=0 weak=0 vecscreen_in_euks_genbank > vecscreen_in_euks_genbank.out
-VSlistTo1HitPerLine.awk suspect=0 weak=0 vecscreen_in_proks_genbank > vecscreen_in_proks_genbank.out
-# 3. A database of mitochondrial genomes
-blastn -query ../../$name.ILRA.fasta -db $databases/mito -out mito_sequences -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 98.6 -soft_masking true -outfmt 7 -num_threads $cores
-awk '$4>=120' mito_sequences > mito_sequences.out
-# 4. A database of ribosomal RNA genes
-blastn -query ../../$name.ILRA.fasta -db $databases/rrna -task megablast -template_length 18 -template_type coding -window_size 120 -word_size 12 -xdrop_gap 20 -no_greedy -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 1E-9 -gapextend 2 -gapopen 4 -penalty -4 -perc_identity 95 -reward 3 -soft_masking true -outfmt 7 -num_threads $cores | awk '$4>=100' > rrna_genbank.out
-# 5. The chromosomes of unrelated organisms. Foreign organisms are those that belong to a different taxonomic group compared to the organism whose sequences are being screened.
-# Likely not needed and we skipped it here, because ILRA already uses Centrifuge/Recentrifuge to get rid of contamination of other organisms.
-# Process the result and get the final files:
-awk ' NF>2 {print $1"\t"$7"\t"$8} ' *genbank.out | grep -v "#" | bedtools sort -i - > sequences_from_blast_to_mask.bed
-bedtools maskfasta -fi ../../$name.ILRA.fasta -bed sequences_from_blast_to_mask.bed -fo $name.ILRA_masked.fasta -fullHeader
-awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' $name.ILRA_masked.fasta > $name.ILRA_GenBank.fasta
-for i in $(awk ' NF>2 {print $1} ' mito_sequences.out | grep -v "#" | uniq); do
-	sed -i "s/${i}/${i} [location=mitochondrion]/" ../../$name.ILRA_GenBank.fasta
-done
-mv $name.ILRA_GenBank.fasta ../../
-else
-echo -e "\n\nLight mode activated. Preparation for DDBJ/ENA/Genbank skipped"
-fi
 echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)\n"
 
 
