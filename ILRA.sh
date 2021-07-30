@@ -228,7 +228,7 @@ type blastn >/dev/null 2>&1 || { echo >&2 "I require blastn but it's not install
 type bedtools >/dev/null 2>&1 || { echo >&2 "I require bedtools but it's not installed or available in the PATH. Aborting..."; exit 1; }
 
 
-if [ $mode == "taxon" ] || [ $mode == "both" ] ; then
+if [[ $mode == "taxon" ]] || [[ $mode == "both" ]] ; then
 	databases=$(dirname $0)/databases; mkdir -p $databases
 	##### Checking the required software for decontamination steps and the installed databases:
 	type centrifuge >/dev/null 2>&1 || { echo >&2 "I require centrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
@@ -252,7 +252,7 @@ if [ $mode == "taxon" ] || [ $mode == "both" ] ; then
 	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions printed in the log"
 		exit 1
 	fi
-elif [ $mode == "blast" ] || [ $mode == "both" ] ; then
+elif [[ $mode == "blast" ]] || [[ $mode == "both" ]] ; then
 	echo -e "Several databases for conforming to DDBJ/ENA/Genbank requirements are needed, please execute:"
 	echo -e "cd /path/to/ILRA/databases/"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -d -k -c -p $cores contam_in_euks.fa.gz | makeblastdb -in - -dbtype nucl"
