@@ -13,4 +13,8 @@ this will execute the command:<BR>
 It will run for around 30 minutes.
 
 ## Comments
-We used ILRA to improve many genomes. It is a continuation of the IPA (https://github.com/ThomasDOtto/IPA) project. We felt to rename the script as our updated version works with every long-read technology. A preprint will be made available shortly. 
+We used ILRA to improve many genomes. It is a continuation of the IPA (https://github.com/ThomasDOtto/IPA) project. We felt to rename the script as our updated version works with every long-read technology
+  
+Please cite this preprint when using ILRA for your publications:
+
+
