@@ -3,8 +3,6 @@
 # License: GNU General Public License v3.0
 # https://github.com/ThomasDOtto/ILRA
 
-
-
 ########## ILRA
 # Pipeline for finishing and the Improvement of Long Reads Assemblies
 start=`date +%s`
