@@ -59,8 +59,8 @@ for argument in $options; do
 done
 export name; export telomere_seq_1; export telomere_seq_2
 
-echo -e "Check help with parameter '-h' or read '/path/to/ILRA/test_data/README' for full example usage"
-echo -e "We strongly recommend to first test ILRA with a smaller subset of example reads, check the subfolder /path/to/ILRA/test_data"
+echo -e "Check help with parameter '-h' or the read '/path/to/ILRA/test_data/README.txt' for full example usage"
+echo -e "In case you want to test ILRA with a smaller subset of example reads, check the subfolder /path/to/ILRA/test_data"
 
 
 ##### Checking Arguments / Variables:
@@ -123,7 +123,7 @@ if [ -z "$mode" ]; then
 	mode="light"
 	echo "Ligth mode activated, steps for decontamination and preparation for online databases steps will be skipped ..."
 else
-	echo "ILRA execution mode (-m) is: " $mode
+	echo "ILRA execution mode (-m) is: "$mode
 fi
 
 echo -e "Final arguments used:"
@@ -132,41 +132,41 @@ if [ -z "$number_iterations_icorn" ]; then
 	echo "Number of iCORN2 iterations: "$number_iterations_icorn
 fi
 
-if [ -z "$cores" ] ; then
+if [ -z "$cores" ]; then
 	cores=40
 	echo "Number of threads: "$cores
 fi
 
-if [ -z "$seqs_circl_1" ] ; then
+if [ -z "$seqs_circl_1" ]; then
 	seqs_circl_1="MT|M76611"
 	echo "Seqs to circularize: "$seqs_circl_1
 fi
 
-if [ -z "$seqs_circl_2" ] ; then
+if [ -z "$seqs_circl_2" ]; then
 	seqs_circl_2="API"
 	echo "Seqs to circularize: "$seqs_circl_2
 fi
 
-if [ -z "$contigs_threshold_size" ] ; then
+if [ -z "$contigs_threshold_size" ]; then
 	contigs_threshold_size=5000
 	echo "Length threshold to discard contigs (bp): "$contigs_threshold_size
 fi
 
-if [ -z "$InsertsizeRange" ] ; then
+if [ -z "$InsertsizeRange" ]; then
 	InsertsizeRange=800
 	echo "Insert size range Illumina short reads (bp): "$InsertsizeRange
 fi
 
-if [ -z "$taxonid" ] ; then
+if [ -z "$taxonid" ]; then
 	taxonid=5833
 	echo "NCBI taxon id to keep in decontamination step: "$taxonid
 fi
 
-if [ $seq_technology == "pb" ] ; then
+if [ $seq_technology == "pb" ]; then
 	long_reads_technology="pacbio"
 	echo "Long reads sequencing technology: PacBio"
 	echo "If Oxford Nanopore were used, please provide the argument 'ont'"
-elif [ $seq_technology == "ont" ] ; then
+elif [ $seq_technology == "ont" ]; then
 	long_reads_technology="ont2d"
 	echo "Long reads sequencing technology: ONT"
 	echo "If PacBio were used, please provide the argument 'pb'"
@@ -175,10 +175,10 @@ else
 	echo "Using by default long reads sequencing technology: PacBio"
 	echo "If this needs to be change please provide 'pb' or 'ont' as the last argument"
 fi
-if [ -z "$telomere_seq_1" ] ; then
+if [ -z "$telomere_seq_1" ]; then
 	telomere_seq_1="CCCTAAACCCTAAACCCTAAA"
 fi
-if [ -z "$telomere_seq_2" ] ; then
+if [ -z "$telomere_seq_2" ]; then
 	telomere_seq_2="TTTAGGGTTTAGGGTTTAGGG"
 fi
 echo -e "assembly="$assembly
@@ -228,8 +228,8 @@ type blastn >/dev/null 2>&1 || { echo >&2 "I require blastn but it's not install
 type bedtools >/dev/null 2>&1 || { echo >&2 "I require bedtools but it's not installed or available in the PATH. Aborting..."; exit 1; }
 
 
-if [[ $mode == "taxon" ]] || [[ $mode == "both" ]] ; then
-	databases=$(dirname $0)/databases; mkdir -p $databases
+if [[ $mode == "taxon" || $mode == "both" ]]; then
+	databases="/export/III-data/otto/jr331e/software/ILRA_bakk_0821/databases"; mkdir -p $databases
 	##### Checking the required software for decontamination steps and the installed databases:
 	type centrifuge >/dev/null 2>&1 || { echo >&2 "I require centrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
 	type retaxdump >/dev/null 2>&1 || { echo >&2 "I require recentrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
@@ -246,13 +246,14 @@ if [[ $mode == "taxon" ]] || [[ $mode == "both" ]] ; then
 	echo -e "Alternatively, please execute: cd /path/to/ILRA/databases/ && wget https://ftp.ncbi.nlm.nih.gov/blast/db/nt.*.tar.gz && tar -xvzf nt.*.tar.gz"
 	echo -e "The databases names.dmp and nodes.dmp has to be downloaded by the user executing the command from Recentrifuge: cd /path/ILRA_folder/databases/ && retaxdump"
 	echo -e "Alternatively, please execute: mkdir -p /path/to/ILRA/databases/taxdump && cd /path/to/ILRA/databases/taxdump && wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip && unzip taxdmp.zip"
-	if [[ -f $databases/nt.1.cf ]] && [[ -f $databases/nt.2.cf ]] && [[ -f $databases/nt.3.cf ]] && [[ -f $databases/nt.4.cf ]] && [[ -f $databases/taxdump/names.dmp ]] && [[ $databases/taxdump/nodes.dmp ]] ; then
+	if [[ -f $databases/nt.1.cf ]] && [[ -f $databases/nt.2.cf ]] && [[ -f $databases/nt.3.cf ]] && [[ -f $databases/nt.4.cf ]] && [[ -f $databases/taxdump/names.dmp ]] && [[ $databases/taxdump/nodes.dmp ]]; then
 	  echo -e "Good, ILRA is detecting all of the required databases "
 	else
 	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions printed in the log"
 		exit 1
 	fi
-elif [[ $mode == "blast" ]] || [[ $mode == "both" ]] ; then
+fi
+if [[ $mode == "blast" || $mode == "both" ]]; then
 	echo -e "Several databases for conforming to DDBJ/ENA/Genbank requirements are needed, please execute:"
 	echo -e "cd /path/to/ILRA/databases/"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -d -k -c -p $cores contam_in_euks.fa.gz | makeblastdb -in - -dbtype nucl"
@@ -261,7 +262,7 @@ elif [[ $mode == "blast" ]] || [[ $mode == "both" ]] ; then
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/adaptors_for_screening_proks.fa && formatdb -p F -i adaptors_for_screening_proks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/blast/db/mito.tar.gz && tar -xvzf mito.tar.gz"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -d -k -c -p $cores rrna.gz | makeblastdb -in - -dbtype nucl"
-	if [[ $databases/contam_in_euks.fa ]] && [[ $databases/contam_in_prok.fa ]] && [[ $databases/adaptors_for_screening_euks.fa ]] && [[ $databases/adaptors_for_screening_proks.fa ]] && [[ $databases/mito.ndb ]] && [[ $databases/taxdb.btd ]] && [[ $databases/rrna ]] ; then
+	if [[ $databases/contam_in_euks.fa ]] && [[ $databases/contam_in_prok.fa ]] && [[ $databases/adaptors_for_screening_euks.fa ]] && [[ $databases/adaptors_for_screening_proks.fa ]] && [[ $databases/mito.ndb ]] && [[ $databases/taxdb.btd ]] && [[ $databases/rrna ]]; then
 	  echo -e "Good, ILRA is detecting all of the required databases "
 	else
 	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions printed in the log"
@@ -318,9 +319,9 @@ if [ -f $illuminaReads\_1.fastq ]; then
 	echo -e "\nCheck out the log of ILRA.findoverlaps_ver3.pl in the files log_OUT.txt and results_OUT.txt"
 # Save the contigs
 	echo -e "\n" >> ../Excluded.contigs.fofn; echo -e "### Contigs not covered: (ILRA.findoverlaps_ver3.pl)" >> ../Excluded.contigs.fofn
-	cat notcovered_OUT.fasta | awk 'BEGIN {RS = ">" ; FS = "\n" ; ORS = ""} $2 {print ">"$0}' | grep ">" >> ../Excluded.contigs.fofn
+	cat notcovered_OUT.fasta | awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} $2 {print ">"$0}' | grep ">" >> ../Excluded.contigs.fofn
 	echo -e "\n" >> ../Excluded.contigs.fofn; echo -e "### New contigs merging overlapping contigs(ILRA.findoverlaps_ver3.pl):" >> ../Excluded.contigs.fofn
-	if [  $(cat log_OUT.txt | grep ^sequences: | awk '{ gsub("sequences: " , "") ; print }') -eq 0 ] ; then
+	if [  $(cat log_OUT.txt | grep ^sequences: | awk '{ gsub("sequences: " , ""); print }') -eq 0 ]; then
 		echo "No filtering ILRA.findoverlaps_ver3.pl"
 	else
 		cat results_OUT.txt >> ../Excluded.contigs.fofn
@@ -338,7 +339,7 @@ echo -e "\n\nSTEP 2: DONE"; echo -e "Current date/time: $(date)\n"
 #### 3. ABACAS2
 echo -e "\n\nSTEP 3: ABACAS2 starting..."; echo -e "Current date/time: $(date)\n"
 mkdir -p $dir/3.ABACAS2; cd $dir/3.ABACAS2
-if [ "$doAbacas2" -eq 1 ] ; then
+if [ "$doAbacas2" -eq 1 ]; then
 	ABA_CHECK_OVERLAP=0; export ABA_CHECK_OVERLAP; Min_Alignment_Length=1000; Identity_Cutoff=98; doBLAST_for_ACT_inspection=1
 	echo "ABACAS2 parameters are: ABA_CHECK_OVERLAP=0, Min_Alignment_Length=1000, Identity_Cutoff=98. Please check ABACAS2 help and change manually within the pipeline (section 3) these parameters if needed"
 	abacas2.nonparallel.sh $reference ../2.MegaBLAST/03.assembly.fa $Min_Alignment_Length $Identity_Cutoff $doBLAST_for_ACT_inspection 1> abacas_log_out.txt 2> abacas_log_warnings_errors.txt
@@ -394,7 +395,7 @@ echo -e "\n\nSTEP 5: Circlator starting..."; echo -e "Current date/time: $(date)
 mkdir -p $dir/5.Circlator; cd $dir/5.Circlator
 if grep -q -E "$seqs_circl_1|$seqs_circl_2" $dir/4.iCORN2/04.assembly.fa; then
 # Map the corrected reads
-	if [ long_reads_technology="pacbio" ]; then
+	if [ $long_reads_technology == "pacbio" ]; then
 		minimap2 -x map-pb -H -t $cores -d minimap2_index_pacbio.mmi $dir/4.iCORN2/04.assembly.fa &> mapping_corrected_reads_log_out.txt
 		minimap2 -x map-pb -t $cores -a minimap2_index_pacbio.mmi $correctedReads > Mapped.corrected.04.sam 2>> mapping_corrected_reads_log_out.txt
 	else
@@ -409,8 +410,8 @@ if grep -q -E "$seqs_circl_1|$seqs_circl_2" $dir/4.iCORN2/04.assembly.fa; then
 	for i in $seq_ids; do
 		samtools faidx $dir/4.iCORN2/04.assembly.fa $i >> ForCirc.Ref.fasta
 	done
-	awk 'BEGIN {RS = ">" ; FS = "\n" ; ORS = ""} {if ($2) print ">"$0}' ForCirc.reads.fasta > ForCirc.reads_2.fasta
-	awk 'BEGIN {RS = ">" ; FS = "\n" ; ORS = ""} {if ($2) print ">"$0}' ForCirc.Ref.fasta > ForCirc.Ref_2.fasta
+	awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.reads.fasta > ForCirc.reads_2.fasta
+	awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.Ref.fasta > ForCirc.Ref_2.fasta
 	echo -e "Check out the log of the mapping of the corrected reads and circlator in the files mapping_corrected_reads_log_out.txt and circlator_log_out.txt"
 	circlator all ForCirc.Ref_2.fasta ForCirc.reads_2.fasta Out.Circ --threads $cores &> circlator_log_out.txt
 # Delete the plastids/organelles/circular sequences from the current assembly version (04.assembly.fa)
@@ -434,7 +435,7 @@ echo -e "\n\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
 
 
 #### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload
-if [ $mode == "taxon" ] || [ $mode == "both" ] ; then
+if [[ $mode == "taxon" || $mode == "both" ]]; then
 	echo -e "\n\nSTEP 6: Centrifuge and decontamination starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/6.Decontamination; cd $dir/6.Decontamination
 	echo -e "\nLog of Centrifuge:"
@@ -465,7 +466,8 @@ if [ $mode == "taxon" ] || [ $mode == "both" ] ; then
 		ln -f -s $dir/5.Circlator/05.assembly.fa 06.assembly.fa
 	fi
 	echo -e "\n\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)\n"
-elif [ $mode == "blast" ] || [ $mode == "both" ] ; then
+fi
+if [[ $mode == "blast" || $mode == "both" ]]; then
 	# Final filtering, masking and reformatting to conform the requirements of DDBJ/ENA/Genbank
 	mkdir -p $dir/6.Decontamination/Genbank_upload; cd $dir/6.Decontamination/Genbank_upload
 	echo -e "\nPlease note the assembly .ILRA_GenBank.fasta is the final assembly with some conversions such as masking or editing the header of mitochondrial sequences, together with other requirements to ease the upload of the genomes to DDBJ/ENA/Genbank"
@@ -494,7 +496,8 @@ elif [ $mode == "blast" ] || [ $mode == "both" ] ; then
 	done
 	mv $name.ILRA_GenBank.fasta ../../
 	echo -e "\n\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
-else
+fi
+if [ $mode == "light" ]; then
 	echo -e "\n\nLight mode activated. STEP 6: Skipped"; echo -e "Current date/time: $(date)\n"
 	# Renaming and making single-line fasta
 	if [ -z "$reference" ]; then
@@ -530,7 +533,7 @@ contigs_both=$(echo $(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep -i $telo
 echo -e "# Amount of telomere repeats at contigs with repeats at both ends: "$(expr $(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep "$contigs_both" | grep -i -c $telomere_seq_1) + $(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep "$contigs_both" | grep -i -c $telomere_seq_2)) >> 07.TelomersSummary.txt
 echo -e "\n# Amount of contigs with telomere repeats left: "$(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep -i $telomere_seq_1 | awk '{print $1}' | wc -l) >> 07.TelomersSummary.txt
 echo -e "# Amount of contigs with telomere repeats right: "$(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep -i $telomere_seq_2 | awk '{print $1}' | wc -l) >> 07.TelomersSummary.txt
-if [ -z "$contigs_both" ] ; then
+if [ -z "$contigs_both" ]; then
 	echo -e "# Amount of contigs/potential chromosomes with telomere repeats at both ends: 0" >> 07.TelomersSummary.txt
 	echo -e "\n# Contigs/potential chromosomes with telomere repeats at both ends: (Length, bp)" >> 07.TelomersSummary.txt
 else
@@ -555,12 +558,12 @@ if [ -f $illuminaReads\_1.fastq ]; then
 fi
 # Comparing with reference genes:
 echo -e "Running QUAST. Please be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene id) are accepted"
-if [ -z "$reference" ] ; then
+if [ -z "$reference" ]; then
 	echo -e "Running QUAST without reference..."
 	quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
 else
 	if [ -f $illuminaReads\_1.fastq ]; then
-		if [ -z "$gff_file" ] ; then
+		if [ -z "$gff_file" ]; then
 			echo -e "Running QUAST with reference and structural variants calling and processing mode..."
 			quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq --eukaryote &> quast.py_log_out.txt
 		else
@@ -568,7 +571,7 @@ else
 			quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq --eukaryote &> quast.py_log_out.txt
 		fi
 	else
-		if [ -z "$gff_file" ] ; then
+		if [ -z "$gff_file" ]; then
 			echo -e "Running QUAST with reference..."
 			quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
 		else
