@@ -6,7 +6,7 @@ ILRA is based on several standard tools. Please find the list of software you ne
 
 We would recommend users without a bioinformatics setup to use our virtual machine (https://q-r.to/ILRA_VM). You will need to install VirtualBox (https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html), set up Ubuntu x64 and mount the disc. See the pdf VM.install.pdf for further help. The user is "bioinfo" and the password "Glasgow2020". 
 
-Once logged in, you can run the ILRA installation with test_data by typing:<BR>
+Once logged in, you can run the ILRA installation with test_data by typing:
 ```
 ~/ILRA/example.sh
 ```
