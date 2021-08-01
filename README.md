@@ -15,7 +15,7 @@ This will execute the command:
 ILRA.sh -a $ASSEMBLY -o $OUTPUT_FOLDER_ILRA -c $CORRECTED_READS -n subset_test -r $REFERENCE -I $ILLU_READS -t $CORES -g $GFF_REF_FILE -L pb
 ```
 
-Please refer to the /test_data/README file or the help ('ILRA.sh -h') for further details. The test run will take around 10 minutes ('light' mode) and 20 minutes ('both' mode) using 4 cores.
+Please refer to the /test_data/README file or the help ('ILRA.sh -h') for further details. The test run will take around 10 minutes ('light' mode) and around 20 minutes ('both' mode) using 4 cores.
 
 ## Comments
 We used ILRA to improve many genomes. It is a continuation of the IPA (https://github.com/ThomasDOtto/IPA) project. We felt to rename the script as our updated version works with every long-read technology.
