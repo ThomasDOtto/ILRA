@@ -229,7 +229,7 @@ type bedtools >/dev/null 2>&1 || { echo >&2 "I require bedtools but it's not ins
 
 
 if [[ $mode == "taxon" || $mode == "both" ]]; then
-	databases="/export/III-data/otto/jr331e/software/ILRA_bakk_0821/databases"; mkdir -p $databases
+	databases=$(dirname $0)/databases; mkdir -p $databases
 	##### Checking the required software for decontamination steps and the installed databases:
 	type centrifuge >/dev/null 2>&1 || { echo >&2 "I require centrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
 	type retaxdump >/dev/null 2>&1 || { echo >&2 "I require recentrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
@@ -247,13 +247,14 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	echo -e "The databases names.dmp and nodes.dmp has to be downloaded by the user executing the command from Recentrifuge: cd /path/ILRA_folder/databases/ && retaxdump"
 	echo -e "Alternatively, please execute: mkdir -p /path/to/ILRA/databases/taxdump && cd /path/to/ILRA/databases/taxdump && wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip && unzip taxdmp.zip"
 	if [[ -f $databases/nt.1.cf ]] && [[ -f $databases/nt.2.cf ]] && [[ -f $databases/nt.3.cf ]] && [[ -f $databases/nt.4.cf ]] && [[ -f $databases/taxdump/names.dmp ]] && [[ $databases/taxdump/nodes.dmp ]]; then
-	  echo -e "Good, ILRA is detecting all of the required databases "
+	  echo -e "Good, ILRA is detecting all of the required databases in "$databases
 	else
 	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions printed in the log"
 		exit 1
 	fi
 fi
 if [[ $mode == "blast" || $mode == "both" ]]; then
+	databases=$(dirname $0)/databases; mkdir -p $databases
 	echo -e "Several databases for conforming to DDBJ/ENA/Genbank requirements are needed, please execute:"
 	echo -e "cd /path/to/ILRA/databases/"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -d -k -c -p $cores contam_in_euks.fa.gz | makeblastdb -in - -dbtype nucl"
@@ -262,8 +263,8 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/adaptors_for_screening_proks.fa && formatdb -p F -i adaptors_for_screening_proks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/blast/db/mito.tar.gz && tar -xvzf mito.tar.gz"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -d -k -c -p $cores rrna.gz | makeblastdb -in - -dbtype nucl"
-	if [[ $databases/contam_in_euks.fa ]] && [[ $databases/contam_in_prok.fa ]] && [[ $databases/adaptors_for_screening_euks.fa ]] && [[ $databases/adaptors_for_screening_proks.fa ]] && [[ $databases/mito.ndb ]] && [[ $databases/taxdb.btd ]] && [[ $databases/rrna ]]; then
-	  echo -e "Good, ILRA is detecting all of the required databases "
+	if [[ -f $databases/contam_in_euks.fa ]] && [[ -f $databases/contam_in_prok.fa ]] && [[ -f $databases/adaptors_for_screening_euks.fa ]] && [[ -f $databases/adaptors_for_screening_proks.fa ]] && [[ -f $databases/mito.ndb ]] && [[ -f $databases/taxdb.btd ]] && [[ -f $databases/rrna ]]; then
+	  echo -e "Good, ILRA is detecting all of the required databases in "$databases
 	else
 	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions printed in the log"
 		exit 1
@@ -279,8 +280,8 @@ fi
 # 3.  ABACAS2 with overlap checking (resolve trivial gaps, reorder contigs, get the chromosome names, rename the sequences...)
 # 4.  iCORN2 - error correction
 # 5.  Circularization or organelles or any sequence reqired
-# 6.  Decontamination. Taxonomic classification (Centrifuge/recentrifuge)/final filtering for databases upload
-# 7.  Rename sequences, evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
+# 6.  Decontamination. Taxonomic classification (Centrifuge/recentrifuge)/final filtering for databases upload, rename sequences
+# 7.  Evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
 
 #### 1. Discard contigs smaller than a threshold:
 echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"
@@ -434,12 +435,13 @@ fi
 echo -e "\n\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
 
 
-#### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload
+#### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload, rename sequences
 if [[ $mode == "taxon" || $mode == "both" ]]; then
 	echo -e "\n\nSTEP 6: Centrifuge and decontamination starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/6.Decontamination; cd $dir/6.Decontamination
+	# usr/bin/time to measure the peak of memory
+	/usr/bin/time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100
 	echo -e "\nLog of Centrifuge:"
-	centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100
 	cat report.txt
 	# Extract contigs classified as different organisms
 	rcf -n $databases/taxdump -f classification.txt -o recentrifuge_contamination_report.html -e CSV &> rcf_log_out.txt # Add --sequential if problems with multithreading
@@ -470,7 +472,15 @@ fi
 if [[ $mode == "blast" || $mode == "both" ]]; then
 	# Final filtering, masking and reformatting to conform the requirements of DDBJ/ENA/Genbank
 	mkdir -p $dir/6.Decontamination/Genbank_upload; cd $dir/6.Decontamination/Genbank_upload
+	echo -e "\n\nSTEP 6: Blasting and decontamination starting..."; echo -e "Current date/time: $(date)\n"
 	echo -e "\nPlease note the assembly .ILRA_GenBank.fasta is the final assembly with some conversions such as masking or editing the header of mitochondrial sequences, together with other requirements to ease the upload of the genomes to DDBJ/ENA/Genbank"
+	if [ $mode == "blast" ]; then
+		if [ -z "$reference" ]; then
+			cat $dir/5.Circlator/05.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_".$n } else { print }' | ILRA.fasta2singleLine.pl - > ../../$name.ILRA.fasta
+		else
+			cat $dir/5.Circlator/05.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - > ../../$name.ILRA.fasta
+		fi
+	fi
 	# BLAST to screen the submitted sequences against:
 	# 1. Common contaminants database that contains vector sequences, bacterial insertion sequences, E. coli and phage genomes...
 	blastn -query ../../$name.ILRA.fasta -db $databases/contam_in_euks.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $cores | awk '($3>=98.0 && $4>=50)||($3>=94.0 && $4>=100)||($3>=90.0 && $4>=200)' > contam_in_euks_genbank.out
@@ -492,7 +502,7 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	bedtools maskfasta -fi ../../$name.ILRA.fasta -bed sequences_from_blast_to_mask.bed -fo $name.ILRA_masked.fasta -fullHeader
 	awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' $name.ILRA_masked.fasta > $name.ILRA_GenBank.fasta
 	for i in $(awk ' NF>2 {print $1} ' mito_sequences.out | grep -v "#" | uniq); do
-		sed -i "s/${i}/${i} [location=mitochondrion]/" ../../$name.ILRA_GenBank.fasta
+		sed -i "s/${i}/${i} [location=mitochondrion]/" $name.ILRA_GenBank.fasta
 	done
 	mv $name.ILRA_GenBank.fasta ../../
 	echo -e "\n\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
@@ -508,7 +518,7 @@ if [ $mode == "light" ]; then
 fi
 
 
-#### 7. Rename sequences, evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
+#### 7. Evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
 echo -e "\n\nSTEP 7: Renaming, gathering stats and evaluation starting..."; echo -e "Current date/time: $(date)\n"
 mkdir -p $dir/7.Stats; cd $dir/7.Stats
 # Evaluating the assemblies:
