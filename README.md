@@ -23,7 +23,9 @@ We used ILRA to improve many genomes. It is a continuation of the IPA (https://g
 Please cite this preprint when using ILRA for your publications:
 
 > From contigs to chromosomes: automatic Improvement of Long Read Assemblies (ILRA)
+> 
 > José L Ruiz, Susanne Reimering, Mandy Sanders, Juan David Escobar-Prieto, Nicolas M. B. Brancucci, Diego F. Echeverry, Abdirahman I. Abdi, Matthias Marti, Elena Gomez-Diaz, Thomas D. Otto
+> 
 > bioRxiv 2021.07.30.454413; doi: https://doi.org/10.1101/2021.07.30.454413
 ```
 @article {Ruiz2021.07.30.454413,
