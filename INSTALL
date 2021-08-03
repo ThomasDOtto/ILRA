@@ -1,5 +1,5 @@
 The following software is needed to run ILRA:
-* perl + python (usually preinstalled)
+* perl + python + awk (usually preinstalled)
 * blast
 * blast-legacy
 * samtools
