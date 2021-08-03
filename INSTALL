@@ -8,7 +8,7 @@ The following software is needed to run ILRA:
 * iCORN2 + bowtie2 + java 1.7.0
 * fastaq
 * minimap2
-* circlator
+* circlator + bwa + prodigal + spades + canu
 * gtool.py
 * fastq-info
 * fastqc
