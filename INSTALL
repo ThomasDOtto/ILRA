@@ -12,6 +12,7 @@ The following software is needed to run ILRA:
 * gtool.py
 * fastq-info
 * fastqc
+* assembly-stats
 * pigz
 * quast
 * bedtools
