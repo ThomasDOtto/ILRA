@@ -31,7 +31,7 @@ FT                   /codon_start=1
 FT                   /transl_table=1
 FT   CDS             complement(join(1187..1352,1449..1486))
 FT                   /locus_tag="Pf_030005100"
-FT                   /product="hypothetical protein"
+FT                   /product="hypothetical protein, conserved"
 FT                   /gene="Pf_030005100"
 FT                   /translation="MVTPLNFWPSGIMLENHIKVLGKVKKGKKYMVKTPGEGFKHLLKKGPKNKIFKNSGGNPLHRDAAVF"
 FT                   /codon_start=1

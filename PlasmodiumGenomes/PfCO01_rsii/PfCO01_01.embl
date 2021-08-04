@@ -889,7 +889,7 @@ FT                   /gene="Pf_010017400"
 FT                   /translation="MSFYYFKLSFISILLCILIITHKFSLEQITHNKSNNFNIINVTHRRLLAEPHKSHILKTHKGENSTAQPIVNKLRENHTECPKKSPSIKLKKTLILVSLFTLPCLFCFQ"
 FT                   /codon_start=1
 FT                   /transl_table=1
-FT   CDS             complement(join(489464..489757,489760..490011,490014..490202,490208..490324))
+FT   CDS             complement(join(489464..489721,489724..490026,490029..490205,490211..490324))
 FT                   /locus_tag="Pf_010017500"
 FT                   /pseudo
 FT                   /note="Rifin/stevor family, putative"
@@ -1026,10 +1026,17 @@ FT                   /gene="Pf_010019300"
 FT                   /translation="MVTNEGLTLSNIGPNLTNIGHKVTNLGTKFGLNLTNIGPKVTNIDLNYRNVSLKFTNLGLKVTNIGPNITNVRLTFTNIGLTFTNSGHTFTNLGLTFTDIGLKVTILGLKVLSHSSTNIGLTLTNIGLTLTNIGANISNVGLTFTNLGLNLANIGPSYSNLGLKVSNLGLKVTNIGPNYTNLGLTFTN"
 FT                   /codon_start=1
 FT                   /transl_table=1
-FT   CDS             join(568136..568263,568365..568467)
+FT   CDS             join(562083..562168,562249..562316,562447..562637)
 FT                   /locus_tag="Pf_010019400"
 FT                   /product="hypothetical protein, conserved"
 FT                   /gene="Pf_010019400"
+FT                   /translation="MLVKVRRRLVMLVPILVMLGPILVMLASTESKTYITNVSTYVSQVKTYISEGPILLTLRPKLVKLGPMLVKLGPMLVNLGPMLVKLRLHLMNVRPMLVKGRLRLVKLRPKLVQV"
+FT                   /codon_start=1
+FT                   /transl_table=1
+FT   CDS             join(568136..568263,568365..568467)
+FT                   /locus_tag="Pf_010019500"
+FT                   /product="hypothetical protein, conserved"
+FT                   /gene="Pf_010019500"
 FT                   /translation="MLVNVRPVLVKLRPMLAKLRPMLVKIGPMLVMLRPMLVTLRPKSKIDDLRPRLVKLRSKLDDLRPMLVKLRPKLVR"
 FT                   /codon_start=1
 FT                   /transl_table=1
