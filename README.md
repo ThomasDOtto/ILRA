@@ -13,7 +13,7 @@ Once logged in, you can run the ILRA installation with test_data by typing:
 
 Please refer to the /test_data/README file or the help ('ILRA.sh -h') for further details. This line will execute the pipeline:
 ```
-...
+# ...  Check test/data/README or ILRA.sh -h
 ILRA.sh -a $ASSEMBLY -o $OUTPUT_FOLDER_ILRA -c $CORRECTED_READS -n subset_test -r $REFERENCE -I $ILLU_READS -t $CORES -g $GFF_REF_FILE -L pb
 ```
 
