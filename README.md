@@ -21,6 +21,7 @@ ILRA.sh -a $ASSEMBLY -o $OUTPUT_FOLDER_ILRA -c $CORRECTED_READS -n subset_test -
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA
+wget --no-check-certificate "https://bit.ly/3xrNBc3" -O external_software.tar.gz
 tar -xvzf external_software.tar.gz
 source external_software/path_to_source
 ./external_software/finish_installation.sh
