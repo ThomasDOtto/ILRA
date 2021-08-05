@@ -68,7 +68,7 @@ echo -e "\nI'm now quickly checking and showing the arguments that are going to 
 if [[ $assembly == /* ]]; then
 	echo -e "Assembly provided correctly"
 elif [ -z "$assembly" ]; then
-	echo -e "Assembly not provided"
+	echo -e "Assembly not provided, exiting..."
 	exit 1
 else
 	echo -e "Assuming the assembly is in the current pathway..."
@@ -106,8 +106,8 @@ if [ -f $illuminaReads\_1.fastq.gz ]; then
 	pigz -d -f -k -c -p $cores $illuminaReads\_1.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq
 	pigz -d -f -k -c -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
 	if [ ! -s $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq ]; then
-		echo -e "pigz is lacking some libraries and I cannot do anything wihout being sudo, so changing to the nonparallel gzip..."
-		cp $illuminaReads\_1.fastq.gz .; cp $illuminaReads\_2.fastq.gz .; gzip -d -f *.fastq.gz		
+		echo -e "pigz is failing, probably because is lacking some libraries and I cannot do anything wihout being sudo. Please double check pigz is working and you have updated libraries that are also going to be used by other software later, such as GLIBC. Exiting for now..."
+		exit 1		
 	fi	
 	illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"	
 else
