@@ -17,13 +17,21 @@ The following software is needed to run ILRA:
 * quast
 * bedtools
 
-We would suggest to install the VM or to use the 'external_software' folder to lift the full installation and precompiled software to your system.
 The light mode (argument '-m light') does not include the decontamination step (Centrifuge and blast according to DDBJ/ENA/Genbank requirements), which also requires: 
 * centrifuge
 * recentrifuge + biopython + pandas + openpyxl
 * vecscreen
 * gawk + VSlistTo1HitPerLine.awk
 
+If the light mode is deactivated ('-m taxon', '-m blast' or '-m both'), the installation of large databases is required for the decontamination step (Centrifuge and BLAST according to DDBJ/ENA/Genbank requirements). ILRA is going to help and won't work without these databases succesfully installed. Please try to execute a first time and then check the ILRA log for instructions. 
+
 Please be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang statements (first line #!) so everything works in your system. The software and dependencies above are automatically checked and the pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly. You may also need to make scripts executable (chmod) and to make source or export so that the PATH variable and others are available for all scripts.
 
-If the light mode is deactivated ('-m taxon', '-m blast' or '-m both'), the installation of large databases is required for the decontamination step (Centrifuge and BLAST according to DDBJ/ENA/Genbank requirements). ILRA is going to help and won't work without these databases succesfully installed. Please try to execute a first time and then check the ILRA log for instructions. 
+We would suggest to install the VM or to use the 'external_software.tar.gz' file to lift the full installation to your system.
+```
+git clone https://github.com/ThomasDOtto/ILRA
+cd ILRA
+tar -xvzf external_software.tar.gz
+source external_software/path_to_source
+./external_software/finish_installation.sh
+```
