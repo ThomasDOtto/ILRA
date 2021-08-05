@@ -20,6 +20,7 @@ If not executing the light mode that skips decontamination (default if not speci
 ```
 # git clone https://github.com/ThomasDOtto/ILRA
 # cd ILRA
+# wget --no-check-certificate "https://bit.ly/3xrNBc3" -O external_software.tar.gz
 # tar -xvzf external_software.tar.gz
 source external_software/path_to_source # This will prepare the PATH for ILRA execution if you are using the folder "external_software"
 # ./external_software/finish_installation.sh
