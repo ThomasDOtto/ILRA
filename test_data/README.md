@@ -16,12 +16,12 @@ Many software and dependencies are also required and are going to be automatical
 If not executing the light mode that skips decontamination (default if not specified or '-m light'), the subfolder 'databases' is going to be automatically created and must be populated manually by the user before executing ILRA. ILRA is going to provide instructions in the log after a first execution.
 
 ### Suggested execution for ILRA: 
-(Replace XXX by a number of cores to use and use the appropriate paths to the files of interest)
+(Replace XXX by a number of cores to use and use the appropriate pathways to the files of interest)
 ```
 # git clone https://github.com/ThomasDOtto/ILRA
 # cd ILRA
 # tar -xvzf external_software.tar.gz
-source external_software/path_to_source # This will prepare the PATH for ILRA execution if you are using the folder external_software
+source external_software/path_to_source # This will prepare the PATH for ILRA execution if you are using the folder "external_software"
 # ./external_software/finish_installation.sh
 
 CORES=XXX
