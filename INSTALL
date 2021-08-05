@@ -31,6 +31,7 @@ We would suggest to install the VM or to use the 'external_software.tar.gz' file
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA
+wget --no-check-certificate "https://bit.ly/3xrNBc3" -O external_software.tar.gz
 tar -xvzf external_software.tar.gz
 source external_software/path_to_source
 ./external_software/finish_installation.sh
