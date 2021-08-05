@@ -15,9 +15,12 @@ Many software and dependencies are also required and are going to be automatical
 
 If not executing the light mode that skips decontamination (default if not specified or '-m light'), the subfolder 'databases' is going to be automatically created and must be populated manually by the user before executing ILRA. ILRA is going to provide instructions in the log after a first execution.
 
+Check the INSTALL file for the list of required software or the main README to get the options for installing.
+
 ### Suggested execution for ILRA: 
 (Replace XXX by a number of cores to use and use the appropriate pathways to the files of interest)
 ```
+## Installation of required software:
 # git clone https://github.com/ThomasDOtto/ILRA
 # cd ILRA
 # wget --no-check-certificate "https://bit.ly/3xrNBc3" -O external_software.tar.gz
@@ -25,6 +28,7 @@ If not executing the light mode that skips decontamination (default if not speci
 source external_software/path_to_source # This will prepare the PATH for ILRA execution if you are using the folder "external_software"
 # ./external_software/finish_installation.sh
 
+## Execute ILRA test run:
 CORES=XXX
 input_folder=/path/to/folder
 REFERENCE=$input_folder/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta
