@@ -105,7 +105,7 @@ if [ -f $illuminaReads\_1.fastq.gz ]; then
 	mkdir -p $dir/1.Filtering; cd $dir/1.Filtering
 	pigz -d -f -k -c -p $cores $illuminaReads\_1.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq
 	pigz -d -f -k -c -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
-	if [ ! -f $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq ]; then
+	if [ ! -s $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq ]; then
 		echo -e "pigz is lacking some libraries and I cannot do anything wihout being sudo, so changing to the nonparallel gzip..."
 		cp $illuminaReads\_1.fastq.gz .; cp $illuminaReads\_2.fastq.gz .; gzip -d -f *.fastq.gz		
 	fi	
@@ -457,8 +457,7 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	# Save contigs
 	echo -e "\n" >> ../Excluded.contigs.fofn; echo -e "### Excluded contigs that are not recognized by Centrifuge as the species of interests: (Check the output of Centrifuge in Step 6)" >> ../Excluded.contigs.fofn
 	comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
-	if [ -s 06.assembly.fa ]
-	then
+	if [ -s 06.assembly.fa ]; then
 		echo -e "Centrifuge seems to have run fine. Please check the report file to assess the contigs that corresponded to contamination. ILRA has helped with this, but it is recommended to run Centrifuge/Recentrifuge on the raw sequencing reads to decontaminate and then reassemble and rerun ILRA, if possible"
 		# Renaming and making single-line fasta
 		if [ -z "$reference" ]; then
