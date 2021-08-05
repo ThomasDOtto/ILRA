@@ -4,7 +4,7 @@ ILRA.sh -a <Assembly> -o <Results directory> -c <Long reads corrected reads> -n 
 ```
 Parameters are not positional. If you did not provide any required parameter, the pipeline will exit or use default values if possible (check the help, the log after execution or the 'Arguments / Variables' section in the pipeline ILRA.sh).
 
-### Please check the help page for futher details:
+Please check the help page for futher details:
 ```
 ILRA.sh -h
 ```
@@ -18,6 +18,12 @@ If not executing the light mode that skips decontamination (default if not speci
 ### Suggested execution for ILRA: 
 (Replace XXX by a number of cores to use and use the appropriate paths to the files of interest)
 ```
+# git clone https://github.com/ThomasDOtto/ILRA
+# cd ILRA
+# tar -xvzf external_software.tar.gz
+source external_software/path_to_source # This will prepare the PATH for ILRA execution if you are using the folder external_software
+# ./external_software/finish_installation.sh
+
 CORES=XXX
 input_folder=/path/to/folder
 REFERENCE=$input_folder/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta
