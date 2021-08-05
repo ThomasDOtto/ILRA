@@ -68,7 +68,7 @@ echo -e "\nI'm now quickly checking and showing the arguments that are going to 
 if [[ $assembly == /* ]]; then
 	echo -e "Assembly provided correctly"
 elif [ -z "$assembly" ]; then
-  echo -e "Assembly not provided"
+	echo -e "Assembly not provided"
 	exit 1
 else
 	echo -e "Assuming the assembly is in the current pathway..."
@@ -84,7 +84,7 @@ fi
 if [[ $correctedReads == /* ]]; then
 	echo -e "Corrected long reads provided correctly"
 elif [ -z "$correctedReads" ]; then
-  echo -e "Corrected reads not provided"
+	echo -e "Corrected reads not provided"
 	exit 1
 else
 	echo -e "Assuming the corrected reads are in the current pathway..."
@@ -101,14 +101,19 @@ else
 fi
 
 if [ -f $illuminaReads\_1.fastq.gz ]; then
-  echo "Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz. Dealing with them now..."
+	echo "Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz. Dealing with them now..."
 	mkdir -p $dir/1.Filtering; cd $dir/1.Filtering
 	pigz -d -f -k -c -p $cores $illuminaReads\_1.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq
 	pigz -d -f -k -c -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
-	illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"
+	if [ ! -f $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq ]; then
+		echo -e "pigz is lacking some libraries and I cannot do anything wihout being sudo, so changing to the nonparallel gzip..."
+		gzip -d -f -k -c -p $cores $illuminaReads\_1.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq
+		gzip -d -f -k -c -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
+	fi	
+	illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"	
 else
-  echo -e "Please be aware of the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz\n"
-  echo "ILRA is not detecting the Illumina reads files. If you want to use Illumina reads for polishing, please check naming, paths and that the files do exist. Otherwise ignore this if you don't want to use Illumina reads. ILRA will skip some steps accordingly"
+	echo -e "Please be aware of the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz\n"
+  	echo "ILRA is not detecting the Illumina reads files. If you want to use Illumina reads for polishing, please check naming, paths and that the files do exist. Otherwise ignore this if you don't want to use Illumina reads. ILRA will skip some steps accordingly"
 	doAbacas2=0
 fi
 
