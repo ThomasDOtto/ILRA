@@ -107,7 +107,7 @@ if [ -f $illuminaReads\_1.fastq.gz ]; then
 	pigz -d -f -k -c -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
 	if [ ! -f $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq ]; then
 		echo -e "pigz is lacking some libraries and I cannot do anything wihout being sudo, so changing to the nonparallel gzip..."
-		cd $dir/1.Filtering; cp $illuminaReads\_1.fastq.gz .; cp $illuminaReads\_2.fastq.gz .; gzip -d -f *.fastq.gz		
+		cp $illuminaReads\_1.fastq.gz .; cp $illuminaReads\_2.fastq.gz .; gzip -d -f *.fastq.gz		
 	fi	
 	illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"	
 else
