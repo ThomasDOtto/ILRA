@@ -27,7 +27,7 @@ If the light mode is deactivated ('-m taxon', '-m blast' or '-m both'), the inst
 
 Please be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang statements (first line #!) so everything works in your system. The software and dependencies above are automatically checked and the pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly. You may also need to make scripts executable (chmod) and to make source or export so that the PATH variable and others are available for all scripts.
 
-We would suggest to install the VM or to use the 'external_software.tar.gz' file to lift the full installation to your system.
+We would suggest to install the VM or to use the 'external_software.tar.gz' file to lift the full installation to your system. Everything should be ready after executing:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA
