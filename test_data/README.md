@@ -18,26 +18,24 @@ If not executing the light mode that skips decontamination (default if not speci
 Check the INSTALL file for the list of required software or the main README to get the options for installing.
 
 ### Suggested execution for ILRA: 
-(Replace XXX by a number of cores to use and use the appropriate pathways to the files of interest)
 ```
 ## Installation of required software:
 # git clone https://github.com/ThomasDOtto/ILRA
-# cd ILRA
+cd ILRA
 # wget --no-check-certificate "https://bit.ly/3xrNBc3" -O external_software.tar.gz
 # tar -xvzf external_software.tar.gz
 source external_software/path_to_source # This will prepare the PATH for ILRA execution if you are using the folder "external_software"
 # ./external_software/finish_installation.sh
 
 ## Execute ILRA test run:
-CORES=XXX
-input_folder=/path/to/folder
+CORES=4
+input_folder=$PWD/test_data
 REFERENCE=$input_folder/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta
 GFF_REF_FILE=$input_folder/PlasmoDB-50_Pfalciparum3D7.gff
 ILLU_READS=$input_folder/Illumina_short_reads_Pf_test_subset
 ASSEMBLY=$input_folder/assembly_Pf_test.fasta
 CORRECTED_READS=$input_folder/corrected_reads_Pf_test_subset.fastq.gz
-OUTPUT_FOLDER_ILRA=/path/to/folder/out_ILRA_subset_test_data
+OUTPUT_FOLDER_ILRA=$PWD/test_data/out_ILRA_subset_test_data
 mkdir -p $OUTPUT_FOLDER_ILRA
-
 ILRA.sh -a $ASSEMBLY -o $OUTPUT_FOLDER_ILRA -c $CORRECTED_READS -n subset_test -r $REFERENCE -I $ILLU_READS -t $CORES -g $GFF_REF_FILE -L pb &> $OUTPUT_FOLDER_ILRA/output_terminal_ILRA_subset_test.txt
 ```
