@@ -17,7 +17,7 @@ Please refer to the /test_data/README file or the help ('ILRA.sh -h') for furthe
 ILRA.sh -a $ASSEMBLY -o $OUTPUT_FOLDER_ILRA -c $CORRECTED_READS -n subset_test -r $REFERENCE -I $ILLU_READS -t $CORES -g $GFF_REF_FILE -L pb
 ```
 
-Please note the version of ILRA installed in the virtual machine is likely outdated. You can overwrite the version within the virtual machine with the most recent one first removing the folder and then running:
+Please note the version of ILRA installed in the virtual machine is likely outdated. You can overwrite the version within the virtual machine with the most recent one by first removing the folder and then running:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 ```
