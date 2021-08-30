@@ -13,8 +13,13 @@ Once logged in, you can run the ILRA installation with test_data by typing:
 
 Please refer to the /test_data/README file or the help ('ILRA.sh -h') for further details. This line will execute the pipeline:
 ```
-# ...  Check test/data/README or ILRA.sh -h
+# ...  Check test_data/README or ILRA.sh -h
 ILRA.sh -a $ASSEMBLY -o $OUTPUT_FOLDER_ILRA -c $CORRECTED_READS -n subset_test -r $REFERENCE -I $ILLU_READS -t $CORES -g $GFF_REF_FILE -L pb
+```
+
+Please note the version of ILRA installed in the virtual machine is likely outdated. You can overwrite the version within the virtual machine with the most recent one first removing the folder and then running:
+```
+git clone https://github.com/ThomasDOtto/ILRA
 ```
 
 2) Another option is to use the file "external_software.tar.gz", which contains the precompiled binaries and wrapper scripts to install the software required. To install everything required to run ILRA, please execute:
