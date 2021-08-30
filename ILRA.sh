@@ -481,9 +481,9 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	if [ $mode == "blast" ]; then
 # Renaming and making single-line fasta with length in the headers
 		if [ -z "$reference" ]; then
-			cat ../06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../../$name.ILRA.fasta
+			cat $dir/5.Circlator/05.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../../$name.ILRA.fasta
 		else
-			cat ../06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../../$name.ILRA.fasta
+			cat $dir/5.Circlator/05.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../../$name.ILRA.fasta
 		fi
 	fi
 # BLAST to screen the submitted sequences against: (this is following Genbank requirements)
@@ -521,14 +521,17 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	bedtools maskfasta -fi ../../$name.ILRA.fasta -bed sequences_from_blast_to_mask.bed -fo $name.ILRA_masked.fasta -fullHeader
 	awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' $name.ILRA_masked.fasta > $name.ILRA.fasta; $name.ILRA_masked.fasta
 	sed -i "s/${seq_mit}/${seq_mit} [location=mitochondrion]/" $name.ILRA.fasta
+	rm ../../$name.ILRA.fasta
 # Remove if there are other contigs matching the mitochondrion:
 	if [ "$(grep -v "#" mito_sequences | cut -f1 | sort | uniq | grep -v $seq_mit | wc -l)" -gt 0 ]; then
 		echo -e "\n### Excluded contigs based on blast against mitochondrion sequences:" >> ../../Excluded.contigs.fofn
 		grep -v "#" mito_sequences | cut -f1 | sort | uniq | grep -v $seq_mit >> ../../Excluded.contigs.fofn
 		grep -v "#" mito_sequences | cut -f1 | sort | uniq | grep -v $seq_mit > mito_sequences_to_remove
-		samtools faidx $name.ILRA.fasta; rm ../../$name.ILRA.fasta
+		samtools faidx $name.ILRA.fasta
 		contigs_to_retain=$(awk '{print $1}' $name.ILRA.fasta.fai | grep -v -f mito_sequences_to_remove)
 		samtools faidx $name.ILRA.fasta -o ../../$name.ILRA.fasta $contigs_to_retain; rm $name.ILRA.fasta
+	else 
+		mv $name.ILRA.fasta ../../$name.ILRA.fasta
 	fi
 	echo -e "\n\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
 fi
