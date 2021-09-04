@@ -152,7 +152,7 @@ else
 	echo "ILRA execution mode (-m) is: "$mode
 fi
 
-echo -e "Final arguments used:"
+echo -e "\nFinal arguments used:"
 if [ -z "$number_iterations_icorn" ]; then
 	number_iterations_icorn=3
 	echo "Number of iCORN2 iterations: "$number_iterations_icorn
@@ -230,7 +230,7 @@ echo -e "The telomere sequences used are:\nLeft:\t" $telomere_seq_1"\nRight:\t" 
 ##### Checking the installed software:
 # PATH with paths to all tools must be properly set: export PATH=$PATH:... in the bashrc or bash_profile files in HOME directory
 echo -e "\nPlease be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang (first line #!) statements so everything works in your system. Many software and dependencies are also required and are being automatically checked. The pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly... You may also need to make scripts executable (chmod) and to make source or export so that the PATH variable and others are available for all scripts"
-echo -e "\nIf ILRA keeps working, congrats, all the required software is available"
+echo -e "Congrats, all the required software is available"
 type ILRA.runSMALT_ver2.sh >/dev/null 2>&1 || { echo >&2 "I require the ILRA folder and all files within to be in the PATH. Aborting..."; exit 1; }
 type formatdb >/dev/null 2>&1 || { echo >&2 "I require formatdb but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type megablast >/dev/null 2>&1 || { echo >&2 "I require megablast but it's not installed or available in the PATH. Aborting..."; exit 1; }
@@ -314,7 +314,7 @@ echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(
 echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > Excluded.contigs.fofn
 perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
 mv Excluded.contigs.fofn ../Excluded.contigs.fofn
-echo -e "\n\nSTEP 1: DONE"; echo -e "Current date/time: $(date)\n"
+echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)\n"
 
 
 #### 2. MegaBLAST
@@ -360,7 +360,7 @@ else
 	echo -e "Illumina reads NOT PROVIDED and no filtering by ILRA.findoverlaps_ver3.pl\n"
 	cp 02.assembly.fa 03.assembly.fa
 fi
-echo -e "\n\nSTEP 2: DONE"; echo -e "Current date/time: $(date)\n"
+echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)\n"
 
 
 #### 3. ABACAS2
@@ -388,7 +388,7 @@ else
 	echo -e "Illumina reads or reference genome NOT PROVIDED and ABACAS2 not executed. STEP 3 for reordering and renaming is skipped\n"
 	ln -fs 03.assembly.fa 03b.assembly.fa
 fi
-echo -e "\n\nSTEP 3: DONE"; echo -e "Current date/time: $(date)\n"
+echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)\n"
 
 
 #### 4. iCORN2
@@ -414,7 +414,7 @@ else
 	echo -e "Illumina reads NOT PROVIDED and iCORN2 is not executed. STEP 4 for correction using short reads is skipped\n"
 	ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
 fi
-echo -e "\n\nSTEP 4: DONE"; echo -e "Current date/time: $(date)\n"
+echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)\n"
 
 
 #### 5. Circlator for organelles
@@ -453,12 +453,13 @@ if grep -q -E "$seqs_circl_1|$seqs_circl_2" $dir/4.iCORN2/04.assembly.fa; then
 	else
 	cat $PWD/Out.Circ/06.fixstart.fasta >> 05.assembly.fa;
 	fi
+	echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
 else
 # Bypass if the contigs names provided are not found
 	ln -fs $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
 	echo -e "The sequence identifiers provided for circularization were not found in the contig names. Circlator NOT EXECUTED. STEP 5 for circularization is skipped"
 fi
-echo -e "\n\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
+
 
 
 #### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload, rename sequences
@@ -483,7 +484,7 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 		echo -e "Centrifuge seems to have run fine. Please check the report file to assess the contigs that corresponded to contamination. ILRA has helped with this, but PLEASE BE AWARE that if possible, it is recommended to run Centrifuge/Recentrifuge on the raw sequencing reads prior assembly to decontaminate, and then reassemble and rerun ILRA"
 	else
 # Bypass if Centrifuge failed and didn't end
-		echo -e "\nPLASE BE AWARE that decontamination based on taxonomic classification HAS FAILED because Centrifuge has been killed due to RAM usage or it has failed due to other reasons. Bypassing..."
+		echo -e "\nPLEASE BE AWARE that decontamination based on taxonomic classification HAS FAILED because Centrifuge has been killed due to RAM usage or it has failed due to other reasons. Bypassing..."
 		ln -fs $dir/5.Circlator/05.assembly.fa 06.assembly.fa
 	fi
 # Renaming and making single-line fasta with length in the headers
@@ -493,7 +494,7 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 		cat 06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../$name.ILRA.fasta
 	fi
 
-	echo -e "\n\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)\n"
+	echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)\n"
 fi
 if [[ $mode == "blast" || $mode == "both" ]]; then
 # Final filtering, masking and reformatting to conform the requirements of DDBJ/ENA/Genbank
@@ -554,10 +555,10 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	else
 		mv $name.ILRA.fasta ../../$name.ILRA.fasta
 	fi
-	echo -e "\n\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
+	echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
 fi
 if [ $mode == "light" ]; then
-	echo -e "\n\nLight mode activated. STEP 6 for decontamination is skipped"; echo -e "Current date/time: $(date)\n"
+	echo -e "\nSTEP 6 for decontamination is skipped. Light mode activated"; echo -e "Current date/time: $(date)\n"
 # Renaming and making single-line fasta with length in the headers
 	if [ -z "$reference" ]; then
 		cat $dir/5.Circlator/05.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > $dir/$name.ILRA.fasta
