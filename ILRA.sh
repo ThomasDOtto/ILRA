@@ -22,6 +22,7 @@ for argument in $options; do
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format)
 		-f | -filter_contig_size # Size threshold to filter the contigs (bp)
 		-I | -Illumina_reads # Root name of the paired-end Illumina reads (FASTQ format, must be gzipped)
+		-C | -Correction_Illumina_reads # Whether illumina reads are provided and all steps of correction should be performed ('no' /'yes' by default)
 		-R | -Range_insert_size # Insert size range of the Illumina reads to use in mapping by SMALT (bp)
 		-i | -iterations_iCORN2 # Number of iterations to perform in iCORN2
 		-r | -reference # Reference file (full pathway, FASTA format)
@@ -43,6 +44,7 @@ for argument in $options; do
 		-n*) name=${arguments[index]} ;;
 		-r*) reference=${arguments[index]} ;;
 		-I*) illuminaReads=${arguments[index]} ;;
+		-C*) perform_correction=${arguments[index]} ;;
 		-s*) seqs_circl_1=${arguments[index]} ;;
 		-S*) seqs_circl_2=${arguments[index]} ;;
 		-i*) number_iterations_icorn=${arguments[index]} ;;
@@ -64,11 +66,15 @@ echo -e "In case you want to test ILRA with a smaller subset of example reads, c
 
 
 ##### Checking Arguments / Variables:
-echo -e "\nI'm now quickly checking and showing the arguments that are going to be used in the ILRA run..."
+echo -e "\nI'm now quickly checking and showing the arguments that are going to be used in the ILRA run...\n"
+if [[ -d "$dir/2.MegaBLAST" ]]; then
+    echo -e "PLEASE keep in mind the output directory already exists, this is potentially a rerunning and you may want to clean...\n"
+fi
+
 if [[ $assembly == /* ]]; then
 	echo -e "Assembly provided correctly"
 elif [ -z "$assembly" ]; then
-	echo -e "Assembly not provided, exiting..."
+	echo -e "ASSEMBLY NOT PROVIDED, exiting..."
 	exit 1
 else
 	echo -e "Assuming the assembly is in the current pathway..."
@@ -76,7 +82,7 @@ else
 fi
 
 if [[ $dir == /* ]]; then
-	echo -e "Setting up the directory to work"
+	echo -e "Setting up the directory to work..."
 else
 	dir=$PWD/$dir
 fi
@@ -84,40 +90,56 @@ fi
 if [[ $correctedReads == /* ]]; then
 	echo -e "Corrected long reads provided correctly"
 elif [ -z "$correctedReads" ]; then
-	echo -e "Corrected reads not provided"
+	echo -e "CORRECTED READS NOT PROVIDED"
 	exit 1
 else
 	echo -e "Assuming the corrected reads are in the current pathway..."
 	correctedReads=$PWD/$correctedReads
 fi
 
-if [[ $illuminaReads == /* ]]; then
-	echo -e "Illumina short reads provided correctly"
-elif [ -z "$illuminaReads" ]; then
-	echo -e "Illumina reads not detected. Some steps of the pipeline will not be executed"
-else
-	echo -e "Trying to look for the Illumina reads in the current pathway"
+if [ -z "$perform_correction" ]; then
+	doAbacas2=1
+	perform_correction="yes"
+elif [ $perform_correction == "yes" ]; then
+	doAbacas2=1
+elif [ $perform_correction == "no" ]; then
+	doAbacas2=0
+	echo -e "You have deactivated correction based on short reads..."
+	illuminaReads=""
+fi
+
+if [[ -z "$illuminaReads" ]]; then
+	if [ $perform_correction == "yes" ]; then
+		echo -e "YOU HAVE NOT PROVIDED ILLUMINA READS. Please rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will then skip some steps accordingly..."
+		exit 1
+	fi
+elif [[ $illuminaReads == /* ]]; then
+	echo -e "Checking Illumina short reads..."
+elif [[ $illuminaReads != /* ]]; then
+	echo -e "Not sure where Illumina reads are... Trying to look for them in the current pathway"
 	illuminaReads=$PWD/$illuminaReads
 fi
 
 if [ -f $illuminaReads\_1.fastq.gz ]; then
 	echo "Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz. Dealing with them now..."
 	mkdir -p $dir/1.Filtering; cd $dir/1.Filtering
-	pigz -d -f -k -c -p $cores $illuminaReads\_1.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq
-	pigz -d -f -k -c -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
+	pigz -dfc -p $cores $illuminaReads\_1.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq
+	pigz -dfc -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
 	if [ ! -s $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq ]; then
-		echo -e "pigz is failing, probably because is lacking some libraries and I cannot do anything wihout being sudo. Please double check pigz is working and you have updated libraries that are also going to be used by other software later, such as GLIBC. Exiting for now..."
-		exit 1		
-	fi	
-	illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"	
+		echo -e "PLEASE double check decompression by pigz has worked. Exiting for now..."
+		exit 1
+	fi
+	illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"
 else
-	echo -e "Please be aware of the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz\n"
-  	echo "ILRA is not detecting the Illumina reads files. If you want to use Illumina reads for polishing, please check naming, paths and that the files do exist. Otherwise ignore this if you don't want to use Illumina reads. ILRA will skip some steps accordingly"
-	doAbacas2=0
+	if [ $perform_correction == "yes" ]; then
+		echo -e "PLEASE be aware of the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz"
+	  echo -e "ILRA is not detecting the Illumina reads files as you provided them. If you want to use Illumina reads for polishing, please check naming, paths and that the files do exist. Otherwise rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will skip some steps accordingly..."
+		exit 1
+	fi
 fi
 
 if [ -z "$reference" ]; then
-	echo "No reference genome provided. ABACAS2 will be skipped ..."
+	echo "NO REFERENCE GENOME PROVIDED. ABACAS2 will be skipped ..."
 	doAbacas2=0
 else
 	doAbacas2=1
@@ -125,7 +147,7 @@ fi
 
 if [ -z "$mode" ]; then
 	mode="light"
-	echo "Ligth mode activated, steps for decontamination and preparation for online databases steps will be skipped ..."
+	echo "LIGHT MODE activated, steps for decontamination and preparation for online databases steps will be skipped ..."
 else
 	echo "ILRA execution mode (-m) is: "$mode
 fi
@@ -242,7 +264,7 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	type vecscreen >/dev/null 2>&1 || { echo >&2 "I require vecscreen but it's not installed or available in the PATH. Aborting..."; exit 1; }
 	type VSlistTo1HitPerLine.awk >/dev/null 2>&1 || { echo >&2 "I require VSlistTo1HitPerLine.awk but it's not installed or available in the PATH. Aborting..."; exit 1; }
 
-	echo -e "\nPlease note some local databases for the decontamination step (Centrifuge and blast according to DDBJ/ENA/Genbank requirements) are needed"
+	echo -e "\nPLEASE note some local databases for the decontamination step (Centrifuge and blast according to DDBJ/ENA/Genbank requirements) are needed"
 	echo -e "These databases are large, so please be aware that the RAM memory usage at the step 6 of ILRA may reach hundreds of GBs (100-150GB for P. falciparum, more depending on the genome assembly size)"
 	echo -e "ILRA is now going to give you instructions so the databases are downloaded and placed in the corresponding folders (main folder where you have placed ILRA folder, under the directory databases that has been automatically created). ILRA will exit until these steps are performed:"
 	echo -e "The NCBI nucleotide non-redundant sequences database (64GB) has to be downloaded and uncompressed by the user"
@@ -261,12 +283,12 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	databases=$(dirname $0)/databases; mkdir -p $databases
 	echo -e "Several databases for conforming to DDBJ/ENA/Genbank requirements are needed, please execute:"
 	echo -e "cd /path/to/ILRA/databases/"
-	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -d -k -c -p $cores contam_in_euks.fa.gz | makeblastdb -in - -dbtype nucl"
+	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -dc -p $cores contam_in_euks.fa.gz | makeblastdb -in - -dbtype nucl"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_prok.fa && makeblastdb -in contam_in_prok.fa -dbtype nucl"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/adaptors_for_screening_euks.fa && formatdb -p F -i adaptors_for_screening_euks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/adaptors_for_screening_proks.fa && formatdb -p F -i adaptors_for_screening_proks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/blast/db/mito.tar.gz && tar -xvzf mito.tar.gz"
-	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -d -k -c -p $cores rrna.gz | makeblastdb -in - -dbtype nucl"
+	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -dc -p $cores rrna.gz | makeblastdb -in - -dbtype nucl"
 	if [[ -f $databases/contam_in_euks.fa ]] && [[ -f $databases/contam_in_prok.fa ]] && [[ -f $databases/adaptors_for_screening_euks.fa ]] && [[ -f $databases/adaptors_for_screening_proks.fa ]] && [[ -f $databases/mito.ndb ]] && [[ -f $databases/taxdb.btd ]] && [[ -f $databases/rrna ]]; then
 	  echo -e "Good, ILRA is detecting all of the required databases in "$databases
 	else
@@ -335,7 +357,7 @@ if [ -f $illuminaReads\_1.fastq ]; then
 	cp mergedseq_OUT.fasta 03.assembly.fa
 else
 # Bypass if Illumina reads not provided
-	echo -e "Illumina reads not provided and no filtering by ILRA.findoverlaps_ver3.pl\n"
+	echo -e "Illumina reads NOT PROVIDED and no filtering by ILRA.findoverlaps_ver3.pl\n"
 	cp 02.assembly.fa 03.assembly.fa
 fi
 echo -e "\n\nSTEP 2: DONE"; echo -e "Current date/time: $(date)\n"
@@ -363,8 +385,8 @@ if [ "$doAbacas2" -eq 1 ]; then
 	done
 else
 # Bypass if Illumina reads not provided
-	echo -e "Illumina reads or reference genome not provided and ABACAS2 not executed\n"
-	ln -s 03.assembly.fa 03b.assembly.fa
+	echo -e "Illumina reads or reference genome NOT PROVIDED and ABACAS2 not executed. STEP 3 for reordering and renaming is skipped\n"
+	ln -fs 03.assembly.fa 03b.assembly.fa
 fi
 echo -e "\n\nSTEP 3: DONE"; echo -e "Current date/time: $(date)\n"
 
@@ -373,24 +395,24 @@ echo -e "\n\nSTEP 3: DONE"; echo -e "Current date/time: $(date)\n"
 echo -e "\n\nSTEP 4: iCORN2 starting..."; echo -e "Current date/time: $(date)\n"
 mkdir -p $dir/4.iCORN2; cd $dir/4.iCORN2
 if [ -f $illuminaReads\_1.fastq ]; then
-	echo -e "Be aware that a particular version of Java, 1.7.0, is required for iCORN2. Users must look for and install 'jdk1.7.0_80'. Any iCORN2 error may be due to incorrect Java version, including newer\n"
 	iCORN2_fragmentSize=500
 	echo "The iCORN2 fragment size used is iCORN2_fragmentSize="$iCORN2_fragmentSize. "Please check iCORN2 help and change manually within the pipeline (section 4) if needed"
-	echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt. But a preview of the corrections is:"
+	echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt"
 	icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn &> icorn2.serial_bowtie2.sh_log_out.txt
 # Cleaned assembly:
-	ln -s ICORN2.03b.assembly.fa.[$(expr $number_iterations_icorn + 1)] 04.assembly.fa
+	ln -fs ICORN2.03b.assembly.fa.[$(expr $number_iterations_icorn + 1)] 04.assembly.fa
 # Summary of iCORN2 results:
 	mkdir -p $dir/7.Stats; icorn2.collectResults.pl $PWD > ../7.Stats/07.iCORN2.final_corrections.results.txt
 	echo -e "### Total SNP: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$6;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
 	echo -e "### Total INS: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$7;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
 	echo -e "### Total DEL: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$8;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
 	echo -e "### Total HETERO: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$9;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
+	echo -e "A preview of the correction by iCORN2 is:"
 	cat ../7.Stats/07.iCORN2.final_corrections.results.txt
 else
 # Bypass if Illumina reads not provided
-	echo -e "Illumina reads not provided and iCORN2 not executed\n"
-	ln -s $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
+	echo -e "Illumina reads NOT PROVIDED and iCORN2 is not executed. STEP 4 for correction using short reads is skipped\n"
+	ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
 fi
 echo -e "\n\nSTEP 4: DONE"; echo -e "Current date/time: $(date)\n"
 
@@ -426,15 +448,15 @@ if grep -q -E "$seqs_circl_1|$seqs_circl_2" $dir/4.iCORN2/04.assembly.fa; then
 	ILRA.deleteContigs.pl List.circular_sequences.fofn $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
 	if [ ! -s $dir/5.Circlator/Out.Circ/06.fixstart.fasta ]; then
 # Bypass if circlator failed and didn't end
-		echo -e "Circlator has failed. Check its log and output for futher details. One likely reason is that there were some problems with the provided reads, and not enough/even coverage for the required contigs. Bypassing..."
-		ln -s -f $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
+		echo -e "PLEASE be aware that Circlator HAS FAILED. Check its log and output for futher details. This is ok for the subset of test_data , but for other sequences one likely reason is that there were some problems with the provided reads, and not enough/even coverage for the required contigs. Bypassing..."
+		ln -fs $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
 	else
 	cat $PWD/Out.Circ/06.fixstart.fasta >> 05.assembly.fa;
 	fi
 else
 # Bypass if the contigs names provided are not found
-	ln -s $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
-	echo -e "The sequence identifiers provided for circularization were not found in the contig names. Circlator not executed"
+	ln -fs $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
+	echo -e "The sequence identifiers provided for circularization were not found in the contig names. Circlator NOT EXECUTED. STEP 5 for circularization is skipped"
 fi
 echo -e "\n\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
 
@@ -458,11 +480,11 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	echo -e "\n### Excluded contigs that are not recognized by Centrifuge as the species of interests: (Check the output of Centrifuge in Step 6)" >> ../Excluded.contigs.fofn
 	comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
 	if [ -s 06.assembly.fa ]; then
-		echo -e "Centrifuge seems to have run fine. Please check the report file to assess the contigs that corresponded to contamination. ILRA has helped with this, but it is recommended to run Centrifuge/Recentrifuge on the raw sequencing reads to decontaminate and then reassemble and rerun ILRA, if possible"
+		echo -e "Centrifuge seems to have run fine. Please check the report file to assess the contigs that corresponded to contamination. ILRA has helped with this, but PLEASE BE AWARE that if possible, it is recommended to run Centrifuge/Recentrifuge on the raw sequencing reads prior assembly to decontaminate, and then reassemble and rerun ILRA"
 	else
 # Bypass if Centrifuge failed and didn't end
-		echo -e "\nBypassing decontamination step because Centrifuge has been killed due to RAM usage or it failed due to other reasons..."
-		ln -f -s $dir/5.Circlator/05.assembly.fa 06.assembly.fa
+		echo -e "\nPLASE BE AWARE that decontamination based on taxonomic classification HAS FAILED because Centrifuge has been killed due to RAM usage or it has failed due to other reasons. Bypassing..."
+		ln -fs $dir/5.Circlator/05.assembly.fa 06.assembly.fa
 	fi
 # Renaming and making single-line fasta with length in the headers
 	if [ -z "$reference" ]; then
@@ -477,7 +499,6 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 # Final filtering, masking and reformatting to conform the requirements of DDBJ/ENA/Genbank
 	mkdir -p $dir/6.Decontamination/Genbank_upload; cd $dir/6.Decontamination/Genbank_upload
 	echo -e "\n\nSTEP 6: Blasting and decontamination starting..."; echo -e "Current date/time: $(date)\n"
-	echo -e "\nPlease note the assembly .ILRA_GenBank.fasta is the final assembly with some conversions such as masking or editing the header of mitochondrial sequences, together with other requirements to ease the upload of the genomes to DDBJ/ENA/Genbank"
 	if [ $mode == "blast" ]; then
 # Renaming and making single-line fasta with length in the headers
 		if [ -z "$reference" ]; then
@@ -503,7 +524,7 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	grep -v "#" mito_sequences >> mito_sequences.out
 	echo -e "\n#Info sequences of the hits:" >> mito_sequences.out
 	for i in $(grep -v "#" mito_sequences | cut -f2 | sort | uniq); do
-		blastdbcmd -db $databases/mito -entry $i | grep ">" >> mito_sequences.out		
+		blastdbcmd -db $databases/mito -entry $i | grep ">" >> mito_sequences.out
 	done
 	echo -e "\n#Filtering hits - largest alignments:" >> mito_sequences.out
 	for i in $(grep -v "#" mito_sequences | cut -f1 | sort | uniq); do
@@ -515,7 +536,7 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	blastn -query ../../$name.ILRA.fasta -db $databases/rrna -task megablast -template_length 18 -template_type coding -window_size 120 -word_size 12 -xdrop_gap 20 -no_greedy -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 1E-9 -gapextend 2 -gapopen 4 -penalty -4 -perc_identity 95 -reward 3 -soft_masking true -outfmt 7 -num_threads $cores | awk '$4>=100' > rrna_genbank.out
 # 5. The chromosomes of unrelated organisms. Foreign organisms are those that belong to a different taxonomic group compared to the organism whose sequences are being screened.
 # This is a requirement by the databases but we skipped it here, because ILRA can alternatively use Centrifuge/Recentrifuge to get rid of contamination of other organisms.
-	
+
 # Process the result and get the final files:
 	awk ' NF>2 {print $1"\t"$7"\t"$8} ' *genbank.out | grep -v "#" | bedtools sort -i - > sequences_from_blast_to_mask.bed
 	bedtools maskfasta -fi ../../$name.ILRA.fasta -bed sequences_from_blast_to_mask.bed -fo $name.ILRA_masked.fasta -fullHeader
@@ -530,13 +551,13 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 		samtools faidx $name.ILRA.fasta
 		contigs_to_retain=$(awk '{print $1}' $name.ILRA.fasta.fai | grep -v -f mito_sequences_to_remove)
 		samtools faidx $name.ILRA.fasta -o ../../$name.ILRA.fasta $contigs_to_retain; rm $name.ILRA.fasta
-	else 
+	else
 		mv $name.ILRA.fasta ../../$name.ILRA.fasta
 	fi
 	echo -e "\n\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
 fi
 if [ $mode == "light" ]; then
-	echo -e "\n\nLight mode activated. STEP 6: Skipped"; echo -e "Current date/time: $(date)\n"
+	echo -e "\n\nLight mode activated. STEP 6 for decontamination is skipped"; echo -e "Current date/time: $(date)\n"
 # Renaming and making single-line fasta with length in the headers
 	if [ -z "$reference" ]; then
 		cat $dir/5.Circlator/05.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > $dir/$name.ILRA.fasta
@@ -550,9 +571,12 @@ fi
 echo -e "\n\nSTEP 7: Renaming, gathering stats and evaluation starting..."; echo -e "Current date/time: $(date)\n"
 mkdir -p $dir/7.Stats; cd $dir/7.Stats
 # Evaluating the assemblies:
+echo -e "A preview of the final corrections by ILRA is: (full details in the file 07.assembly_stats_original_correction_ILRA.txt)"
 assembly-stats $assembly | head -n 3; assembly-stats $assembly > 07.assembly_stats_original_correction_ILRA.txt
 assembly-stats ../$name.ILRA.fasta | head -n 3; assembly-stats ../$name.ILRA.fasta >> 07.assembly_stats_original_correction_ILRA.txt
+
 # Getting telomere counts:
+echo -e "\nCheck out the output of the telomeres analyses in the file 07.TelomersSummary.txt"
 # Extracting potential telomeres (1Kb)
 cat ../$name.ILRA.fasta | perl -nle 'if (/>/){ print } else { $l="Left:"; $left=substr($_,0,1000); print "$l\t$left"}' | tr "\n" "\t" | sed 's/>/\n&/g' | sed '1d' > 07.Telomeres_seq_1kb.txt
 cat ../$name.ILRA.fasta | perl -nle 'if (/>/){ print } else { $r="Right:"; $right=substr($_,(length($_)-1000),1000); print "$r\t$right"}' | tr "\n" "\t" | sed 's/>/\n&/g' >> 07.Telomeres_seq_1kb.txt
@@ -562,28 +586,32 @@ cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep -i $telomere_seq_1 | awk '{pri
 echo -e "\n### Sequences with the right telomere sequence "$telomere_seq_2": (within a 1Kb end region, extracted in 07.Telomeres_seq_1kb.txt)" >> 07.TelomerContigs.txt
 cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep -i $telomere_seq_2 | awk '{print $1}' >> 07.TelomerContigs.txt
 # Summary of telomere repeats statistics
-echo -e "# Amount of telomere repeats left: "$(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep -i -c $telomere_seq_1) > 07.TelomersSummary.txt
-echo -e "# Amount of telomere repeats right: "$(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep -i -c $telomere_seq_2) >> 07.TelomersSummary.txt
-echo -e "# Amount of telomere repeats: "$(expr $(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep -i -c $telomere_seq_1) + $(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep -i -c $telomere_seq_2)) >> 07.TelomersSummary.txt
+echo -e "# Amount of telomere repeats left: "$(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep -i -c $telomere_seq_1) > 07.telomeresSummary.txt
+echo -e "# Amount of telomere repeats right: "$(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep -i -c $telomere_seq_2) >> 07.telomeresSummary.txt
+echo -e "# Amount of telomere repeats: "$(expr $(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep -i -c $telomere_seq_1) + $(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep -i -c $telomere_seq_2)) >> 07.telomeresSummary.txt
 contigs_both=$(echo $(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep -i $telomere_seq_1 | awk '{print $1}') $(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep -i $telomere_seq_2 | awk '{print $1}') | tr ' ' '\n' | sort | uniq -d)
-echo -e "# Amount of telomere repeats at contigs with repeats at both ends: "$(expr $(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep "$contigs_both" | grep -i -c $telomere_seq_1) + $(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep "$contigs_both" | grep -i -c $telomere_seq_2)) >> 07.TelomersSummary.txt
-echo -e "\n# Amount of contigs with telomere repeats left: "$(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep -i $telomere_seq_1 | awk '{print $1}' | wc -l) >> 07.TelomersSummary.txt
-echo -e "# Amount of contigs with telomere repeats right: "$(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep -i $telomere_seq_2 | awk '{print $1}' | wc -l) >> 07.TelomersSummary.txt
+echo -e "# Amount of telomere repeats at contigs with repeats at both ends: "$(expr $(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep "$contigs_both" | grep -i -c $telomere_seq_1) + $(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep "$contigs_both" | grep -i -c $telomere_seq_2)) >> 07.telomeresSummary.txt
+echo -e "\n# Amount of contigs with telomere repeats left: "$(cat 07.Telomeres_seq_1kb.txt | grep 'Left' | grep -i $telomere_seq_1 | awk '{print $1}' | wc -l) >> 07.telomeresSummary.txt
+echo -e "# Amount of contigs with telomere repeats right: "$(cat 07.Telomeres_seq_1kb.txt | grep 'Right' | grep -i $telomere_seq_2 | awk '{print $1}' | wc -l) >> 07.telomeresSummary.txt
 if [ -z "$contigs_both" ]; then
-	echo -e "# Amount of contigs/potential chromosomes with telomere repeats at both ends: 0" >> 07.TelomersSummary.txt
-	echo -e "\n# Contigs/potential chromosomes with telomere repeats at both ends: (Length, bp)" >> 07.TelomersSummary.txt
+	echo -e "# Amount of contigs/potential chromosomes with telomere repeats at both ends: 0" >> 07.telomeresSummary.txt
+	echo -e "\n# Contigs/potential chromosomes with telomere repeats at both ends: (Length, bp)" >> 07.telomeresSummary.txt
 else
-	echo -e "# Amount of contigs/potential chromosomes with telomere repeats at both ends: "$(echo $contigs_both | tr " " "\n" | wc -l) >> 07.TelomersSummary.txt
-	echo -e "\n# Contigs/potential chromosomes with telomere repeats at both ends: (Length, bp)" >> 07.TelomersSummary.txt
-	awk '/^>/ {if (seqlen){print seqlen}; print ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../$name.ILRA.fasta | tr "\n" "\t" | sed 's/>/\n&/g' | grep "$contigs_both" >> 07.TelomersSummary.txt
+	echo -e "# Amount of contigs/potential chromosomes with telomere repeats at both ends: "$(echo $contigs_both | tr " " "\n" | wc -l) >> 07.telomeresSummary.txt
+	echo -e "\n# Contigs/potential chromosomes with telomere repeats at both ends: (Length, bp)" >> 07.telomeresSummary.txt
+	awk '/^>/ {if (seqlen){print seqlen}; print ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../$name.ILRA.fasta | tr "\n" "\t" | sed 's/>/\n&/g' | grep "$contigs_both" >> 07.telomeresSummary.txt
 fi
+
 # Getting GC stats: (https://github.com/oXis/gtool)
+echo -e "\nA preview of the overall GC content is: (full details in the file 07.Contigs_GC_size.txt)"
 gtool.py -sg ../$name.ILRA.fasta | tee 07.Contigs_GC_size.txt; echo -e "\nIndividual contigs:" >> 07.Contigs_GC_size.txt
 for i in $(grep "^>" ../$name.ILRA.fasta | awk 'sub(/^>/, "")'); do
 	cat ../$name.ILRA.fasta | gtool.py -sg -c $i - >> 07.Contigs_GC_size.txt
 done
 sed -i 's/stdin//g' 07.Contigs_GC_size.txt
+
 # Getting sequencing depth and stats: (https://github.com/wudustan/fastq-info)
+echo -e "\nCheck out the sequencing depth and other stats in the files 07.fastq_info_depth_IlluminaReads.txt and 07.fastq_info_depth_IlluminaReads_assembly.txt"
 if [ -f $illuminaReads\_1.fastq ]; then
 	fastq_info_2.sh $illuminaReads\_1.fastq $illuminaReads\_2.fastq > 07.fastq_info_depth_IlluminaReads.txt
 	illumina_read_length=$(head -n 2 $illuminaReads\_1.fastq |tail -n 2|wc -c)
@@ -591,8 +619,10 @@ if [ -f $illuminaReads\_1.fastq ]; then
 	fastq-info.sh -r $illumina_read_length $illuminaReads\_1.fastq $illuminaReads\_2.fastq ../$name.ILRA.fasta > 07.fastq_info_depth_IlluminaReads_assembly.txt
 	fastqc $illuminaReads\_1.fastq $illuminaReads\_2.fastq -o $PWD --noextract -q -t $cores
 fi
+
 # Comparing with reference genes:
-echo -e "Running QUAST. Please be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene id) are accepted"
+echo -e "\nRunning QUAST. Please be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene id) are accepted"
+echo -e "Check out the file quast.py_log_out.txt and the QUAST report"
 if [ -z "$reference" ]; then
 	echo -e "Running QUAST without reference..."
 	quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
@@ -615,6 +645,7 @@ else
 		fi
 	fi
 fi
+
 # Converting files to minimize space
 if [ -f $dir/2.MegaBLAST/first.bam ]; then
 	samtools view -@ $cores -T $dir/1.Filtering/01.assembly.fa -C -o $dir/2.MegaBLAST/first.bam.cram $dir/2.MegaBLAST/first.bam &> $dir/2.MegaBLAST/first.bam.cram_log_out.txt
@@ -629,7 +660,7 @@ if [ -f $dir/5.Circlator/Mapped.corrected.04.sam ]; then
 	samtools view -@ $cores -T $dir/4.iCORN2/04.assembly.fa -C -o $dir/5.Circlator/Mapped.corrected.04.sam.cram $dir/5.Circlator/Mapped.corrected.04.sam &> $dir/5.Circlator/Mapped.corrected.04.sam.cram_log_out.txt
 	samtools view -@ $cores -T $dir/5.Circlator/ForCirc.Ref_2.fasta -C -o $dir/5.Circlator/Out.Circ/01.mapreads.bam.cram $dir/5.Circlator/Out.Circ/01.mapreads.bam &> $dir/5.Circlator/01.mapreads.bam.cram_log_out.txt
 fi
-echo -e "\nIf needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ $cores -T filename.fasta -b -o output.bam input.cram"
+echo -e "\nAlignment files have been converted to cram for long-term storage. If needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ $cores -T filename.fasta -b -o output.bam input.cram (check out samtools view statements within ILRA.sh to get the fasta file used)"
 # Cleaning up:
 cd $dir; rm $(find . -regex ".*\.\(bam\|sam\)"); rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
 echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)\n"
