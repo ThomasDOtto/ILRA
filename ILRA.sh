@@ -669,7 +669,7 @@ echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)\n"
 
 echo -e "\nILRA IS DONE"; echo -e "Current date/time: $(date)\n"
 echo -e "Original assembly file: "$assembly
-echo -e "Final corrected assembly file: "$name.ILRA.fasta
+echo -e "Final corrected assembly file: "$dir"/"$name.ILRA.fasta
 end=`date +%s`; runtime=$((end-start))
 echo -e "\nCores: $cores"
 echo -e "Final runtime (secs): $runtime"
