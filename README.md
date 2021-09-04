@@ -1,28 +1,27 @@
 # ILRA
-Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing) by cleaning and merging contigs, correcting homopolymer tracks and circularizing plastids. We also have the code preinstalled on a virtual Linux machine.  
+Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing) by cleaning and merging contigs, correcting homopolymer tracks and circularizing plastids. 
 
 ## Installation
-ILRA is based on several standard tools. 
+ILRA is based on several standard tools and novel scripts. 
 
-1) We would recommend users without a bioinformatics setup to use our virtual machine (https://q-r.to/ILRA_VM). You will need to install VirtualBox (https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html), set up Ubuntu x64 and mount the disc. See the pdf VM.install.pdf for further help. The user is "bioinfo" and the password "Glasgow2020". 
+1) We would recommend users without a bioinformatics setup to use our Linux virtual machine (https://q-r.to/ILRA_VM). You will need to install VirtualBox (https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html), set up Ubuntu x64 and mount the downloaded disc (.vdi). See the pdf 'VM.install.pdf' for further help. The username is 'bioinfo' and the password 'Glasgow2020'.
 
 Once logged in, you can run the ILRA installation with test_data by typing:
 ```
 ~/ILRA/example.sh
 ```
 
-Please refer to the /test_data/README file or the help ('ILRA.sh -h') for further details. This line will execute the pipeline:
+Please refer to the help ('ILRA.sh -h') for further details. This line will execute the pipeline:
 ```
-# ...  Check test_data/README or ILRA.sh -h
 ILRA.sh -a $ASSEMBLY -o $OUTPUT_FOLDER_ILRA -c $CORRECTED_READS -n subset_test -r $REFERENCE -I $ILLU_READS -t $CORES -g $GFF_REF_FILE -L pb
 ```
 
-Please note the version of ILRA installed in the virtual machine is likely outdated. You can overwrite the version within the virtual machine with the most recent one by first removing the folder of ILRA and then obtaining the most updated version by running:
+Please note the version of ILRA installed in the virtual machine is likely outdated. You can overwrite the version with the most recent one by first removing the folder of ILRA and then obtaining the most updated version by running:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 ```
 
-2) The fastest option is to use the file "external_software.tar.gz", which contains the precompiled binaries and wrapper scripts to install the software required. To install everything required to run ILRA, please execute:
+2) The fastest option is to use the file 'external_software.tar.gz', which contains the precompiled binaries and wrapper scripts to install the software required. To install everything required to run ILRA, please execute:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA
@@ -30,7 +29,7 @@ wget --no-check-certificate "http://q-r.to/ILRA_soft" -O external_software.tar.g
 source external_software/path_to_source; ./external_software/finish_installation.sh
 ```
 
-3) The last option is to manually install the required software (please find the list and further details in the INSTALL file).
+3) The last option is to manually install the required software (please find the list and further details in the 'INSTALL' file).
 
 
 ## Quick start
@@ -48,7 +47,7 @@ ILRA.sh -a <Assembly> -o <Results directory> -c <Long reads corrected reads> -n 
 ```
 Parameters are not positional. If you did not provide any required parameter, the pipeline will exit or use default values if possible (check the help, the log after execution or the 'Arguments / Variables' section in the pipeline ILRA.sh).
 
-Please check the help page for futher details:
+Please refer to the help for futher details:
 ```
 ILRA.sh -h
 ```
