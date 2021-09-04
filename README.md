@@ -42,7 +42,7 @@ source external_software/path_to_source; ./external_software/finish_installation
 source external_software/path_to_source
 ILRA.sh -a test_data/assembly_Pf_test.fasta -o test_data/out_ILRA_test -c test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I test_data/Illumina_short_reads_Pf_test_subset -t 4 -g test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb | tee -a test_data/test_log.txt
 ```
-The test run will take around 5-10 minutes ('light' mode) and around 10-20 minutes ('both' mode) using 4 cores.
+The test run will take around 5 minutes ('light' mode) and around 10 minutes ('both' mode) using 4 cores.
 
 
 
