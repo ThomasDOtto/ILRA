@@ -4,6 +4,7 @@ Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-ass
 ## Installation
 ILRA is based on several standard tools and novel scripts. 
 
+
 1) We would recommend users without a bioinformatics setup to use our Linux virtual machine (https://q-r.to/ILRA_VM). You will need to install VirtualBox (https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html), set up Ubuntu x64 and mount the downloaded disc (.vdi). See the pdf 'VM.install.pdf' for further help. The username is 'bioinfo' and the password 'Glasgow2020'.
 
 Once logged in, you can run the ILRA installation with test_data by typing:
@@ -21,6 +22,7 @@ Please note the version of ILRA installed in the virtual machine is likely outda
 git clone https://github.com/ThomasDOtto/ILRA
 ```
 
+
 2) The fastest option is to use the file 'external_software.tar.gz', which contains the precompiled binaries and wrapper scripts to install the software required. To install everything required to run ILRA, please execute:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
@@ -29,7 +31,9 @@ wget --no-check-certificate "http://q-r.to/ILRA_soft" -O external_software.tar.g
 source external_software/path_to_source; ./external_software/finish_installation.sh
 ```
 
+
 3) The last option is to manually install the required software (please find the list and further details in the 'INSTALL' file).
+
 
 
 ## Quick start
@@ -39,6 +43,7 @@ source external_software/path_to_source
 ILRA.sh -a test_data/assembly_Pf_test.fasta -o test_data/out_ILRA_test -c test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I test_data/Illumina_short_reads_Pf_test_subset -t 4 -g test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb | tee -a test_data/test_log.txt
 ```
 The test run will take around 5-10 minutes ('light' mode) and around 10-20 minutes ('both' mode) using 4 cores.
+
 
 
 ### ILRA arguments:
@@ -51,6 +56,7 @@ Please refer to the help for futher details:
 ```
 ILRA.sh -h
 ```
+
 
 
 ## Comments
