@@ -34,9 +34,24 @@ source external_software/path_to_source; ./external_software/finish_installation
 
 
 ## Quick start
-
-
+```
+cd ILRA
+source external_software/path_to_source
+ILRA.sh -a test_data/assembly_Pf_test.fasta -o test_data/out_ILRA_test -c test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I test_data/Illumina_short_reads_Pf_test_subset -t 4 -g test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb | tee -a test_data/test_log.txt
+```
 The test run will take around 5-10 minutes ('light' mode) and around 10-20 minutes ('both' mode) using 4 cores.
+
+
+### ILRA arguments:
+```
+ILRA.sh -a <Assembly> -o <Results directory> -c <Long reads corrected reads> -n <Name of results> -r <Reference genome for ABACAS2> -I <Root name of Illumina short reads> -t <Number of cores to use> -s <First sequence name to circularize> -S <Second sequence name to circularize> -i <Number of iterations for iCORN2> -f <Size threshold for discarding contigs> -R <Insert size range for Illumina short reads> -T <NCBI taxonomy id to extract> -g <GFF reference genes annotation file> -L <Long reads sequencing technology> -e <Telomeric sequence left> -E <Telomeric sequence right> -m <Execution mode> -C <Perform error correction by short reads> -h <Show help>
+```
+Parameters are not positional. If you did not provide any required parameter, the pipeline will exit or use default values if possible (check the help, the log after execution or the 'Arguments / Variables' section in the pipeline ILRA.sh).
+
+Please check the help page for futher details:
+```
+ILRA.sh -h
+```
 
 
 ## Comments
