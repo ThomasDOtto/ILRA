@@ -29,5 +29,5 @@ Please be aware that many scripts (bash, perl...) within the ILRA folder are use
 
 The pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly. Check the log after execution or the 'Checking the installed software and databases' section in the pipeline ILRA.sh.
 
-If not executing the light mode that skips decontamination (default if not specified or '-m light'), the subfolder 'databases' is going to be automatically created and must be populated manually by the user before executing ILRA. ILRA is going to provide instructions in the log after a first execution.
+If not executing the light mode that skips decontamination (by default, or argument '-m light'), the subfolder 'databases' is going to be automatically created and must be populated manually by the user before executing ILRA. ILRA is going to provide instructions in the log after a first execution.
 
