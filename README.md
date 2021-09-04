@@ -17,24 +17,26 @@ Please refer to the /test_data/README file or the help ('ILRA.sh -h') for furthe
 ILRA.sh -a $ASSEMBLY -o $OUTPUT_FOLDER_ILRA -c $CORRECTED_READS -n subset_test -r $REFERENCE -I $ILLU_READS -t $CORES -g $GFF_REF_FILE -L pb
 ```
 
-Please note the version of ILRA installed in the virtual machine is likely outdated. You can overwrite the version within the virtual machine with the most recent one by first removing the folder and then running:
+Please note the version of ILRA installed in the virtual machine is likely outdated. You can overwrite the version within the virtual machine with the most recent one by first removing the folder of ILRA and then obtaining the most updated version by running:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 ```
 
-2) Another option is to use the file "external_software.tar.gz", which contains the precompiled binaries and wrapper scripts to install the software required. To install everything required to run ILRA, please execute:
+2) The fastest option is to use the file "external_software.tar.gz", which contains the precompiled binaries and wrapper scripts to install the software required. To install everything required to run ILRA, please execute:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA
-wget --no-check-certificate "https://bit.ly/3xrNBc3" -O external_software.tar.gz
-tar -xvzf external_software.tar.gz
-source external_software/path_to_source
-./external_software/finish_installation.sh
+wget --no-check-certificate "http://q-r.to/ILRA_soft" -O external_software.tar.gz; tar -xvzf external_software.tar.gz; rm external_software.tar.gz
+source external_software/path_to_source; ./external_software/finish_installation.sh
 ```
 
 3) The last option is to manually install the required software (please find the list and further details in the INSTALL file).
 
-After succesfully installing, the test run will take around 5-10 minutes ('light' mode) and around 10-20 minutes ('both' mode) using 4 cores.
+
+## Quick start
+
+
+The test run will take around 5-10 minutes ('light' mode) and around 10-20 minutes ('both' mode) using 4 cores.
 
 
 ## Comments
