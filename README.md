@@ -28,7 +28,7 @@ git clone https://github.com/ThomasDOtto/ILRA
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA
 wget --no-check-certificate "https://bit.ly/3h2mfUy" -O external_software.tar.gz; tar -xvzf external_software.tar.gz; rm external_software.tar.gz
-source external_software/path_to_source; ./external_software/finish_installation.sh
+source external_software/path_to_source; ./external_software/finish_installation.sh | tee -a external_software/finish_installation_log.txt
 ```
 
 
