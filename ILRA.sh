@@ -138,6 +138,13 @@ else
 	fi
 fi
 
+if [[ $reference == /* ]]; then
+	echo -e "Reference provided correctly"
+else
+	echo -e "Assuming the reference is in the current pathway..."
+	reference=$PWD/$reference
+fi
+
 if [ -z "$reference" ]; then
 	echo "NO REFERENCE GENOME PROVIDED. ABACAS2 will be skipped ..."
 	doAbacas2=0
@@ -368,7 +375,7 @@ echo -e "\n\nSTEP 3: ABACAS2 starting..."; echo -e "Current date/time: $(date)\n
 mkdir -p $dir/3.ABACAS2; cd $dir/3.ABACAS2
 if [ "$doAbacas2" -eq 1 ]; then
 	ABA_CHECK_OVERLAP=0; export ABA_CHECK_OVERLAP; Min_Alignment_Length=1000; Identity_Cutoff=98; doBLAST_for_ACT_inspection=1
-	echo "ABACAS2 parameters are: ABA_CHECK_OVERLAP=0, Min_Alignment_Length=1000, Identity_Cutoff=98. Please check ABACAS2 help and change manually within the pipeline (section 3) these parameters if needed"
+	echo -e "ABACAS2 parameters are:\nABA_CHECK_OVERLAP=0\nMin_Alignment_Length=1000\nIdentity_Cutoff=98\nPlease check ABACAS2 help and change manually within the pipeline (section 3) these parameters if needed"
 	abacas2.nonparallel.sh $reference ../2.MegaBLAST/03.assembly.fa $Min_Alignment_Length $Identity_Cutoff $doBLAST_for_ACT_inspection 1> abacas_log_out.txt 2> abacas_log_warnings_errors.txt
 	echo -e "\nCheck out the log of abacas2.nonparallel.sh in the files abacas_log_out.txt and abacas_log_warnings_errors.txt"
 # Break  and delete N's
