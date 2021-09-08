@@ -455,7 +455,7 @@ if grep -q -E "$seqs_circl_1|$seqs_circl_2" $dir/4.iCORN2/04.assembly.fa; then
 	ILRA.deleteContigs.pl List.circular_sequences.fofn $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
 	if [ ! -s $dir/5.Circlator/Out.Circ/06.fixstart.fasta ]; then
 # Bypass if circlator failed and didn't end
-		echo -e "PLEASE be aware that Circlator HAS FAILED. Check its log and output for futher details. This is ok for the subset of test_data , but for other sequences one likely reason is that there were some problems with the provided reads, and not enough/even coverage for the required contigs. Bypassing..."
+		echo -e "PLEASE be aware that Circlator HAS FAILED. Check its log and output for futher details. This may be due to some problems with the provided reads, or not enough/even coverage for the required contigs. Bypassing..."
 		ln -fs $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
 	else
 	cat $PWD/Out.Circ/06.fixstart.fasta >> 05.assembly.fa;
