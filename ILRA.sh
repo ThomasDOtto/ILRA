@@ -275,9 +275,9 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	echo -e "These databases are large, so please be aware that the RAM memory usage at the step 6 of ILRA may reach hundreds of GBs (100-150GB for P. falciparum, more depending on the genome assembly size)"
 	echo -e "ILRA is now going to give you instructions so the databases are downloaded and placed in the corresponding folders (main folder where you have placed ILRA folder, under the directory databases that has been automatically created). ILRA will exit until these steps are performed:"
 	echo -e "The NCBI nucleotide non-redundant sequences database (64GB) has to be downloaded and uncompressed by the user"
-	echo -e "It can be downloaded from NCBI or from the Centrifuge's webpage. The commands would be: cd /path/ILRA_folder/databases/ && wget https://genome-idx.s3.amazonaws.com/centrifuge/nt_2018_3_3.tar.gz && tar -xvzf nt_2018_3_3.tar.gz"
+	echo -e "It can be downloaded from NCBI or from the Centrifuge's webpage. The commands would be: cd /path/to/ILRA/databases/ && wget https://genome-idx.s3.amazonaws.com/centrifuge/nt_2018_3_3.tar.gz && tar -xvzf nt_2018_3_3.tar.gz"
 	echo -e "Alternatively, please execute: cd /path/to/ILRA/databases/ && wget https://ftp.ncbi.nlm.nih.gov/blast/db/nt.*.tar.gz && tar -xvzf nt.*.tar.gz"
-	echo -e "The databases names.dmp and nodes.dmp has to be downloaded by the user executing the command from Recentrifuge: cd /path/ILRA_folder/databases/ && retaxdump"
+	echo -e "The databases names.dmp and nodes.dmp has to be downloaded by the user executing the command from Recentrifuge: cd /path/to/ILRA/databases/ && retaxdump"
 	echo -e "Alternatively, please execute: mkdir -p /path/to/ILRA/databases/taxdump && cd /path/to/ILRA/databases/taxdump && wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip && unzip taxdmp.zip"
 	if [[ -f $databases/nt.1.cf ]] && [[ -f $databases/nt.2.cf ]] && [[ -f $databases/nt.3.cf ]] && [[ -f $databases/nt.4.cf ]] && [[ -f $databases/taxdump/names.dmp ]] && [[ $databases/taxdump/nodes.dmp ]]; then
 	  echo -e "Good, ILRA is detecting all of the required databases in "$databases
