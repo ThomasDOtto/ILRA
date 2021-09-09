@@ -122,7 +122,7 @@ fi
 
 if [ -f $illuminaReads\_1.fastq.gz ]; then
 	echo "Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz. Dealing with them now..."
-	mkdir -p $dir/1.Filtering; cd $dir/1.Filtering
+	mkdir -p $dir/1.Filtering
 	pigz -dfc -p $cores $illuminaReads\_1.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq
 	pigz -dfc -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
 	if [ ! -s $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq ]; then
@@ -195,6 +195,12 @@ if [ -z "$taxonid" ]; then
 	echo "NCBI taxon id to keep in decontamination step: "$taxonid
 fi
 
+if [ $mode != "light" ]; then
+	databases=$(dirname $0)/databases; mkdir -p $databases
+else
+	echo "Execution mode is "$mode". Databases are/should be located in the folder "$databases
+fi
+
 if [ $seq_technology == "pb" ]; then
 	long_reads_technology="pacbio"
 	echo "Long reads sequencing technology: PacBio"
@@ -208,12 +214,15 @@ else
 	echo "Using by default long reads sequencing technology: PacBio"
 	echo "If this needs to be change please provide 'pb' or 'ont' as the last argument"
 fi
+
 if [ -z "$telomere_seq_1" ]; then
 	telomere_seq_1="CCCTAAACCCTAAACCCTAAA"
 fi
+
 if [ -z "$telomere_seq_2" ]; then
 	telomere_seq_2="TTTAGGGTTTAGGGTTTAGGG"
 fi
+
 echo -e "assembly="$assembly
 echo -e "dir="$dir
 echo -e "correctedReads="$correctedReads
@@ -260,10 +269,8 @@ type makeblastdb >/dev/null 2>&1 || { echo >&2 "I require makeblastdb but it's n
 type blastn >/dev/null 2>&1 || { echo >&2 "I require blastn but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type bedtools >/dev/null 2>&1 || { echo >&2 "I require bedtools but it's not installed or available in the PATH. Aborting..."; exit 1; }
 
-
-if [[ $mode == "taxon" || $mode == "both" ]]; then
-	databases=$(dirname $0)/databases; mkdir -p $databases
 ##### Checking the required software for decontamination steps and the installed databases:
+if [[ $mode == "taxon" || $mode == "both" ]]; then
 	type centrifuge >/dev/null 2>&1 || { echo >&2 "I require centrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
 	type retaxdump >/dev/null 2>&1 || { echo >&2 "I require recentrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
 	type rcf >/dev/null 2>&1 || { echo >&2 "I require recentrifuge but it's not installed or available in the PATH. Aborting..."; exit 1; }
@@ -287,7 +294,6 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	fi
 fi
 if [[ $mode == "blast" || $mode == "both" ]]; then
-	databases=$(dirname $0)/databases; mkdir -p $databases
 	echo -e "Several databases for conforming to DDBJ/ENA/Genbank requirements are needed, please execute:"
 	echo -e "cd /path/to/ILRA/databases/"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -dc -p $cores contam_in_euks.fa.gz | makeblastdb -in - -dbtype nucl"
