@@ -24,7 +24,7 @@ my $minlen = shift or die "Error: `minlen` parameter not provided\n";
     local $/="\n";
 }
 
-open(my $fh, '>>', 'Excluded.contigs.fofn');
+open(my $fh, '>>', '../Excluded.contigs.fofn');
 print $fh $result;
 close $fh;
 
