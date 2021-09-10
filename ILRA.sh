@@ -686,3 +686,6 @@ echo -e "Final corrected assembly file: "$dir"/"$name.ILRA.fasta
 end=`date +%s`; runtime=$((end-start))
 echo -e "\nCores: $cores"
 echo -e "Final runtime (secs): $runtime"
+
+echo -e "\n\n\nList of output files:"
+ls -Rslh $dir
