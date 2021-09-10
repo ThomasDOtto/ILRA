@@ -62,7 +62,7 @@ done
 export name; export telomere_seq_1; export telomere_seq_2
 
 echo -e "Check help with parameter '-h' or the read '/path/to/ILRA/test_data/README.txt' for full example usage"
-echo -e "In case you want to test ILRA with a smaller subset of example reads, check the subfolder /path/to/ILRA/test_data"
+echo -e "In case you want to test ILRA with a smaller subset of example reads, check the subfolder /path/to/ILRA/test_data and the 'Quick Start' in the GitHub README"
 
 
 ##### Checking Arguments / Variables:
@@ -686,5 +686,5 @@ end=`date +%s`; runtime=$((end-start))
 echo -e "\nCores: $cores"
 echo -e "Final runtime (secs): $runtime"
 
-echo -e "\n\n\nList of output files:"
+echo -e "\n\n\n\n\n(List of output files)"
 ls -Rslh $dir
