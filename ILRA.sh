@@ -323,10 +323,9 @@ fi
 # 7.  Evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
 
 #### 1. Discard contigs smaller than a threshold:
-echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"
-echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > Excluded.contigs.fofn
+echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"; cd $dir/1.Filtering
+echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
-mv Excluded.contigs.fofn ../Excluded.contigs.fofn
 echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)\n"
 
 
