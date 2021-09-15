@@ -98,21 +98,15 @@ else
 fi
 
 if [ -z "$perform_correction" ]; then
-	doAbacas2=1
 	perform_correction="yes"
-elif [ $perform_correction == "yes" ]; then
-	doAbacas2=1
 elif [ $perform_correction == "no" ]; then
-	doAbacas2=0
 	echo -e "You have deactivated correction based on short reads..."
 	illuminaReads=""
 fi
 
-if [[ -z "$illuminaReads" ]]; then
-	if [ $perform_correction == "yes" ]; then
+if [[ -z "$illuminaReads" ]] && [[ $perform_correction == "yes" ]]; then
 		echo -e "YOU HAVE NOT PROVIDED ILLUMINA READS. Please rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will then skip some steps accordingly..."
 		exit 1
-	fi
 elif [[ $illuminaReads == /* ]]; then
 	echo -e "Checking Illumina short reads..."
 elif [[ $illuminaReads != /* ]]; then
@@ -396,8 +390,8 @@ if [ "$doAbacas2" -eq 1 ]; then
 		cat $i | grep contig | awk '{ print $9 }' | sed 's/^[^"]*"\([^"]*\)".*/\1/' | sed 's/.*=//' >> ../Excluded.contigs.fofn
 	done
 else
-# Bypass if Illumina reads not provided
-	echo -e "Illumina reads or reference genome NOT PROVIDED and ABACAS2 not executed. STEP 3 for reordering and renaming is skipped\n"
+# Bypass if necessary:
+	echo -e "Reference genome NOT PROVIDED and ABACAS2 not executed. STEP 3 for reordering and renaming is skipped\n"
 	ln -fs 03.assembly.fa 03b.assembly.fa
 fi
 echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)\n"
@@ -635,7 +629,7 @@ fi
 
 # Comparing with reference genes:
 echo -e "\nRunning QUAST. Please be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene id) are accepted"
-echo -e "Check out the file quast.py_log_out.txt and the QUAST report"
+echo -e "Check out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats"
 if [ -z "$reference" ]; then
 	echo -e "Running QUAST without reference..."
 	quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
