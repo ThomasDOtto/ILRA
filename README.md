@@ -2,26 +2,18 @@
 Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing) by cleaning and merging contigs, correcting homopolymer tracks and circularizing plastids. 
 
 ## Installation
-ILRA is based on several standard tools and novel scripts. 
+ILRA is based on several standard tools and novel scripts. We suggest three different alternatives for installation:
 
 
-1) We would recommend users without a bioinformatics setup to use our Linux virtual machine (https://q-r.to/ILRA_VM). You will need to install VirtualBox (https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html), set up Ubuntu x64 and mount the downloaded disc (.vdi). See the pdf 'VM.install.pdf' for further help. The username is 'bioinfo' and the password 'Glasgow2020'.
+1) Users without a bioinformatics setup can use our Linux virtual machine (https://q-r.to/ILRA_VM). You will need to install VirtualBox (https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html), set up Ubuntu x64 and mount the downloaded disc (.vdi). See the file 'VM.install.pdf' for further help. The username is 'bioinfo' and the password 'Glasgow2020'.
 
-Once logged in, you can run the ILRA installation with test_data by typing:
-```
-~/ILRA/example.sh
-```
-
-Please refer to the help ('ILRA.sh -h') for further details. This line will execute the pipeline:
-```
-ILRA.sh -a $ASSEMBLY -o $OUTPUT_FOLDER_ILRA -c $CORRECTED_READS -n subset_test -r $REFERENCE -I $ILLU_READS -t $CORES -g $GFF_REF_FILE -L pb
-```
-
-Please note the version of ILRA installed in the virtual machine is likely outdated. You can overwrite the version with the most recent one by first removing the folder of ILRA and then obtaining the most updated version by running:
+Please note the version of ILRA installed in the virtual machine may be outdated. You can overwrite the version with the most recent one by first removing the folder of ILRA and then obtaining the most updated version by running:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
+cd ILRA
+wget --no-check-certificate "https://bit.ly/3h2mfUy" -O external_software.tar.gz; tar -xvzf external_software.tar.gz; rm external_software.tar.gz
+source external_software/path_to_source; ./external_software/finish_installation.sh | tee -a external_software/finish_installation_log.txt
 ```
-
 
 2) The fastest option is to use the file 'external_software.tar.gz', which contains the precompiled binaries and wrapper scripts to install the software required. To install everything required to run ILRA, please execute:
 ```
@@ -39,7 +31,7 @@ source external_software/path_to_source; ./external_software/finish_installation
 ## Quick start
 ```
 cd ILRA # From ILRA main folder
-source $PWD/external_software/path_to_source
+source $PWD/external_software/path_to_source # To set up the PATH, unless you have followed option 3 and manually installed all dependencies
 ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb | tee -a $PWD/test_data/out_ILRA_test_log.txt
 ```
 The test run will take around 5 minutes ('light' mode) and around 10 minutes ('both' mode) using 4 cores.
