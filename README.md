@@ -36,6 +36,8 @@ ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test
 ```
 The test run will take around 5 minutes ('light' mode) and around 10 minutes ('both' mode) using 4 cores.
 
+Please go through the output file 'out_ILRA_test_log.txt' to get the details on the pipeline processing and final output.
+
 
 
 ### ILRA arguments:
@@ -48,6 +50,12 @@ Please refer to the help for futher details:
 ```
 ILRA.sh -h
 ```
+Please provide or not the arguments '-C' and '-I' to indicate whether to perform error correction and find overlapped contigs via short reads (iCORN2 + ILRA.findoverlaps_ver3.pl).
+
+Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) is going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. 
+
+Finally, ILRA can be run in alternative modes (argument '-m'): in order to perform decontamination based on taxonomic classification ('-m taxon', which would be more computationally expensive), to perform decontamination and formatting for online submission based on blasting against databases ('-m blast', which would be less computationally expensive), to perform both ('-m both'), or to skip decontamination and expedite the process ('-m light').
+
 
 
 
