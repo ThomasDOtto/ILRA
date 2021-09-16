@@ -281,9 +281,9 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	echo -e "The databases names.dmp and nodes.dmp has to be downloaded by the user executing the command from Recentrifuge: cd /path/to/ILRA/databases/ && retaxdump"
 	echo -e "Alternatively, please execute: mkdir -p /path/to/ILRA/databases/taxdump && cd /path/to/ILRA/databases/taxdump && wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip && unzip taxdmp.zip"
 	if [[ -f $databases/nt.1.cf ]] && [[ -f $databases/nt.2.cf ]] && [[ -f $databases/nt.3.cf ]] && [[ -f $databases/nt.4.cf ]] && [[ -f $databases/taxdump/names.dmp ]] && [[ $databases/taxdump/nodes.dmp ]]; then
-	  echo -e "Good, ILRA is detecting all of the required databases in "$databases
+	  echo -e "\nGood, ILRA is detecting all of the required databases in "$databases"\n"
 	else
-	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions printed in the log"
+	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions just printed above"
 		exit 1
 	fi
 fi
@@ -297,9 +297,9 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/blast/db/mito.tar.gz && tar -xvzf mito.tar.gz"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -dfc -p 2 rrna.gz | makeblastdb -in - -dbtype nucl -out rrna -title rrna"
 	if [[ -f $databases/contam_in_euks.fa ]] && [[ -f $databases/contam_in_prok.fa ]] && [[ -f $databases/adaptors_for_screening_euks.fa ]] && [[ -f $databases/adaptors_for_screening_proks.fa ]] && [[ -f $databases/mito.ndb ]] && [[ -f $databases/taxdb.btd ]] && [[ -f $databases/rrna ]]; then
-	  echo -e "Good, ILRA is detecting all of the required databases in "$databases
+	  echo -e "\nGood, ILRA is detecting all of the required databases in "$databases"\n"
 	else
-	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions printed in the log"
+	  echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions just printed above"
 		exit 1
 	fi
 fi
@@ -349,7 +349,7 @@ if [ -f $illuminaReads\_1.fastq ]; then
 	echo -e "Check out the log of ILRA.runSMALT_ver2.sh in the file ILRA.runSMALT_ver2.sh_log_out.txt"
 # Find overlaps
 	ILRA.findoverlaps_ver3.pl Blast.merge.blast.length first.bam 02.assembly.fa OUT 1> ILRA.findoverlaps_ver3.pl_log.txt 2> ILRA.findoverlaps_ver3.pl_log_perl_warnings.txt
-	echo -e "\nCheck out the log of ILRA.findoverlaps_ver3.pl in the files log_OUT.txt and results_OUT.txt"
+	echo -e "\nCheck out the log of ILRA.findoverlaps_ver3.pl in the files log_OUT.txt, results_OUT.txt, ILRA.findoverlaps_ver3.pl_log.txt, and ILRA.findoverlaps_ver3.pl_log_perl_warnings.txt"
 # Save the contigs
 	echo -e "\n### Contigs not covered: (ILRA.findoverlaps_ver3.pl)" >> ../Excluded.contigs.fofn
 	cat notcovered_OUT.fasta | awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} $2 {print ">"$0}' | grep ">" >> ../Excluded.contigs.fofn
@@ -473,7 +473,7 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	echo -e "\n\nSTEP 6: Centrifuge and decontamination starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/6.Decontamination; cd $dir/6.Decontamination
 # usr/bin/time to measure the peak of memory
-	/usr/bin/time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100
+	/usr/bin/time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100 1> centrifuge_log_out.txt 2> centrifuge_log_warnings_errors.txt
 	echo -e "\nLog of Centrifuge:"
 	cat report.txt
 # Extract contigs classified as different organisms
@@ -491,6 +491,7 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	else
 # Bypass if Centrifuge failed and didn't end
 		echo -e "\nPLEASE BE AWARE that decontamination based on taxonomic classification HAS FAILED because Centrifuge has been killed due to RAM usage or it has failed due to other reasons. Bypassing..."
+		echo -e "Please check the files centrifuge_log_out.txt and centrifuge_log_warnings_errors.txt"
 		ln -fs $dir/5.Circlator/05.assembly.fa 06.assembly.fa
 	fi
 # Renaming and making single-line fasta with length in the headers
@@ -676,6 +677,7 @@ echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)\n"
 echo -e "\nILRA IS DONE"; echo -e "Current date/time: $(date)\n"
 echo -e "Original assembly file: "$assembly
 echo -e "Final corrected assembly file: "$dir"/"$name.ILRA.fasta
+echo -e "Excluded contigs file: "$dir"/Excluded.contigs.fofn"
 end=`date +%s`; runtime=$((end-start))
 echo -e "\nCores: $cores"
 echo -e "Final runtime (secs): $runtime"
