@@ -60,7 +60,7 @@ Finally, ILRA can be run in alternative modes (argument '-m'):
 
 
 ## Comments
-We used ILRA to improve many genomes. The novel Plasmodium de novo assemblies included in the article are in the folder 'PlasmodiumGenomes'.
+We used ILRA to improve many genomes. The novel Plasmodium de novo assemblies included in the article are in the folder 'PlasmodiumGenomes' and in Zenodo (doi:XXX)
 
 ILRA is a continuation of the IPA (https://github.com/ThomasDOtto/IPA) project. We felt to rename the script as our updated version works with every long-read technology.
   
