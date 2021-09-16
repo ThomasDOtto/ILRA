@@ -2,12 +2,14 @@
 Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing) by cleaning and merging contigs, correcting homopolymer tracks and circularizing plastids. 
 
 ## Installation
-ILRA is based on several standard tools and novel scripts. We suggest three different alternatives for installation:
+ILRA is based on several standard tools and novel scripts. We suggest three different alternatives for installation. Please choose one of:
 
 
 1) Users without a bioinformatics setup can use our Linux virtual machine (https://q-r.to/ILRA_VM). You will need to install VirtualBox (https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html), set up Ubuntu x64 and mount the downloaded disc (.vdi). See the file 'VM.install.pdf' for further help. The username is 'bioinfo' and the password 'Glasgow2020'.
 
-Please note the version of ILRA installed in the virtual machine may be outdated. You can overwrite the version with the most recent one by first removing the folder of ILRA and then obtaining the most updated version by running:
+
+
+2) The fastest option is to use the file 'external_software.tar.gz', which contains the precompiled binaries and wrapper scripts to install the required software. To install everything required to run ILRA, please execute:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA
@@ -15,13 +17,6 @@ wget --no-check-certificate "https://bit.ly/3h2mfUy" -O external_software.tar.gz
 source external_software/path_to_source; ./external_software/finish_installation.sh | tee -a external_software/finish_installation_log.txt
 ```
 
-2) The fastest option is to use the file 'external_software.tar.gz', which contains the precompiled binaries and wrapper scripts to install the software required. To install everything required to run ILRA, please execute:
-```
-git clone https://github.com/ThomasDOtto/ILRA
-cd ILRA
-wget --no-check-certificate "https://bit.ly/3h2mfUy" -O external_software.tar.gz; tar -xvzf external_software.tar.gz; rm external_software.tar.gz
-source external_software/path_to_source; ./external_software/finish_installation.sh | tee -a external_software/finish_installation_log.txt
-```
 
 
 3) The last option is to manually install the required software (please find the list and further details in the 'INSTALL' file).
@@ -46,16 +41,21 @@ ILRA.sh -a <Assembly> -o <Results directory> -c <Long reads corrected reads> -n 
 ```
 Parameters are not positional. If you did not provide any required parameter, the pipeline will exit or use default values if possible (check the help, the log after execution or the 'Arguments / Variables' section in the pipeline ILRA.sh).
 
-Please refer to the help for futher details:
+Please refer to the help page for futher details:
 ```
 ILRA.sh -h
 ```
-Please provide or not the arguments '-C' and '-I' to indicate whether to perform error correction and find overlapped contigs via short reads (iCORN2 + ILRA.findoverlaps_ver3.pl).
+In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output (the file 'XXX.ILRA.fasta')
+
+Please provide or not the arguments '-C' and '-I' to indicate whether to use short reads to perform error correction (iCORN2) and to find overlapped contigs (ILRA.findoverlaps_ver3.pl).
 
 Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) is going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. 
 
-Finally, ILRA can be run in alternative modes (argument '-m'): in order to perform decontamination based on taxonomic classification ('-m taxon', which would be more computationally expensive), to perform decontamination and formatting for online submission based on blasting against databases ('-m blast', which would be less computationally expensive), to perform both ('-m both'), or to skip decontamination and expedite the process ('-m light').
-
+Finally, ILRA can be run in alternative modes (argument '-m'): 
+* '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive
+* '-m blast': To perform decontamination and formatting for online submission based on blasting against databases, which would be less computationally expensive
+* '-m both': To perform both 
+* '-m light': To skip decontamination and expedite the process
 
 
 
