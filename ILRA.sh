@@ -274,7 +274,7 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 
 	echo -e "\nPLEASE note some local databases for the decontamination step (Centrifuge and blast according to DDBJ/ENA/Genbank requirements) are needed"
 	echo -e "These databases are large, so please be aware that the RAM memory usage at the step 6 of ILRA may reach hundreds of GBs (100-150GB for P. falciparum, more depending on the genome assembly size)"
-	echo -e "ILRA is now going to give you instructions so the databases are downloaded and placed in the corresponding folders (main folder where you have placed ILRA folder, under the directory databases that has been automatically created). ILRA will exit until these steps are performed:"
+	echo -e "ILRA is now going to give you instructions so the databases are downloaded and placed in the corresponding folders (main folder where you have placed ILRA folder, under the directory databases that has been automatically created). ILRA will exit until these steps are performed. Please note 'wget' may not complete the download and then uncompressing would give errors. You would need to remove any incomplete file and restart download"
 	echo -e "The NCBI nucleotide non-redundant sequences database (64GB) has to be downloaded and uncompressed by the user"
 	echo -e "It can be downloaded from NCBI or from the Centrifuge's webpage. The commands would be: cd /path/to/ILRA/databases/ && wget https://genome-idx.s3.amazonaws.com/centrifuge/nt_2018_3_3.tar.gz && tar -xvzf nt_2018_3_3.tar.gz"
 	echo -e "Alternatively, please execute: cd /path/to/ILRA/databases/ && wget https://ftp.ncbi.nlm.nih.gov/blast/db/nt.*.tar.gz && tar -xvzf nt.*.tar.gz"
@@ -288,14 +288,14 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	fi
 fi
 if [[ $mode == "blast" || $mode == "both" ]]; then
-	echo -e "Several databases for conforming to DDBJ/ENA/Genbank requirements are needed, please execute:"
+	echo -e "Several databases for conforming to DDBJ/ENA/Genbank requirements are needed. Please download them and note that 'wget' may not complete the download and then uncompressing would give errors. You would need to remove any incomplete file and restart download. Please execute:"
 	echo -e "cd /path/to/ILRA/databases/"
-	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -dc -p $cores contam_in_euks.fa.gz | makeblastdb -in - -dbtype nucl"
+	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -dfc -p 2 contam_in_euks.fa.gz | makeblastdb -in - -dbtype nucl -out contam_in_euks.fa -title contam_in_euks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_prok.fa && makeblastdb -in contam_in_prok.fa -dbtype nucl"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/adaptors_for_screening_euks.fa && formatdb -p F -i adaptors_for_screening_euks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/adaptors_for_screening_proks.fa && formatdb -p F -i adaptors_for_screening_proks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/blast/db/mito.tar.gz && tar -xvzf mito.tar.gz"
-	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -dc -p $cores rrna.gz | makeblastdb -in - -dbtype nucl"
+	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -dfc -p 2 rrna.gz | makeblastdb -in - -dbtype nucl -out rrna -title rrna"
 	if [[ -f $databases/contam_in_euks.fa ]] && [[ -f $databases/contam_in_prok.fa ]] && [[ -f $databases/adaptors_for_screening_euks.fa ]] && [[ -f $databases/adaptors_for_screening_proks.fa ]] && [[ -f $databases/mito.ndb ]] && [[ -f $databases/taxdb.btd ]] && [[ -f $databases/rrna ]]; then
 	  echo -e "Good, ILRA is detecting all of the required databases in "$databases
 	else
