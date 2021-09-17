@@ -492,8 +492,9 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 # Extract contigs classified as different organisms
 	rcf -n $databases/taxdump -f classification.txt -o recentrifuge_contamination_report.html -e CSV &> rcf_log_out.txt # Add --sequential if problems with multithreading
 	perl -S fasta_to_fastq.pl $dir/5.Circlator/05.assembly.fa ? > 05.assembly.fa.fq # assuming default "fake" quality 30 (? symbol, see https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
-	source $(echo $PATH | awk '{gsub(/:/,"\n",$0)}1' | egrep ILRA | uniq)/ILRA_exclude_taxons_recentrifuge.txt
-	echo -e "Check out the log of Recentrifuge in the files rcf_log_out.txt and rextract_log_out.txt"
+	echo -e "\nPlease customize the organisms to be removed in the file /bin/ILRA_exclude_taxons_recentrifuge.txt. Currently:"; cat $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
+	source $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
+	echo -e "\nCheck out the log of Recentrifuge in the files rcf_log_out.txt and rextract_log_out.txt"
 	rextract -f classification.txt -i $taxonid $TAXONS_TO_EXCLUDE -n $databases/taxdump -q 05.assembly.fa.fq &> rextract_log_out.txt
 	sed -n '1~4s/^@/>/p;2~4p' *.fastq > 06.assembly.fa
 # Save contigs
@@ -561,7 +562,7 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 # Process the result and get the final files:
 	awk ' NF>2 {print $1"\t"$7"\t"$8} ' *genbank.out | grep -v "#" | bedtools sort -i - > sequences_from_blast_to_mask.bed
 	bedtools maskfasta -fi ../../$name.ILRA.fasta -bed sequences_from_blast_to_mask.bed -fo $name.ILRA_masked.fasta -fullHeader
-	awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' $name.ILRA_masked.fasta > $name.ILRA.fasta; $name.ILRA_masked.fasta
+	awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' $name.ILRA_masked.fasta > $name.ILRA.fasta; rm $name.ILRA_masked.fasta
 	sed -i "s/${seq_mit}/${seq_mit} [location=mitochondrion]/" $name.ILRA.fasta
 	rm ../../$name.ILRA.fasta
 # Remove if there are other contigs matching the mitochondrion:
