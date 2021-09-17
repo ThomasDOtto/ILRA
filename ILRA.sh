@@ -535,8 +535,8 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 # 2. A database of adaptors linkers and primers
 	vecscreen -d $databases/adaptors_for_screening_euks.fa -f3 -i ../../$name.ILRA.fasta -o vecscreen_in_euks_genbank
 	vecscreen -d $databases/adaptors_for_screening_proks.fa -f3 -i ../../$name.ILRA.fasta -o vecscreen_in_proks_genbank
-	VSlistTo1HitPerLine.awk suspect=0 weak=0 vecscreen_in_euks_genbank > vecscreen_in_euks_genbank.out
-	VSlistTo1HitPerLine.awk suspect=0 weak=0 vecscreen_in_proks_genbank > vecscreen_in_proks_genbank.out
+	VSlistTo1HitPerLine.sh suspect=0 weak=0 vecscreen_in_euks_genbank > vecscreen_in_euks_genbank.out
+	VSlistTo1HitPerLine.sh suspect=0 weak=0 vecscreen_in_proks_genbank > vecscreen_in_proks_genbank.out
 # 3. A database of mitochondrial genomes
 	blastn -query ../../$name.ILRA.fasta -db $databases/mito -out mito_sequences -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 98.6 -soft_masking true -outfmt 7 -num_threads $cores
 # Deal with several hits: (from the BLAST output get the largest alignments and then the largest % of identity)
