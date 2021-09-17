@@ -283,7 +283,7 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	if [[ -f $databases/nt.1.cf ]] && [[ -f $databases/nt.2.cf ]] && [[ -f $databases/nt.3.cf ]] && [[ -f $databases/nt.4.cf ]] && [[ -f $databases/taxdump/names.dmp ]] && [[ $databases/taxdump/nodes.dmp ]]; then
 	  	echo -e "\nGood, ILRA is detecting all of the required databases in "$databases"\n"
 	else
-		echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions just printed above"
+		echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions just printed above and that the databases are in "$databases
 		if [[ -f $databases/nt.1.cf ]]; then echo "nt.1 detected"; else echo "nt.1 not detected"; fi
 		if [[ -f $databases/nt.2.cf ]]; then echo "nt.2 detected"; else echo "nt.2 not detected"; fi
 		if [[ -f $databases/nt.3.cf ]]; then echo "nt.3 detected"; else echo "nt.3 not detected"; fi
@@ -305,7 +305,7 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	if [[ -f $databases/contam_in_euks.fa ]] && [[ -f $databases/contam_in_prok.fa ]] && [[ -f $databases/adaptors_for_screening_euks.fa ]] && [[ -f $databases/adaptors_for_screening_proks.fa ]] && [[ -f $databases/mito.ndb ]] && [[ -f $databases/taxdb.btd ]] && [[ -f $databases/rrna ]]; then
 	  	echo -e "\nGood, ILRA is detecting all of the required databases in "$databases"\n"
 	else
-	  	echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions just printed above"
+	  	echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions just printed above and that the databases are in "$databases
 		if [[ -f $databases/contam_in_euks.fa ]]; then echo "contam_in_euks.fa detected"; else echo "contam_in_euks.fa not detected"; fi
 		if [[ -f $databases/contam_in_prok.fa ]]; then echo "contam_in_prok.fa detected"; else echo "contam_in_prok.fa not detected"; fi
 		if [[ -f $databases/adaptors_for_screening_euks.fa ]]; then echo "adaptors_for_screening_euks.fa detected"; else echo "adaptors_for_screening_euks.fa not detected"; fi
