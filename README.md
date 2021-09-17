@@ -55,7 +55,7 @@ Finally, ILRA can be run in alternative modes (argument '-m'):
 * '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive
 * '-m blast': To perform decontamination and formatting for online submission based on blasting against databases, which would be less computationally expensive
 * '-m both': To perform both 
-* '-m light': To skip decontamination and expedite the process
+* '-m light': To skip decontamination and expedite the process (default if argument not provided)
 
 
 
