@@ -27,9 +27,12 @@ source external_software/path_to_source; ./external_software/finish_installation
 ```
 cd ILRA # From ILRA main folder
 source $PWD/external_software/path_to_source # To set up the PATH, unless you have followed option 3 and manually installed all dependencies
+# Light mode:
 ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb | tee -a $PWD/test_data/out_ILRA_test_log.txt
+# Decontamination based on centrifuge and blast. Both mode:
+ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -m both | tee -a $PWD/test_data/out_ILRA_test_log.txt
 ```
-The test run will take around 5 minutes ('light' mode) and around 10 minutes ('both' mode) using 4 cores.
+The test run will take around 10 minutes ('light' mode) and around 20 minutes ('both' mode) using 4 cores.
 
 Please go through the output file 'out_ILRA_test_log.txt' to get the details on the pipeline processing and final output.
 
