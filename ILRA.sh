@@ -280,32 +280,37 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	echo -e "Alternatively, please execute: cd /path/to/ILRA/databases/ && wget https://ftp.ncbi.nlm.nih.gov/blast/db/nt.*.tar.gz && tar -xvzf nt.*.tar.gz"
 	echo -e "The databases names.dmp and nodes.dmp has to be downloaded by the user executing the command from Recentrifuge: cd /path/to/ILRA/databases/ && retaxdump"
 	echo -e "Alternatively, please execute: mkdir -p /path/to/ILRA/databases/taxdump && cd /path/to/ILRA/databases/taxdump && wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip && unzip taxdmp.zip"
+	echo -e 'Alternatively, to download all databases but nt (you would still need to download that one manually, see above), please execute from the ILRA main folder: wget --no-check-certificate "https://bit.ly/3nTzI5d" -O databases.tar.gz && tar -xvzf databases.tar.gz && rm databases.tar.gz'
+	echo -e "This last option would download all databases but nt at once, but it's not recommended unless you find trouble downloading with the previous instructions, as databases may be outdated..."
 	if [[ -f $databases/nt.1.cf ]] && [[ -f $databases/nt.2.cf ]] && [[ -f $databases/nt.3.cf ]] && [[ -f $databases/nt.4.cf ]] && [[ -f $databases/taxdump/names.dmp ]] && [[ $databases/taxdump/nodes.dmp ]]; then
 	  	echo -e "\nGood, ILRA is detecting all of the required databases in "$databases"\n"
 	else
-		echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions just printed above and that the databases are in "$databases
+		echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions just printed above and that the databases that are marked as not detected are in "$databases
 		if [[ -f $databases/nt.1.cf ]]; then echo "nt.1 detected"; else echo "nt.1 not detected"; fi
 		if [[ -f $databases/nt.2.cf ]]; then echo "nt.2 detected"; else echo "nt.2 not detected"; fi
 		if [[ -f $databases/nt.3.cf ]]; then echo "nt.3 detected"; else echo "nt.3 not detected"; fi
 		if [[ -f $databases/nt.4.cf ]]; then echo "nt.4 detected"; else echo "nt.4 not detected"; fi
 		if [[ -f $databases/taxdump/names.dmp ]]; then echo "/taxdump/names.dmp detected"; else echo "/taxdump/names.dmp not detected"; fi
 		if [[ -f $databases/taxdump/nodes.dmp ]]; then echo "/taxdump/nodes.dmp detected"; else echo "/taxdump/nodes.dmp not detected"; fi
+		ls -Rslh $databases
 		exit 1
 	fi
 fi
 if [[ $mode == "blast" || $mode == "both" ]]; then
 	echo -e "Several databases for conforming to DDBJ/ENA/Genbank requirements are needed. Please download them and note that 'wget' may not complete the download and then uncompressing would give errors. You would need to remove any incomplete file and restart download. Please execute:"
 	echo -e "cd /path/to/ILRA/databases/"
-	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -dfc -p 2 contam_in_euks.fa.gz | makeblastdb -in - -dbtype nucl -out contam_in_euks.fa -title contam_in_euks.fa"
+	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -df -p 2 contam_in_euks.fa.gz && makeblastdb -in contam_in_euks.fa -dbtype nucl -out contam_in_euks.fa -title contam_in_euks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_prok.fa && makeblastdb -in contam_in_prok.fa -dbtype nucl"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/adaptors_for_screening_euks.fa && formatdb -p F -i adaptors_for_screening_euks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/adaptors_for_screening_proks.fa && formatdb -p F -i adaptors_for_screening_proks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/blast/db/mito.tar.gz && tar -xvzf mito.tar.gz"
-	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -dfc -p 2 rrna.gz | makeblastdb -in - -dbtype nucl -out rrna -title rrna"
+	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -df -p 2 rrna.gz && makeblastdb -in rrna -dbtype nucl -out rrna -title rrna"
+	echo -e 'Alternatively, to download all databases but nt (you would still need to download that one manually if required for taxonomic classification, see above), please execute from the ILRA main folder: wget --no-check-certificate "https://bit.ly/3nTzI5d" -O databases.tar.gz && tar -xvzf databases.tar.gz && rm databases.tar.gz'
+	echo -e "This last option would download all databases but nt at once, but it's not recommended unless you find trouble downloading with the previous instructions, as databases may be outdated..."
 	if [[ -f $databases/contam_in_euks.fa ]] && [[ -f $databases/contam_in_prok.fa ]] && [[ -f $databases/adaptors_for_screening_euks.fa ]] && [[ -f $databases/adaptors_for_screening_proks.fa ]] && [[ -f $databases/mito.ndb ]] && [[ -f $databases/taxdb.btd ]] && [[ -f $databases/rrna ]]; then
 	  	echo -e "\nGood, ILRA is detecting all of the required databases in "$databases"\n"
 	else
-	  	echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions just printed above and that the databases are in "$databases
+	  	echo -e "ILRA is not detecting the required databases to decontaminate and you are not in the light mode, so the pipeline is exiting. Please double check the instructions just printed above and that the databases marked as not detected are in "$databases
 		if [[ -f $databases/contam_in_euks.fa ]]; then echo "contam_in_euks.fa detected"; else echo "contam_in_euks.fa not detected"; fi
 		if [[ -f $databases/contam_in_prok.fa ]]; then echo "contam_in_prok.fa detected"; else echo "contam_in_prok.fa not detected"; fi
 		if [[ -f $databases/adaptors_for_screening_euks.fa ]]; then echo "adaptors_for_screening_euks.fa detected"; else echo "adaptors_for_screening_euks.fa not detected"; fi
@@ -313,6 +318,7 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 		if [[ -f $databases/mito.ndb ]]; then echo "mito.ndb detected"; else echo "mito.ndb not detected"; fi
 		if [[ -f $databases/taxdb.btd ]]; then echo "taxdb.btd detected"; else echo "taxdb.btd not detected"; fi
 		if [[ -f $databases/rrna ]]; then echo "rrna detected"; else echo "rrna not detected"; fi
+		ls -Rslh $databases
 		exit 1
 	fi
 fi
