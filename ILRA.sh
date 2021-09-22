@@ -280,7 +280,7 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 	echo -e "Alternatively, please execute: cd /path/to/ILRA/databases/ && wget https://ftp.ncbi.nlm.nih.gov/blast/db/nt.*.tar.gz && tar -xvzf nt.*.tar.gz"
 	echo -e "The databases names.dmp and nodes.dmp has to be downloaded by the user executing the command from Recentrifuge: cd /path/to/ILRA/databases/ && retaxdump"
 	echo -e "Alternatively, please execute: mkdir -p /path/to/ILRA/databases/taxdump && cd /path/to/ILRA/databases/taxdump && wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip && unzip taxdmp.zip"
-	echo -e 'Alternatively, to download all databases but nt (you would still need to download that one manually, see above), please execute from the ILRA main folder: wget --no-check-certificate "https://bit.ly/3nTzI5d" -O databases.tar.gz && tar -xvzf databases.tar.gz && rm databases.tar.gz'
+	echo -e 'Alternatively, to download all databases but nt (you would still need to download that one manually, see above), please execute from the databases folder: wget --no-check-certificate "https://bit.ly/3nTzI5d" -O databases.tar.gz && tar -xvzf databases.tar.gz && rm databases.tar.gz'
 	echo -e "This last option would download all databases but nt at once, but it's not recommended unless you find trouble downloading with the previous instructions, as databases may be outdated..."
 	if [[ -f $databases/nt.1.cf ]] && [[ -f $databases/nt.2.cf ]] && [[ -f $databases/nt.3.cf ]] && [[ -f $databases/nt.4.cf ]] && [[ -f $databases/taxdump/names.dmp ]] && [[ $databases/taxdump/nodes.dmp ]]; then
 	  	echo -e "\nGood, ILRA is detecting all of the required databases in "$databases"\n"
@@ -305,7 +305,7 @@ if [[ $mode == "blast" || $mode == "both" ]]; then
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/adaptors_for_screening_proks.fa && formatdb -p F -i adaptors_for_screening_proks.fa"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/blast/db/mito.tar.gz && tar -xvzf mito.tar.gz"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/rrna.gz && pigz -df -p 2 rrna.gz && makeblastdb -in rrna -dbtype nucl -out rrna -title rrna"
-	echo -e 'Alternatively, to download all databases but nt (you would still need to download that one manually if required for taxonomic classification, see above), please execute from the ILRA main folder: wget --no-check-certificate "https://bit.ly/3nTzI5d" -O databases.tar.gz && tar -xvzf databases.tar.gz && rm databases.tar.gz'
+	echo -e 'Alternatively, to download all databases but nt (you would still need to download that one manually if required for taxonomic classification, see above), please execute from the databases folder: wget --no-check-certificate "https://bit.ly/3nTzI5d" -O databases.tar.gz && tar -xvzf databases.tar.gz && rm databases.tar.gz'
 	echo -e "This last option would download all databases but nt at once, but it's not recommended unless you find trouble downloading with the previous instructions, as databases may be outdated..."
 	if [[ -f $databases/contam_in_euks.fa ]] && [[ -f $databases/contam_in_prok.fa ]] && [[ -f $databases/adaptors_for_screening_euks.fa ]] && [[ -f $databases/adaptors_for_screening_proks.fa ]] && [[ -f $databases/mito.ndb ]] && [[ -f $databases/taxdb.btd ]] && [[ -f $databases/rrna ]]; then
 	  	echo -e "\nGood, ILRA is detecting all of the required databases in "$databases"\n"
