@@ -583,16 +583,18 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' $name.ILRA_masked.fasta > $name.ILRA.fasta; rm $name.ILRA_masked.fasta
 		rm ../../$name.ILRA.fasta
 	# Remove if there are other contigs matching the mitochondrion:
-		if [ "$(grep -v "#" mito_sequences | cut -f1 | sort | uniq | grep -v $seq_mit | wc -l)" -gt 0 ]; then
-			echo -e "\n### Excluded contigs based on blast against mitochondrion sequences:" >> ../../Excluded.contigs.fofn
-			grep -v "#" mito_sequences | cut -f1 | sort | uniq | grep -v $seq_mit >> ../../Excluded.contigs.fofn
-			grep -v "#" mito_sequences | cut -f1 | sort | uniq | grep -v $seq_mit > mito_sequences_to_remove
-			sed -i "s/${seq_mit}/${seq_mit} [location=mitochondrion]/" $name.ILRA.fasta
-			samtools faidx $name.ILRA.fasta
-			contigs_to_retain=$(awk '{print $1}' $name.ILRA.fasta.fai | grep -v -f mito_sequences_to_remove)
-			samtools faidx $name.ILRA.fasta -o ../../$name.ILRA.fasta $contigs_to_retain; rm $name.ILRA.fasta
-		else
-			mv $name.ILRA.fasta ../../$name.ILRA.fasta
+		if [ ! -z "$seq_mit" ]; then
+			if [ "$(grep -v "#" mito_sequences | cut -f1 | sort | uniq | grep -v $seq_mit | wc -l)" -gt 0 ]; then
+				echo -e "\n### Excluded contigs based on blast against mitochondrion sequences:" >> ../../Excluded.contigs.fofn
+				grep -v "#" mito_sequences | cut -f1 | sort | uniq | grep -v $seq_mit >> ../../Excluded.contigs.fofn
+				grep -v "#" mito_sequences | cut -f1 | sort | uniq | grep -v $seq_mit > mito_sequences_to_remove
+				sed -i "s/${seq_mit}/${seq_mit} [location=mitochondrion]/" $name.ILRA.fasta
+				samtools faidx $name.ILRA.fasta
+				contigs_to_retain=$(awk '{print $1}' $name.ILRA.fasta.fai | grep -v -f mito_sequences_to_remove)
+				samtools faidx $name.ILRA.fasta -o ../../$name.ILRA.fasta $contigs_to_retain; rm $name.ILRA.fasta
+			else
+				mv $name.ILRA.fasta ../../$name.ILRA.fasta
+			fi
 		fi
 		echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
 	fi
