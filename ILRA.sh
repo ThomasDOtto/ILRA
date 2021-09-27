@@ -303,7 +303,7 @@ if [[ $mode == "taxon" || $mode == "both" ]]; then
 		exit 1
 	fi
 fi
-if [[ $mode == "blast" || $debug == "step1" ]]; then
+if [[ $mode == "blast" || $mode == "both" ]]; then
 	echo -e "Several databases for conforming to DDBJ/ENA/Genbank requirements are needed. Please download them and note that 'wget' may not complete the download and then uncompressing would give errors. You would need to remove any incomplete file and restart download. Please execute:"
 	echo -e "cd /path/to/ILRA/databases/"
 	echo -e "wget https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz && pigz -df -p 2 contam_in_euks.fa.gz && makeblastdb -in contam_in_euks.fa -dbtype nucl -out contam_in_euks.fa -title contam_in_euks.fa"
