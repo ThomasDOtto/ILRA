@@ -348,6 +348,7 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
 	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)\n"
+	debug="all"
 fi
 
 #### 2. MegaBLAST
@@ -395,6 +396,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		cp 02.assembly.fa 03.assembly.fa
 	fi
 	echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)\n"
+	debug="all"
 fi
 
 #### 3. ABACAS2
@@ -424,6 +426,7 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 		ln -fs 03.assembly.fa 03b.assembly.fa
 	fi
 	echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)\n"
+	debug="all"
 fi
 
 #### 4. iCORN2
@@ -451,6 +454,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 		ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
 	fi
 	echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)\n"
+	debug="all"
 fi
 
 #### 5. Circlator for organelles
@@ -496,6 +500,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		ln -fs $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
 		echo -e "The sequence identifiers provided for circularization were not found in the contig names. Circlator NOT EXECUTED. STEP 5 for circularization is skipped"
 	fi
+	debug="all"
 fi
 
 #### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload, rename sequences
@@ -607,6 +612,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			cat $dir/5.Circlator/05.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > $dir/$name.ILRA.fasta
 		fi
 	fi
+debug="all"
 fi
 
 #### 7. Evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
