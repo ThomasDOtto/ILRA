@@ -70,7 +70,7 @@ echo -e "In case you want to test ILRA with a smaller subset of example reads, c
 ##### Checking Arguments / Variables:
 echo -e "\nI'm now quickly checking and showing the arguments that are going to be used in the ILRA run...\n"
 if [[ -d "$dir/2.MegaBLAST" ]]; then
-    echo -e "PLEASE keep in mind the output directory already exists, this is potentially a rerunning and you may want to clean...\n"
+    echo -e "PLEASE keep in mind the output directory already exists, so this is potentially a rerunning. ILRA is going to clean the existing folders and rerun. If you want to run ILRA only from a particular step, please use the argument '-d '...\n"
 fi
 
 if [[ $assembly == /* ]]; then
