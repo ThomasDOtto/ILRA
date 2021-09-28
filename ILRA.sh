@@ -508,8 +508,9 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 	if [[ $mode == "taxon" || $mode == "both" ]]; then
 		echo -e "\n\nSTEP 6: Centrifuge and decontamination starting..."; echo -e "Current date/time: $(date)\n"
 		mkdir -p $dir/6.Decontamination; cd $dir/6.Decontamination; rm -rf *
-	# usr/bin/time to measure the peak of memory
-		/usr/bin/time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100 1> centrifuge_log_out.txt 2> centrifuge_log_warnings_errors.txt
+	# usr/bin/time if required to measure the time and peak of memory
+		# /usr/bin/time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100 1> centrifuge_log_out.txt 2> centrifuge_log_warnings_errors.txt
+		centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100 1> centrifuge_log_out.txt 2> centrifuge_log_warnings_errors.txt
 		echo -e "\nLog of Centrifuge:"
 		cat report.txt
 	# Extract contigs classified as different organisms
