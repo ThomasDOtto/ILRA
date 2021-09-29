@@ -768,7 +768,16 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 		samtools view -@ $cores -T $dir/4.iCORN2/04.assembly.fa -C -o $dir/5.Circlator/Mapped.corrected.04.sam.cram $dir/5.Circlator/Mapped.corrected.04.sam &> $dir/5.Circlator/Mapped.corrected.04.sam.cram_log_out.txt
 		samtools view -@ $cores -T $dir/5.Circlator/ForCirc.Ref_2.fasta -C -o $dir/5.Circlator/Out.Circ/01.mapreads.bam.cram $dir/5.Circlator/Out.Circ/01.mapreads.bam &> $dir/5.Circlator/01.mapreads.bam.cram_log_out.txt
 	fi
+	if [[ -d "$dir/4.pilon" ]]; then
+		for i in $(seq 1 1 $number_iterations_icorn); do
+			samtools view -@ $cores -T $dir/3.ABACAS2/03b.assembly.fa -C -o $dir/4.pilon/$i.cram $i &> $dir/4.pilon/$i.cram_log_out.txt
+		done
+	fi
 	echo -e "\nAlignment files have been converted to cram for long-term storage. If needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ $cores -T filename.fasta -b -o output.bam input.cram (check out samtools view statements within ILRA.sh to get the fasta file used)"
+	for i in $(find $dir/4.pilon -name "*.vcf"); do
+		pigz -p $cores -11 $i
+	done
+	
 	# Cleaning up:
 	cd $dir; rm $(find . -regex ".*\.\(bam\|sam\)"); rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
 	echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)\n"
