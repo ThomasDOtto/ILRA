@@ -361,7 +361,7 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
 	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)\n"
-	time2=`date +%s`; echo -e "STEP 1 time (secs=): $((time2-time1))"
+	time2=`date +%s`; echo -e "STEP 1 time (secs): $((time2-time1))"
 debug="all"
 fi
 
@@ -411,7 +411,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		cp 02.assembly.fa 03.assembly.fa
 	fi
 	echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)\n"
-	time2=`date +%s`; echo -e "STEP 2 time (secs=): $((time2-time1))"
+	time2=`date +%s`; echo -e "STEP 2 time (secs): $((time2-time1))"
 debug="all"
 fi
 
@@ -443,7 +443,7 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 		ln -fs 03.assembly.fa 03b.assembly.fa
 	fi
 	echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)\n"
-	time2=`date +%s`; echo -e "STEP 3 time (secs=): $((time2-time1))"
+	time2=`date +%s`; echo -e "STEP 3 time (secs): $((time2-time1))"
 debug="all"
 fi
 
@@ -504,7 +504,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 		fi		
 	fi
 echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)\n"
-time2=`date +%s`; echo -e "STEP 4 time (secs=): $((time2-time1))"
+time2=`date +%s`; echo -e "STEP 4 time (secs): $((time2-time1))"
 debug="all"
 fi
 
@@ -547,7 +547,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		cat $PWD/Out.Circ/06.fixstart.fasta >> 05.assembly.fa;
 		fi
 		echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
-		time2=`date +%s`; echo -e "STEP 5 time (secs=): $((time2-time1))"
+		time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"
 	else
 	# Bypass if the contigs names provided are not found
 		ln -fs $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
@@ -594,7 +594,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		fi
 
 		echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)\n"
-		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs=): $((time2-time1))"
+		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs): $((time2-time1))"
 	fi
 	if [[ $mode == "blast" || $mode == "both" ]]; then
 	# Final filtering, masking and reformatting to conform the requirements of DDBJ/ENA/Genbank
@@ -659,7 +659,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			fi
 		fi
 		echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
-		time2=`date +%s`; echo -e "STEP 6 blast time (secs=): $((time2-time1))"
+		time2=`date +%s`; echo -e "STEP 6 blast time (secs): $((time2-time1))"
 	fi
 	if [ $mode == "light" ]; then
 		echo -e "\nSTEP 6 for decontamination is skipped. Light mode activated"; echo -e "Current date/time: $(date)\n"
@@ -781,7 +781,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	# Cleaning up:
 	cd $dir; rm $(find . -regex ".*\.\(bam\|sam\)"); rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
 	echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)\n"
-	time2=`date +%s`; echo -e "STEP 7 time (secs=): $((time2-time1))"
+	time2=`date +%s`; echo -e "STEP 7 time (secs): $((time2-time1))"
 fi
 
 
