@@ -483,13 +483,13 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 		for i in $(seq 1 1 $number_iterations_icorn); do
 			if [ "$i" -eq 1 ]; then
 				mkdir -p $dir/4.pilon/iter_1
-				bowtie2-build --threads $cores $dir/3.ABACAS2/03b.assembly.fa genome_iter1
-				bowtie2 -t -x genome_iter1 -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq -2 $illuminaReads\_2.fastq | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads1.bam##idx##ill_reads1.bam.bai"
+				bowtie2-build --threads $cores $dir/3.ABACAS2/03b.assembly.fa genome_iter1 &> bowtie_log_out.txt
+				bowtie2 -t -x genome_iter1 -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq -2 $illuminaReads\_2.fastq | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads1.bam##idx##ill_reads1.bam.bai" &> bowtie_log_out.txt
 				pilon --genome $dir/3.ABACAS2/03b.assembly.fa --bam ill_reads1.bam --output genome_pilon1 --outdir $dir/4.pilon/iter_1 --changes --vcf --tracks &> pilon_log_out.txt
 			else
 				mkdir -p $dir/4.pilon/iter_$i
-				bowtie2-build --threads $cores $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta genome_iter$i
-				bowtie2 -t -x genome_iter$i -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq -2 $illuminaReads\_2.fastq | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads$i.bam##idx##ill_reads$i.bam.bai"
+				bowtie2-build --threads $cores $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta genome_iter$i &> bowtie_log_out.txt
+				bowtie2 -t -x genome_iter$i -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq -2 $illuminaReads\_2.fastq | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads$i.bam##idx##ill_reads$i.bam.bai" &> bowtie_log_out.txt
 				pilon --genome $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta --bam ill_reads$i.bam --output genome_pilon$i --outdir $dir/4.pilon/iter_$i --changes --vcf --tracks &> pilon_log_out.txt
 			fi
 		done
@@ -516,10 +516,10 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 	if grep -q -E "$seqs_circl_1|$seqs_circl_2" $dir/4.iCORN2/04.assembly.fa; then
 	# Map the corrected reads
 		if [ $long_reads_technology == "pacbio" ]; then
-			minimap2 -x map-pb -H -t $cores -d minimap2_index_pacbio.mmi $dir/4.iCORN2/04.assembly.fa &> mapping_corrected_reads_log_out.txt
+			minimap2 -x map-pb -H -t $cores -d minimap2_index_pacbio.mmi $(find $dir -name "04.assembly.fa") &> mapping_corrected_reads_log_out.txt
 			minimap2 -x map-pb -t $cores -a minimap2_index_pacbio.mmi $correctedReads > Mapped.corrected.04.sam 2>> mapping_corrected_reads_log_out.txt
 		else
-			minimap2 -x map-ont -t $cores -d minimap2_index_nanopore.mmi $dir/4.iCORN2/04.assembly.fa &> mapping_corrected_reads_log_out.txt
+			minimap2 -x map-ont -t $cores -d minimap2_index_nanopore.mmi $(find $dir -name "04.assembly.fa") &> mapping_corrected_reads_log_out.txt
 			minimap2 -x map-ont -t $cores -a minimap2_index_nanopore.mmi $correctedReads > Mapped.corrected.04.sam 2>> mapping_corrected_reads_log_out.txt
 		fi
 	# Circlator:
@@ -542,7 +542,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		if [ ! -s $dir/5.Circlator/Out.Circ/06.fixstart.fasta ]; then
 	# Bypass if circlator failed and didn't end
 			echo -e "PLEASE be aware that Circlator HAS FAILED. Check its log and output for futher details. This may be due to some problems with the provided reads, or not enough/even coverage for the required contigs. Bypassing..."
-			ln -fs $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
+			ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
 		else
 		cat $PWD/Out.Circ/06.fixstart.fasta >> 05.assembly.fa;
 		fi
@@ -550,7 +550,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"
 	else
 	# Bypass if the contigs names provided are not found
-		ln -fs $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
+		ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
 		echo -e "The sequence identifiers provided for circularization were not found in the contig names. Circlator NOT EXECUTED. STEP 5 for circularization is skipped"
 	fi
 debug="all"
@@ -765,7 +765,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 		done
 	fi
 	if [ -f $dir/5.Circlator/Mapped.corrected.04.sam ]; then
-		samtools view -@ $cores -T $dir/4.iCORN2/04.assembly.fa -C -o $dir/5.Circlator/Mapped.corrected.04.sam.cram $dir/5.Circlator/Mapped.corrected.04.sam &> $dir/5.Circlator/Mapped.corrected.04.sam.cram_log_out.txt
+		samtools view -@ $cores -T $(find $dir -name "04.assembly.fa") -C -o $dir/5.Circlator/Mapped.corrected.04.sam.cram $dir/5.Circlator/Mapped.corrected.04.sam &> $dir/5.Circlator/Mapped.corrected.04.sam.cram_log_out.txt
 		samtools view -@ $cores -T $dir/5.Circlator/ForCirc.Ref_2.fasta -C -o $dir/5.Circlator/Out.Circ/01.mapreads.bam.cram $dir/5.Circlator/Out.Circ/01.mapreads.bam &> $dir/5.Circlator/01.mapreads.bam.cram_log_out.txt
 	fi
 	if [[ -d "$dir/4.pilon" ]]; then
