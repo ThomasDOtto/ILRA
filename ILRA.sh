@@ -513,7 +513,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 	time1=`date +%s`
 	echo -e "\n\nSTEP 5: Circlator starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/5.Circlator; cd $dir/5.Circlator; rm -rf *
-	if grep -q -E "$seqs_circl_1|$seqs_circl_2" $dir/4.iCORN2/04.assembly.fa; then
+	if grep -q -E "$seqs_circl_1|$seqs_circl_2" $(find $dir -name "04.assembly.fa"); then
 	# Map the corrected reads
 		if [ $long_reads_technology == "pacbio" ]; then
 			minimap2 -x map-pb -H -t $cores -d minimap2_index_pacbio.mmi $(find $dir -name "04.assembly.fa") &> mapping_corrected_reads_log_out.txt
@@ -528,7 +528,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 			cat Mapped.corrected.04.sam | grep $i | awk '{ print ">"$1"\n"$10 }' >> ForCirc.reads.fasta
 		done
 		for i in $seq_ids; do
-			samtools faidx $dir/4.iCORN2/04.assembly.fa $i >> ForCirc.Ref.fasta
+			samtools faidx $(find $dir -name "04.assembly.fa") $i >> ForCirc.Ref.fasta
 		done
 		awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.reads.fasta > ForCirc.reads_2.fasta
 		awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.Ref.fasta > ForCirc.Ref_2.fasta
@@ -538,7 +538,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		for i in $seq_ids; do
 			echo $i >> List.circular_sequences.fofn
 		done
-		ILRA.deleteContigs.pl List.circular_sequences.fofn $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
+		ILRA.deleteContigs.pl List.circular_sequences.fofn $(find $dir -name "04.assembly.fa") 05.assembly.fa
 		if [ ! -s $dir/5.Circlator/Out.Circ/06.fixstart.fasta ]; then
 	# Bypass if circlator failed and didn't end
 			echo -e "PLEASE be aware that Circlator HAS FAILED. Check its log and output for futher details. This may be due to some problems with the provided reads, or not enough/even coverage for the required contigs. Bypassing..."
