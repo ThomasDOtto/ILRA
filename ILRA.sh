@@ -38,6 +38,7 @@ for argument in $options; do
 		-n | -name # Base name of the output file
 		-t | -threads # Number of cores to use in multithreaded steps
 		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run (step1, step2, step3, step4, step5, step6, or step7)
+		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by Centrifuge, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)" && exit 1;;
 		-a*) assembly=${arguments[index]} ;;
 		-o*) dir=${arguments[index]} ;;
@@ -59,6 +60,7 @@ for argument in $options; do
 		-L*) seq_technology=${arguments[index]} ;;
 		-m*) mode=${arguments[index]} ;;
 		-d*) debug=${arguments[index]} ;;
+		-p*) pilon=${arguments[index]} ;;
 	esac
 done
 export name; export telomere_seq_1; export telomere_seq_2
@@ -153,6 +155,16 @@ if [ -z "$mode" ]; then
 	echo "LIGHT MODE activated, steps for decontamination and preparation for online databases steps will be skipped ..."
 else
 	echo "ILRA execution mode (-m) is: "$mode
+fi
+
+if [ -z "$pilon" ]; then
+	pilon="no"
+	echo "You are using iCORN2 for the correction via Illumina short reads. If you want to use pilon, please provide the argument '-p yes'..."
+elif [[ $pilon == "yes" ]]; then
+	echo "You are using pilon for the correction via Illumina short reads ..."
+else
+	pilon="no"
+	echo "You are using iCORN2 for the correction via Illumina short reads. If you want to use pilon, please provide the argument '-p yes'..."
 fi
 
 echo -e "\nFinal arguments used:"
@@ -336,23 +348,26 @@ fi
 # 2.  megablast -F F
 # 2a. Delete contained contigs
 # 2b. Find overlaps
-# 3.  ABACAS2 with overlap checking (resolve trivial gaps, reorder contigs, get the chromosome names, rename the sequences...)
-# 4.  iCORN2 - error correction
+# 3.  ABACAS2 without overlap checking for reordering (resolve trivial gaps, reorder contigs, get the chromosome names, rename the sequences...)
+# 4.  Error correction (iCORN2 or pilon)
 # 5.  Circularization or organelles or any sequence reqired
-# 6.  Decontamination. Taxonomic classification (Centrifuge/recentrifuge)/final filtering for databases upload, rename sequences
+# 6.  Decontamination. Taxonomic classification via Centrifuge/recentrifuge and final filtering for decontamination and databases upload (blast). Rename sequences if step 3 skipped
 # 7.  Evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
 
 #### 1. Discard contigs smaller than a threshold:
 if [[ $debug == "all" || $debug == "step1" ]]; then
+	time1=`date +%s`
 	echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"; cd $dir/1.Filtering
 	echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
 	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)\n"
-	debug="all"
+	time2=`date +%s`; echo -e "STEP 1 time (secs=): $((time2-time1))"
+debug="all"
 fi
 
 #### 2. MegaBLAST
 if [[ $debug == "all" || $debug == "step2" ]]; then
+	time1=`date +%s`
 	echo -e "\n\nSTEP 2: MegaBLAST starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/2.MegaBLAST; cd $dir/2.MegaBLAST; rm -rf *
 	formatdb -p F -i $dir/1.Filtering/01.assembly.fa
@@ -396,11 +411,13 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		cp 02.assembly.fa 03.assembly.fa
 	fi
 	echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)\n"
-	debug="all"
+	time2=`date +%s`; echo -e "STEP 2 time (secs=): $((time2-time1))"
+debug="all"
 fi
 
 #### 3. ABACAS2
 if [[ $debug == "all" || $debug == "step3" ]]; then
+	time1=`date +%s`
 	echo -e "\n\nSTEP 3: ABACAS2 starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/3.ABACAS2; cd $dir/3.ABACAS2; rm -rf *
 	if [ "$doAbacas2" -eq 1 ]; then
@@ -426,39 +443,72 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 		ln -fs 03.assembly.fa 03b.assembly.fa
 	fi
 	echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)\n"
-	debug="all"
+	time2=`date +%s`; echo -e "STEP 3 time (secs=): $((time2-time1))"
+debug="all"
 fi
 
-#### 4. iCORN2
+#### 4. Correction via Illumina short reads
+#### iCORN2 or pilon:
 if [[ $debug == "all" || $debug == "step4" ]]; then
-	echo -e "\n\nSTEP 4: iCORN2 starting..."; echo -e "Current date/time: $(date)\n"
-	mkdir -p $dir/4.iCORN2; cd $dir/4.iCORN2; rm -rf *
-	if [ -f $illuminaReads\_1.fastq ]; then
-		iCORN2_fragmentSize=500
-		echo "The iCORN2 fragment size used is iCORN2_fragmentSize="$iCORN2_fragmentSize. "Please check iCORN2 help and change manually within the pipeline (section 4) if needed"
-		echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt"
-		icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn &> icorn2.serial_bowtie2.sh_log_out.txt
-	# Cleaned assembly:
-		ln -fs ICORN2.03b.assembly.fa.[$(expr $number_iterations_icorn + 1)] 04.assembly.fa
-	# Summary of iCORN2 results:
-		mkdir -p $dir/7.Stats; icorn2.collectResults.pl $PWD > ../7.Stats/07.iCORN2.final_corrections.results.txt
-		echo -e "### Total SNP: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$6;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
-		echo -e "### Total INS: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$7;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
-		echo -e "### Total DEL: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$8;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
-		echo -e "### Total HETERO: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$9;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
-		echo -e "A preview of the correction by iCORN2 is:"
-		cat ../7.Stats/07.iCORN2.final_corrections.results.txt
-	else
-	# Bypass if Illumina reads not provided
-		echo -e "Illumina reads NOT PROVIDED and iCORN2 is not executed. STEP 4 for correction using short reads is skipped\n"
-		ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
+	if [[ $pilon == "no" ]]; then
+		time1=`date +%s`
+		echo -e "\n\nSTEP 4: iCORN2 starting..."; echo -e "Current date/time: $(date)\n"
+		mkdir -p $dir/4.iCORN2; cd $dir/4.iCORN2; rm -rf *
+		if [ -f $illuminaReads\_1.fastq ]; then
+			iCORN2_fragmentSize=500
+			echo "The iCORN2 fragment size used is iCORN2_fragmentSize="$iCORN2_fragmentSize. "Please check iCORN2 help and change manually within the pipeline (section 4) if needed"
+			echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt"
+			icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn &> icorn2.serial_bowtie2.sh_log_out.txt
+		# Cleaned assembly:
+			ln -fs ICORN2.03b.assembly.fa.[$(expr $number_iterations_icorn + 1)] 04.assembly.fa
+		# Summary of iCORN2 results:
+			mkdir -p $dir/7.Stats; icorn2.collectResults.pl $PWD > ../7.Stats/07.iCORN2.final_corrections.results.txt
+			echo -e "### Total SNP: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$6;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
+			echo -e "### Total INS: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$7;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
+			echo -e "### Total DEL: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$8;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
+			echo -e "### Total HETERO: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$9;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
+			echo -e "A preview of the correction by iCORN2 is:"
+			cat ../7.Stats/07.iCORN2.final_corrections.results.txt
+		else
+		# Bypass if Illumina reads not provided
+			echo -e "Illumina reads NOT PROVIDED and iCORN2 is not executed. STEP 4 for correction using short reads is skipped\n"
+			ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
+		fi		
+	elif [[ $pilon == "yes" ]]; then
+		type pilon >/dev/null 2>&1 || { echo >&2 "I require to execute 'pilon' but it's not installed or available in the PATH in the form of that command line. Aborting..."; exit 1; }
+		time1=`date +%s`
+		echo -e "\n\nSTEP 4: Pilon starting..."; echo -e "Current date/time: $(date)\n"
+		mkdir -p $dir/4.pilon; cd $dir/4.pilon; rm -rf *
+		if [ -f $illuminaReads\_1.fastq ]; then
+		for i in $(seq 1 1 $number_iterations_icorn); do
+			if [ "$i" -eq 1 ]; then
+				mkdir -p $dir/4.pilon/iter_1
+				bowtie2-build --threads $cores $dir/3.ABACAS2/03b.assembly.fa genome_iter1
+				bowtie2 -t -x genome_iter1 -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq -2 $illuminaReads\_2.fastq | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads1.bam##idx##ill_reads1.bam.bai"
+				pilon --genome $dir/3.ABACAS2/03b.assembly.fa --bam ill_reads1.bam --output genome_pilon1 --outdir $dir/4.pilon/iter_1 --changes --vcf --tracks
+			else
+				mkdir -p $dir/4.pilon/iter_$i
+				bowtie2-build --threads $cores $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta genome_iter$i
+				bowtie2 -t -x genome_iter$i -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq -2 $illuminaReads\_2.fastq | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads$i.bam##idx##ill_reads$i.bam.bai"
+				pilon --genome $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta --bam ill_reads$i.bam --output genome_pilon$i --outdir $dir/4.pilon/iter_$i --changes --vcf --tracks
+			fi
+		done
+		# Cleaned assembly:
+			ln -fs $dir/4.pilon/iter_$number_iterations_icorn/genome_pilon$number_iterations_icorn.fasta 04.assembly.fa
+		else
+		# Bypass if Illumina reads not provided
+			echo -e "Illumina reads NOT PROVIDED and pilon is not executed. STEP 4 for correction using short reads is skipped\n"
+			ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
+		fi		
 	fi
-	echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)\n"
-	debug="all"
+echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)\n"
+time2=`date +%s`; echo -e "STEP 4 time (secs=): $((time2-time1))"
+debug="all"
 fi
 
 #### 5. Circlator for organelles
 if [[ $debug == "all" || $debug == "step5" ]]; then
+	time1=`date +%s`
 	echo -e "\n\nSTEP 5: Circlator starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/5.Circlator; cd $dir/5.Circlator; rm -rf *
 	if grep -q -E "$seqs_circl_1|$seqs_circl_2" $dir/4.iCORN2/04.assembly.fa; then
@@ -495,17 +545,19 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		cat $PWD/Out.Circ/06.fixstart.fasta >> 05.assembly.fa;
 		fi
 		echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
+		time2=`date +%s`; echo -e "STEP 5 time (secs=): $((time2-time1))"
 	else
 	# Bypass if the contigs names provided are not found
 		ln -fs $dir/4.iCORN2/04.assembly.fa 05.assembly.fa
 		echo -e "The sequence identifiers provided for circularization were not found in the contig names. Circlator NOT EXECUTED. STEP 5 for circularization is skipped"
 	fi
-	debug="all"
+debug="all"
 fi
 
 #### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload, rename sequences
 if [[ $debug == "all" || $debug == "step6" ]]; then
 	if [[ $mode == "taxon" || $mode == "both" ]]; then
+		time1=`date +%s`
 		echo -e "\n\nSTEP 6: Centrifuge and decontamination starting..."; echo -e "Current date/time: $(date)\n"
 		mkdir -p $dir/6.Decontamination; cd $dir/6.Decontamination; rm -rf *
 	# usr/bin/time if required to measure the time and peak of memory
@@ -540,10 +592,12 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		fi
 
 		echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)\n"
+		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs=): $((time2-time1))"
 	fi
 	if [[ $mode == "blast" || $mode == "both" ]]; then
 	# Final filtering, masking and reformatting to conform the requirements of DDBJ/ENA/Genbank
 		mkdir -p $dir/6.Decontamination/Genbank_upload; cd $dir/6.Decontamination/Genbank_upload; rm -rf *
+		time1=`date +%s`
 		echo -e "\n\nSTEP 6: Blasting and decontamination starting..."; echo -e "Current date/time: $(date)\n"
 		if [ $mode == "blast" ]; then
 	# Renaming and making single-line fasta with length in the headers
@@ -603,6 +657,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			fi
 		fi
 		echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
+		time2=`date +%s`; echo -e "STEP 6 blast time (secs=): $((time2-time1))"
 	fi
 	if [ $mode == "light" ]; then
 		echo -e "\nSTEP 6 for decontamination is skipped. Light mode activated"; echo -e "Current date/time: $(date)\n"
@@ -618,6 +673,7 @@ fi
 
 #### 7. Evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
 if [[ $debug == "all" || $debug == "step7" ]]; then
+	time1=`date +%s`
 	echo -e "\n\nSTEP 7: Renaming, gathering stats and evaluation starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/7.Stats; cd $dir/7.Stats; rm -rf *
 	# Evaluating the assemblies:
@@ -714,6 +770,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	# Cleaning up:
 	cd $dir; rm $(find . -regex ".*\.\(bam\|sam\)"); rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
 	echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)\n"
+	time2=`date +%s`; echo -e "STEP 7 time (secs=): $((time2-time1))"
 fi
 
 
