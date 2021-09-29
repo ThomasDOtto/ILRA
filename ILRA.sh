@@ -485,15 +485,17 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 				mkdir -p $dir/4.pilon/iter_1
 				bowtie2-build --threads $cores $dir/3.ABACAS2/03b.assembly.fa genome_iter1
 				bowtie2 -t -x genome_iter1 -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq -2 $illuminaReads\_2.fastq | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads1.bam##idx##ill_reads1.bam.bai"
-				pilon --genome $dir/3.ABACAS2/03b.assembly.fa --bam ill_reads1.bam --output genome_pilon1 --outdir $dir/4.pilon/iter_1 --changes --vcf --tracks
+				pilon --genome $dir/3.ABACAS2/03b.assembly.fa --bam ill_reads1.bam --output genome_pilon1 --outdir $dir/4.pilon/iter_1 --changes --vcf --tracks &> pilon_log_out.txt
 			else
 				mkdir -p $dir/4.pilon/iter_$i
 				bowtie2-build --threads $cores $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta genome_iter$i
 				bowtie2 -t -x genome_iter$i -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq -2 $illuminaReads\_2.fastq | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads$i.bam##idx##ill_reads$i.bam.bai"
-				pilon --genome $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta --bam ill_reads$i.bam --output genome_pilon$i --outdir $dir/4.pilon/iter_$i --changes --vcf --tracks
+				pilon --genome $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta --bam ill_reads$i.bam --output genome_pilon$i --outdir $dir/4.pilon/iter_$i --changes --vcf --tracks &> pilon_log_out.txt
 			fi
 		done
 		# Cleaned assembly:
+			echo -e "Check out the log of pilon in the file pilon_log_out.txt and *.changes in the subfolders. The numbers of changes by pilon in the $number_iterations_icorn iterations are:" 
+			wc -l $(find . -name "*.changes")
 			ln -fs $dir/4.pilon/iter_$number_iterations_icorn/genome_pilon$number_iterations_icorn.fasta 04.assembly.fa
 		else
 		# Bypass if Illumina reads not provided
