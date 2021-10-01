@@ -621,19 +621,21 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 	# 3. A database of mitochondrial genomes
 		blastn -query ../../$name.ILRA.fasta -db $databases/mito -out mito_sequences -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 98.6 -soft_masking true -outfmt 7 -num_threads $cores
 	# Deal with several hits: (from the BLAST output get the largest alignments and then the largest % of identity)
-		echo "#Hits:" > mito_sequences.out
-		grep "Fields: " mito_sequences | uniq | sed -e 's/,/\t/g' | sed 's/.*: //' >> mito_sequences.out
-		grep -v "#" mito_sequences >> mito_sequences.out
-		echo -e "\n#Info sequences of the hits:" >> mito_sequences.out
-		for i in $(grep -v "#" mito_sequences | cut -f2 | sort | uniq); do
-			blastdbcmd -db $databases/mito -entry $i | grep ">" >> mito_sequences.out
-		done
-		echo -e "\n#Filtering hits - largest alignments:" >> mito_sequences.out
-		for i in $(grep -v "#" mito_sequences | cut -f1 | sort | uniq); do
-			grep -e "^$i" mito_sequences | awk -v aln_length=$(grep -e "^$i" mito_sequences | sort -n -k4 -r | head -n 1 | cut -f 4) '$4 == aln_length' >> mito_sequences.out
-		done
-		seq_mit=$(awk '/largest/,0' mito_sequences.out | awk 'NR!=1' | sort -n -k3 -r | head -n 1 | cut -f 1)
-		echo -e "\n#Contig chosen to be labelled as mitochondrion based on % identity of the largest alignments:" $seq_mit >> mito_sequences.out
+		if [ "$(grep -v "#" mito_sequences | wc -l)" -gt 0 ]; then
+			echo "#Hits:" > mito_sequences.out
+			grep "Fields: " mito_sequences | uniq | sed -e 's/,/\t/g' | sed 's/.*: //' >> mito_sequences.out
+			grep -v "#" mito_sequences >> mito_sequences.out
+			echo -e "\n#Info sequences of the hits:" >> mito_sequences.out
+			for i in $(grep -v "#" mito_sequences | cut -f2 | sort | uniq); do
+				blastdbcmd -db $databases/mito -entry $i | grep ">" >> mito_sequences.out
+			done
+			echo -e "\n#Filtering hits - largest alignments:" >> mito_sequences.out
+			for i in $(grep -v "#" mito_sequences | cut -f1 | sort | uniq); do
+				grep -e "^$i" mito_sequences | awk -v aln_length=$(grep -e "^$i" mito_sequences | sort -n -k4 -r | head -n 1 | cut -f 4) '$4 == aln_length' >> mito_sequences.out
+			done
+			seq_mit=$(awk '/largest/,0' mito_sequences.out | awk 'NR!=1' | sort -n -k3 -r | head -n 1 | cut -f 1)
+			echo -e "\n#Contig chosen to be labelled as mitochondrion based on % identity of the largest alignments:" $seq_mit >> mito_sequences.out
+		fi
 	# 4. A database of ribosomal RNA genes
 		blastn -query ../../$name.ILRA.fasta -db $databases/rrna -task megablast -template_length 18 -template_type coding -window_size 120 -word_size 12 -xdrop_gap 20 -no_greedy -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 1E-9 -gapextend 2 -gapopen 4 -penalty -4 -perc_identity 95 -reward 3 -soft_masking true -outfmt 7 -num_threads $cores | awk '$4>=100' > rrna_genbank.out
 	# 5. The chromosomes of unrelated organisms. Foreign organisms are those that belong to a different taxonomic group compared to the organism whose sequences are being screened.
