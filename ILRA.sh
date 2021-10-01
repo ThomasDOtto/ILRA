@@ -774,12 +774,11 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 		for i in $(seq 1 1 $number_iterations_icorn); do
 			samtools view -@ $cores -T $dir/3.ABACAS2/03b.assembly.fa -C -o $dir/4.pilon/$i.cram $i &> $dir/4.pilon/$i.cram_log_out.txt
 		done
+		for i in $(find $dir/4.pilon -name "*.vcf"); do
+			pigz -p $cores -11 $i
+		done
 	fi
 	echo -e "\nAlignment files have been converted to cram for long-term storage. If needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ $cores -T filename.fasta -b -o output.bam input.cram (check out samtools view statements within ILRA.sh to get the fasta file used)"
-	for i in $(find $dir/4.pilon -name "*.vcf"); do
-		pigz -p $cores -11 $i
-	done
-	
 	# Cleaning up:
 	cd $dir; rm $(find . -regex ".*\.\(bam\|sam\)"); rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
 	echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)\n"
