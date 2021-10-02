@@ -565,25 +565,27 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 	# usr/bin/time if required to measure the time and peak of memory
 		# /usr/bin/time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100 1> centrifuge_log_out.txt 2> centrifuge_log_warnings_errors.txt
 		centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100 1> centrifuge_log_out.txt 2> centrifuge_log_warnings_errors.txt
-		echo -e "\nLog of Centrifuge:"
-		cat report.txt
+		echo -e "Please check the files centrifuge_log_out.txt and centrifuge_log_warnings_errors.txt"
+		if [ -s report.txt ]; then
+			echo -e "\nLog of Centrifuge:"
+			cat report.txt
 	# Extract contigs classified as different organisms
-		rcf -n $databases/taxdump -f classification.txt -o recentrifuge_contamination_report.html -e CSV &> rcf_log_out.txt # Add --sequential if problems with multithreading
-		perl -S fasta_to_fastq.pl $dir/5.Circlator/05.assembly.fa ? > 05.assembly.fa.fq # assuming default "fake" quality 30 (? symbol, see https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
-		echo -e "\nPlease customize the organisms to be removed in the file /bin/ILRA_exclude_taxons_recentrifuge.txt. Currently:"; cat $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
-		source $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
-		echo -e "\nCheck out the log of Recentrifuge in the files rcf_log_out.txt and rextract_log_out.txt"
-		rextract -f classification.txt -i $taxonid $TAXONS_TO_EXCLUDE -n $databases/taxdump -q 05.assembly.fa.fq &> rextract_log_out.txt
-		sed -n '1~4s/^@/>/p;2~4p' *.fastq > 06.assembly.fa
+			rcf -n $databases/taxdump -f classification.txt -o recentrifuge_contamination_report.html -e CSV &> rcf_log_out.txt # Add --sequential if problems with multithreading
+			perl -S fasta_to_fastq.pl $dir/5.Circlator/05.assembly.fa ? > 05.assembly.fa.fq # assuming default "fake" quality 30 (? symbol, see https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
+			echo -e "\nPlease customize the organisms to be removed in the file /bin/ILRA_exclude_taxons_recentrifuge.txt. Currently:"; cat $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
+			source $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
+			echo -e "\nCheck out the log of Recentrifuge in the files rcf_log_out.txt and rextract_log_out.txt"
+			rextract -f classification.txt -i $taxonid $TAXONS_TO_EXCLUDE -n $databases/taxdump -q 05.assembly.fa.fq &> rextract_log_out.txt
+			sed -n '1~4s/^@/>/p;2~4p' *.fastq > 06.assembly.fa
 	# Save contigs
-		echo -e "\n### Excluded contigs that are not recognized by Centrifuge as the species of interests: (Check the output of Centrifuge in Step 6)" >> ../Excluded.contigs.fofn
-		comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
+			echo -e "\n### Excluded contigs that are not recognized by Centrifuge as the species of interests: (Check the output of Centrifuge in Step 6)" >> ../Excluded.contigs.fofn
+			comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
+		fi
 		if [ -s 06.assembly.fa ]; then
-			echo -e "Centrifuge seems to have run fine. Please check the report file to assess the contigs that corresponded to contamination. ILRA has helped with this, but PLEASE BE AWARE that if possible, it is recommended to run Centrifuge/Recentrifuge on the raw sequencing reads prior assembly to decontaminate, and then reassemble and rerun ILRA"
+			echo -e "Centrifuge seems to have run fine. Please check the log, the Excluded.contigs.fofn and the report.txt files to assess the contigs that corresponded to contamination. ILRA has helped with this, but PLEASE BE AWARE that if possible, it is recommended to run Centrifuge/Recentrifuge on the raw sequencing reads prior assembly to decontaminate, and then reassemble and rerun ILRA"
 		else
 	# Bypass if Centrifuge failed and didn't end
-			echo -e "\nPLEASE BE AWARE that decontamination based on taxonomic classification HAS FAILED because Centrifuge has been killed due to RAM usage or it has failed due to other reasons. Bypassing..."
-			echo -e "Please check the files centrifuge_log_out.txt and centrifuge_log_warnings_errors.txt"
+			echo -e "\nPLEASE BE AWARE that decontamination based on taxonomic classification HAS FAILED because Centrifuge has been killed due to RAM usage or it has failed due to other reasons. Check the logs. Bypassing..."
 			ln -fs $dir/5.Circlator/05.assembly.fa 06.assembly.fa
 		fi
 	# Renaming and making single-line fasta with length in the headers
@@ -592,7 +594,6 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		else
 			cat 06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../$name.ILRA.fasta
 		fi
-
 		echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)\n"
 		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs): $((time2-time1))"
 	fi
@@ -659,6 +660,8 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			else
 				mv $name.ILRA.fasta ../../$name.ILRA.fasta
 			fi
+		else
+			mv $name.ILRA.fasta ../../$name.ILRA.fasta
 		fi
 		echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
 		time2=`date +%s`; echo -e "STEP 6 blast time (secs): $((time2-time1))"
