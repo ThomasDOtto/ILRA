@@ -94,8 +94,7 @@ fi
 if [[ $correctedReads == /* ]]; then
 	echo -e "Corrected long reads provided correctly"
 elif [ -z "$correctedReads" ]; then
-	echo -e "CORRECTED READS NOT PROVIDED"
-	exit 1
+	echo -e "CORRECTED READS NOT PROVIDED, Circlator is going to be skipped"
 else
 	echo -e "Assuming the corrected reads are in the current pathway..."
 	correctedReads=$PWD/$correctedReads
@@ -238,7 +237,9 @@ fi
 
 echo -e "assembly="$assembly
 echo -e "dir="$dir
-echo -e "correctedReads="$correctedReads
+if [[ $correctedReads == /* ]]; then
+	echo -e "correctedReads="$correctedReads
+fi
 echo -e "name="$name
 echo -e "reference="$reference
 echo -e "illuminaReads="$illuminaReads
@@ -510,50 +511,56 @@ fi
 
 #### 5. Circlator for organelles
 if [[ $debug == "all" || $debug == "step5" ]]; then
-	time1=`date +%s`
-	echo -e "\n\nSTEP 5: Circlator starting..."; echo -e "Current date/time: $(date)\n"
-	mkdir -p $dir/5.Circlator; cd $dir/5.Circlator; rm -rf *
-	if grep -q -E "$seqs_circl_1|$seqs_circl_2" $(find $dir -name "04.assembly.fa"); then
-	# Map the corrected reads
-		if [ $long_reads_technology == "pacbio" ]; then
-			minimap2 -x map-pb -H -t $cores -d minimap2_index_pacbio.mmi $(find $dir -name "04.assembly.fa") &> mapping_corrected_reads_log_out.txt
-			minimap2 -x map-pb -t $cores -a minimap2_index_pacbio.mmi $correctedReads > Mapped.corrected.04.sam 2>> mapping_corrected_reads_log_out.txt
+	if [[ $correctedReads == /* ]]; then
+		time1=`date +%s`
+		echo -e "\n\nSTEP 5: Circlator starting..."; echo -e "Current date/time: $(date)\n"
+		mkdir -p $dir/5.Circlator; cd $dir/5.Circlator; rm -rf *
+		if grep -q -E "$seqs_circl_1|$seqs_circl_2" $(find $dir -name "04.assembly.fa"); then
+		# Map the corrected reads
+			if [ $long_reads_technology == "pacbio" ]; then
+				minimap2 -x map-pb -H -t $cores -d minimap2_index_pacbio.mmi $(find $dir -name "04.assembly.fa") &> mapping_corrected_reads_log_out.txt
+				minimap2 -x map-pb -t $cores -a minimap2_index_pacbio.mmi $correctedReads > Mapped.corrected.04.sam 2>> mapping_corrected_reads_log_out.txt
+			else
+				minimap2 -x map-ont -t $cores -d minimap2_index_nanopore.mmi $(find $dir -name "04.assembly.fa") &> mapping_corrected_reads_log_out.txt
+				minimap2 -x map-ont -t $cores -a minimap2_index_nanopore.mmi $correctedReads > Mapped.corrected.04.sam 2>> mapping_corrected_reads_log_out.txt
+			fi
+		# Circlator:
+			seq_ids=$(awk '{print $3}' Mapped.corrected.04.sam | grep -E "$seqs_circl_1|$seqs_circl_2" | tail -n +2 | sort | uniq)
+			for i in $seq_ids; do
+				cat Mapped.corrected.04.sam | grep $i | awk '{ print ">"$1"\n"$10 }' >> ForCirc.reads.fasta
+			done
+			for i in $seq_ids; do
+				samtools faidx $(find $dir -name "04.assembly.fa") $i >> ForCirc.Ref.fasta
+			done
+			awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.reads.fasta > ForCirc.reads_2.fasta
+			awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.Ref.fasta > ForCirc.Ref_2.fasta
+			echo -e "Check out the log of the mapping of the corrected reads and circlator in the files mapping_corrected_reads_log_out.txt and circlator_log_out.txt"
+			circlator all ForCirc.Ref_2.fasta ForCirc.reads_2.fasta Out.Circ --threads $cores &> circlator_log_out.txt
+		# Delete the plastids/organelles/circular sequences from the current assembly version (04.assembly.fa)
+			for i in $seq_ids; do
+				echo $i >> List.circular_sequences.fofn
+			done
+			ILRA.deleteContigs.pl List.circular_sequences.fofn $(find $dir -name "04.assembly.fa") 05.assembly.fa
+			if [ ! -s $dir/5.Circlator/Out.Circ/06.fixstart.fasta ]; then
+		# Bypass if circlator failed and didn't end
+				echo -e "PLEASE be aware that Circlator HAS FAILED. Check its log and output for futher details. This may be due to some problems with the provided reads, or not enough/even coverage for the required contigs. Bypassing..."
+				ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
+			else
+			cat $PWD/Out.Circ/06.fixstart.fasta >> 05.assembly.fa;
+			fi
+			echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
+			time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"
 		else
-			minimap2 -x map-ont -t $cores -d minimap2_index_nanopore.mmi $(find $dir -name "04.assembly.fa") &> mapping_corrected_reads_log_out.txt
-			minimap2 -x map-ont -t $cores -a minimap2_index_nanopore.mmi $correctedReads > Mapped.corrected.04.sam 2>> mapping_corrected_reads_log_out.txt
-		fi
-	# Circlator:
-		seq_ids=$(awk '{print $3}' Mapped.corrected.04.sam | grep -E "$seqs_circl_1|$seqs_circl_2" | tail -n +2 | sort | uniq)
-		for i in $seq_ids; do
-			cat Mapped.corrected.04.sam | grep $i | awk '{ print ">"$1"\n"$10 }' >> ForCirc.reads.fasta
-		done
-		for i in $seq_ids; do
-			samtools faidx $(find $dir -name "04.assembly.fa") $i >> ForCirc.Ref.fasta
-		done
-		awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.reads.fasta > ForCirc.reads_2.fasta
-		awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.Ref.fasta > ForCirc.Ref_2.fasta
-		echo -e "Check out the log of the mapping of the corrected reads and circlator in the files mapping_corrected_reads_log_out.txt and circlator_log_out.txt"
-		circlator all ForCirc.Ref_2.fasta ForCirc.reads_2.fasta Out.Circ --threads $cores &> circlator_log_out.txt
-	# Delete the plastids/organelles/circular sequences from the current assembly version (04.assembly.fa)
-		for i in $seq_ids; do
-			echo $i >> List.circular_sequences.fofn
-		done
-		ILRA.deleteContigs.pl List.circular_sequences.fofn $(find $dir -name "04.assembly.fa") 05.assembly.fa
-		if [ ! -s $dir/5.Circlator/Out.Circ/06.fixstart.fasta ]; then
-	# Bypass if circlator failed and didn't end
-			echo -e "PLEASE be aware that Circlator HAS FAILED. Check its log and output for futher details. This may be due to some problems with the provided reads, or not enough/even coverage for the required contigs. Bypassing..."
+		# Bypass if the contigs names provided are not found
 			ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
-		else
-		cat $PWD/Out.Circ/06.fixstart.fasta >> 05.assembly.fa;
+			echo -e "The sequence identifiers provided for circularization were not found in the contig names. Circlator NOT EXECUTED. STEP 5 for circularization is skipped"
 		fi
-		echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
-		time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"
+		debug="all"
 	else
-	# Bypass if the contigs names provided are not found
+		echo -e "CORRECTED READS NOT PROVIDED, Circlator NOT EXECUTED. STEP 5 for circularization is skipped"
+		mkdir -p $dir/5.Circlator; cd $dir/5.Circlator
 		ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
-		echo -e "The sequence identifiers provided for circularization were not found in the contig names. Circlator NOT EXECUTED. STEP 5 for circularization is skipped"
 	fi
-debug="all"
 fi
 
 #### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload, rename sequences
