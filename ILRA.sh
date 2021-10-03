@@ -21,13 +21,13 @@ for argument in $options; do
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format)
 		-f | -filter_contig_size # Size threshold to filter the contigs (bp)
-		-I | -Illumina_reads # Root name of the paired-end Illumina reads (FASTQ format, must be gzipped)
+		-I | -Illumina_reads # Root name of the paired-end Illumina reads (FASTQ format, must be gzipped and name root_1.fastq.gz and root_2.fastq.gz prior execution)
 		-C | -Correction_Illumina_reads # Whether illumina reads are provided and all steps of correction should be performed ('no' /'yes' by default)
 		-R | -Range_insert_size # Insert size range of the Illumina reads to use in mapping by SMALT (bp)
 		-i | -iterations_iCORN2 # Number of iterations to perform in iCORN2
 		-r | -reference # Reference file (full pathway, FASTA format)
 		-g | -gff_file # Reference annotation file (full pathway, GFF format)
-		-c | -corrected_reads # Corrected long reads (FASTQ format, can be gzipped)
+		-c | -corrected_reads # Corrected long reads for circulatization of the contigs containing the strings by -s and -S (FASTQ format, can be gzipped)
 		-s | -seq_circularize_1 # Regex pattern to find in the contig names and circularize
 		-S | -Seq_circularize_2 # Regex pattern to find in the contig names and circularize
 		-L | -Long_reads_technology # Technology of long reads sequencing (pb/ont)
