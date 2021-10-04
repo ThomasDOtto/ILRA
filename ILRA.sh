@@ -589,7 +589,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
 		fi
 		if [ -s 06.assembly.fa ]; then
-			echo -e "Centrifuge seems to have run fine. Please check the log, the Excluded.contigs.fofn and the report.txt files to assess the contigs that corresponded to contamination. ILRA has helped with this, but PLEASE BE AWARE that if possible, it is recommended to run Centrifuge/Recentrifuge on the raw sequencing reads prior assembly to decontaminate, and then reassemble and rerun ILRA"
+			echo -e "Centrifuge seems to have run fine. Please check the log, the Excluded.contigs.fofn and the report.txt files to assess the contigs that corresponded to contamination and that have been excluded by ILRA"
 		else
 	# Bypass if Centrifuge failed and didn't end
 			echo -e "\nPLEASE BE AWARE that decontamination based on taxonomic classification HAS FAILED because Centrifuge has been killed due to RAM usage or it has failed due to other reasons. Check the logs. Bypassing..."
