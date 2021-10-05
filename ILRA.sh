@@ -275,7 +275,7 @@ type minimap2 >/dev/null 2>&1 || { echo >&2 "I require minimap2 but it's not ins
 type circlator >/dev/null 2>&1 || { echo >&2 "I require Circlator but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type gtool.py >/dev/null 2>&1 || { echo >&2 "I require gtool.py for getting GC content but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type assembly-stats >/dev/null 2>&1 || { echo >&2 "I require assembly-stats but it's not installed or available in the PATH. Aborting..."; exit 1; }
-type fastq_info.sh >/dev/null 2>&1 || { echo >&2 "I require fastq_info.sh but it's not installed or available in the PATH. Aborting..."; exit 1; }
+type fastq-info.sh >/dev/null 2>&1 || { echo >&2 "I require fastq-info.sh but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type pigz >/dev/null 2>&1 || { echo >&2 "I require pigz but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type fastqc >/dev/null 2>&1 || { echo >&2 "I require fastqc but it's not installed or available in the PATH. Aborting..."; exit 1; }
 type quast.py >/dev/null 2>&1 || { echo >&2 "I require quast but it's not installed or available in the PATH. Aborting..."; exit 1; }
