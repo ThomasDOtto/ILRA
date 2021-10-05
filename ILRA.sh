@@ -424,7 +424,7 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 	if [ "$doAbacas2" -eq 1 ]; then
 		ABA_CHECK_OVERLAP=0; export ABA_CHECK_OVERLAP; Min_Alignment_Length=1000; Identity_Cutoff=98; doBLAST_for_ACT_inspection=1
 		echo -e "ABACAS2 parameters are:\nABA_CHECK_OVERLAP=0\nMin_Alignment_Length=1000\nIdentity_Cutoff=98\nPlease check ABACAS2 help and change manually within the pipeline (section 3) these parameters if needed"
-		abacas2.nonparallel.sh $reference ../2.MegaBLAST/03.assembly.fa $Min_Alignment_Length $Identity_Cutoff $doBLAST_for_ACT_inspection 1> abacas_log_out.txt 2> abacas_log_warnings_errors.txt
+		abacas2.nonparallel.sh $reference ../2.MegaBLAST/03.assembly.fa $cores $Min_Alignment_Length $Identity_Cutoff $doBLAST_for_ACT_inspection 1> abacas_log_out.txt 2> abacas_log_warnings_errors.txt
 		echo -e "\nCheck out the log of abacas2.nonparallel.sh in the files abacas_log_out.txt and abacas_log_warnings_errors.txt"
 	# Break  and delete N's
 		fastaq trim_Ns_at_end Genome.abacas.fasta 03b.assembly.fa
