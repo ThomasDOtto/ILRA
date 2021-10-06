@@ -28,7 +28,6 @@ echo -e "\n\n\nIf for some reason an outdated python or conda is required in you
 cd $EXTERNAL_SOFTWARE_DIR; wget "https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Linux-x86_64.sh"
 mkdir -p Miniconda3; sh Miniconda3-py39_4.10.3-Linux-x86_64.sh -b -f -s -p $EXTERNAL_SOFTWARE_DIR/Miniconda3; rm Miniconda3-py39_4.10.3-Linux-x86_64.sh
 
-
 #### Install packages in an environment via conda:
 echo -e "\n\n\nI'm downloading and installing several packages through conda...\n\n\n"
 $EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda create -n ILRA_env -y -c conda-forge mamba
@@ -45,15 +44,18 @@ cd $(dirname $(find . -name reads_analyzer.py)); rm reads_analyzer.py; "wget htt
 mamba create -n centrifuge -y -c bioconda centrifuge
 
 
-#### Getting the outdated java version required for iCORN2:
+#### Setting up iCORN2:
+# Getting picard:
+echo -e "\n\n\nGetting picard (v2.26.2)...\n\n\n"
+cd $EXTERNAL_SOFTWARE_DIR/iCORN2
+wget https://github.com/broadinstitute/picard/releases/download/2.26.2/picard.jar
+# Getting the outdated java version required for iCORN2:
 echo -e "\n\n\nGetting JAVA v1.7 for iCORN2...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://files-cdn.liferay.com/mirrors/download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz; tar -xzf jdk-7u80-linux-x64.tar.gz; rm jdk-7u80-linux-x64.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin; chmod 775 *
-
-
-#### Getting an updated java version required for picard:
-echo -e "\n\n\nGetting an updated JAVA version (16.0.2) for picard...\n\n\n"
+# Getting an updated java version required for picard:
+echo -e "\n\n\nGetting an updated JAVA version (openjdk v16.0.2) for picard...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz; tar -xzf openjdk-16.0.2_linux-x64_bin.tar.gz; rm openjdk-16.0.2_linux-x64_bin.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk-16.0.2/bin; chmod 775 *
