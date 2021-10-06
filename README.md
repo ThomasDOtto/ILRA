@@ -9,30 +9,29 @@ ILRA is based on several standard tools and novel scripts. We suggest three diff
 
 
 
-2) The fastest option is to use the file 'external_software.tar.gz', which contains the precompiled binaries and wrapper scripts to install the required software. To install everything required to run ILRA, please execute:
+2) The fastest option is to use the folder 'external_software', which contains a wrapper script to install the required software and PATH to set. To install and setup everything required to run ILRA, please execute:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA
-wget --no-check-certificate "https://bit.ly/3h2mfUy" -O external_software.tar.gz; tar -xvzf external_software.tar.gz; rm external_software.tar.gz
-source external_software/path_to_source; ./external_software/finish_installation.sh | tee -a external_software/finish_installation_log.txt
+bash external_software/ILRA/finish_installation.sh | tee -a external_software/ILRA/finish_installation_log.txt
 ```
 
 
 
-3) The last option is to manually install the required software (please find the list and further details in the 'INSTALL' file).
+3) The last and less recommended option is to manually install the required software (please find the list and further details in the 'INSTALL' file).
 
 
 
 ## Quick start
 ```
-cd ILRA # From ILRA main folder
-source $PWD/external_software/path_to_source # To set up the PATH, unless you have followed option 3 and manually installed all dependencies
+cd ILRA
+source external_software/ILRA/path_to_source # To set up the PATH if you have followed option 2 for installation above
 # Light mode:
-ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb | tee -a $PWD/test_data/out_ILRA_test_log.txt
+ILRA.sh -a test_data/assembly_Pf_test.fasta -o test_data/out_ILRA_test -c test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I test_data/Illumina_short_reads_Pf_test_subset -t 4 -g test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb | tee -a test_data/out_ILRA_test_log.txt
 # Decontamination based on centrifuge and blast. Both mode:
-ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -m both | tee -a $PWD/test_data/out_ILRA_test_log.txt
+ILRA.sh -a test_data/assembly_Pf_test.fasta -o test_data/out_ILRA_test -c test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I test_data/Illumina_short_reads_Pf_test_subset -t 4 -g test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -m both | tee -a test_data/out_ILRA_test_m_both_log.txt
 ```
-The test run will take around 10 minutes ('light' mode) and around 20 minutes ('both' mode) using 4 cores.
+The test run will take around XX minutes ('light' mode) and around XX minutes ('both' mode) using 4 cores.
 
 Please go through the output file 'out_ILRA_test_log.txt' to get the details on the pipeline processing and final output.
 
@@ -40,25 +39,25 @@ Please go through the output file 'out_ILRA_test_log.txt' to get the details on 
 
 ## ILRA arguments
 ```
-ILRA.sh -a <Assembly> -o <Results directory> -c <Long reads corrected reads> -n <Name of results> -r <Reference genome for ABACAS2> -I <Root name of Illumina short reads> -t <Number of cores to use> -s <First sequence name to circularize> -S <Second sequence name to circularize> -i <Number of iterations for iCORN2> -f <Size threshold for discarding contigs> -R <Insert size range for Illumina short reads> -T <NCBI taxonomy id to extract> -g <GFF reference genes annotation file> -L <Long reads sequencing technology> -e <Telomeric sequence left> -E <Telomeric sequence right> -m <Execution mode> -C <Perform error correction by short reads> -h <Show help>
+ILRA.sh -a <Assembly> -o <Results directory> -c <Long reads corrected reads> -n <Name> -r <Reference genome> -I <Root name of Illumina short reads> -t <Number of cores to use> -s <First sequence name to circularize> -S <Second sequence name to circularize> -i <Number of iterations for iCORN2> -f <Size threshold for discarding contigs> -R <Insert size range for Illumina short reads> -T <NCBI taxonomy id to extract> -g <GFF reference genes annotation file> -L <Long reads sequencing technology> -e <Telomeric sequence left> -E <Telomeric sequence right> -m <Execution mode> -C <Perform error correction by short reads> -d <Step to commence the run> -h <Show help>
 ```
-Parameters are not positional. If you did not provide any required parameter, the pipeline will exit or use default values if possible (check the help, the log after execution or the 'Arguments / Variables' section in the main file 'ILRA.sh').
+Parameters are not positional. If you did not provide a required parameter, the pipeline may exit or use default values if possible (check the help, the log after execution, and the 'Arguments / Variables' section in the ILRA main script 'ILRA.sh').
 
-Please refer to the help page for futher details:
+Please refer to the help for futher details:
 ```
 ILRA.sh -h
 ```
-In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output (the file 'XXX.ILRA.fasta')
+In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output (the file 'Name.ILRA.fasta').
 
 Please provide or not the arguments '-C' and '-I' to indicate whether to use short reads to perform error correction (iCORN2) and to find overlapped contigs (ILRA.findoverlaps_ver3.pl).
 
-Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) is going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. 
+Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) are going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step).
 
 Finally, ILRA can be run in alternative modes (argument '-m'): 
-* '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive
-* '-m blast': To perform decontamination and formatting for online submission based on blasting against databases, which would be less computationally expensive
-* '-m both': To perform both 
-* '-m light': To skip decontamination and expedite the process (default if argument not provided)
+* '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive.
+* '-m blast': To perform decontamination and formatting for online submission based on blasting against databases, which would be less computationally expensive.
+* '-m both': To perform both. 
+* '-m light': To skip decontamination and expedite the process (default if argument not provided).
 
 
 
