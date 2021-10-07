@@ -3,7 +3,7 @@ EXTERNAL_SOFTWARE_DIR=$(dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev
 export EXTERNAL_SOFTWARE_DIR
 
 #### Set PATH:
-PATH=$(dirname $EXTERNAL_SOFTWARE_DIR):$(dirname $EXTERNAL_SOFTWARE_DIR)/bin:$EXTERNAL_SOFTWARE_DIR:$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/condabin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/centrifuge/bin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/quast/bin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:$HOME/.local/bin
+PATH=$(dirname $EXTERNAL_SOFTWARE_DIR):$(dirname $EXTERNAL_SOFTWARE_DIR)/bin:$EXTERNAL_SOFTWARE_DIR:$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/condabin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/centrifuge/bin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/quast/bin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:$HOME/.local/bin
 export PATH
 
 # Set PERL5LIB (the programs are supposed to do it but it may help to set these beforehand...):
