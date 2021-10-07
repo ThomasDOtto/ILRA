@@ -31,7 +31,7 @@ for argument in $options; do
 		-s | -seq_circularize_1 # Regex pattern to find in the contig names and circularize
 		-S | -Seq_circularize_2 # Regex pattern to find in the contig names and circularize
 		-L | -Long_reads_technology # Technology of long reads sequencing (pb/ont)
-		-T | -Taxon_ID # NCBI taxon ID to extract in the decontamination step
+		-T | -Taxon_ID # NCBI taxon ID
 		-e | -ending_telomere_seq_1 # Telomere-associated sequence to search in the first strand
 		-E | -Ending_telomere_seq_2 # Telomere-associated sequence to search in the second strand
 		-o | -output # Output folder (full pathway)
@@ -197,11 +197,9 @@ if [ -z "$InsertsizeRange" ]; then
 	echo "Insert size range Illumina short reads (bp): "$InsertsizeRange
 fi
 
-if [[ $mode == "taxon" || $mode == "both" ]]; then
-	if [ -z "$taxonid" ]; then
-		taxonid=5833
-		echo "NCBI taxon id to keep in decontamination step: "$taxonid
-	fi
+if [ -z "$taxonid" ]; then
+	taxonid=5833
+	echo "NCBI taxon id: "$taxonid
 fi
 
 if [ $mode == "light" ]; then
@@ -748,34 +746,72 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 		fastqc $illuminaReads\_1.fastq $illuminaReads\_2.fastq -o $PWD --noextract -q -t $cores
 	fi
 
-	# Comparing with reference genes:
+	mkdir -p $(dirname $0)/databases; cd $(dirname $0)/databases; wget "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxcat.zip" &> taxcat_log
+	pigz -d -p $cores taxcat.zip; cd $dir/7.Stats
+	top_level=$(awk -v taxid="$taxonid" '{ if ($3 == taxid) { print $1 } }' $(dirname $0)/databases/taxcat); rm $(dirname $0)/databases/taxcat
+	
+	# Comparing with reference genes (QUAST):
 	echo -e "\nRunning QUAST. Please be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene id) are accepted"
-	echo -e "Check out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats"
-	if [ -z "$reference" ]; then
-		echo -e "Running QUAST without reference..."
-		quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
-	else
-		if [ -f $illuminaReads\_1.fastq ]; then
-			if [ -z "$gff_file" ]; then
-				echo -e "Running QUAST with reference and structural variants calling and processing mode..."
-				quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq --eukaryote &> quast.py_log_out.txt
-			else
-				echo -e "Running QUAST with reference, with gff file and with structural variants calling and processing mode..."
-				quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq --eukaryote &> quast.py_log_out.txt
-			fi
+	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not, to use the '--eukaryote' argument in quast.py. If your species is prokaryotic QUAST would also work. In other cases, you may need to manually run quast.py with the argument '--fungus' for fungi or the argument '--large' for large genomes"
+	echo -e "Current NCBI taxon ID: $taxonid"
+	echo -e "\nCheck out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats/quast_results"
+	if [ "$top_level"=="E" ]; then 
+		if [ -z "$reference" ]; then
+			echo -e "Running QUAST without reference..."
+			quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
 		else
-			if [ -z "$gff_file" ]; then
-				echo -e "Running QUAST with reference..."
-				quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
+			if [ -f $illuminaReads\_1.fastq ]; then
+				if [ -z "$gff_file" ]; then
+					echo -e "Running QUAST with reference and structural variants calling and processing mode..."
+					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq --eukaryote &> quast.py_log_out.txt
+				else
+					echo -e "Running QUAST with reference, with gff file and with structural variants calling and processing mode..."
+					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq --eukaryote &> quast.py_log_out.txt
+				fi
 			else
-				echo -e "Running QUAST with reference and with gff file..."
-				quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
+				if [ -z "$gff_file" ]; then
+					echo -e "Running QUAST with reference..."
+					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
+				else
+					echo -e "Running QUAST with reference and with gff file..."
+					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
+				fi
+			fi
+		fi
+	elif [ ! -z $top_level ] && [ "$top_level" != "E" ]; then
+		if [ -z "$reference" ]; then
+			echo -e "Running QUAST without reference..."
+			quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient &> quast.py_log_out.txt
+		else
+			if [ -f $illuminaReads\_1.fastq ]; then
+				if [ -z "$gff_file" ]; then
+					echo -e "Running QUAST with reference and structural variants calling and processing mode..."
+					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq &> quast.py_log_out.txt
+				else
+					echo -e "Running QUAST with reference, with gff file and with structural variants calling and processing mode..."
+					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq &> quast.py_log_out.txt
+				fi
+			else
+				if [ -z "$gff_file" ]; then
+					echo -e "Running QUAST with reference..."
+					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient &> quast.py_log_out.txt
+				else
+					echo -e "Running QUAST with reference and with gff file..."
+					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient &> quast.py_log_out.txt
+				fi
 			fi
 		fi
 	fi
 
+	# Asessing genome completeness (BUSCO): 
+	echo -e "\nRunning BUSCO... This is one of the final ILRA steps and if it takes long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
+	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not to use the automatic lineage selection in BUSCO. This may not work and you would need to run manually BUSCO with the final corrected assembly, providing as the argument '-l' the BUSCO dataset closest to your species (https://busco-data.ezlab.org/v4/data/lineages/)"
+	echo -e "Current NCBI taxon ID: $taxonid"
+	
+
+
 	# Converting files to minimize space
-	echo -e "\nConverting and compressing final files...This is the final ILRA step"
+	echo -e "\nConverting and compressing final files... This is the final ILRA step and if it takes long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
 	if [ -f $dir/2.MegaBLAST/first.bam ]; then
 		samtools view -@ $cores -T $dir/1.Filtering/01.assembly.fa -C -o $dir/2.MegaBLAST/first.bam.cram $dir/2.MegaBLAST/first.bam &> $dir/2.MegaBLAST/first.bam.cram_log_out.txt
 	fi
