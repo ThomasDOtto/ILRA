@@ -751,8 +751,9 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	top_level=$(awk -v taxid="$taxonid" '{ if ($3 == taxid) { print $1 } }' $(dirname $0)/databases/taxcat); rm $(dirname $0)/databases/taxcat
 	
 	# Comparing with reference genes (QUAST):
-	echo -e "\nRunning QUAST. Please be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene id) are accepted"
-	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not, to use the '--eukaryote' argument in quast.py. If your species is prokaryotic QUAST would also work. In other cases, you may need to manually run quast.py with the argument '--fungus' for fungi or the argument '--large' for large genomes"
+	echo -e "\nRunning QUAST... This is one of the final ILRA steps and if it takes long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
+	echo -e "\nPlease be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene ID) are accepted"
+	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not, to use the '--eukaryote' argument in quast.py. If your species is prokaryotic QUAST would also work. In other cases, you may need to manually run quast.py with the argument '--fungus' for fungi or the arguments '--large' and '--memory-efficient' for large genomes. If the taxon ID is not known or present in the NCBI taxonomy databases, this step will skip..."
 	echo -e "Current NCBI taxon ID: $taxonid"
 	echo -e "\nCheck out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats/quast_results"
 	if [ "$top_level"=="E" ]; then 
@@ -805,10 +806,19 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 
 	# Asessing genome completeness (BUSCO): 
 	echo -e "\nRunning BUSCO... This is one of the final ILRA steps and if it takes long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
-	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not to use the automatic lineage selection in BUSCO. This may not work and you would need to run manually BUSCO with the final corrected assembly, providing as the argument '-l' the BUSCO dataset closest to your species (https://busco-data.ezlab.org/v4/data/lineages/)"
+	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not to use the automatic lineage selection in BUSCO. This may not work and you would need to run manually BUSCO with the final corrected assembly, providing as the argument '--lineage_dataset' the BUSCO dataset closest to your species in 'https://busco-data.ezlab.org/v4/data/lineages/', which would be automatically downloaded. If the taxon ID is not known or present in the NCBI taxonomy databases, the automatic mode will be executed"
 	echo -e "Current NCBI taxon ID: $taxonid"
-	
-
+	echo -e "\nCheck out the file busco_log_out.txt and the BUSCO report within the folder 7.Stats/busco_results"
+	if [ "$top_level"=="E" ]; then
+		echo -e "\nRunning BUSCO for eukaryotes in the mode '--auto-lineage-euk'"
+		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results
+	elif [ ! -z $top_level ] && [ "$top_level" != "E" ]; then
+		echo -e "\nRunning BUSCO for prokaryotes in the mode '--auto-lineage-prok'"
+		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results
+	else
+		echo -e "\nRunning BUSCO in the automatic mode, '--auto-lineage'"
+		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results
+	fi
 
 	# Converting files to minimize space
 	echo -e "\nConverting and compressing final files... This is the final ILRA step and if it takes long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
