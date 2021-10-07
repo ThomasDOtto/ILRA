@@ -9,7 +9,7 @@ referenceORG=$3
 start=$4
 end=$5
 
-echo "We are automatically setting ICORN2_HOME to $(dirname "$0")"
+echo -e "We are automatically setting ICORN2_HOME to $(dirname "$0")\n"
 ICORN2_HOME=$(dirname "$0"); export ICORN2_HOME
 
 if [ -z "$end" ] || [ -z "$readRoot" ] || [ ! -f "$referenceORG" ] ; then
@@ -31,6 +31,7 @@ fi
 if [ -z "$ICORN2_THREADS" ] ; then
 	ICORN2_THREADS=1; export ICORN2_THREADS
 fi
+echo -e "Current ICORN2_THREADS: $ICORN2_THREADS cores\n"
 
 refRoot=$(echo $referenceORG | perl -nle '@ar=split(/\//); print $ar[($ar[scalar(@ar)]-1)]') # For getting a copy of the reference in the folder, without | in the name
 if [ ! -f "ICORN2.$refRoot.$start" ] ; then
@@ -45,8 +46,10 @@ for ((i=$start;$i<=$end;i++)); do
 	echo -e "\n\n\nIteration ++++ $i"
 
 	### Call the mapper
+	echo -e "\nCalling the mapper...\n"
 	$ICORN2_HOME/icorn2.bowtie2.sh ICORN2.$refRoot.$i 13 3 $readRoot ICORN2_$i 1200 $ICORN2_THREADS
-
+	echo -e "\nMapper DONE\n"
+	
 	### Call the SNP caller
 	cd ICORN2_$i
 	ln -s ../$reference.$i ref.fa; samtools faidx ref.fa
@@ -55,16 +58,17 @@ for ((i=$start;$i<=$end;i++)); do
 		echo "java -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T IndelRealigner -I out.sorted.markdup.bam -o gatk.realigned.bam -targetIntervals gatk_variants.realign.intervals -R ref.fa"
 		echo "java -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T UnifiedGenotyper -I gatk.realigned.bam -pnrm POOL -o gatk_variants.variants.vcf -ploidy 1 -glm POOLBOTH -R ref.fa -nt $ICORN2_THREADS"
 	fi
-	$ICORN2_HOME/jdk-16.0.2/bin/java -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=ref.fa O=ref.dict
+	echo -e "\nCalling the SNP caller...\n"
+	java -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=ref.fa O=ref.dict
 	$ICORN2_HOME/jdk1.7.0_80/bin/java -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T RealignerTargetCreator -I out.sorted.markdup.bam -o gatk_variants.realign.intervals -R ref.fa -nt $ICORN2_THREADS &> out.gatk.1.txt
 	$ICORN2_HOME/jdk1.7.0_80/bin/java -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T IndelRealigner -I out.sorted.markdup.bam -o gatk.realigned.bam -targetIntervals gatk_variants.realign.intervals -R  ref.fa &> out.gatk.2.txt
 	$ICORN2_HOME/jdk1.7.0_80/bin/java -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T UnifiedGenotyper -I gatk.realigned.bam -pnrm POOL -o gatk_variants.variants.vcf -ploidy 1 -glm POOLBOTH -R ref.fa -nt $ICORN2_THREADS &> out.gatk.3.txt
-	echo -e "\nSNP caller DONE"; cd ..
+	echo -e "\nSNP caller DONE\n"; cd ..
 
 	### Call iCORN2 starter
-	echo "Calling iCORN2 starter"
+	echo -e "\nCalling iCORN2 correct...\n"
 	$ICORN2_HOME/icorn2.correct.sh $directory $readRoot $fragmentSize $reference.$(($i+1)) > out.ICORN2.CORRECT.$i.o
-	echo "icorn2.correct.sh finished"
+	echo -e "\nicorn2.correct.sh DONE\n"
 	return=$?
 	if [ "$return" != "0" ] ; then
 		echo "See errors in the iCORN2 correction script: $ICORN2_HOME/icorn2.correct.sh $directory $readRoot $fragmentSize $reference.$(($i+1))"
