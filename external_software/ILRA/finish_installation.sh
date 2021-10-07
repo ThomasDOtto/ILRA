@@ -54,11 +54,12 @@ echo -e "\n\n\nGetting JAVA v1.7 for iCORN2...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://files-cdn.liferay.com/mirrors/download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz; tar -xzf jdk-7u80-linux-x64.tar.gz; rm jdk-7u80-linux-x64.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin; chmod 775 *
+# The conda/mamba installation is already installing a java version that's working with picard, so not necessary anymore to get an updated java manually...
 # Getting an updated java version required for picard:
-echo -e "\n\n\nGetting an updated JAVA version (openjdk v16.0.2) for picard...\n\n\n"
-cd $EXTERNAL_SOFTWARE_DIR/iCORN2
-wget https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz; tar -xzf openjdk-16.0.2_linux-x64_bin.tar.gz; rm openjdk-16.0.2_linux-x64_bin.tar.gz
-cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk-16.0.2/bin; chmod 775 *
+# echo -e "\n\n\nGetting an updated JAVA version (openjdk v16.0.2) for picard...\n\n\n"
+# cd $EXTERNAL_SOFTWARE_DIR/iCORN2
+# et https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz; tar -xzf openjdk-16.0.2_linux-x64_bin.tar.gz; rm openjdk-16.0.2_linux-x64_bin.tar.gz
+#  $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk-16.0.2/bin; chmod 775 *
 
 echo -e "\n\n\nALL DONE\n\n\n"
 
