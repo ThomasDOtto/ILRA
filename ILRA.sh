@@ -81,7 +81,7 @@ elif [ -z "$assembly" ]; then
 	echo -e "ASSEMBLY NOT PROVIDED, exiting..."
 	exit 1
 else
-	echo -e "Assuming the assembly is in the current pathway..."
+	echo -e "Assuming the assembly is in the current pathway... If errors please provide absolute pathways as arguments"
 	assembly=$PWD/$assembly
 fi
 
@@ -96,7 +96,7 @@ if [[ $correctedReads == /* ]]; then
 elif [ -z "$correctedReads" ]; then
 	echo -e "CORRECTED READS NOT PROVIDED, Circlator is going to be skipped"
 else
-	echo -e "Assuming the corrected reads are in the current pathway..."
+	echo -e "Assuming the corrected reads are in the current pathway... If errors please provide absolute pathways as arguments"
 	correctedReads=$PWD/$correctedReads
 fi
 
@@ -113,7 +113,7 @@ if [[ -z "$illuminaReads" ]] && [[ $perform_correction == "yes" ]]; then
 elif [[ $illuminaReads == /* ]]; then
 	echo -e "Checking Illumina short reads..."
 elif [[ $illuminaReads != /* ]]; then
-	echo -e "Not sure where Illumina reads are... Trying to look for them in the current pathway"
+	echo -e "Not sure where Illumina reads are... Trying to look for them in the current pathway... If errors please provide absolute pathways as arguments"
 	illuminaReads=$PWD/$illuminaReads
 fi
 
@@ -138,7 +138,7 @@ fi
 if [[ $reference == /* ]]; then
 	echo -e "Reference provided correctly"
 else
-	echo -e "Assuming the reference is in the current pathway..."
+	echo -e "Assuming the reference is in the current pathway... If errors please provide absolute pathways as arguments"
 	reference=$PWD/$reference
 fi
 
@@ -202,10 +202,11 @@ if [ -z "$taxonid" ]; then
 	echo "NCBI taxon id to keep in decontamination step: "$taxonid
 fi
 
-if [ $mode != "light" ]; then
+if [ $mode == "light" ]; then
+	echo "Execution mode is $mode"
+elif [ $mode == "blast" ] || [ $mode == "taxon" ] || [ $mode == "both" ]; then
 	databases=$(dirname $0)/databases; mkdir -p $databases
-else
-	echo "Execution mode is "$mode". Databases are/should be located in the folder "$databases
+	echo "Execution mode is $mode. Databases are/should be located in the folder $databases"
 fi
 
 if [ $seq_technology == "pb" ]; then
