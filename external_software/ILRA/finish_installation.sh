@@ -33,8 +33,8 @@ echo -e "\n\n\nI'm downloading and installing several packages through conda...\
 $EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda create -n ILRA_env -y -c conda-forge mamba
 source $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin/activate
 mamba install -y -c conda-forge pigz gawk curl openmp
-mamba install -y -c bioconda blast-legacy blast samtools smalt pyfastaq bowtie2 minimap2 circlator assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal
-pip install --prefix $EXTERNAL_SOFTWARE_DIR/python_modules recentrifuge quast==5.0.2
+mamba install -y -c bioconda blast-legacy blast samtools smalt pyfastaq bowtie2 minimap2 circlator assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge
+pip install --prefix $EXTERNAL_SOFTWARE_DIR/python_modules quast==5.0.2
 # Small manual fix to quast
 echo -e "\n\n\nSome errors when installing QUAST may be expected, I'm addressing them...\n\n\n"
 cd $(dirname $(find . -name jsontemplate.py)); rm jsontemplate.py; wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/site_packages/jsontemplate/jsontemplate.py"
@@ -54,7 +54,8 @@ echo -e "\n\n\nGetting JAVA v1.7 for iCORN2...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://files-cdn.liferay.com/mirrors/download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz; tar -xzf jdk-7u80-linux-x64.tar.gz; rm jdk-7u80-linux-x64.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin; chmod 775 *
-# The conda/mamba installation is already installing a java version that's working with picard, so not necessary anymore to get an updated java manually...
+
+echo "The conda/mamba installation is already installing a java version that's working with picard, so not necessary anymore to get an updated java manually, but keep in mind that any related error may be to not enough updated java version..."
 # Getting an updated java version required for picard:
 # echo -e "\n\n\nGetting an updated JAVA version (openjdk v16.0.2) for picard...\n\n\n"
 # cd $EXTERNAL_SOFTWARE_DIR/iCORN2
