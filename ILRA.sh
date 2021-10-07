@@ -363,6 +363,7 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"; cd $dir/1.Filtering
 	echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
+	assembly-stats 01.assembly.fa | head -n 2
 	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)\n"
 	time2=`date +%s`; echo -e "STEP 1 time (secs): $((time2-time1))"
 debug="all"
@@ -413,6 +414,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		echo -e "Illumina reads NOT PROVIDED and no filtering by ILRA.findoverlaps_ver3.pl\n"
 		cp 02.assembly.fa 03.assembly.fa
 	fi
+	assembly-stats 02.assembly.fa | head -n 2; assembly-stats 03.assembly.fa | head -n 2
 	echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)\n"
 	time2=`date +%s`; echo -e "STEP 2 time (secs): $((time2-time1))"
 debug="all"
@@ -445,6 +447,7 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 		echo -e "Reference genome NOT PROVIDED and ABACAS2 not executed. STEP 3 for reordering and renaming is skipped\n"
 		ln -fs 03.assembly.fa 03b.assembly.fa
 	fi
+	assembly-stats 03b.assembly.fa | head -n 2
 	echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)\n"
 	time2=`date +%s`; echo -e "STEP 3 time (secs): $((time2-time1))"
 debug="all"
@@ -506,6 +509,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 			ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
 		fi		
 	fi
+assembly-stats 04.assembly.fa | head -n 2
 echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)\n"
 time2=`date +%s`; echo -e "STEP 4 time (secs): $((time2-time1))"
 debug="all"
@@ -549,9 +553,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 				ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
 			else
 			cat $PWD/Out.Circ/06.fixstart.fasta >> 05.assembly.fa;
-			fi
-			echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
-			time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"
+			fi			
 		else
 		# Bypass if the contigs names provided are not found
 			ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
@@ -563,6 +565,9 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		mkdir -p $dir/5.Circlator; cd $dir/5.Circlator
 		ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
 	fi
+assembly-stats 05.assembly.fa | head -n 2
+echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
+time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"
 fi
 
 #### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload, rename sequences
@@ -603,6 +608,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		else
 			cat 06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../$name.ILRA.fasta
 		fi
+		assembly-stats 06.assembly.fa | head -n 2
 		echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)\n"
 		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs): $((time2-time1))"
 	fi
@@ -769,6 +775,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	fi
 
 	# Converting files to minimize space
+	echo -e "\nConverting and compressing final files...This is the final ILRA step"
 	if [ -f $dir/2.MegaBLAST/first.bam ]; then
 		samtools view -@ $cores -T $dir/1.Filtering/01.assembly.fa -C -o $dir/2.MegaBLAST/first.bam.cram $dir/2.MegaBLAST/first.bam &> $dir/2.MegaBLAST/first.bam.cram_log_out.txt
 	fi
@@ -790,6 +797,9 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 			pigz -p $cores -11 $i
 		done
 	fi
+	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\)$' | grep -v $name.ILRA.fasta); do
+		pigz -p $cores -11 $i
+	done
 	echo -e "\nAlignment files have been converted to cram for long-term storage. If needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ $cores -T filename.fasta -b -o output.bam input.cram (check out samtools view statements within ILRA.sh to get the fasta file used)"
 	# Cleaning up:
 	cd $dir; rm $(find . -regex ".*\.\(bam\|sam\)"); rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
