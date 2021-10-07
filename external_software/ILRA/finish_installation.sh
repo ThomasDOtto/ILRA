@@ -33,7 +33,7 @@ echo -e "\n\n\nI'm downloading and installing several packages through conda...\
 $EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda create -n ILRA_env -y -c conda-forge mamba
 source $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin/activate
 mamba install -y -c conda-forge pigz gawk curl openmp
-mamba install -y -c bioconda blast-legacy blast samtools smalt pyfastaq bowtie2 minimap2 circlator assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge
+mamba install -y -c bioconda blast-legacy blast samtools smalt pyfastaq bowtie2 minimap2 circlator assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge hmmer
 
 # Centrifuge requires outdated dependencies, so new environment
 echo -e "\n\n\nCentrifuge requires outdated dependencies, so new environment...\n\n\n"
