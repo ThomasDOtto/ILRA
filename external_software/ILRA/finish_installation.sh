@@ -34,19 +34,23 @@ $EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda create -n ILRA_env -y -c conda-forge
 source $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin/activate
 mamba install -y -c conda-forge pigz gawk curl openmp
 mamba install -y -c bioconda blast-legacy blast samtools smalt pyfastaq bowtie2 minimap2 circlator assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge
+
 # Centrifuge requires outdated dependencies, so new environment
 echo -e "\n\n\nCentrifuge requires outdated dependencies, so new environment...\n\n\n"
 mamba create -n centrifuge -y -c bioconda centrifuge
+
 # Busco requires outdated dependencies, so new environment
 echo -e "\n\n\nBUSCO requires outdated dependencies, so new environment...\n\n\n"
 mamba create -n busco -y python==3.7
 mamba install -n busco -y -c conda-forge -c bioconda busco==5.2.2
 $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/pip install numpy==1.17.3
+# Small manual fix to the shebang in BUSCO so it uses the appropriate python and numpy versions 
+sed -i "1s%.*%\#\!$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/python%" $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/busco
+
 # QUAST requires outdated dependencies, so new environment
 echo -e "\n\n\nQUAST requires outdated dependencies, so new environment...\n\n\n"
 mamba create -n quast -y -c bioconda quast==5.0.2
-
-# Small manual fix to quast
+# Small manual fix to QUAST
 echo -e "\n\n\nFew scripts from QUAST needs to be manually updated, addressing...\n\n\n"
 cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name jsontemplate.py | grep /envs/quast/)); rm jsontemplate.py; wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/site_packages/jsontemplate/jsontemplate.py"
 cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name misc.py | grep ra_utils | grep /envs/quast/)); rm misc.py; wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/ra_utils/misc.py"
