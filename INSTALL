@@ -3,6 +3,7 @@ The following software is required to run ILRA:
 * blast
 * blast-legacy
 * samtools
+* bedtools
 * smalt
 * abacas2 + mummer
 * iCORN2 + bowtie2 + java 1.7.0
@@ -16,7 +17,8 @@ The following software is required to run ILRA:
 * assembly-stats
 * pigz
 * quast
-* bedtools
+* busco
+
 
 The light mode (by default, or argument '-m light') does not include the decontamination step (Centrifuge and blast according to DDBJ/ENA/Genbank requirements), which also requires: 
 * centrifuge
