@@ -33,7 +33,7 @@ ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test
 ```
 The test run will take around 5 minutes in 'light' mode and around 15 minutes in 'both' mode using 4 cores.
 
-Please go through the output file 'out_ILRA_test_log.txt' to get the details on the pipeline processing and final output. For the test run, QUAST and BUSCO are expected to fail
+Please go through the output file 'out_ILRA_test_log.txt' to get the details on the pipeline processing and final output. For the test run, QUAST and BUSCO are expected to fail given the input assembly is an artificial subset.
 
 
 
