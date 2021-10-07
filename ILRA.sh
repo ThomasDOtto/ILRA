@@ -197,14 +197,16 @@ if [ -z "$InsertsizeRange" ]; then
 	echo "Insert size range Illumina short reads (bp): "$InsertsizeRange
 fi
 
-if [ -z "$taxonid" ]; then
-	taxonid=5833
-	echo "NCBI taxon id to keep in decontamination step: "$taxonid
+if [[ $mode == "taxon" || $mode == "both" ]]; then
+	if [ -z "$taxonid" ]; then
+		taxonid=5833
+		echo "NCBI taxon id to keep in decontamination step: "$taxonid
+	fi
 fi
 
 if [ $mode == "light" ]; then
 	echo "Execution mode is $mode"
-elif [ $mode == "blast" ] || [ $mode == "taxon" ] || [ $mode == "both" ]; then
+elif [[ $mode == "blast" || $mode == "taxon" || $mode == "both" ]]; then
 	databases=$(dirname $0)/databases; mkdir -p $databases
 	echo "Execution mode is $mode. Databases are/should be located in the folder $databases"
 fi
@@ -254,7 +256,6 @@ echo -e "seqs_circl_2="$seqs_circl_2
 echo -e "number_iterations_icorn="$number_iterations_icorn
 echo -e "contigs_threshold_size="$contigs_threshold_size
 echo -e "InsertsizeRange="$InsertsizeRange
-echo -e "taxonid="$taxonid
 echo -e "The telomere sequences used are:\nLeft:\t" $telomere_seq_1"\nRight:\t" $telomere_seq_2
 
 
