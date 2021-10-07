@@ -34,14 +34,18 @@ $EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda create -n ILRA_env -y -c conda-forge
 source $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin/activate
 mamba install -y -c conda-forge pigz gawk curl openmp
 mamba install -y -c bioconda blast-legacy blast samtools smalt pyfastaq bowtie2 minimap2 circlator assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge
-pip install --prefix $EXTERNAL_SOFTWARE_DIR/python_modules quast==5.0.2
-# Small manual fix to quast
-echo -e "\n\n\nSome errors when installing QUAST may be expected, I'm addressing them...\n\n\n"
-cd $(dirname $(find . -name jsontemplate.py)); rm jsontemplate.py; wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/site_packages/jsontemplate/jsontemplate.py"
-cd $(dirname $(find . -name misc.py | grep ra_utils)); rm misc.py; wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/ra_utils/misc.py"
-cd $(dirname $(find . -name reads_analyzer.py)); rm reads_analyzer.py; "wget https://raw.githubusercontent.com/ablab/quast/master/quast_libs/reads_analyzer.py"
 # Centrifuge require outdated dependencies, so new environment
+echo -e "\n\n\nCentrifuge requires outdated dependencies, so new environment...\n\n\n"
 mamba create -n centrifuge -y -c bioconda centrifuge
+# QUAST require outdated dependencies, so new environment
+echo -e "\n\n\nQUAST requires outdated dependencies, so new environment...\n\n\n"
+mamba create -n quast -y -c bioconda quast==5.0.2
+
+# Small manual fix to quast
+echo -e "\n\n\nFew scripts from QUAST needs to be manually updated, addressing...\n\n\n"
+cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name jsontemplate.py | grep /envs/quast/)); rm jsontemplate.py; wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/site_packages/jsontemplate/jsontemplate.py"
+cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name misc.py | grep ra_utils | grep /envs/quast/)); rm misc.py; wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/ra_utils/misc.py"
+cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name reads_analyzer.py | grep /envs/quast/)); rm reads_analyzer.py; "wget https://raw.githubusercontent.com/ablab/quast/master/quast_libs/reads_analyzer.py"
 
 
 #### Setting up iCORN2:
