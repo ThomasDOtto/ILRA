@@ -811,13 +811,13 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	echo -e "\nCheck out the file busco_log_out.txt and the BUSCO reports within the folder 7.Stats/busco_results"
 	if [ "$top_level"=="E" ]; then
 		echo -e "\nRunning BUSCO for eukaryotes in the mode '--auto-lineage-euk'"
-		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	elif [ ! -z $top_level ] && [ "$top_level" != "E" ]; then
 		echo -e "\nRunning BUSCO for prokaryotes in the mode '--auto-lineage-prok'"
-		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	else
 		echo -e "\nRunning BUSCO in the automatic mode, '--auto-lineage'"
-		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	fi
 
 	# Converting files to minimize space
@@ -840,11 +840,11 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 			samtools view -@ $cores -T $dir/3.ABACAS2/03b.assembly.fa -C -o $dir/4.pilon/$i.cram $i &> $dir/4.pilon/$i.cram_log_out.txt
 		done
 		for i in $(find $dir/4.pilon -name "*.vcf"); do
-			pigz -p -f $cores --best $i
+			pigz -f -p $cores --best $i
 		done
 	fi
 	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\)$' | grep -v $name.ILRA.fasta); do
-		pigz -p $cores -f --best $i
+		pigz -f -p $cores --best $i
 	done
 	echo -e "\nAlignment files have been converted to cram for long-term storage. If needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ $cores -T filename.fasta -b -o output.bam input.cram (check out samtools view statements within ILRA.sh to get the fasta file used)"
 	# Cleaning up:
