@@ -811,13 +811,13 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	echo -e "\nCheck out the file busco_log_out.txt and the BUSCO reports within the folder 7.Stats/busco_results"
 	if [ "$top_level"=="E" ]; then
 		echo -e "\nRunning BUSCO for eukaryotes in the mode '--auto-lineage-euk'"
-		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results &> busco_log_out.txt
+		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	elif [ ! -z $top_level ] && [ "$top_level" != "E" ]; then
 		echo -e "\nRunning BUSCO for prokaryotes in the mode '--auto-lineage-prok'"
-		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results &> busco_log_out.txt
+		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	else
 		echo -e "\nRunning BUSCO in the automatic mode, '--auto-lineage'"
-		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results &> busco_log_out.txt
+		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	fi
 
 	# Converting files to minimize space
