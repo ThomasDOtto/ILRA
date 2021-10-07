@@ -33,7 +33,7 @@ samtools faidx $genome; mkdir -p $resultname
 ### Executing bowtie2...
 echo -e "\nCalling bowtie2..."
 bowtie2-build --threads $cores $genome $genome &> output.bowtiebuild.txt
-bowtie2 -x $genome -p $ICORN2_THREADS -X $insertSize --very-sensitive -N 1 -L 31 --rdg 5,2 -1 "$readRoot"_1.fastq -2 "$readRoot"_2.fastq | awk -va=$readRoot '{if ($1~/^@/) {print} else {print $0"\tRG:Z:"a}}' | samtools view -@ $cores -f 0x2 -u -t $genome.fai - | samtools reheader -c 'sed "$ a\@RG\tID:$readRoot\tSM:1"' - | samtools sort -@ $cores -u -m 2G -o $resultname/out.bam -
+bowtie2 -x $genome -p $cores -X $insertSize --very-sensitive -N 1 -L 31 --rdg 5,2 -1 "$readRoot"_1.fastq -2 "$readRoot"_2.fastq | awk -va=$readRoot '{if ($1~/^@/) {print} else {print $0"\tRG:Z:"a}}' | samtools view -@ $cores -f 0x2 -u -t $genome.fai - | samtools reheader -c 'sed "$ a\@RG\tID:$readRoot\tSM:1"' - | samtools sort -@ $cores -u -m 2G -o $resultname/out.bam -
 echo -e "\nbowtie2 DONE"
 
 ### Executing MarkDuplicates with updated java (make sure not to use the java 1.7 that's required by iCORN2's GenomeAnalysisTK.jar, but a more recent one)
