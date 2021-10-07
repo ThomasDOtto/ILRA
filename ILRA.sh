@@ -808,16 +808,16 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	echo -e "\nRunning BUSCO... This is one of the final ILRA steps and if it takes long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
 	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not to use the automatic lineage selection in BUSCO. This may not work and you would need to run manually BUSCO with the final corrected assembly, providing as the argument '--lineage_dataset' the BUSCO dataset closest to your species in 'https://busco-data.ezlab.org/v4/data/lineages/', which would be automatically downloaded. If the taxon ID is not known or present in the NCBI taxonomy databases, the automatic mode will be executed"
 	echo -e "Current NCBI taxon ID: $taxonid"
-	echo -e "\nCheck out the file busco_log_out.txt and the BUSCO report within the folder 7.Stats/busco_results"
+	echo -e "\nCheck out the file busco_log_out.txt and the BUSCO reports within the folder 7.Stats/busco_results"
 	if [ "$top_level"=="E" ]; then
 		echo -e "\nRunning BUSCO for eukaryotes in the mode '--auto-lineage-euk'"
-		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results
+		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results &> busco_log_out.txt
 	elif [ ! -z $top_level ] && [ "$top_level" != "E" ]; then
 		echo -e "\nRunning BUSCO for prokaryotes in the mode '--auto-lineage-prok'"
-		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results
+		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results &> busco_log_out.txt
 	else
 		echo -e "\nRunning BUSCO in the automatic mode, '--auto-lineage'"
-		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results
+		busco -i ../$name.ILRA.fasta -o $name.ILRA -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results &> busco_log_out.txt
 	fi
 
 	# Converting files to minimize space
