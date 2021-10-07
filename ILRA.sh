@@ -840,11 +840,11 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 			samtools view -@ $cores -T $dir/3.ABACAS2/03b.assembly.fa -C -o $dir/4.pilon/$i.cram $i &> $dir/4.pilon/$i.cram_log_out.txt
 		done
 		for i in $(find $dir/4.pilon -name "*.vcf"); do
-			pigz -p $cores --best $i
+			pigz -p -f $cores --best $i
 		done
 	fi
 	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\)$' | grep -v $name.ILRA.fasta); do
-		pigz -p $cores --best $i
+		pigz -p $cores -f --best $i
 	done
 	echo -e "\nAlignment files have been converted to cram for long-term storage. If needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ $cores -T filename.fasta -b -o output.bam input.cram (check out samtools view statements within ILRA.sh to get the fasta file used)"
 	# Cleaning up:
