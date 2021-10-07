@@ -753,28 +753,28 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	# Comparing with reference genes (QUAST):
 	echo -e "\nRunning QUAST... This is one of the final ILRA steps and if it takes long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
 	echo -e "\nPlease be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene ID) are accepted"
-	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not, to use the '--eukaryote' argument in quast.py. If your species is prokaryotic QUAST would also work. In other cases, you may need to manually run quast.py with the argument '--fungus' for fungi or the arguments '--large' and '--memory-efficient' for large genomes. If the taxon ID is not known or present in the NCBI taxonomy databases, this step will skip..."
+	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not, to use the '--eukaryote' argument in quast.py. If your species is prokaryotic QUAST would also work. In other cases, you may need to manually run quast.py with the argument '--fungus' for fungi or the arguments '--large' and '--memory-efficient' for large genomes. If the taxon ID is not known or present in the NCBI taxonomy databases, this step will be skipped..."
 	echo -e "Current NCBI taxon ID: $taxonid"
 	echo -e "\nCheck out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats/quast_results"
 	if [ "$top_level"=="E" ]; then 
 		if [ -z "$reference" ]; then
-			echo -e "Running QUAST without reference..."
+			echo -e "Running QUAST eukaryote without reference..."
 			quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
 		else
 			if [ -f $illuminaReads\_1.fastq ]; then
 				if [ -z "$gff_file" ]; then
-					echo -e "Running QUAST with reference and structural variants calling and processing mode..."
+					echo -e "Running QUAST --eukaryote with reference and structural variants calling and processing mode..."
 					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq --eukaryote &> quast.py_log_out.txt
 				else
-					echo -e "Running QUAST with reference, with gff file and with structural variants calling and processing mode..."
+					echo -e "Running QUAST --eukaryote with reference, with gff file and with structural variants calling and processing mode..."
 					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq --eukaryote &> quast.py_log_out.txt
 				fi
 			else
 				if [ -z "$gff_file" ]; then
-					echo -e "Running QUAST with reference..."
+					echo -e "Running QUAST --eukaryote with reference..."
 					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
 				else
-					echo -e "Running QUAST with reference and with gff file..."
+					echo -e "Running QUAST --eukaryote with reference and with gff file..."
 					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
 				fi
 			fi
@@ -786,18 +786,18 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 		else
 			if [ -f $illuminaReads\_1.fastq ]; then
 				if [ -z "$gff_file" ]; then
-					echo -e "Running QUAST with reference and structural variants calling and processing mode..."
+					echo -e "Running QUAST prokaryote with reference and structural variants calling and processing mode..."
 					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq &> quast.py_log_out.txt
 				else
-					echo -e "Running QUAST with reference, with gff file and with structural variants calling and processing mode..."
+					echo -e "Running QUAST prokaryote with reference, with gff file and with structural variants calling and processing mode..."
 					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq &> quast.py_log_out.txt
 				fi
 			else
 				if [ -z "$gff_file" ]; then
-					echo -e "Running QUAST with reference..."
+					echo -e "Running QUAST prokaryote with reference..."
 					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient &> quast.py_log_out.txt
 				else
-					echo -e "Running QUAST with reference and with gff file..."
+					echo -e "Running QUAST prokaryote with reference and with gff file..."
 					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient &> quast.py_log_out.txt
 				fi
 			fi
