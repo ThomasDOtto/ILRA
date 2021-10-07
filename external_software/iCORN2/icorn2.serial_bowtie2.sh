@@ -9,10 +9,9 @@ referenceORG=$3
 start=$4
 end=$5
 
-if [ -z "$ICORN2_HOME" ] ; then
-	echo "We are automatically setting ICORN2_HOME to $(dirname "$0")"
-	ICORN2_HOME=$(dirname "$0"); export ICORN2_HOME
-fi
+echo "We are automatically setting ICORN2_HOME to $(dirname "$0")"
+ICORN2_HOME=$(dirname "$0"); export ICORN2_HOME
+
 if [ -z "$end" ] || [ -z "$readRoot" ] || [ ! -f "$referenceORG" ] ; then
 	echo "Oh $(whoami), you have to call me and provide Illumina short reads and a correct reference
 ### Usage:
