@@ -27,9 +27,9 @@ bash external_software/ILRA/finish_installation.sh | tee -a external_software/IL
 cd ILRA
 source external_software/ILRA/path_to_source # To set up the PATH if you have followed option 2 for installation above
 # Light mode:
-ILRA.sh -a test_data/assembly_Pf_test.fasta -o test_data/out_ILRA_test -c test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I test_data/Illumina_short_reads_Pf_test_subset -t 4 -g test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb | tee -a test_data/out_ILRA_test_log.txt
+ILRA.sh -a test_data/assembly_Pf_test.fasta -o test_data/out_ILRA_test -c test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I test_data/Illumina_short_reads_Pf_test_subset -t 4 -g test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb | tee -a test_data/out_ILRA_test_log.txt
 # Decontamination based on centrifuge and blast. Both mode:
-ILRA.sh -a test_data/assembly_Pf_test.fasta -o test_data/out_ILRA_test -c test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I test_data/Illumina_short_reads_Pf_test_subset -t 4 -g test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -m both | tee -a test_data/out_ILRA_test_m_both_log.txt
+ILRA.sh -a test_data/assembly_Pf_test.fasta -o test_data/out_ILRA_test -c test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I test_data/Illumina_short_reads_Pf_test_subset -t 4 -g test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -m both | tee -a test_data/out_ILRA_test_m_both_log.txt
 ```
 The test run will take around XX minutes ('light' mode) and around XX minutes ('both' mode) using 4 cores.
 
