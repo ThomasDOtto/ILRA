@@ -6,6 +6,7 @@ The following software is required to run ILRA:
 * smalt
 * abacas2 + mummer
 * iCORN2 + bowtie2 + java 1.7.0
+* picard + java > 1.7
 * fastaq
 * minimap2
 * circlator + bwa + prodigal + spades
