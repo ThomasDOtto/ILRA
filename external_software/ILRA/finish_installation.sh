@@ -39,7 +39,9 @@ echo -e "\n\n\nCentrifuge requires outdated dependencies, so new environment...\
 mamba create -n centrifuge -y -c bioconda centrifuge
 # Busco requires outdated dependencies, so new environment
 echo -e "\n\n\nBUSCO requires outdated dependencies, so new environment...\n\n\n"
-mamba create -n busco -y -c bioconda busco==5.2.2
+mamba create -n busco -y python==3.7
+mamba install -n busco -y -c conda-forge -c bioconda busco==5.2.2
+$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/pip install numpy==1.17.3
 # QUAST requires outdated dependencies, so new environment
 echo -e "\n\n\nQUAST requires outdated dependencies, so new environment...\n\n\n"
 mamba create -n quast -y -c bioconda quast==5.0.2
