@@ -697,8 +697,9 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	echo -e "\n\nSTEP 7: Renaming, gathering stats and evaluation starting..."; echo -e "Current date/time: $(date)"
 	echo -e "This is the final ILRA step, but the assembly has already been corrected and won't change more. If step 7 takes too long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
 	mkdir -p $dir/7.Stats; cd $dir/7.Stats; rm -rf *
+	
 	# Evaluating the assemblies:
-	echo -e "A preview of the final corrections by ILRA is: (full details in the file 07.assembly_stats_original_correction_ILRA.txt)"
+	echo -e "\nA preview of the final corrections by ILRA is: (full details in the file 07.assembly_stats_original_correction_ILRA.txt)"
 	assembly-stats $assembly | head -n 3; assembly-stats $assembly > 07.assembly_stats_original_correction_ILRA.txt
 	assembly-stats ../$name.ILRA.fasta | head -n 3; assembly-stats ../$name.ILRA.fasta >> 07.assembly_stats_original_correction_ILRA.txt
 
