@@ -861,7 +861,8 @@ echo -e "Final corrected assembly file: "$dir"/"$name.ILRA.fasta
 echo -e "Excluded contigs file: "$dir"/Excluded.contigs.fofn"
 end=`date +%s`; runtime=$((end-start))
 echo -e "\nCores: $cores"
-echo -e "Final runtime (secs): $runtime"
+echo -e "Final runtime (hours): $((runtime / 3600))"
+echo -e "($runtime secs, check out time for each step after the statements 'STEP X: DONE')"
 
-echo -e "\n\n\n\n\n(List of output files)" > $dir/list_output_files.txt
-ls -Rslh $dir &> $dir/list_output_files.txt
+echo -e "\n\n\n\n\n(List of output files)" > $dir/all_output_files_log.txt
+ls -Rslh $dir &> $dir/all_output_files_log.txt
