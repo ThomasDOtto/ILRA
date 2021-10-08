@@ -361,7 +361,7 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"; cd $dir/1.Filtering
 	echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
-	assembly-stats 01.assembly.fa | head -n 2
+	echo "After this step:"; assembly-stats 01.assembly.fa | head -n 2
 	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 1 time (secs): $((time2-time1))"
 debug="all"
@@ -412,7 +412,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		echo -e "Illumina reads NOT PROVIDED and no filtering by ILRA.findoverlaps_ver3.pl\n"
 		cp 02.assembly.fa 03.assembly.fa
 	fi
-	assembly-stats 02.assembly.fa | head -n 2; assembly-stats 03.assembly.fa | head -n 2
+	echo "After this step:"; assembly-stats 02.assembly.fa | head -n 2; assembly-stats 03.assembly.fa | head -n 2
 	echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 2 time (secs): $((time2-time1))"
 debug="all"
@@ -445,7 +445,7 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 		echo -e "Reference genome NOT PROVIDED and ABACAS2 not executed. STEP 3 for reordering and renaming is skipped\n"
 		ln -fs 03.assembly.fa 03b.assembly.fa
 	fi
-	assembly-stats 03b.assembly.fa | head -n 2
+	echo "After this step:"; assembly-stats 03b.assembly.fa | head -n 2
 	echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 3 time (secs): $((time2-time1))"
 debug="all"
@@ -507,7 +507,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 			ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
 		fi		
 	fi
-assembly-stats 04.assembly.fa | head -n 2
+echo "After this step:"; assembly-stats 04.assembly.fa | head -n 2
 echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)"
 time2=`date +%s`; echo -e "STEP 4 time (secs): $((time2-time1))"
 debug="all"
@@ -563,7 +563,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		mkdir -p $dir/5.Circlator; cd $dir/5.Circlator
 		ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
 	fi
-assembly-stats 05.assembly.fa | head -n 2
+echo "After this step:"; assembly-stats 05.assembly.fa | head -n 2
 echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)"
 time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"
 fi
@@ -606,7 +606,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		else
 			cat 06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../$name.ILRA.fasta
 		fi
-		assembly-stats 06.assembly.fa | head -n 2
+		echo "After this step:"; assembly-stats 06.assembly.fa | head -n 2
 		echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)"
 		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs): $((time2-time1))"
 	fi
@@ -676,6 +676,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		else
 			mv $name.ILRA.fasta ../../$name.ILRA.fasta
 		fi
+		echo "After this step:"; assembly-stats ../../$name.ILRA.fasta | head -n 2
 		echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)"
 		time2=`date +%s`; echo -e "STEP 6 blast time (secs): $((time2-time1))"
 	fi
@@ -694,14 +695,14 @@ fi
 #### 7. Evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
 if [[ $debug == "all" || $debug == "step7" ]]; then
 	time1=`date +%s`
-	echo -e "\n\nSTEP 7: Renaming, gathering stats and evaluation starting..."; echo -e "Current date/time: $(date)"
+	echo -e "\n\n\nSTEP 7: Renaming, gathering stats and evaluation starting..."; echo -e "Current date/time: $(date)"
 	echo -e "This is the final ILRA step, but the assembly has already been corrected and won't change more. If step 7 takes too long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
 	mkdir -p $dir/7.Stats; cd $dir/7.Stats; rm -rf *
 	
 	# Evaluating the assemblies:
 	echo -e "\nA preview of the final corrections by ILRA is: (full details in the file 07.assembly_stats_original_correction_ILRA.txt)"
-	assembly-stats $assembly | head -n 3; assembly-stats $assembly > 07.assembly_stats_original_correction_ILRA.txt
-	assembly-stats ../$name.ILRA.fasta | head -n 3; assembly-stats ../$name.ILRA.fasta >> 07.assembly_stats_original_correction_ILRA.txt
+	echo "Original:"; assembly-stats $assembly | head -n 3; assembly-stats $assembly > 07.assembly_stats_original_correction_ILRA.txt
+	echo "Corrected:"; assembly-stats ../$name.ILRA.fasta | head -n 3; assembly-stats ../$name.ILRA.fasta >> 07.assembly_stats_original_correction_ILRA.txt
 
 	# Getting telomere counts:
 	echo -e "\nCheck out the output of the telomeres analyses in the file 07.TelomersSummary.txt"
