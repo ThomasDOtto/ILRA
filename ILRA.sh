@@ -67,7 +67,7 @@ export name; export telomere_seq_1; export telomere_seq_2
 
 echo -e "Check help with parameter '-h' or read the GitHub README for full example usage"
 echo -e "In case you want to test ILRA with a smaller subset of example reads, check the subfolder /path/to/ILRA/test_data and the 'Quick Start' in the GitHub README"
-
+echo -e "Current date/time: $(date)\n"
 
 ##### Checking Arguments / Variables:
 echo -e "\nI'm now quickly checking and showing the arguments that are going to be used in the ILRA run...\n"
