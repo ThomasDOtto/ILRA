@@ -65,7 +65,7 @@ for argument in $options; do
 done
 export name; export telomere_seq_1; export telomere_seq_2
 
-echo -e "Check help with parameter '-h' or the read '/path/to/ILRA/test_data/README.txt' for full example usage"
+echo -e "Check help with parameter '-h' or read the GitHub README for full example usage"
 echo -e "In case you want to test ILRA with a smaller subset of example reads, check the subfolder /path/to/ILRA/test_data and the 'Quick Start' in the GitHub README"
 
 
@@ -362,7 +362,7 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
 	assembly-stats 01.assembly.fa | head -n 2
-	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)\n"
+	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 1 time (secs): $((time2-time1))"
 debug="all"
 fi
@@ -413,7 +413,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		cp 02.assembly.fa 03.assembly.fa
 	fi
 	assembly-stats 02.assembly.fa | head -n 2; assembly-stats 03.assembly.fa | head -n 2
-	echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)\n"
+	echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 2 time (secs): $((time2-time1))"
 debug="all"
 fi
@@ -446,7 +446,7 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 		ln -fs 03.assembly.fa 03b.assembly.fa
 	fi
 	assembly-stats 03b.assembly.fa | head -n 2
-	echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)\n"
+	echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 3 time (secs): $((time2-time1))"
 debug="all"
 fi
@@ -508,7 +508,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 		fi		
 	fi
 assembly-stats 04.assembly.fa | head -n 2
-echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)\n"
+echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)"
 time2=`date +%s`; echo -e "STEP 4 time (secs): $((time2-time1))"
 debug="all"
 fi
@@ -564,7 +564,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
 	fi
 assembly-stats 05.assembly.fa | head -n 2
-echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)\n"
+echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)"
 time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"
 fi
 
@@ -607,7 +607,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			cat 06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../$name.ILRA.fasta
 		fi
 		assembly-stats 06.assembly.fa | head -n 2
-		echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)\n"
+		echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)"
 		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs): $((time2-time1))"
 	fi
 	if [[ $mode == "blast" || $mode == "both" ]]; then
@@ -676,7 +676,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		else
 			mv $name.ILRA.fasta ../../$name.ILRA.fasta
 		fi
-		echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)\n"
+		echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)"
 		time2=`date +%s`; echo -e "STEP 6 blast time (secs): $((time2-time1))"
 	fi
 	if [ $mode == "light" ]; then
@@ -752,10 +752,10 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	
 	# Comparing with reference genes (QUAST):
 	echo -e "\nRunning QUAST... This is one of the final ILRA steps and if it takes long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
-	echo -e "\nPlease be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene ID) are accepted"
-	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not, to use the '--eukaryote' argument in quast.py. If your species is prokaryotic QUAST would also work. In other cases, you may need to manually run quast.py with the argument '--fungus' for fungi or the arguments '--large' and '--memory-efficient' for large genomes. If the taxon ID is not known or present in the NCBI taxonomy databases, this step will be skipped..."
+	echo -e "Please be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene ID) are accepted"
+	echo -e "Please be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not, to use the '--eukaryote' argument in quast.py. If your species is prokaryotic QUAST would also work. In other cases, you may need to manually run quast.py with the argument '--fungus' for fungi or the arguments '--large' and '--memory-efficient' for large genomes. If the taxon ID is not known or present in the NCBI taxonomy databases, this step will be skipped..."
 	echo -e "Current NCBI taxon ID: $taxonid"
-	echo -e "\nCheck out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats/quast_results"
+	echo -e "Check out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats/quast_results"
 	if [ "$top_level"=="E" ]; then 
 		if [ -z "$reference" ]; then
 			echo -e "Running QUAST eukaryote without reference..."
@@ -806,17 +806,17 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 
 	# Asessing genome completeness (BUSCO): 
 	echo -e "\nRunning BUSCO... This is one of the final ILRA steps and if it takes long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
-	echo -e "\nPlease be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not to use the automatic lineage selection in BUSCO. This may not work and you would need to run manually BUSCO with the final corrected assembly, providing as the argument '--lineage_dataset' the BUSCO dataset closest to your species in 'https://busco-data.ezlab.org/v4/data/lineages/', which would be automatically downloaded. If the taxon ID is not known or present in the NCBI taxonomy databases, the automatic mode will be executed"
+	echo -e "Please be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not to use the automatic lineage selection in BUSCO. This may not work and you would need to run manually BUSCO with the final corrected assembly, providing as the argument '--lineage_dataset' the BUSCO dataset closest to your species in 'https://busco-data.ezlab.org/v4/data/lineages/', which would be automatically downloaded. If the taxon ID is not known or present in the NCBI taxonomy databases, the automatic mode will be executed"
 	echo -e "Current NCBI taxon ID: $taxonid"
-	echo -e "\nCheck out the file busco_log_out.txt and the BUSCO reports within the folder 7.Stats/busco_results"
+	echo -e "Check out the file busco_log_out.txt and the BUSCO reports within the folder 7.Stats/busco_results"
 	if [ "$top_level"=="E" ]; then
-		echo -e "\nRunning BUSCO for eukaryotes in the mode '--auto-lineage-euk'"
+		echo -e "Running BUSCO for eukaryotes in the mode '--auto-lineage-euk'"
 		busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	elif [ ! -z $top_level ] && [ "$top_level" != "E" ]; then
-		echo -e "\nRunning BUSCO for prokaryotes in the mode '--auto-lineage-prok'"
+		echo -e "Running BUSCO for prokaryotes in the mode '--auto-lineage-prok'"
 		busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	else
-		echo -e "\nRunning BUSCO in the automatic mode, '--auto-lineage'"
+		echo -e "Running BUSCO in the automatic mode, '--auto-lineage'"
 		busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	fi
 
@@ -843,13 +843,14 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 			pigz -f -p $cores --best $i
 		done
 	fi
+	rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
 	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\)$' | grep -v $name.ILRA.fasta); do
 		pigz -f -p $cores --best $i
 	done
 	echo -e "\nAlignment files have been converted to cram for long-term storage. If needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ $cores -T filename.fasta -b -o output.bam input.cram (check out samtools view statements within ILRA.sh to get the fasta file used)"
 	# Cleaning up:
-	cd $dir; rm $(find . -regex ".*\.\(bam\|sam\)"); rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
-	echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)\n"
+	cd $dir; rm $(find . -regex ".*\.\(bam\|sam\)") 
+	echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 7 time (secs): $((time2-time1))"
 fi
 
