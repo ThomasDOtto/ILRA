@@ -754,7 +754,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	top_level=$(awk -v taxid="$taxonid" '{ if ($3 == taxid) { print $1 } }' $(dirname $0)/databases/taxcat); rm $(dirname $0)/databases/taxcat
 	
 	# Comparing with reference genes (QUAST):
-	echo -e "\nRunning QUAST... 
+	echo -e "\nRunning QUAST..." 
 	echo -e "Please be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene ID) are accepted"
 	echo -e "Please be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not, to use the '--eukaryote' argument in quast.py. If your species is prokaryotic QUAST would also work. In other cases, you may need to manually run quast.py with the argument '--fungus' for fungi or the arguments '--large' and '--memory-efficient' for large genomes. If the taxon ID is not known or present in the NCBI taxonomy databases, this step will be skipped..."
 	echo -e "Current NCBI taxon ID: $taxonid"
