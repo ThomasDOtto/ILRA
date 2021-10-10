@@ -369,6 +369,9 @@ fi
 
 #### 2. MegaBLAST
 if [[ $debug == "all" || $debug == "step2" ]]; then
+	if [[ ! -d "$dir/1.Filtering" ]]; then
+		mkdir -p $dir/1.Filtering; ln -fs $assembly $dir/1.Filtering/01.assembly.fa
+	fi
 	time1=`date +%s`
 	echo -e "\n\nSTEP 2: MegaBLAST starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/2.MegaBLAST; cd $dir/2.MegaBLAST; rm -rf *
@@ -420,13 +423,16 @@ fi
 
 #### 3. ABACAS2
 if [[ $debug == "all" || $debug == "step3" ]]; then
+	if [[ ! -d "$dir/2.MegaBLAST" ]]; then
+		mkdir -p $dir/2.MegaBLAST; ln -fs $assembly $dir/2.MegaBLAST/03.assembly.fa
+	fi
 	time1=`date +%s`
 	echo -e "\n\nSTEP 3: ABACAS2 starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/3.ABACAS2; cd $dir/3.ABACAS2; rm -rf *
 	if [ "$doAbacas2" -eq 1 ]; then
 		ABA_CHECK_OVERLAP=0; export ABA_CHECK_OVERLAP; ABA_COMPARISON=nucmer; export ABA_COMPARISON; Min_Alignment_Length=1000; Identity_Cutoff=98
 		echo -e "ABACAS2 parameters are:\nABA_CHECK_OVERLAP=0\nABA_COMPARISON=nucmer\nMin_Alignment_Length=1000\nIdentity_Cutoff=98\nPlease check ABACAS2 help and change manually within the pipeline (section 3) these parameters if needed"
-		abacas2.nonparallel.sh $reference ../2.MegaBLAST/03.assembly.fa $cores $Min_Alignment_Length $Identity_Cutoff 1> abacas_log_out.txt 2> abacas_log_warnings_errors.txt
+		abacas2.nonparallel.sh $reference $dir/2.MegaBLAST/03.assembly.fa $cores $Min_Alignment_Length $Identity_Cutoff 1> abacas_log_out.txt 2> abacas_log_warnings_errors.txt
 		echo -e "\nCheck out the log of abacas2.nonparallel.sh in the files abacas_log_out.txt and abacas_log_warnings_errors.txt"
 	# Break  and delete N's
 		fastaq trim_Ns_at_end Genome.abacas.fasta 03b.assembly.fa
@@ -454,6 +460,9 @@ fi
 #### 4. Correction via Illumina short reads
 #### iCORN2 or pilon:
 if [[ $debug == "all" || $debug == "step4" ]]; then
+	if [[ ! -d "$dir/3.ABACAS2" ]]; then
+		mkdir -p $dir/3.ABACAS2; ln -fs $assembly $dir/3.ABACAS2/03b.assembly.fa
+	fi
 	if [[ $pilon == "no" ]]; then
 		time1=`date +%s`
 		echo -e "\n\nSTEP 4: iCORN2 starting..."; echo -e "Current date/time: $(date)\n"
@@ -515,6 +524,9 @@ fi
 
 #### 5. Circlator for organelles
 if [[ $debug == "all" || $debug == "step5" ]]; then
+	if [[ ! -d "$dir/4.iCORN2" ]] && [[ ! -d "$dir/4.pilon" ]]; then
+		mkdir -p $dir/4.iCORN2_pilon; ln -fs $assembly $dir/4.iCORN2_pilon/04.assembly.fa
+	fi
 	if [[ $correctedReads == /* ]]; then
 		time1=`date +%s`
 		echo -e "\n\nSTEP 5: Circlator starting..."; echo -e "Current date/time: $(date)\n"
@@ -570,6 +582,9 @@ fi
 
 #### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload, rename sequences
 if [[ $debug == "all" || $debug == "step6" ]]; then
+	if [[ ! -d "$dir/5.MegaBLAST" ]]; then
+		mkdir -p $dir/5.Circlator; ln -fs $assembly $dir/5.Circlator/05.assembly.fa
+	fi
 	if [[ $mode == "taxon" || $mode == "both" ]]; then
 		time1=`date +%s`
 		echo -e "\n\nSTEP 6: Centrifuge and decontamination starting..."; echo -e "Current date/time: $(date)\n"
@@ -694,6 +709,9 @@ fi
 
 #### 7. Evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
 if [[ $debug == "all" || $debug == "step7" ]]; then
+	if [[ ! -d "$dir/6.Decontamination" ]] && [[ ! -d "$dir/5.Circlator" ]]; then
+		ln -fs $assembly $dir/5.Circlator/05.assembly.fa $dir/$name.ILRA.fasta
+	fi
 	time1=`date +%s`
 	echo -e "\n\n\nSTEP 7: Renaming, gathering stats and evaluation starting..."; echo -e "Current date/time: $(date)"
 	echo -e "This is the final ILRA step, but the assembly has already been corrected and won't change more. If step 7 takes too long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
@@ -808,7 +826,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	fi
 
 	# Asessing genome completeness (BUSCO): 
-	echo -e "\nRunning BUSCO... 
+	echo -e "\nRunning BUSCO..." 
 	echo -e "Please be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not to use the automatic lineage selection in BUSCO. This may not work and you would need to run manually BUSCO with the final corrected assembly, providing as the argument '--lineage_dataset' the BUSCO dataset closest to your species in 'https://busco-data.ezlab.org/v4/data/lineages/', which would be automatically downloaded. If the taxon ID is not known or present in the NCBI taxonomy databases, the automatic mode will be executed"
 	echo -e "Current NCBI taxon ID: $taxonid"
 	echo -e "Check out the file busco_log_out.txt and the BUSCO reports within the folder 7.Stats/busco_results"
