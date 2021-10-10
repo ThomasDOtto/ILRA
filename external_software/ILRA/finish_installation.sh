@@ -35,8 +35,9 @@ source $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin/activate
 mamba install -y -c conda-forge pigz gawk curl openmp
 mamba install -y -c bioconda blast-legacy blast samtools smalt pyfastaq bowtie2 minimap2 circlator assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge hmmer
 # Small manual fix to pilon:
-echo -e "\n\n\nThe JAVA options used by Pilon by default may be not appropriate for processing large genomes. For example, heap memory may not be enough. Please keep in mind that any pilon-related error may be due to this and require manual tuning. For now, the default options are changed to: ['-Xms1g', '-Xmx10g']"
-sed -i "/default_jvm_mem_opts = /c\default_jvm_mem_opts = ['-Xms1g', '-Xmx10g']" $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin/pilon
+echo -e "\n\n\nThe JAVA options used by Pilon by default may be not appropriate for processing large genomes. For example, heap memory may not be enough. Please keep in mind that any pilon-related error may be due to this and require manual tuning. For now, the default options are changed to ['-Xms1g', '-Xmx10g']. Change in the envinromental variable _JAVA_OPTIONS if needed"
+export _JAVA_OPTIONS='-Xms1g -Xmx5g'
+
 
 # Centrifuge requires outdated dependencies, so new environment
 echo -e "\n\n\nCentrifuge requires outdated dependencies, so new environment...\n\n\n"
