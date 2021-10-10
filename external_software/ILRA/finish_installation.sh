@@ -34,6 +34,9 @@ $EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda create -n ILRA_env -y -c conda-forge
 source $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin/activate
 mamba install -y -c conda-forge pigz gawk curl openmp
 mamba install -y -c bioconda blast-legacy blast samtools smalt pyfastaq bowtie2 minimap2 circlator assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge hmmer
+# Small manual fix to pilon:
+echo -e "\n\n\nThe JAVA options used by Pilon by default may be not appropriate for processing large genomes. For example, heap memory may not be enough. Please keep in mind that any pilon-related error may be due to this and require manual tuning. For now, the default options are changed to: ['-Xms1g', '-Xmx10g']"
+sed -i "/default_jvm_mem_opts/c\default_jvm_mem_opts = ['-Xms1g', '-Xmx10g']" $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin/pilon
 
 # Centrifuge requires outdated dependencies, so new environment
 echo -e "\n\n\nCentrifuge requires outdated dependencies, so new environment...\n\n\n"
@@ -68,7 +71,7 @@ cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://files-cdn.liferay.com/mirrors/download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz; tar -xzf jdk-7u80-linux-x64.tar.gz; rm jdk-7u80-linux-x64.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin; chmod 775 *
 
-echo "The conda/mamba installation is already installing a java version that's working with picard, so not necessary anymore to get an updated java manually, but keep in mind that any related error may be to not enough updated java version..."
+echo "iCORN2 is requiring an outdates java version (v1.7). But picard requires an update one. The conda/mamba installation is already installing a java version that's working with picard, so not necessary anymore to get an updated java manually, but keep in mind that any related error may be to not enough updated java version..."
 # Getting an updated java version required for picard:
 # echo -e "\n\n\nGetting an updated JAVA version (openjdk v16.0.2) for picard...\n\n\n"
 # cd $EXTERNAL_SOFTWARE_DIR/iCORN2
