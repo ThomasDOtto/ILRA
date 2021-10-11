@@ -118,15 +118,17 @@ elif [[ $illuminaReads != /* ]]; then
 fi
 
 if [ -f $illuminaReads\_1.fastq.gz ]; then
-	echo "Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz. Dealing with them now..."
-	mkdir -p $dir/1.Filtering
-	pigz -dfc -p $cores $illuminaReads\_1.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq
-	pigz -dfc -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
-	if [ ! -s $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq ]; then
-		echo -e "PLEASE double check decompression by pigz has worked. Exiting for now..."
-		exit 1
+	if [[ -z "$(find "$dir/1.Filtering" -name *.fastq | head -n1)" ]]; then
+		echo "Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz. Dealing with them now..."
+		mkdir -p $dir/1.Filtering
+		pigz -dfc -p $cores $illuminaReads\_1.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq
+		pigz -dfc -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
+		if [ ! -s $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq ]; then
+			echo -e "PLEASE double check decompression by pigz has worked. Exiting for now..."
+			exit 1
+		fi
+		illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"
 	fi
-	illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"
 else
 	if [ $perform_correction == "yes" ]; then
 		echo -e "PLEASE be aware of the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz"
