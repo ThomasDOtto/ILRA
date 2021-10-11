@@ -582,7 +582,7 @@ fi
 
 #### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload, rename sequences
 if [[ $debug == "all" || $debug == "step6" ]]; then
-	if [[ ! -d "$dir/5.MegaBLAST" ]]; then
+	if [[ ! -d "$dir/5.Circlator" ]]; then
 		mkdir -p $dir/5.Circlator; ln -fs $assembly $dir/5.Circlator/05.assembly.fa
 	fi
 	if [[ $mode == "taxon" || $mode == "both" ]]; then
@@ -842,7 +842,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	fi
 
 	# Converting files to minimize space
-	echo -e "\nConverting and compressing final files... This is the final ILRA step and if it takes long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
+	echo -e "\nConverting and compressing final files..."
 	if [ -f $dir/2.MegaBLAST/first.bam ]; then
 		samtools view -@ $cores -T $dir/1.Filtering/01.assembly.fa -C -o $dir/2.MegaBLAST/first.bam.cram $dir/2.MegaBLAST/first.bam &> $dir/2.MegaBLAST/first.bam.cram_log_out.txt
 	fi
