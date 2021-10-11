@@ -118,6 +118,7 @@ elif [[ $illuminaReads != /* ]]; then
 fi
 
 if [ -f $illuminaReads\_1.fastq.gz ]; then
+	illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"
 	if [[ -z "$(find "$dir/1.Filtering" -name *.fastq | head -n1)" ]]; then
 		echo "Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz. Dealing with them now..."
 		mkdir -p $dir/1.Filtering
@@ -127,7 +128,6 @@ if [ -f $illuminaReads\_1.fastq.gz ]; then
 			echo -e "PLEASE double check decompression by pigz has worked. Exiting for now..."
 			exit 1
 		fi
-		illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"
 	fi
 else
 	if [ $perform_correction == "yes" ]; then
