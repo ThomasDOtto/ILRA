@@ -10,7 +10,7 @@ export PATH
 PERL5LIB=$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$PERL5LIB
 export PERL5LIB
 
-### Set JAVA options such as heap memory for pilon. If larger genomes, you may need to increase this
-export _JAVA_OPTIONS='-Xms1g -Xmx5g'
+### Set JAVA options (heap memory) for pilon. If larger genomes, you may need to increase this and if smaller genomes or less amount of memory available, you may want to decrease this
+export _JAVA_OPTIONS='-Xms10g -Xmx100g'
 
 ### Check out other environmental variables automatically set in ILRA.sh
