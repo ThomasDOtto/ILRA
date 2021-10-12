@@ -609,7 +609,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			rextract -f classification.txt -i $taxonid $TAXONS_TO_EXCLUDE -n $databases/taxdump -q 05.assembly.fa.fq &> rextract_log_out.txt
 			sed -n '1~4s/^@/>/p;2~4p' *.fastq > 06.assembly.fa
 	# Save contigs
-			echo -e "\n### Excluded contigs that are not recognized by Centrifuge as the species of interests: (Check the output of Centrifuge in Step 6)" >> ../Excluded.contigs.fofn
+			echo -e "\n### Excluded contigs that are not recognized by Centrifuge as the species of interest: (Check the output of Centrifuge in Step 6)" >> ../Excluded.contigs.fofn
 			comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
 		fi
 		if [ -s 06.assembly.fa ]; then
