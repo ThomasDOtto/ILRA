@@ -12,7 +12,7 @@ chmod 775 $EXTERNAL_SOFTWARE_DIR/gtool.py
 # ftp://ftp.ncbi.nlm.nih.gov/blast/demo/vecscreen
 chmod 775 $EXTERNAL_SOFTWARE_DIR/vecscreen
 # ftp://ftp.ncbi.nlm.nih.gov/pub/kitts/VSlistTo1HitPerLine.awk
-chmod 775 $EXTERNAL_SOFTWARE_DIR/VSlistTo1HitPerLine.sh # This wrapper allows tu use the gawk in the environment
+chmod 775 $EXTERNAL_SOFTWARE_DIR/VSlistTo1HitPerLine.sh # This wrapper allows to use the gawk in the environment when executing VSlistTo1HitPerLine.awk
 # ILRA scripts
 chmod 775 $(dirname $EXTERNAL_SOFTWARE_DIR)/ILRA.sh
 cd $(dirname $EXTERNAL_SOFTWARE_DIR)/bin; chmod 775 *
@@ -63,21 +63,26 @@ cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name reads_analyzer.py | grep /envs/
 
 #### Setting up iCORN2:
 # Getting picard:
-echo -e "\n\n\nGetting picard (v2.26.2)...\n\n\n"
+echo -e "\n\n\nSetting up iCORN2 dependencies..."
+echo -e "Getting picard (v2.26.2)...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://github.com/broadinstitute/picard/releases/download/2.26.2/picard.jar
+# Getting FASTA Splitter:
+echo -e "\n\n\nGetting fasta-splitter.pl (v0.2.6)...\n\n\n"
+wget http://kirill-kryukov.com/study/tools/fasta-splitter/files/fasta-splitter-0.2.6.zip; unzip fasta-splitter-0.2.6.zip; rm fasta-splitter-0.2.6.zip; chmod 775 fasta-splitter.pl
+# Getting GATK:
+echo -e "\n\n\nGetting GATK (v4.2.2.0)...\n\n\n"
+wget https://github.com/broadinstitute/gatk/releases/download/4.2.2.0/gatk-4.2.2.0.zip; unzip gatk-4.2.2.0.zip; rm gatk-4.2.2.0.zip; chmod 775 gatk-4.2.2.0/gatk; ln -fs gatk-4.2.2.0/gatk gatk
 # Getting the outdated java version required for iCORN2:
-echo -e "\n\n\nGetting JAVA v1.7 for iCORN2...\n\n\n"
+echo -e "\n\n\nGetting JAVA v1.7 required by iCORN2's SNP caller...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://files-cdn.liferay.com/mirrors/download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz; tar -xzf jdk-7u80-linux-x64.tar.gz; rm jdk-7u80-linux-x64.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin; chmod 775 *
-
-echo "iCORN2 is requiring an outdates java version (v1.7). But picard requires an update one. The conda/mamba installation is already installing a java version that's working with picard, so not necessary anymore to get an updated java manually, but keep in mind that any related error may be to not enough updated java version..."
-# Getting an updated java version required for picard:
-# echo -e "\n\n\nGetting an updated JAVA version (openjdk v16.0.2) for picard...\n\n\n"
-# cd $EXTERNAL_SOFTWARE_DIR/iCORN2
-# et https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz; tar -xzf openjdk-16.0.2_linux-x64_bin.tar.gz; rm openjdk-16.0.2_linux-x64_bin.tar.gz
-#  $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk-16.0.2/bin; chmod 775 *
+# Getting the outdated java version required for GATK
+echo -e "\n\n\nGetting JAVA v1.8 required by GATK v4...\n\n\n"
+cd $EXTERNAL_SOFTWARE_DIR/iCORN2
+wget https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz; tar -xzf OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz; rm OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz
+cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin; chmod 775 *
 
 echo -e "\n\n\nALL DONE\n\n\n"
 
