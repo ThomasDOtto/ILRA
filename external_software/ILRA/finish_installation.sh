@@ -68,10 +68,10 @@ cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://github.com/broadinstitute/picard/releases/download/2.26.2/picard.jar
 # Getting FASTA Splitter:
 echo -e "\n\n\nGetting fasta-splitter.pl (v0.2.6)...\n\n\n"
-wget http://kirill-kryukov.com/study/tools/fasta-splitter/files/fasta-splitter-0.2.6.zip; unzip fasta-splitter-0.2.6.zip; rm fasta-splitter-0.2.6.zip; chmod 775 fasta-splitter.pl
+wget http://kirill-kryukov.com/study/tools/fasta-splitter/files/fasta-splitter-0.2.6.zip; unzip -qq fasta-splitter-0.2.6.zip; rm fasta-splitter-0.2.6.zip; chmod 775 fasta-splitter.pl
 # Getting GATK:
 echo -e "\n\n\nGetting GATK (v4.2.2.0)...\n\n\n"
-wget https://github.com/broadinstitute/gatk/releases/download/4.2.2.0/gatk-4.2.2.0.zip; unzip gatk-4.2.2.0.zip; rm gatk-4.2.2.0.zip; chmod 775 gatk-4.2.2.0/gatk; ln -fs gatk-4.2.2.0/gatk gatk
+wget https://github.com/broadinstitute/gatk/releases/download/4.2.2.0/gatk-4.2.2.0.zip; unzip -qq gatk-4.2.2.0.zip; rm gatk-4.2.2.0.zip; chmod 775 gatk-4.2.2.0/gatk; ln -fs gatk-4.2.2.0/gatk gatk
 # Getting the outdated java version required for iCORN2:
 echo -e "\n\n\nGetting JAVA v1.7 required by iCORN2's SNP caller...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
