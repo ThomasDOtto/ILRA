@@ -866,7 +866,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 		done
 	fi
 	rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
-	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\)$' | grep -v $name.ILRA.fasta); do
+	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\)$' | grep -v $name.ILRA.fasta | grep -v "01.assembly.fa" | grep -v "03.assembly.fa" | grep -v "03b.assembly.fa" | grep -v "04.assembly.fa" | grep -v "05.assembly.fa"); do
 		pigz -f -p $cores --best $i
 	done
 	for i in $(find $dir -name "*.vcf"); do
