@@ -38,7 +38,6 @@ mamba install -y -c bioconda blast-legacy blast samtools smalt pyfastaq bowtie2 
 echo -e "\n\n\nThe JAVA options used by Pilon by default may be not appropriate for processing large genomes. For example, heap memory may not be enough. Please keep in mind that any pilon-related error may be due to this and require manual tuning. You can manually set up the environmental variable _JAVA_OPTIONS to use other -Xms or -Xmx values if needed"
 # export _JAVA_OPTIONS='-Xms1g -Xmx5g'
 
-
 # Centrifuge requires outdated dependencies, so new environment
 echo -e "\n\n\nCentrifuge requires outdated dependencies, so new environment...\n\n\n"
 mamba create -n centrifuge -y -c bioconda centrifuge
