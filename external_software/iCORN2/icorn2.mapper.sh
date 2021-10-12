@@ -42,7 +42,7 @@ $ICORN2_HOME/gatk MarkDuplicatesSpark -I $resultname/out.bam -O $resultname/out.
 # Add the argument -M marked_dup_metrics.txt if you want to gather the stats, but by default omitted as it slows down
 return=$?
 if [ "$return" != "0" ] ; then
-	echo "Sorry, MarkDuplicatesSpark failed... Maybe due to excessive memory required? Maybe due to excessive open files (see ulimit -a)?. Maybe due to incorrect JAVA version (OpenJDK v8 required by GATK)?. Please check the log MarkDuplicatesSpark_log.out.txt to find more information..."
+	echo "Sorry, MarkDuplicatesSpark failed... Maybe due to excessive memory required (consider using less cores)? Maybe due to excessive open files (see ulimit -a)?. Maybe due to incorrect JAVA version (OpenJDK v8 required by GATK)? Please check the log MarkDuplicatesSpark_log.out.txt to find more information..."
 	exit 1;
 else
 	rm $resultname/out.bam; echo -e "\nMarkDuplicates DONE"
