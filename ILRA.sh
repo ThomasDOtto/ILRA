@@ -602,7 +602,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			cat report.txt
 	# Extract contigs classified as different organisms
 			rcf -n $databases/taxdump -f classification.txt -o recentrifuge_contamination_report.html -e CSV &> rcf_log_out.txt # Add --sequential if problems with multithreading
-			perl -S fasta_to_fastq.pl $dir/5.Circlator/05.assembly.fa ? > 05.assembly.fa.fq # assuming default "fake" quality 30 (? symbol, see https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
+			perl -S fasta_to_fastq.pl $dir/5.Circlator/05.assembly.fa ? > 05.assembly.fa.fq &> fasta_to_fastq_log_out.txt # assuming default "fake" quality 30 (? symbol, see https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
 			echo -e "\nPlease customize the organisms to be removed in the file /bin/ILRA_exclude_taxons_recentrifuge.txt. Currently:"; cat $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
 			source $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
 			echo -e "\nCheck out the log of Recentrifuge in the files rcf_log_out.txt and rextract_log_out.txt"
