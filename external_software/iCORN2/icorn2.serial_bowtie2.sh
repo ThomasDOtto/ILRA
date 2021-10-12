@@ -70,7 +70,7 @@ for ((i=$start;$i<=$end;i++)); do
 	if [ "$ICORN2_THREADS" -ge $splitter_parts ]; then
 	  (
 	  for part in $(ls | grep -e ".part.*.fa$"); do
-	    java -XX:-UseParallelGC -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true &
+	    java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true &
 	  done
 	  ) 2>&1 | cat -u >> split_parts_processing_reordersam.log
 	  (
