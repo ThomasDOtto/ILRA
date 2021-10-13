@@ -52,7 +52,7 @@ fi
 for i in {1..2}; do
   pigz -dfc -p $ICORN2_THREADS $readRoot\_$i.fastq.gz > $PWD/"${readRoot##*/}"\_$i.fastq &
 done
-) 2>&1 | cat -u >> processing_decompressing.log
+) 2>&1 | cat -u >> processing_decompressing_log_out.txt
 readRoot_uncompressed=$PWD/"${readRoot##*/}"
 
 
@@ -82,12 +82,12 @@ for ((i=$start;$i<=$end;i++)); do
 	  for part in $(ls | grep -e ".part.*.fa$"); do
 	    java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true &
 	  done
-	  ) 2>&1 | cat -u >> split_parts_processing_reordersam.log
+	  ) 2>&1 | cat -u >> split_parts_processing_reordersam_log_out.txt
 	  (
 	  for part in $(ls | grep -e ".part.*.fa$"); do
 	    icorn2.snpcall.correction.sh $part $part.bam $cores_split $readRoot_uncompressed $fragmentSize $part.$(($i+1)) $i &
 	  done
-	  ) 2>&1 | cat -u >> split_parts_processing_correction.log
+	  ) 2>&1 | cat -u >> split_parts_processing_correction_log_out.txt
 	fi
 	cd ../
 # Merge the different splits:
