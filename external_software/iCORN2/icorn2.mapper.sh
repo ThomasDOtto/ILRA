@@ -30,11 +30,11 @@ echo -e "Current ICORN2_THREADS: $cores cores\n"
 samtools faidx $genome; mkdir -p $resultname
 
 ### Executing bowtie2...
-echo -e "\nCalling bowtie2..."
-bowtie2-build --threads $cores $genome $genome &> $resultname/output.bowtiebuild.txt
+echo -e "\nCalling Bowtie2..."
+bowtie2-build --threads $cores $genome $genome &> $resultname/bowtiebuild.log_out.txt
 bowtie2 -t -x $genome -p $cores -X $insertSize --very-sensitive -N 1 -L 31 --rdg 5,2 -1 "$readRoot"_1.fastq.gz -2 "$readRoot"_2.fastq.gz | awk -va=$readRoot '{if ($1~/^@/) {print} else {print $0"\tRG:Z:"a}}' | samtools view -@ $cores -f 0x2 -u -t $genome.fai - | samtools reheader -c 'sed "$ a\@RG\tID:$readRoot\tSM:1"' - | samtools sort -@ $cores -n -u -m 2G -o $resultname/out.bam -
-rm $genome.* # Remove the old bowtie2 index, not required anymore
-echo -e "\nbowtie2 DONE"
+rm $genome.* # Remove the bowtie2 index
+echo -e "\nBowtie2 DONE"
 
 ### Executing MarkDuplicates
 echo -e "\nCalling MarkDuplicates (GATK)..."
