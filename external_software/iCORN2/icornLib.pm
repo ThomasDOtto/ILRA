@@ -1245,11 +1245,11 @@ sub callSubSNPoMaticPaired {
 
   # call SNP
   my $Call ="$SNPOMATIC_PATH/$SNPOMATIC_PROGRAM --genome=$ref --fastq=$fastq --pileup=$tmp_pileup --pair=$length --fragment=$insert_size --chop=2";
-  !system("$Call 2> output.snpopmati.txt") or die "SNPoMatic did not run ok $Call \n";
+  !system("$Call 2> snpopmati.log_out.txt") or die "SNPoMatic did not run ok $Call \n";
 
   $Call="awk '{ print \$1\":\"\$3\":\"\$5 }'  $tmp_pileup  > $pileup";
 
-  !system("$Call 2> output.snpopmati.txt") or die "awk did not run ok $Call \n";
+  !system("$Call 2> snpopmati.log_out.txt") or die "awk did not run ok $Call \n";
 
 #  unlink($tmp_pileup);
 }
@@ -1264,11 +1264,11 @@ sub callSubSNPoMaticPairedV2 {
 
   # call SNP
   my $Call ="$SNPOMATIC_PATH/$SNPOMATIC_PROGRAM --genome=$ref --fastq=".$readRoot."_1.fastq --fastq2=".$readRoot."_2.fastq --pileup=$tmp_pileup --fragment=$insert_size --chop=2";
-  !system("$Call 2> output.snpopmati.txt") or die "SNPoMatic did not run ok $Call \n";
+  !system("$Call 2> snpopmati.log_out.txt") or die "SNPoMatic did not run ok $Call \n";
 
   $Call="awk '{ print \$1\":\"\$3\":\"\$5 }'  $tmp_pileup  > $pileup";
 
-  !system("$Call 2> output.snpopmati.txt") or die "awk did not run ok $Call \n";
+  !system("$Call 2> snpopmati.log_out.txt") or die "awk did not run ok $Call \n";
 
   unlink($tmp_pileup);
 }
