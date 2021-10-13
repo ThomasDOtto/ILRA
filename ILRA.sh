@@ -602,7 +602,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			cat report.txt
 	# Extract contigs classified as different organisms
 			rcf -n $databases/taxdump -f classification.txt -o recentrifuge_contamination_report.html -e CSV &> rcf_log_out.txt # Add --sequential if problems with multithreading
-			perl -S fasta_to_fastq.pl $dir/5.Circlator/05.assembly.fa ? > 05.assembly.fa.fq &> fasta_to_fastq_log_out.txt # assuming default "fake" quality 30 (? symbol, see https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
+			perl -S fasta_to_fastq.pl $dir/5.Circlator/05.assembly.fa ? &> 05.assembly.fa.fq # assuming default "fake" quality 30 (? symbol, see https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
 			echo -e "\nPlease customize the organisms to be removed in the file /bin/ILRA_exclude_taxons_recentrifuge.txt. Currently:"; cat $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
 			source $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
 			echo -e "\nCheck out the log of Recentrifuge in the files rcf_log_out.txt and rextract_log_out.txt"
@@ -613,10 +613,10 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
 		fi
 		if [ -s 06.assembly.fa ]; then
-			echo -e "Centrifuge seems to have run fine. Please check the log, the Excluded.contigs.fofn and the report.txt files to assess the contigs that corresponded to contamination and that have been excluded by ILRA"
+			echo -e "Centrifuge and Recentrifuge seem to have run fine. Please check the logs, the Excluded.contigs.fofn and the report.txt files to assess the contigs that corresponded to contamination and that have been excluded by ILRA"
 		else
 	# Bypass if Centrifuge failed and didn't end
-			echo -e "\nPLEASE BE AWARE that decontamination based on taxonomic classification HAS FAILED because Centrifuge has been killed due to RAM usage or it has failed due to other reasons. Check the logs. Bypassing..."
+			echo -e "\nPLEASE BE AWARE that decontamination based on taxonomic classification HAS FAILED, Centrifuge may have been killed due to RAM usage, Recentrifuge may have failed due to other reasons... Please check the logs. For now bypassing step 6 so ILRA can continue..."
 			ln -fs $dir/5.Circlator/05.assembly.fa 06.assembly.fa
 		fi
 	# Renaming and making single-line fasta with length in the headers
@@ -688,7 +688,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 				sed -i "s/${seq_mit}/${seq_mit} [location=mitochondrion]/" $name.ILRA.fasta
 				samtools faidx $name.ILRA.fasta
 				contigs_to_retain=$(awk '{print $1}' $name.ILRA.fasta.fai | grep -v -f mito_sequences_to_remove)
-				samtools faidx $name.ILRA.fasta -o ../../$name.ILRA.fasta $contigs_to_retain; rm $name.ILRA.fasta
+				samtools faidx $name.ILRA.fasta -o ../../$name.ILRA.fasta $contigs_to_retain; rm $name.ILRA.fasta; rm $name.ILRA.fasta.fasta.fai
 			else
 				mv $name.ILRA.fasta ../../$name.ILRA.fasta
 			fi
@@ -717,8 +717,8 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 		ln -fs $assembly $dir/5.Circlator/05.assembly.fa $dir/$name.ILRA.fasta
 	fi
 	time1=`date +%s`
-	echo -e "\n\n\nSTEP 7: Renaming, gathering stats and evaluation starting..."; echo -e "Current date/time: $(date)"
-	echo -e "This is the final ILRA step, but the assembly has already been corrected and won't change more. If step 7 takes too long, you may already use the final corrected assembly "$dir"/"$name.ILRA.fasta
+	echo -e "\n\n\nSTEP 7 starting: Renaming, gathering stats and evaluation, cleaning up files..."; echo -e "Current date/time: $(date)"
+	echo -e "This is the final ILRA step and it may take long, but the assembly has already been corrected and won't change more. You can use already the final corrected assembly "$dir"/"$name.ILRA.fasta
 	mkdir -p $dir/7.Stats; cd $dir/7.Stats; rm -rf *
 	
 	# Evaluating the assemblies:
@@ -848,33 +848,30 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	# Converting files to minimize space
 	echo -e "\nConverting and compressing final files..."
 	if [ -f $dir/2.MegaBLAST/first.bam ]; then
-		samtools view -@ $cores -T $dir/1.Filtering/01.assembly.fa -C -o $dir/2.MegaBLAST/first.bam.cram $dir/2.MegaBLAST/first.bam &> $dir/2.MegaBLAST/first.bam.cram_log_out.txt
+		samtools view -@ $cores -T $dir/1.Filtering/01.assembly.fa -C -o $dir/2.MegaBLAST/first.bam.cram $dir/2.MegaBLAST/first.bam
 	fi
-	if [ -f $dir/4.iCORN2/ICORN2_1/out.sorted.markdup.bam ]; then
-		cd $dir/4.iCORN2
-		for f in $( find . -type f -name "*.bam" ); do
-			samtools view -@ $cores -T $dir/3.ABACAS2/03b.assembly.fa -C -o "${f}".cram "${f}" &> $dir/4.iCORN2/"${f}.cram_log_out.txt"
+	if [[ -d "$dir/4.iCORN2" ]]; then
+		for f in $(find $dir/4.iCORN2 -type f -name "*.bam"); do
+			a=${f%/*}
+			samtools view -@ $cores -T $dir/4.iCORN2/ICORN2.03b.assembly.fa.${a##*_} -C -o "${f}".cram "${f}"
 		done
-	fi
-	if [ -f $dir/5.Circlator/Mapped.corrected.04.sam ]; then
-		samtools view -@ $cores -T $(find $dir -name "04.assembly.fa") -C -o $dir/5.Circlator/Mapped.corrected.04.sam.cram $dir/5.Circlator/Mapped.corrected.04.sam &> $dir/5.Circlator/Mapped.corrected.04.sam.cram_log_out.txt
-		samtools view -@ $cores -T $dir/5.Circlator/ForCirc.Ref_2.fasta -C -o $dir/5.Circlator/Out.Circ/01.mapreads.bam.cram $dir/5.Circlator/Out.Circ/01.mapreads.bam &> $dir/5.Circlator/01.mapreads.bam.cram_log_out.txt
 	fi
 	if [[ -d "$dir/4.pilon" ]]; then
 		for i in $(seq 1 1 $number_iterations_icorn); do
 			samtools view -@ $cores -T $dir/3.ABACAS2/03b.assembly.fa -C -o $dir/4.pilon/ill_reads$i.bam.cram ill_reads$i.bam &> $dir/4.pilon/ill_reads$i.bam_log_out.txt
 		done
 	fi
+	if [ -f $dir/5.Circlator/Mapped.corrected.04.sam ]; then
+		samtools view -@ $cores -T $(find $dir -name "04.assembly.fa") -C -o $dir/5.Circlator/Mapped.corrected.04.sam.cram $dir/5.Circlator/Mapped.corrected.04.sam
+		samtools view -@ $cores -T $dir/5.Circlator/ForCirc.Ref_2.fasta -C -o $dir/5.Circlator/Out.Circ/01.mapreads.bam.cram $dir/5.Circlator/Out.Circ/01.mapreads.bam
+	fi
 	rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
-	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\)$' | grep -v $name.ILRA.fasta | grep -v "01.assembly.fa" | grep -v "03.assembly.fa" | grep -v "03b.assembly.fa" | grep -v "04.assembly.fa" | grep -v "05.assembly.fa"); do
-		pigz -f -p $cores --best $i
-	done
-	for i in $(find $dir -name "*.vcf"); do
+	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\|.vcf$\)$' | grep -v $name.ILRA.fasta | grep -v "01.assembly.fa" | grep -v "03.assembly.fa" | grep -v "03b.assembly.fa" | grep -v "04.assembly.fa" | grep -v "05.assembly.fa"); do
 		pigz -f -p $cores --best $i
 	done
 	echo -e "\nMain alignment files have been converted to cram for long-term storage. If needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ $cores -T filename.fasta -b -o output.bam input.cram (check out samtools view statements within ILRA.sh to get the fasta file used)"
 	# Cleaning up:
-	cd $dir; rm $(find . -regex ".*\.\(bam\|sam\)") 
+	rm $(find $dir -regex '.*\(.bam$\|.sam$\)$') 
 	echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 7 time (secs): $((time2-time1))"
 fi
