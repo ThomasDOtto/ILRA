@@ -1,13 +1,13 @@
 #!/bin/bash
 
-#### This is a wrapper script to install all ILRA dependencies available through conda and finish installation of others, including updated ABACAS2 and iCORN2.
+#### This is a wrapper script to install all ILRA dependencies available through conda and finish installation of others, such as iCORN2...
 
 #### Get the directory of the script:
 EXTERNAL_SOFTWARE_DIR=$(dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ))
 echo "The folder with external software is $EXTERNAL_SOFTWARE_DIR"
 
 
-#### Setting permissions:
+#### Setting permissions of executables:
 # (https://github.com/oXis/gtool)
 chmod 775 $EXTERNAL_SOFTWARE_DIR/gtool.py
 # ftp://ftp.ncbi.nlm.nih.gov/blast/demo/vecscreen
@@ -28,6 +28,7 @@ echo -e "\n\n\nI'm downloading and installing an updated copy of Miniconda3 in t
 echo -e "\n\n\nIf for some reason an outdated python or conda is required in your system, please ignore the miniconda3 folder created by this script (which may have failed), go to https://repo.anaconda.com/miniconda/ and download and install manually the corresponding Linux installer\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR; wget "https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Linux-x86_64.sh"
 mkdir -p Miniconda3; sh Miniconda3-py39_4.10.3-Linux-x86_64.sh -b -f -s -p $EXTERNAL_SOFTWARE_DIR/Miniconda3; rm Miniconda3-py39_4.10.3-Linux-x86_64.sh
+
 
 #### Install packages in an environment via conda:
 echo -e "\n\n\nI'm downloading and installing several packages through conda...\n\n\n"
@@ -88,6 +89,7 @@ echo -e "Getting picard (v2.26.2)...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://github.com/broadinstitute/picard/releases/download/2.26.2/picard.jar
 $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java -jar $EXTERNAL_SOFTWARE_DIR/iCORN2/picard.jar ReorderSam --version
+
 
 echo -e "\n\n\nALL DONE\n\n\n"
 
