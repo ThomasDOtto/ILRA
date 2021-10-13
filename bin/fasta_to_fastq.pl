@@ -14,7 +14,7 @@
 #IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 use strict;
-use warnings;
+# use warnings;
 
 my $file = $ARGV[0];
 open FILE, $file;
