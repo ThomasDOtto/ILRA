@@ -351,6 +351,7 @@ fi
 if [[ $debug == "all" || $debug == "step1" ]]; then
 	time1=`date +%s`
 	echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"; cd $dir/1.Filtering
+	mkdir -p $dir/1.Filtering; cd $dir/1.Filtering; rm -rf *
 	echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
 	echo "After this step:"; assembly-stats 01.assembly.fa | head -n 2
