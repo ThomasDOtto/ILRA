@@ -31,16 +31,13 @@ G=$genomesize
 coverage=$(echo "$LN/$G"|bc)
 
 #print outputs
-echo -n -e "sample_name\t"
-echo -n -e "\tread_length\t"
-echo -n -e "reads\t"
-echo -n -e "genome\t"
-echo -e "coverage"
-echo -n -e "$fasta\t"
-echo -n -e "$readlength\t"
-echo -n -e "$readcount\t"
-echo -n -e "$genomesize\t"
-echo -e "$coverage"
+echo -e "sample_name: $fasta\n"
+echo -e "read_name_1: $fastq1\n"
+echo -e "read_name_2: $fastq2\n"
+echo -e "read_length: $readlength\n"
+echo -e "reads: $readcount\n"
+echo -e "genome_size: $genomesize\n"
+echo -e "coverage: $coverage\n"
 
 #remove intermediary files
 rm "$fasta"-single;
