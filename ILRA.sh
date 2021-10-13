@@ -350,7 +350,7 @@ fi
 #### 1. Discard contigs smaller than a threshold:
 if [[ $debug == "all" || $debug == "step1" ]]; then
 	time1=`date +%s`
-	echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"; cd $dir/1.Filtering
+	echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/1.Filtering; cd $dir/1.Filtering; rm -rf *
 	echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
