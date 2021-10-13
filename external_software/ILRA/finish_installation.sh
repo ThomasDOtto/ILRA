@@ -2,6 +2,9 @@
 
 #### This is a wrapper script to install all ILRA dependencies available through conda and finish installation of others, such as iCORN2...
 
+
+
+
 #### Get the directory of the script:
 EXTERNAL_SOFTWARE_DIR=$(dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ))
 echo "The folder with external software is $EXTERNAL_SOFTWARE_DIR"
