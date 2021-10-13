@@ -13,7 +13,7 @@ ILRA is based on several standard tools and novel scripts. We suggest three diff
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA
-bash external_software/ILRA/finish_installation.sh | tee -a external_software/ILRA/finish_installation_log.txt
+bash external_software/ILRA/finish_installation.sh | tee -a external_software/ILRA/finish_installation_log.txt # Check log to ensure successful installation of dependencies
 ```
 
 
