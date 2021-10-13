@@ -2,7 +2,7 @@
 ### Modified by José Luis Ruiz to be used as part of the ILRA pipeline in 2022
 
 
-### Check and set arguments by default if not provided
+### Checking and setting arguments by default if not provided
 readRoot=$1
 fragmentSize=$2
 referenceORG=$3
@@ -39,6 +39,7 @@ if [ "$splitter_parts" -gt $(grep -c ">" $referenceORG) ]; then
 	splitter_parts=$(grep -c ">" $referenceORG)
 fi
 
+
 ### Setting up the reference sequences...
 refRoot=$(echo $referenceORG | perl -nle '@ar=split(/\//); print $ar[($ar[scalar(@ar)]-1)]') # For getting a copy of the reference in the folder, without | in the name
 if [ ! -f "ICORN2.$refRoot.$start" ] ; then
@@ -46,27 +47,36 @@ if [ ! -f "ICORN2.$refRoot.$start" ] ; then
 fi
 
 
+### Decompressing the Illumina short reads... (this may be time-consuming, but unfortunately it is mandatory, since SNP-o-matic in the iCORN2's correction step does not allow gzipped .fastq)
+(
+for i in {1..2}; do
+  pigz -dfc -p $ICORN2_THREADS $readRoot\_$i.fastq.gz > $PWD/"${readRoot##*/}"\_$i.fastq &
+done
+) 2>&1 | cat -u >> processing_decompressing.log
+readRoot_uncompressed=$PWD/"${readRoot##*/}"
+
+
 ### Executing iCORN2...
 cores_split=$((ICORN2_THREADS / splitter_parts)) # subset of cores for the simultaneous SNP calling threads
+echo -e "Cores to be used simultaneously to process each split sequence: $cores_split"
 for ((i=$start;$i<=$end;i++)); do
-	echo -e "\n\n\n#### ITERATION ++++ $i"
-	
-	### Call the mapper
+	echo -e "\n\n\n#### ITERATION ++++ $i"	
+### Call the mapper
 	echo -e "\nCalling the mapper...\n"
 	$ICORN2_HOME/icorn2.mapper.sh ICORN2.$refRoot.$i 13 3 $readRoot ICORN2_$i 1200 $ICORN2_THREADS
 	echo -e "\nMapper DONE\n"
 
-	### Call SNP caller and correction in splitted sequences:
+### Call SNP caller and correction in splitted sequences:
 	cd ICORN2_$i
 	ln -sf ../ICORN2.$refRoot.$i ref.fa
-	# Separating the sequences and subsetting the alignment (with updated java, make sure not to use the java 1.7 that's required by iCORN2's GenomeAnalysisTK.jar, but a more recent one, for example the 1.8 that GATK requires))
+# Separating the sequences and subsetting the alignment (with updated java, make sure not to use the java 1.7 that's required by iCORN2's GenomeAnalysisTK.jar, but a more recent one, for example the 1.8 that GATK requires))
 	echo -e "\nSeparating the sequences and batch analyzing them...\n"
 	fasta-splitter.pl --n-parts $splitter_parts --nopad --measure seq --line-length 0 --out-dir $PWD ref.fa
 	for part in $(ls | grep -e ".part.*.fa$"); do 
 		samtools faidx $part
 		java -XX:-UseParallelGC -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$part O=${part%.*}.dict &> CreateSequenceDictionary_$part.log_out.txt
 	done
-	# Executing in parallel each subset of the sequences
+# Executing in parallel each subset of the sequences
 	if [ "$ICORN2_THREADS" -ge $splitter_parts ]; then
 	  (
 	  for part in $(ls | grep -e ".part.*.fa$"); do
@@ -75,12 +85,12 @@ for ((i=$start;$i<=$end;i++)); do
 	  ) 2>&1 | cat -u >> split_parts_processing_reordersam.log
 	  (
 	  for part in $(ls | grep -e ".part.*.fa$"); do
-	    icorn2.snpcall.correction.sh $part $part.bam $cores_split $readRoot $fragmentSize $part.$(($i+1)) $i &
+	    icorn2.snpcall.correction.sh $part $part.bam $cores_split $readRoot_uncompressed $fragmentSize $part.$(($i+1)) $i &
 	  done
 	  ) 2>&1 | cat -u >> split_parts_processing_correction.log
 	fi
 	cd ../
-	# Merge the different splits:
+# Merge the different splits:
 	cat $(find $PWD/ICORN2_$i -name "*.fa.$(($i+1))") > ICORN2.$refRoot.$(($i+1)); rm $(find $PWD/ICORN2_$i -name "*.fa.$(($i+1))")	
 	echo "SNP" > ICORN2_$i/iter.$i.General.stats; awk '/^SNP$/,/^INS$/' $(find $PWD/ICORN2_$i -name "*General.stats" | grep -v iter) | sed "/SNP/d" | sed "/INS/d" | sort >> ICORN2_$i/iter.$i.General.stats
 	echo "INS" >> ICORN2_$i/iter.$i.General.stats; awk '/^INS$/,/^DEL$/' $(find $PWD/ICORN2_$i -name "*General.stats" | grep -v iter) | sed "/INS/d" | sed "/DEL/d" | sort >> ICORN2_$i/iter.$i.General.stats
@@ -89,9 +99,9 @@ for ((i=$start;$i<=$end;i++)); do
 	echo "Rej.SNP" >> ICORN2_$i/iter.$i.General.stats; awk '/^Rej.SNP$/,/^Rej.INS$/' $(find $PWD/ICORN2_$i -name "*General.stats" | grep -v iter) | sed "/Rej.SNP/d" | sed "/Rej.INS/d" | sort >> ICORN2_$i/iter.$i.General.stats
 	echo "Rej.INS" >> ICORN2_$i/iter.$i.General.stats; awk '/^Rej.INS$/,/^Rej.DEL$/' $(find $PWD/ICORN2_$i -name "*General.stats" | grep -v iter) | sed "/Rej.INS/d" | sed "/Rej.DEL/d" | sort >> ICORN2_$i/iter.$i.General.stats
 	echo "Rej.DEL" >> ICORN2_$i/iter.$i.General.stats; awk -v RS='(^|\n)Rej.DEL\n' 'END{printf "%s", $0}' $(find $PWD/ICORN2_$i -name "*General.stats" | grep -v iter) | sort >> ICORN2_$i/iter.$i.General.stats
-	
+# Collecting results:	
 	echo -e "\nIteration $i DONE"
 	echo "Current corrections:"; perl $ICORN2_HOME/icorn2.collectResults.pl .
 done
-
+rm "$readRoot_uncompressed"_1.fastq "$readRoot_uncompressed"_2.fastq
 echo -e "\n\n\nTo look in into a correction, open the file ending with .1 in artemis and load the gff file onto it..."
