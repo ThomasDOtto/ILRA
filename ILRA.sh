@@ -118,23 +118,11 @@ elif [[ $illuminaReads != /* ]]; then
 fi
 
 if [ -f $illuminaReads\_1.fastq.gz ]; then	
-	if [[ -z "$(find "$dir/1.Filtering" -name *.fastq | head -n1)" ]]; then
-		echo "Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz. Dealing with them now..."
-		mkdir -p $dir/1.Filtering
-		pigz -dfc -p $cores $illuminaReads\_1.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq
-		pigz -dfc -p $cores $illuminaReads\_2.fastq.gz > $dir/1.Filtering/"${illuminaReads##*/}"\_2.fastq
-		if [ ! -s $dir/1.Filtering/"${illuminaReads##*/}"\_1.fastq ]; then
-			echo -e "PLEASE double check decompression by pigz has worked. Exiting for now..."
-			exit 1
-		fi
-		illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"
-	else
-		illuminaReads=$dir/1.Filtering/"${illuminaReads##*/}"
-	fi
+	echo "Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz..."
 else
 	if [ $perform_correction == "yes" ]; then
 		echo -e "PLEASE be aware of the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz"
-	  echo -e "ILRA is not detecting the Illumina reads files as you provided them. If you want to use Illumina reads for polishing, please check naming, paths and that the files do exist. Otherwise rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will skip some steps accordingly..."
+	  	echo -e "ILRA is not detecting the Illumina reads files as you provided them. If you want to use Illumina reads for polishing, please check naming, paths and that the files do exist. Otherwise rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will skip some steps accordingly..."
 		exit 1
 	fi
 fi
@@ -396,9 +384,9 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 	# 2b. Find overlaps
 	# Get a bam files to do the merge
 	echo -e "\n\nSTEP 2b: Find overlaps starting..."; echo -e "Current date/time: $(date)\n"
-	if [ -f $illuminaReads\_1.fastq ]; then
+	if [ -f $illuminaReads\_1.fastq.gz ]; then
 		echo -e "SMALT parameters are: k-mer size=20, step-size=3, insert size range="$InsertsizeRange". Please check SMALT help and change manually within the pipeline (section 2b) these parameters if needed"
-		ILRA.runSMALT_ver2.sh 02.assembly.fa 20 3 $illuminaReads\_1.fastq $illuminaReads\_2.fastq first $InsertsizeRange $cores &> ILRA.runSMALT_ver2.sh_log_out.txt
+		ILRA.runSMALT_ver2.sh 02.assembly.fa 20 3 $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz first $InsertsizeRange $cores &> ILRA.runSMALT_ver2.sh_log_out.txt
 		echo -e "Check out the log of ILRA.runSMALT_ver2.sh in the file ILRA.runSMALT_ver2.sh_log_out.txt"
 	# Find overlaps
 		ILRA.findoverlaps_ver3.pl Blast.merge.blast.length first.bam 02.assembly.fa OUT 1> ILRA.findoverlaps_ver3.pl_log.txt 2> ILRA.findoverlaps_ver3.pl_log_perl_warnings.txt
@@ -471,7 +459,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 		time1=`date +%s`
 		echo -e "\n\nSTEP 4: iCORN2 starting..."; echo -e "Current date/time: $(date)\n"
 		mkdir -p $dir/4.iCORN2; cd $dir/4.iCORN2; rm -rf *
-		if [ -f $illuminaReads\_1.fastq ]; then
+		if [ -f $illuminaReads\_1.fastq.gz ]; then
 			iCORN2_fragmentSize=500
 			echo "The iCORN2 fragment size used is iCORN2_fragmentSize="$iCORN2_fragmentSize. "Please check iCORN2 help and change manually within the pipeline (section 4) if needed"
 			echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt"
@@ -496,17 +484,17 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 		time1=`date +%s`
 		echo -e "\n\nSTEP 4: Pilon starting..."; echo -e "Current date/time: $(date)\n"
 		mkdir -p $dir/4.pilon; cd $dir/4.pilon; rm -rf *
-		if [ -f $illuminaReads\_1.fastq ]; then
+		if [ -f $illuminaReads\_1.fastq.gz ]; then
 		for i in $(seq 1 1 $number_iterations_icorn); do
 			if [ "$i" -eq 1 ]; then
 				mkdir -p $dir/4.pilon/iter_1
 				bowtie2-build --threads $cores $dir/3.ABACAS2/03b.assembly.fa genome_iter1 &> bowtie_log_out.txt 2> bowtie_log_out.txt
-				bowtie2 -t -x genome_iter1 -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq -2 $illuminaReads\_2.fastq | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads1.bam##idx##ill_reads1.bam.bai"
+				bowtie2 -t -x genome_iter1 -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq.gz -2 $illuminaReads\_2.fastq.gz | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads1.bam##idx##ill_reads1.bam.bai"
 				pilon --genome $dir/3.ABACAS2/03b.assembly.fa --bam ill_reads1.bam --output genome_pilon1 --outdir $dir/4.pilon/iter_1 --changes --vcf --tracks &> pilon_log_out.txt
 			else
 				mkdir -p $dir/4.pilon/iter_$i
 				bowtie2-build --threads $cores $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta genome_iter$i &> bowtie_log_out.txt
-				bowtie2 -t -x genome_iter$i -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq -2 $illuminaReads\_2.fastq | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads$i.bam##idx##ill_reads$i.bam.bai"
+				bowtie2 -t -x genome_iter$i -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq.gz -2 $illuminaReads\_2.fastq.gz | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads$i.bam##idx##ill_reads$i.bam.bai"
 				pilon --genome $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta --bam ill_reads$i.bam --output genome_pilon$i --outdir $dir/4.pilon/iter_$i --changes --vcf --tracks &> pilon_log_out.txt
 			fi
 		done
@@ -761,16 +749,14 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	done
 	sed -i 's/stdin//g' 07.Contigs_GC_size.txt
 
-	# Getting sequencing depth and stats: (https://github.com/wudustan/fastq-info)
+	# Getting sequencing depth and stats: (modified from https://github.com/wudustan/fastq-info)
 	echo -e "\nCheck out the sequencing depth and other stats in the files 07.fastq_info_depth_IlluminaReads.txt and 07.fastq_info_depth_IlluminaReads_assembly.txt"
-	if [ -f $illuminaReads\_1.fastq ]; then
-		fastq_info_2.sh $illuminaReads\_1.fastq $illuminaReads\_2.fastq > 07.fastq_info_depth_IlluminaReads.txt
-		illumina_read_length=$(head -n 2 $illuminaReads\_1.fastq |tail -n 2|wc -c)
-		echo "Illumina_read_length =" $illumina_read_length
-		fastq-info.sh -r $illumina_read_length $illuminaReads\_1.fastq $illuminaReads\_2.fastq ../$name.ILRA.fasta > 07.fastq_info_depth_IlluminaReads_assembly.txt
-		fastqc $illuminaReads\_1.fastq $illuminaReads\_2.fastq -o $PWD --noextract -q -t $cores
+	if [ -f $illuminaReads\_1.fastq.gz ]; then
+		fastq-info.sh $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz ../$name.ILRA.fasta > 07.fastq_info_depth_IlluminaReads_assembly.txt
+		fastqc $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz -o $PWD --noextract -q -t $cores
 	fi
 
+	# Getting whether the organism is eukaryote for the following steps:
 	mkdir -p $(dirname $0)/databases; cd $(dirname $0)/databases; wget "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxcat.zip" &> taxcat_log
 	pigz -d -p $cores taxcat.zip; cd $dir/7.Stats
 	top_level=$(awk -v taxid="$taxonid" '{ if ($3 == taxid) { print $1 } }' $(dirname $0)/databases/taxcat); rm $(dirname $0)/databases/taxcat
@@ -786,13 +772,13 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 			echo -e "Running QUAST eukaryote without reference..."
 			quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
 		else
-			if [ -f $illuminaReads\_1.fastq ]; then
+			if [ -f $illuminaReads\_1.fastq.gz ]; then
 				if [ -z "$gff_file" ]; then
 					echo -e "Running QUAST --eukaryote with reference and structural variants calling and processing mode..."
-					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq --eukaryote &> quast.py_log_out.txt
+					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --eukaryote &> quast.py_log_out.txt
 				else
 					echo -e "Running QUAST --eukaryote with reference, with gff file and with structural variants calling and processing mode..."
-					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq --eukaryote &> quast.py_log_out.txt
+					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --eukaryote &> quast.py_log_out.txt
 				fi
 			else
 				if [ -z "$gff_file" ]; then
@@ -809,13 +795,13 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 			echo -e "Running QUAST without reference..."
 			quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient &> quast.py_log_out.txt
 		else
-			if [ -f $illuminaReads\_1.fastq ]; then
+			if [ -f $illuminaReads\_1.fastq.gz ]; then
 				if [ -z "$gff_file" ]; then
 					echo -e "Running QUAST prokaryote with reference and structural variants calling and processing mode..."
-					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq &> quast.py_log_out.txt
+					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz &> quast.py_log_out.txt
 				else
 					echo -e "Running QUAST prokaryote with reference, with gff file and with structural variants calling and processing mode..."
-					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq --pe2 $illuminaReads\_2.fastq &> quast.py_log_out.txt
+					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz &> quast.py_log_out.txt
 				fi
 			else
 				if [ -z "$gff_file" ]; then
@@ -864,8 +850,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	if [ -f $dir/5.Circlator/Mapped.corrected.04.sam ]; then
 		samtools view -@ $cores -T $(find $dir -name "04.assembly.fa") -C -o $dir/5.Circlator/Mapped.corrected.04.sam.cram $dir/5.Circlator/Mapped.corrected.04.sam
 		samtools view -@ $cores -T $dir/5.Circlator/ForCirc.Ref_2.fasta -C -o $dir/5.Circlator/Out.Circ/01.mapreads.bam.cram $dir/5.Circlator/Out.Circ/01.mapreads.bam
-	fi
-	rm $illuminaReads\_1.fastq; rm $illuminaReads\_2.fastq
+	fi	
 	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\|.vcf$\)$' | grep -v $name.ILRA.fasta | grep -v "01.assembly.fa" | grep -v "03.assembly.fa" | grep -v "03b.assembly.fa" | grep -v "04.assembly.fa" | grep -v "05.assembly.fa"); do
 		pigz -f -p $cores --best $i
 	done
