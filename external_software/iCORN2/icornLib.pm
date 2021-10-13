@@ -1186,12 +1186,12 @@ sub callSNPoMatic{
   my $tmp_pileup = "$pileup.tmp";
 
   my $Call ="$SNPOMATIC_PATH/$SNPOMATIC_PROGRAM --genome=$ref --fastq=$fastq --pileup=$tmp_pileup";
-  !system("$Call 2> out.SNPomatic.txt") or die "SNPoMatic did not run ok $Call \n";
+  !system("$Call 2> snpopmati.log_out.txt") or die "SNPoMatic did not run ok $Call \n";
 
 
   $Call="awk '{ print \$1\"\\t\"\$3\"\\t\"\$5 }'  $tmp_pileup  > $pileup ";
 
-  !system("$Call 2> out.SNPomaticII.txt") or die "SNPoMatic did not run ok $Call \n";
+  !system("$Call 2> snpopmati.log_out.txt") or die "SNPoMatic did not run ok $Call \n";
 
   unlink($tmp_pileup);
 
