@@ -750,7 +750,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 	sed -i 's/stdin//g' 07.Contigs_GC_size.txt
 
 	# Getting sequencing depth and stats: (modified from https://github.com/wudustan/fastq-info)
-	echo -e "\nCheck out the sequencing depth and other stats in the files 07.fastq_info_depth_IlluminaReads.txt and 07.fastq_info_depth_IlluminaReads_assembly.txt"
+	echo -e "\nCheck out the sequencing depth and other stats in the file 07.fastq_info_depth_IlluminaReads_assembly.txt"
 	if [ -f $illuminaReads\_1.fastq.gz ]; then
 		fastq-info.sh $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz ../$name.ILRA.fasta > 07.fastq_info_depth_IlluminaReads_assembly.txt
 		fastqc $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz -o $PWD --noextract -q -t $cores
