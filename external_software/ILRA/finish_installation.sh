@@ -4,9 +4,6 @@ EXTERNAL_SOFTWARE_DIR=$(dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev
 echo "The folder with external software is $EXTERNAL_SOFTWARE_DIR"
 
 #### Setting permissions:
-# (https://github.com/wudustan/fastq-info)
-chmod 775 $EXTERNAL_SOFTWARE_DIR/fastq-info.sh
-chmod 775 $EXTERNAL_SOFTWARE_DIR/fastq_info_2.sh
 # (https://github.com/oXis/gtool)
 chmod 775 $EXTERNAL_SOFTWARE_DIR/gtool.py
 # ftp://ftp.ncbi.nlm.nih.gov/blast/demo/vecscreen
