@@ -852,7 +852,7 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 		samtools view -@ $cores -T $(find $dir -name "04.assembly.fa") -C -o $dir/5.Circlator/Mapped.corrected.04.sam.cram $dir/5.Circlator/Mapped.corrected.04.sam
 		samtools view -@ $cores -T $dir/5.Circlator/ForCirc.Ref_2.fasta -C -o $dir/5.Circlator/Out.Circ/01.mapreads.bam.cram $dir/5.Circlator/Out.Circ/01.mapreads.bam
 	fi	
-	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\|.vcf$\)$' | grep -v $name.ILRA.fasta | grep -v "01.assembly.fa" | grep -v "03.assembly.fa" | grep -v "03b.assembly.fa" | grep -v "04.assembly.fa" | grep -v "05.assembly.fa"); do
+	for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\|.vcf$\|ICORN2.03b.assembly.fa.[1-10]\)$' | grep -v $name.ILRA.fasta | grep -v "01.assembly.fa" | grep -v "03.assembly.fa" | grep -v "03b.assembly.fa" | grep -v "04.assembly.fa" | grep -v "05.assembly.fa"); do
 		pigz -f -p $cores --best $i
 	done
 	echo -e "\nMain alignment files have been converted to cram for long-term storage. If needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ $cores -T filename.fasta -b -o output.bam input.cram (check out samtools view statements within ILRA.sh to get the fasta file used)"
