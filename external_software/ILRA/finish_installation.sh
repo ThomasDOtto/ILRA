@@ -58,27 +58,32 @@ cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name reads_analyzer.py | grep /envs/
 
 
 #### Setting up iCORN2:
-# Getting picard:
-echo -e "\n\n\nSetting up iCORN2 dependencies..."
-echo -e "Getting picard (v2.26.2)...\n\n\n"
-cd $EXTERNAL_SOFTWARE_DIR/iCORN2
-wget https://github.com/broadinstitute/picard/releases/download/2.26.2/picard.jar
 # Getting FASTA Splitter:
 echo -e "\n\n\nGetting fasta-splitter.pl (v0.2.6)...\n\n\n"
 wget http://kirill-kryukov.com/study/tools/fasta-splitter/files/fasta-splitter-0.2.6.zip; unzip -qq fasta-splitter-0.2.6.zip; rm fasta-splitter-0.2.6.zip; chmod 775 fasta-splitter.pl
+$EXTERNAL_SOFTWARE_DIR/iCORN2/fasta-splitter.pl --version
 # Getting GATK:
 echo -e "\n\n\nGetting GATK (v4.2.2.0)...\n\n\n"
 wget https://github.com/broadinstitute/gatk/releases/download/4.2.2.0/gatk-4.2.2.0.zip; unzip -qq gatk-4.2.2.0.zip; rm gatk-4.2.2.0.zip; chmod 775 gatk-4.2.2.0/gatk; ln -fs gatk-4.2.2.0/gatk gatk
+$EXTERNAL_SOFTWARE_DIR/iCORN2/gatk --version
 # Getting the outdated java version required for iCORN2:
 echo -e "\n\n\nGetting JAVA v1.7 required by iCORN2's SNP caller...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://files-cdn.liferay.com/mirrors/download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz; tar -xzf jdk-7u80-linux-x64.tar.gz; rm jdk-7u80-linux-x64.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin; chmod 775 *
+$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin/java -version
 # Getting the outdated java version required for GATK
 echo -e "\n\n\nGetting JAVA v1.8 required by GATK v4... This one must be in the PATH when executing iCORN2 and it is also enough for all the JAVA-related computation in ILRA\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz; tar -xzf OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz; rm OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin; chmod 775 *
+$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java -version
+# Getting picard:
+echo -e "\n\n\nSetting up iCORN2 dependencies..."
+echo -e "Getting picard (v2.26.2)...\n\n\n"
+cd $EXTERNAL_SOFTWARE_DIR/iCORN2
+wget https://github.com/broadinstitute/picard/releases/download/2.26.2/picard.jar
+$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java -jar $EXTERNAL_SOFTWARE_DIR/iCORN2/picard.jar ReorderSam --version
 
 echo -e "\n\n\nALL DONE\n\n\n"
 
