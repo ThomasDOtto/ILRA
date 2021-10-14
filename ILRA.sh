@@ -39,6 +39,7 @@ for argument in $options; do
 		-t | -threads # Number of cores to use in multithreaded steps
 		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run (step1, step2, step3, step4, step5, step6, or step7)
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
+		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by Centrifuge, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)" && exit 1;;
 		-a*) assembly=${arguments[index]} ;;
 		-o*) dir=${arguments[index]} ;;
@@ -61,6 +62,7 @@ for argument in $options; do
 		-m*) mode=${arguments[index]} ;;
 		-d*) debug=${arguments[index]} ;;
 		-p*) pilon=${arguments[index]} ;;
+		-q*) quality_step=${arguments[index]} ;;
 	esac
 done
 export name; export telomere_seq_1; export telomere_seq_2
@@ -156,6 +158,13 @@ elif [[ $pilon == "yes" ]]; then
 else
 	pilon="no"
 	echo "You are using iCORN2 for the correction via Illumina short reads. If you want to use pilon, please provide the argument '-p yes'..."
+fi
+
+if [ -z "$quality_step" ] || [ $quality_step == "yes" ]; then
+	quality_step="yes"
+	echo "You are requesting the last step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc"
+elif [ $quality_step == "no" ]; then
+	echo "You are skipping the last step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc"
 fi
 
 echo -e "\nFinal arguments used:"
@@ -700,11 +709,11 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			cat $dir/5.Circlator/05.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > $dir/$name.ILRA.fasta
 		fi
 	fi
-debug="all"
+debug=""
 fi
 
 #### 7. Evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
-if [[ $debug == "all" || $debug == "step7" ]]; then
+if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 	if [[ ! -d "$dir/6.Decontamination" ]] && [[ ! -d "$dir/5.Circlator" ]]; then
 		ln -fs $assembly $dir/5.Circlator/05.assembly.fa $dir/$name.ILRA.fasta
 	fi
