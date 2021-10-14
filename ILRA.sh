@@ -677,7 +677,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 				sed -i "s/${seq_mit}/${seq_mit} [location=mitochondrion]/" $name.ILRA.fasta
 				samtools faidx $name.ILRA.fasta
 				contigs_to_retain=$(awk '{print $1}' $name.ILRA.fasta.fai | grep -v -f mito_sequences_to_remove)
-				samtools faidx $name.ILRA.fasta -o ../../$name.ILRA.fasta $contigs_to_retain; rm $name.ILRA.fasta; rm $name.ILRA.fasta.fasta.fai
+				samtools faidx $name.ILRA.fasta -o ../../$name.ILRA.fasta $contigs_to_retain; rm $name.ILRA.fasta; rm $name.ILRA.fasta.fai
 			else
 				mv $name.ILRA.fasta ../../$name.ILRA.fasta
 			fi
