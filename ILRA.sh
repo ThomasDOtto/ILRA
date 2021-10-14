@@ -588,7 +588,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		echo -e "Please check the files centrifuge_log_out.txt and centrifuge_log_warnings_errors.txt"
 		if [ -s report.txt ]; then
 			echo -e "\nLog of Centrifuge:"
-			cat report.txt
+			cat report.txt; echo $(awk '{ print $3 }' classification.txt | sort | uniq -c | sed '$ d')
 			echo -e "\n\nNumber of contigs: $(($(awk '{ print $1 }' classification.txt | sort | uniq | wc -l) - 1))" >> report.txt
 			echo -e "\nSummary of the taxonomy IDs assigned to the contigs: (sometimes multiple):" >> report.txt; awk '{ print $3 }' classification.txt | sort | uniq -c | sed '$ d' >> report.txt
 			echo -e "\n\nTaxonomy IDs assigned to the contigs:" >> report.txt; awk '{ print $1"\t"$3 }' classification.txt | sort -n -k2 >> report.txt			
