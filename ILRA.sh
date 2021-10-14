@@ -831,7 +831,8 @@ if [[ $debug == "all" || $debug == "step7" ]]; then
 		echo -e "Running BUSCO in the automatic mode, '--auto-lineage'"
 		busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	fi
-
+	rm -rf $dir/7.Stats/busco_results/downloads
+	
 	# Converting files to minimize space
 	echo -e "\nConverting and compressing final files..."
 	if [ -f $dir/2.MegaBLAST/first.bam ]; then
