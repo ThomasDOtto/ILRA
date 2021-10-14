@@ -95,4 +95,3 @@ $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java -jar $EXTERNAL_SOFTWARE_DIR/
 
 
 echo -e "\n\n\nALL DONE\n\n\n"
-
