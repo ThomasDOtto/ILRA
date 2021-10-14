@@ -28,8 +28,8 @@ cd $EXTERNAL_SOFTWARE_DIR/iCORN2; chmod 775 *
 #### Download and install Miniconda:
 echo -e "\n\n\nI'm downloading and installing an updated copy of Miniconda3 in the folder external_software/miniconda3 to create ILRA environment\n\n\n"
 echo -e "\n\n\nIf for some reason an outdated python or conda is required in your system, please ignore the miniconda3 folder created by this script (which may have failed), go to https://repo.anaconda.com/miniconda/ and download and install manually the corresponding Linux installer\n\n\n"
-cd $EXTERNAL_SOFTWARE_DIR; wget "https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Linux-x86_64.sh"
-mkdir -p Miniconda3; sh Miniconda3-py39_4.10.3-Linux-x86_64.sh -b -f -s -p $EXTERNAL_SOFTWARE_DIR/Miniconda3; rm Miniconda3-py39_4.10.3-Linux-x86_64.sh
+cd $EXTERNAL_SOFTWARE_DIR; wget "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+mkdir -p Miniconda3; bash Miniconda3-latest-Linux-x86_64.sh -b -f -s -p $EXTERNAL_SOFTWARE_DIR/Miniconda3; rm Miniconda3-latest-Linux-x86_64.sh
 
 
 #### Install packages in an environment via conda:
