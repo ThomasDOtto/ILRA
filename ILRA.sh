@@ -37,7 +37,7 @@ for argument in $options; do
 		-o | -output # Output folder (full pathway)
 		-n | -name # Base name of the output file
 		-t | -threads # Number of cores to use in multithreaded steps
-		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run (step1, step2, step3, step4, step5, step6, or step7)
+		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run ('step1', 'step2', 'step3', 'step4', 'step5', 'step6', or 'step7')
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by Centrifuge, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)" && exit 1;;
