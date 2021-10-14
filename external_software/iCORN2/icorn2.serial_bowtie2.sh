@@ -24,8 +24,8 @@ For more debugging information, please set the environmental variable ICORN2_VER
 
 iCORN2 expects Illumina short reads whose root name is provided with absolute paths (the files should be prepared to follow the name convention <Illumina reads root name>_1.fastq and <Illumina reads root name>_2.fastq)
 To continue a correction after three iteration just put 4 in the <Number iteration to start>, or one unit more than the iteration that you want to resume
-To activate the low memory mode, provide 'yes' as the argument. Otherwise, leave empty or use 'no'
-iCORN2 is dividing the input sequences in N parts, which will be by default simultaneously processed. To this end, the number of cores will be automatically distributed, but the memory usage may increase. If the number of parts to split the input sequences is larger than the number of ICORN2_THREADS, or larger than the number of input sequences, or if you provide 'yes' to the low memory argument, the parts will be sequentially processed instead, using half the ICORN2_THREADS. If still running into memory issues, try and decrease the cores even more...
+To activate the low memory mode, provide 'yes' as the argument. Otherwise, use 'no' or leave empty ('no' is used as default)
+iCORN2 is dividing the input sequences in N parts, which will be by default simultaneously processed. To this end, the number of cores will be automatically distributed, but the memory usage may increase. If the number of parts to split the input sequences is larger than the number of ICORN2_THREADS, or larger than the number of input sequences, or if you provide 'yes' to the low memory argument, the parts will be sequentially processed instead, using half the ICORN2_THREADS. If still running into memory issues, try and decrease the cores even more or reduce the number of parts the input sequences are divided into...
 
 "
 	exit 1;
