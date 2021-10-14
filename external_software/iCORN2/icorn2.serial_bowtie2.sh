@@ -9,22 +9,24 @@ referenceORG=$3
 start=$4
 end=$5
 splitter_parts=$6
+low_mem_mode=$7; export low_mem_mode # export to be used also in other scripts
 
 echo -e "We are automatically setting ICORN2_HOME to $(dirname "$0")\n"
 ICORN2_HOME=$(dirname "$0"); export ICORN2_HOME
 
-if [ -z "$end" ] || [ -z "$readRoot" ] || [ ! -f "$referenceORG" ] ; then
+if [ -z "$readRoot" ] || [ -z "$fragmentSize" ] || [ -z "$referenceORG" ] || [ -z "$start" ] || [ -z "$end" ] || [ -z "$splitter_parts" ] || [ ! -f "$referenceORG" ] ; then
 	echo "Oh $(whoami), you have to call me and provide Illumina short reads and a correct reference
 ### Usage:
-icorn2.serial_bowtie2.sh <Illumina reads root name> <Illumina reads fragment size> <Reference genome> <Number iteration to start> <Number iteration to stop> <Number of parts to split the sequences>
+icorn2.serial_bowtie2.sh <Illumina reads root name> <Illumina reads fragment size> <Reference genome> <Number iteration to start> <Number iteration to stop> <Number of parts to split the sequences> <Low memory mode>
+
+Multithreading would be used in several steps, such as the mapping stage and the GATK variant calls. Please set the environmental variable ICORN2_THREADS, for example for using 8 cores 'ICORN2_THREADS=8; export ICORN2_THREADS
+For more debugging information, please set the environmental variable ICORN2_VERBOSE to an integer, for example 'ICORN2_VERBOSE=1; export ICORN2_VERBOSE'
 
 iCORN2 expects Illumina short reads whose root name is provided with absolute paths (the files should be prepared to follow the name convention <Illumina reads root name>_1.fastq and <Illumina reads root name>_2.fastq)
 To continue a correction after three iteration just put 4 in the <Number iteration to start>, or one unit more than the iteration that you want to resume
-The number of parts to split the sequences must be lower or equal the number of ICORN2_THREADS
+To activate the low memory mode, provide 'yes' as the argument. Otherwise, leave empty or use 'no'
+iCORN2 is dividing the input sequences in N parts, which will be by default simultaneously processed. To this end, the number of cores will be automatically distributed, but the memory usage may increase. If the number of parts to split the input sequences is larger than the number of ICORN2_THREADS, or larger than the number of input sequences, or if you provide 'yes' to the low memory argument, the parts will be sequentially processed instead, using half the ICORN2_THREADS. If still running into memory issues, try and decrease the cores even more...
 
-### Further parameters via environmental variables:
-Multithreading would be used in several steps, such as the mapping stage and the GATK variant calls. Please set the variable ICORN2_THREADS, for example for using 8 cores 'ICORN2_THREADS=8; export ICORN2_THREADS
-For debugging information, please set the variable ICORN2_VERBOSE to an integer, for example 'ICORN2_VERBOSE=1; export ICORN2_VERBOSE'
 "
 	exit 1;
 
@@ -34,8 +36,14 @@ if [ -z "$ICORN2_THREADS" ] ; then
 	ICORN2_THREADS=1; export ICORN2_THREADS
 fi
 echo -e "Current ICORN2_THREADS: $ICORN2_THREADS cores\n"
+echo -e "Please change and export the environmental variable ICORN2_THREADS if necessary"
+
+if [ -z "$low_mem_mode" ] ; then
+	low_mem_mode="no"; export low_mem_mode # export to be used also in other scripts
+fi
 
 if [ "$splitter_parts" -gt $(grep -c ">" $referenceORG) ]; then
+	low_mem_mode="yes"; export low_mem_mode # export to be used also in other scripts
 	splitter_parts=$(grep -c ">" $referenceORG)
 fi
 
@@ -47,10 +55,12 @@ if [ ! -f "ICORN2.$refRoot.$start" ] ; then
 fi
 
 
-### Decompressing the Illumina short reads... (this may be time-consuming, but unfortunately it is mandatory, since SNP-o-matic in the iCORN2's correction step does not allow gzipped .fastq)
+### Decompressing the Illumina short reads...
+# This may be time-consuming, but unfortunately it is mandatory, since SNP-o-matic in the iCORN2's correction step does not allow gzipped .fastq.
+# Since it's supossed to only use a core, decompression of both sets of pairs is done simultaneously...
 (
 for i in {1..2}; do
-  pigz -dfc -p $ICORN2_THREADS $readRoot\_$i.fastq.gz > $PWD/"${readRoot##*/}"\_$i.fastq &
+	pigz -dfc -p $ICORN2_THREADS $readRoot\_$i.fastq.gz > $PWD/"${readRoot##*/}"\_$i.fastq &
 done
 ) 2>&1 | cat -u >> processing_decompressing_log_out.txt
 readRoot_uncompressed=$PWD/"${readRoot##*/}"
@@ -58,14 +68,12 @@ readRoot_uncompressed=$PWD/"${readRoot##*/}"
 
 ### Executing iCORN2...
 cores_split=$((ICORN2_THREADS / splitter_parts)) # subset of cores for the simultaneous SNP calling threads
-echo -e "Cores to be used simultaneously to process each split sequence: $cores_split"
 for ((i=$start;$i<=$end;i++)); do
 	echo -e "\n\n\n#### ITERATION ++++ $i"	
 ### Call the mapper
 	echo -e "\nCalling the mapper...\n"
 	$ICORN2_HOME/icorn2.mapper.sh ICORN2.$refRoot.$i 13 3 $readRoot ICORN2_$i 1200 $ICORN2_THREADS
 	echo -e "\nMapper DONE\n"
-
 ### Call SNP caller and correction in splitted sequences:
 	cd ICORN2_$i
 	ln -sf ../ICORN2.$refRoot.$i ref.fa
@@ -76,18 +84,26 @@ for ((i=$start;$i<=$end;i++)); do
 		samtools faidx $part
 		java -XX:-UseParallelGC -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$part O=${part%.*}.dict &> CreateSequenceDictionary_$part.log_out.txt
 	done
+	if [ $low_mem_mode == "no" ]; then
 # Executing in parallel each subset of the sequences
-	if [ "$ICORN2_THREADS" -ge $splitter_parts ]; then
-	  (
-	  for part in $(ls | grep -e ".part.*.fa$"); do
-	    java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true &
-	  done
-	  ) 2>&1 | cat -u >> split_parts_processing_reordersam_log_out.txt
-	  (
-	  for part in $(ls | grep -e ".part.*.fa$"); do
-	    icorn2.snpcall.correction.sh $part $part.bam $cores_split $readRoot_uncompressed $fragmentSize $part.$(($i+1)) $i &
-	  done
-	  ) 2>&1 | cat -u >> split_parts_processing_correction_log_out.txt
+		echo -e "Cores to be used simultaneously to process each split sequence: $cores_split"
+		(
+		for part in $(ls | grep -e ".part.*.fa$"); do
+			java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true &
+		done
+		) 2>&1 | cat -u >> split_parts_processing_reordersam_log_out.txt
+		(
+		for part in $(ls | grep -e ".part.*.fa$"); do
+			icorn2.snpcall.correction.sh $part $part.bam $cores_split $readRoot_uncompressed $fragmentSize $part.$(($i+1)) $i &
+		done
+		) 2>&1 | cat -u >> split_parts_processing_correction_log_out.txt
+	elif [ $low_mem_mode == "yes" ]; then
+# Executing sequentially each subset of the sequences
+		echo -e "Cores to be used to sequentially process each split sequence: $((ICORN2_THREADS / 2))"
+		for part in $(ls | grep -e ".part.*.fa$"); do
+			java -XX:-UseParallelGC -XX:ParallelGCThreads=$((ICORN2_THREADS / 2)) -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true
+			icorn2.snpcall.correction.sh $part $part.bam $((ICORN2_THREADS / 2)) $readRoot_uncompressed $fragmentSize $part.$(($i+1)) $i
+		done
 	fi
 	cd ../
 # Merge the different splits:
