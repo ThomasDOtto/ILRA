@@ -390,8 +390,8 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		ILRA.runSMALT_ver2.sh 02.assembly.fa 20 3 $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz first $InsertsizeRange $cores &> ILRA.runSMALT_ver2.sh_log_out.txt
 		echo -e "Check out the log of ILRA.runSMALT_ver2.sh in the file ILRA.runSMALT_ver2.sh_log_out.txt"
 	# Find overlaps
-		ILRA.findoverlaps_ver3.pl Blast.merge.blast.length first.bam 02.assembly.fa OUT 1> ILRA.findoverlaps_ver3.pl_log.txt 2> ILRA.findoverlaps_ver3.pl_log_perl_warnings.txt
-		echo -e "\nCheck out the log of ILRA.findoverlaps_ver3.pl in the files log_OUT.txt, results_OUT.txt, ILRA.findoverlaps_ver3.pl_log.txt, and ILRA.findoverlaps_ver3.pl_log_perl_warnings.txt"
+		ILRA.findoverlaps_ver3.pl Blast.merge.blast.length first.bam 02.assembly.fa OUT 1> ILRA.findoverlaps_ver3.pl_log_out.txt 2> ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt
+		echo -e "\nCheck out the log of ILRA.findoverlaps_ver3.pl in the files log_OUT.txt, results_OUT.txt, ILRA.findoverlaps_ver3.pl_log_out.txt, and ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt"
 	# Save the contigs
 		echo -e "\n### Contigs not covered: (ILRA.findoverlaps_ver3.pl)" >> ../Excluded.contigs.fofn
 		cat notcovered_OUT.fasta | awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} $2 {print ">"$0}' | grep ">" >> ../Excluded.contigs.fofn
@@ -425,8 +425,8 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 	if [ "$doAbacas2" -eq 1 ]; then
 		ABA_CHECK_OVERLAP=0; export ABA_CHECK_OVERLAP; ABA_COMPARISON=nucmer; export ABA_COMPARISON; Min_Alignment_Length=1000; Identity_Cutoff=98
 		echo -e "ABACAS2 parameters are:\nABA_CHECK_OVERLAP=0\nABA_COMPARISON=nucmer\nMin_Alignment_Length=1000\nIdentity_Cutoff=98\nPlease check ABACAS2 help and change manually within the pipeline (section 3) these parameters if needed"
-		abacas2.nonparallel.sh $reference $dir/2.MegaBLAST/03.assembly.fa $cores $Min_Alignment_Length $Identity_Cutoff 1> abacas_log_out.txt 2> abacas_log_warnings_errors.txt
-		echo -e "\nCheck out the log of abacas2.nonparallel.sh in the files abacas_log_out.txt and abacas_log_warnings_errors.txt"
+		abacas2.nonparallel.sh $reference $dir/2.MegaBLAST/03.assembly.fa $cores $Min_Alignment_Length $Identity_Cutoff 1> abacas_log_out.txt 2> abacas_log_out_warnings_errors.txt
+		echo -e "\nCheck out the log of abacas2.nonparallel.sh in the files abacas_log_out.txt and abacas_log_out_warnings_errors.txt"
 	# Break  and delete N's
 		fastaq trim_Ns_at_end Genome.abacas.fasta 03b.assembly.fa
 	# Save the contigs
@@ -584,8 +584,8 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		mkdir -p $dir/6.Decontamination; cd $dir/6.Decontamination; rm -rf *
 	# usr/bin/time if required to measure the time and peak of memory
 		# /usr/bin/time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100 1> centrifuge_log_out.txt 2> centrifuge_log_warnings_errors.txt
-		centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100 1> centrifuge_log_out.txt 2> centrifuge_log_warnings_errors.txt
-		echo -e "Please check the files centrifuge_log_out.txt and centrifuge_log_warnings_errors.txt"
+		centrifuge -f -x $databases/nt -U $dir/5.Circlator/05.assembly.fa -p $cores --report-file report.txt -S classification.txt --min-hitlen 100 1> centrifuge_log_out.txt 2> centrifuge_log_out_warnings_errors.txt
+		echo -e "Please check the files centrifuge_log_out.txt and centrifuge_log_out_warnings_errors.txt"
 		if [ -s report.txt ]; then
 			echo -e "\nLog of Centrifuge:"
 			cat report.txt; echo $(awk '{ print $3 }' classification.txt | sort | uniq -c | sed '$ d')
@@ -601,7 +601,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			rextract -f classification.txt -i $taxonid $TAXONS_TO_EXCLUDE -n $databases/taxdump -q 05.assembly.fa.fq &> rextract_log_out.txt
 			sed -n '1~4s/^@/>/p;2~4p' *.fastq > 06.assembly.fa
 	# Save contigs
-			echo -e "\n### Excluded contigs that are not recognized by Centrifuge as the species of interest: (Check the output of Centrifuge in Step 6)" >> ../Excluded.contigs.fofn
+			echo -e "\n### Excluded contigs that are not recognized by Centrifuge as the species of interest:" >> ../Excluded.contigs.fofn
 			comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
 		fi
 		if [ -s 06.assembly.fa ]; then
@@ -871,10 +871,11 @@ echo -e "\nILRA IS DONE"; echo -e "Current date/time: $(date)\n"
 echo -e "Original assembly file: "$assembly
 echo -e "Final corrected assembly file: "$dir"/"$name.ILRA.fasta
 echo -e "Excluded contigs file: "$dir"/Excluded.contigs.fofn"
+echo -e "To assess the running please look for the expected output and log files within the step folders, particularly '*log_out*' files"
 end=`date +%s`; runtime=$((end-start))
 echo -e "\nCores: $cores"
 echo -e "Final runtime (hours): $((runtime / 3600))"
 echo -e "($runtime secs, check out time for each step after the statements 'STEP X: DONE')"
 
-echo -e "\n\n\n\n\n(List of output files)" > $dir/all_output_files_log.txt
-ls -Rslh $dir &> $dir/all_output_files_log.txt
+echo -e "\n\n\n\n\n(List of output files)" > $dir/all_output_files_log_out.txt
+ls -Rslh $dir &> $dir/all_output_files_log_out.txt
