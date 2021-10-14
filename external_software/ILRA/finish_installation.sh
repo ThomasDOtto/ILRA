@@ -65,6 +65,7 @@ cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name reads_analyzer.py | grep /envs/
 
 
 #### Setting up iCORN2:
+cd $EXTERNAL_SOFTWARE_DIR/iCORN2/
 # Getting FASTA Splitter:
 echo -e "\n\n\nGetting fasta-splitter.pl (v0.2.6)...\n\n\n"
 wget http://kirill-kryukov.com/study/tools/fasta-splitter/files/fasta-splitter-0.2.6.zip; unzip -qq fasta-splitter-0.2.6.zip; rm fasta-splitter-0.2.6.zip; chmod 775 fasta-splitter.pl
