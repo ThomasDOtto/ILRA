@@ -51,7 +51,7 @@ In general, from an assembly as input (argument '-a'), ILRA is going to provide 
 
 Please provide or not the arguments '-C' and '-I' to indicate whether to use short reads to perform error correction (iCORN2) and to find overlapped contigs (ILRA.findoverlaps_ver3.pl).
 
-Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) are going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step).
+Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) are going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon is used for short reads correction (default 'no') and the argument '-q' determines whether a final extra step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... is included (default 'yes').
 
 Finally, ILRA can be run in alternative modes (argument '-m'): 
 * '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive.
