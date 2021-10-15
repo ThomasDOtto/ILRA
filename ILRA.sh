@@ -597,10 +597,10 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		echo -e "Please check the files centrifuge_log_out.txt and centrifuge_log_out_warnings_errors.txt"
 		if [ -s report.txt ]; then
 			echo -e "\nLog of Centrifuge:"
-			cat report.txt; echo $(awk '{ print $3 }' classification.txt | sort | uniq -c | sed '$ d')
+			cat report.txt; echo -e "#Contig TaxID\n$(awk '{ print $1"\t"$3 }' classification.txt | sed '1d' | sort | uniq | cut -f2 | sort | uniq -c)\n"
 			echo -e "\n\nNumber of contigs: $(($(awk '{ print $1 }' classification.txt | sort | uniq | wc -l) - 1))" >> report.txt
-			echo -e "\nSummary of the taxonomy IDs assigned to the contigs: (sometimes multiple):" >> report.txt; awk '{ print $3 }' classification.txt | sort | uniq -c | sed '$ d' >> report.txt
-			echo -e "\n\nTaxonomy IDs assigned to the contigs:" >> report.txt; awk '{ print $1"\t"$3 }' classification.txt | sort -n -k2 >> report.txt			
+			echo -e "\nSummary of the taxonomy IDs assigned to the contigs:" >> report.txt; echo -e "#Contig TaxID\n$(awk '{ print $1"\t"$3 }' classification.txt | sed '1d' | sort | uniq | cut -f2 | sort | uniq -c)\n" >> report.txt
+			echo -e "\nTaxonomy IDs assigned to the contigs:" >> report.txt; awk '{ print $1"\t"$3 }' classification.txt | sort | uniq >> report.txt			
 	# Extract contigs classified as different organisms
 			rcf -n $databases/taxdump -f classification.txt -o recentrifuge_contamination_report.html -e CSV &> rcf_log_out.txt # Add --sequential if problems with multithreading
 			perl -S fasta_to_fastq.pl $dir/5.Circlator/05.assembly.fa ? &> 05.assembly.fa.fq # assuming default "fake" quality 30 (? symbol, see https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
