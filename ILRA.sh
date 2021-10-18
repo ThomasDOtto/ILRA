@@ -365,7 +365,7 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' > 01.assembly.fa
 	echo "After this step:"; assembly-stats 01.assembly.fa | head -n 2
 	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)"
-	time2=`date +%s`; echo -e "STEP 1 time (secs): $((time2-time1))"
+	time2=`date +%s`; echo -e "STEP 1 time (secs): $((time2-time1))"; echo -e "STEP 1 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
 fi
 
@@ -419,7 +419,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 	fi
 	echo "After this step:"; assembly-stats 02.assembly.fa | head -n 2; assembly-stats 03.assembly.fa | head -n 2
 	echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)"
-	time2=`date +%s`; echo -e "STEP 2 time (secs): $((time2-time1))"
+	time2=`date +%s`; echo -e "STEP 2 time (secs): $((time2-time1))"; echo -e "STEP 2 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
 fi
 
@@ -455,7 +455,7 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 	fi
 	echo "After this step:"; assembly-stats 03b.assembly.fa | head -n 2
 	echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)"
-	time2=`date +%s`; echo -e "STEP 3 time (secs): $((time2-time1))"
+	time2=`date +%s`; echo -e "STEP 3 time (secs): $((time2-time1))"; echo -e "STEP 3 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
 fi
 
@@ -520,7 +520,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 	fi
 echo "After this step:"; assembly-stats 04.assembly.fa | head -n 2
 echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)"
-time2=`date +%s`; echo -e "STEP 4 time (secs): $((time2-time1))"
+time2=`date +%s`; echo -e "STEP 4 time (secs): $((time2-time1))"; echo -e "STEP 4 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
 fi
 
@@ -579,7 +579,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 	fi
 echo "After this step:"; assembly-stats 05.assembly.fa | head -n 2
 echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)"
-time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"
+time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"; echo -e "STEP 5 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 fi
 
 #### 6. Decontamination/taxonomic classification/final masking and filtering for databases upload, rename sequences
@@ -628,7 +628,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		fi
 		echo "After this step:"; assembly-stats 06.assembly.fa | head -n 2
 		echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)"
-		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs): $((time2-time1))"
+		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs): $((time2-time1))"; echo -e "STEP 6 Centrifuge time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 	fi
 	if [[ $mode == "blast" || $mode == "both" ]]; then
 	# Final filtering, masking and reformatting to conform the requirements of DDBJ/ENA/Genbank
@@ -698,7 +698,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		fi
 		echo "After this step:"; assembly-stats ../../$name.ILRA.fasta | head -n 2
 		echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)"
-		time2=`date +%s`; echo -e "STEP 6 blast time (secs): $((time2-time1))"
+		time2=`date +%s`; echo -e "STEP 6 blast time (secs): $((time2-time1))"; echo -e "STEP 6 blast time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 	fi
 	if [ $mode == "light" ]; then
 		echo -e "\nSTEP 6 for decontamination is skipped. Light mode activated"; echo -e "Current date/time: $(date)\n"
@@ -872,7 +872,7 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 	# Cleaning up:
 	rm $(find $dir -regex '.*\(.bam$\|.sam$\)$') 
 	echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)"
-	time2=`date +%s`; echo -e "STEP 7 time (secs): $((time2-time1))"
+	time2=`date +%s`; echo -e "STEP 7 time (secs): $((time2-time1))"; echo -e "STEP 7 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 fi
 
 
