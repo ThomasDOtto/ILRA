@@ -88,28 +88,31 @@ export ABA_MIN_LENGTH ABA_MIN_IDENTITY contig reference
 
 
 ### ABACAS2 runComparison
+echo -e "\nExecuting abacas2.runComparison.sh...\n"
 abacas2.runComparison.sh $reference $contig $cores $ABA_splitContigs
-
+echo -e "\nDONE\n"
 
 ### ABACAS2 TillingGraph
-for x in `grep '>' $reference | perl -nle '/>(\S+)/;print $1' ` ; do
+echo -e "\nExecuting abacas2.doTilingGraph.pl...\n"
+for x in `grep '>' $reference | perl -nle '/>(\S+)/;print $1'` ; do
 	abacas2.doTilingGraph.pl $x.coords $contig Res
 done
-
+echo -e "\nDONE\n"
 
 ### ABACAS2 binning
 # abacas2.bin.sh $contig Res.abacasBin.fna && grep -v '>'  Res.abacasBin.fna | awk 'BEGIN {print ">Bin.union"} {print}' > Res.abacasBin.oneSeq.fna_ && cat Res*fna > Genome.abacas.fasta && bam.correctLineLength.sh Genome.abacas.fasta  &> /dev/null && mv  Res.abacasBin.fna_ Res.abacasBin.fna
 # JLRuiz update 2022. The line above is the original one in Abacas. However, there was always an error regarding the last statement: "mv Res.abacasBin.fna_ Res.abacasBin.fna"
 # It seems "Res.abacasBin.fna_" had never been defined, nor "Res.abacasBin.fna" seemed to be used after that attempted mv command. I'm not sure on the aim, but I have commented the original line and added the same without the last mv statement so we avoid the errors
 # In any case, the contigs that are identified in the bin by abacas2 are included in the output sequences, just not merged into a single one. If this is something desirable, here is where the code has to be modified
-
+echo -e "\nExecuting abacas2.bin.sh...\n"
 abacas2.bin.sh $contig Res.abacasBin.fna
 grep -v '>' Res.abacasBin.fna | awk 'BEGIN {print ">Bin.union"} {print}' > Res.abacasBin.oneSeq.fna_
 cat Res*fna > Genome.abacas.fasta
 bam.correctLineLength.sh Genome.abacas.fasta &> /dev/null
-
+echo -e "\nDONE\n"
 
 ### Blasting:
+echo -e "\nExecuting megablast...\n"
 ref=$reference
 pre=Res
 if [ -z "$pre" ] ; then
@@ -134,5 +137,5 @@ for nameRes in `grep '>' $ref | perl -nle 's/\|/_/g;/>(\S+)/; print $1'` ; do
 	formatdb -p F -i Reference/$nameRes
 	megablast -F T -m 8 -e 1e-20 -d Reference/$nameRes -i $pre.$nameRes.fna -a $cores -o comp/comp.$nameRes.blast
 done
-
+echo -e "\nDONE\n"
 
