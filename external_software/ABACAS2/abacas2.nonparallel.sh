@@ -82,7 +82,7 @@ fi
 tmp=$$
 sed 's/|/_/g' $reference > Ref.$tmp
 reference=Ref.$tmp
-ln -s $contig Contigs.$tmp
+ln -sf $contig Contigs.$tmp
 contig=Contigs.$tmp
 export ABA_MIN_LENGTH ABA_MIN_IDENTITY contig reference
 
@@ -94,7 +94,7 @@ echo -e "\nDONE\n"
 
 ### ABACAS2 TillingGraph
 echo -e "\nExecuting abacas2.doTilingGraph.pl...\n"
-for x in `grep '>' $reference | perl -nle '/>(\S+)/;print $1'` ; do
+for x in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
 	abacas2.doTilingGraph.pl $x.coords $contig Res
 done
 echo -e "\nDONE\n"
@@ -121,19 +121,19 @@ if [ -z "$pre" ] ; then
 fi
 
 tmp=$$
-ln -s $ref REF.$tmp
+ln -sf $ref REF.$tmp
 
-mkdir Reference; cd Reference
+mkdir -p Reference; cd Reference
 SeparateSequences.pl ../REF.$tmp
-cd ..; mkdir comp
+cd ..; mkdir -p comp
 
-count=0
-for nameRes in `grep '>' $ref | perl -nle 's/\|/_/g;/>(\S+)/; print $1'` ; do
-	let count++;
-	if [ $count -gt 200 ] ; then
-		echo "too many contigs to bsub!\n";
-		exit
-	fi
+# count=0
+for nameRes in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
+	# let count++;
+	# if [ $count -gt 200 ] ; then
+	#	echo "too many contigs to bsub!\n";
+	#	exit
+	# fi
 	formatdb -p F -i Reference/$nameRes
 	megablast -F T -m 8 -e 1e-20 -d Reference/$nameRes -i $pre.$nameRes.fna -a $cores -o comp/comp.$nameRes.blast
 done
