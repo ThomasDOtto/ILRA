@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-### Modified by José Luis Ruiz to be used as part of the ILRA pipeline in 2022
+### Modified by José Luis Ruiz to improve performance and to be used as part of the ILRA pipeline in 2022
 
 reference=$1
 contig=$2
