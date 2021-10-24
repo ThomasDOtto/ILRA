@@ -1,5 +1,5 @@
 #!/bin/bash
-### Modified by José Luis Ruiz to be used as part of the ILRA pipeline in 2022
+### Modified by José Luis Ruiz to improve performarme and to be used as part of the ILRA pipeline in 2022
 
 
 ### Checking and setting arguments by default if not provided
