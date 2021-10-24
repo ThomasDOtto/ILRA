@@ -86,6 +86,9 @@ if [ -z "$ABA_LOW_MEM" ] ; then
 elif [ $ABA_LOW_MEM == "no" ]; then
 	cores_split=$((cores / ABA_SPLIT_PARTS)) # subset of cores for the simultaneous processing
 fi
+if [ "$cores_split" -eq 0 ]; then
+	cores_split=1 # At least each contig in a core if the number of contigs is exceeding the number of cores
+fi
 if [ "$ABA_MIN_IDENTITY" -gt "99" ] ; then
 	echo "Your identity might be too high $ABA_MIN_IDENTITY > 99 "
 	exit;
@@ -102,19 +105,31 @@ export ABA_MIN_LENGTH ABA_MIN_IDENTITY contig reference
 ### ABACAS2 runComparison
 echo -e "\nExecuting abacas2.runComparison.sh...\n"
 abacas2.runComparison.sh $reference $contig $cores $ABA_splitContigs
+arr=($(find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"))
 echo -e "\nDONE\n"
 
 
 ### ABACAS2 TillingGraph
 echo -e "\nExecuting abacas2.doTilingGraph.pl...\n"
-if [[ $ABA_LOW_MEM == "no" ]] && [[ "$cores" -ge "$(find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*" | wc -l)" ]] ; then
-	(
-	for x in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
-		abacas2.doTilingGraph.pl $x.coords $contig Res &
+if [[ $ABA_LOW_MEM == "no" ]] ; then
+	count=0
+	while [ "$element" != "${arr[${#arr[@]}-1]}" ]; do
+		(
+		for i in $(seq 0 ${#arr[@]}); do
+			abacas2.doTilingGraph.pl ${arr[$count + $i]}.coords $contig Res &
+			echo "element=${arr[$count + $i]}"
+			echo "count=$((i+1))"
+			if [[ $((i+1)) -ge "$cores" ]] || [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
+				echo "Another round needed because I reached the max of cores..."
+				exit 1
+			fi
+		done
+		) 2>&1 | cat -u >> abacas2.doTilingGraph.pl_parallel_log_out.txt
+		eval $(grep "count=" abacas2.doTilingGraph.pl_parallel_log_out.txt | sort | tail -1)
+		eval $(grep "element=" abacas2.doTilingGraph.pl_parallel_log_out.txt | tail -1)
 	done
-	) 2>&1 | cat -u >> abacas2.doTilingGraph.pl_parallel_log_out.txt
-else
-	for x in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
+elif [[ $ABA_LOW_MEM == "yes" ]] ; then
+	for x in "${arr[@]}" ; do
 		abacas2.doTilingGraph.pl $x.coords $contig Res
 	done
 fi
@@ -150,19 +165,41 @@ cd ..; mkdir -p comp
 
 # Execution:
 # count=0
-if [[ $ABA_LOW_MEM == "no" ]] && [[ "$cores" -ge "$(find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*" | wc -l)" ]] ; then
-	(
-	for nameRes in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
-		formatdb -p F -i Reference/$nameRes &
+if [[ $ABA_LOW_MEM == "no" ]] ; then
+	element=${arr[0]}
+	count=0
+	while [ "$element" != "${arr[${#arr[@]}-1]}" ]; do
+		(
+		for i in $(seq 0 ${#arr[@]}); do
+			formatdb -p F -i Reference/${arr[$count + $i]} &
+			echo "element=${arr[$count + $i]}"
+			echo "count=$((i+1))"
+			if [[ $((i+1)) -ge "$cores" ]] || [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
+				exit 1
+			fi
+		done
+		) 2>&1 | cat -u >> formatdb_parallel_log_out.txt
+		eval $(grep "count=" formatdb_parallel_log_out.txt | sort | tail -1)
+		eval $(grep "element=" formatdb_parallel_log_out.txt | tail -1)
 	done
-	) 2>&1 | cat -u >> formatdb_parallel_log_out.txt
-	(
-	for nameRes in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
-		megablast -F T -m 8 -e 1e-20 -d Reference/$nameRes -i $pre.$nameRes.fna -a $cores_split -o comp/comp.$nameRes.blast &
+	element=${arr[0]}
+	count=0
+	while [ "$element" != "${arr[${#arr[@]}-1]}" ]; do
+		(
+		for i in $(seq 0 ${#arr[@]}); do
+			megablast -F T -m 8 -e 1e-20 -d Reference/${arr[$count + $i]} -i $pre.${arr[$count + $i]}.fna -a $cores_split -o comp/comp.${arr[$count + $i]}.blast &
+			echo "element=${arr[$count + $i]}"
+			echo "count=$((i+1))"
+			if [[ $((i+1)) -ge "$cores" ]] || [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
+				exit 1
+			fi
+		done
+		) 2>&1 | cat -u >> megablast_parallel_log_out.txt
+		eval $(grep "count=" megablast_parallel_log_out.txt | sort | tail -1)
+		eval $(grep "element=" megablast_parallel_log_out.txt | tail -1)
 	done
-	) 2>&1 | cat -u >> megablast_parallel_log_out.txt
-else
-	for nameRes in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
+elif [[ $ABA_LOW_MEM == "yes" ]] ; then
+	for nameRes in "${arr[@]}" ; do
 		# let count++;
 		# if [ $count -gt 200 ] ; then
 		#	echo "too many contigs to bsub!\n";
