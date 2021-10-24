@@ -36,18 +36,22 @@ if [ -z "$contig" ] || [ -z "$reference" ] || [ -z "$ABA_MIN_LENGTH" ] ; then
 *** Abacas II ***       For any disturbation with this program, please don't blame Sammy!
 
 ### Usage
-abacas2.nonparallel.sh <Reference> <Contigs to order> <Cores to nucmer>. Optional: <min aligment length> <Identity cutoff>
+abacas2.nonparallel.sh <Reference> <Contigs to order> <Cores>. Optional: <Min aligment length> <Identity cutoff>
 
-reference:           Fasta (or multi-fasta) against which the contigs should be ordered
-contig:              Contigs or query that should be ordered
+Reference:           Fasta (or multi-fasta) against which the contigs should be ordered
+Contigs:             Contigs or query that should be ordered
+Cores		     Cores to use
 Min aligment length: Alignment length significance threshold (default 200)
 Identity cutoff:     Threshold for identity to place contigs (default 95)
+
 
 ### Further parameters via envinromental variables:
 ABA_CHECK_OVERLAP=1; export ABA_CHECK_OVERLAP # This will try to overlap contigs
 ABA_splitContigs=1; export ABA_splitContigs # This will split contigs. This is good to split the orign, and to find rearrangement. A split contigs has the suffix _i (i the part)
 ABA_WORD_SIZE=20; export ABA_WORD_SIZE # This sets the word size. This is critical for speed issues in nucmer. Default is 20
 ABA_COMPARISON=promer; export ABA_COMPARISON # This sets promer as the comparison method to use (default). It can be changed to 'nucmer'
+ABA_SPLIT_PARTS=5; export ABA_SPLIT_PARTS # The input sequences will be splitted into this number of parts/contigs and processed in parallel when possible
+ABA_LOW_MEM=yes; export ABA_LOW_MEM # This sets low memory mode and no parallel processing is going to be performed, by default is deactivated
 Check the script 'abacas2.showACT.sh' if you want to automatically check the comparisons in the Artemis Comparison Tool (ACT)
 
 ### Results
@@ -65,14 +69,22 @@ fi
 
 ### Check and set arguments by default if not provided
 if [ -z "$ABA_MIN_LENGTH" ] ; then
-	ABA_MIN_LENGTH=200;
+	ABA_MIN_LENGTH=200; export ABA_MIN_LENGTH
 fi
 if [ -z "$ABA_MIN_IDENTITY" ] ; then
-	ABA_MIN_IDENTITY=95;
+	ABA_MIN_IDENTITY=95; export ABA_MIN_IDENTITY
 fi
 if [ -z "$ABA_CHECK_OVERLAP" ] ; then
-        ABA_CHECK_OVERLAP=0;
-	export ABA_CHECK_OVERLAP
+        ABA_CHECK_OVERLAP=0; export ABA_CHECK_OVERLAP
+fi
+if [ -z "$ABA_SPLIT_PARTS" ] ; then
+        ABA_SPLIT_PARTS=$(grep -c ">" $contig); export ABA_SPLIT_PARTS
+fi
+if [ -z "$ABA_LOW_MEM" ] ; then
+        ABA_LOW_MEM="no"; export ABA_LOW_MEM
+	cores_split=$((cores / ABA_SPLIT_PARTS)) # subset of cores for the simultaneous processing
+elif [ $ABA_LOW_MEM == "no" ]; then
+	cores_split=$((cores / ABA_SPLIT_PARTS)) # subset of cores for the simultaneous processing
 fi
 if [ "$ABA_MIN_IDENTITY" -gt "99" ] ; then
 	echo "Your identity might be too high $ABA_MIN_IDENTITY > 99 "
@@ -92,12 +104,22 @@ echo -e "\nExecuting abacas2.runComparison.sh...\n"
 abacas2.runComparison.sh $reference $contig $cores $ABA_splitContigs
 echo -e "\nDONE\n"
 
+
 ### ABACAS2 TillingGraph
 echo -e "\nExecuting abacas2.doTilingGraph.pl...\n"
-for x in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
-	abacas2.doTilingGraph.pl $x.coords $contig Res
-done
+if [[ $ABA_LOW_MEM == "no" ]] && [[ "$cores" -ge "$(find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*" | wc -l)" ]] ; then
+	(
+	for x in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
+		abacas2.doTilingGraph.pl $x.coords $contig Res &
+	done
+	) 2>&1 | cat -u >> abacas2.doTilingGraph.pl_parallel_log_out.txt
+else
+	for x in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
+		abacas2.doTilingGraph.pl $x.coords $contig Res
+	done
+fi
 echo -e "\nDONE\n"
+
 
 ### ABACAS2 binning
 # abacas2.bin.sh $contig Res.abacasBin.fna && grep -v '>'  Res.abacasBin.fna | awk 'BEGIN {print ">Bin.union"} {print}' > Res.abacasBin.oneSeq.fna_ && cat Res*fna > Genome.abacas.fasta && bam.correctLineLength.sh Genome.abacas.fasta  &> /dev/null && mv  Res.abacasBin.fna_ Res.abacasBin.fna
@@ -111,31 +133,43 @@ cat Res*fna > Genome.abacas.fasta
 bam.correctLineLength.sh Genome.abacas.fasta &> /dev/null
 echo -e "\nDONE\n"
 
+
 ### Blasting:
 echo -e "\nExecuting megablast...\n"
+# Preparation:
 ref=$reference
 pre=Res
 if [ -z "$pre" ] ; then
    echo "usage <reference> Res"
-
 fi
-
 tmp=$$
 ln -sf $ref REF.$tmp
-
 mkdir -p Reference; cd Reference
 SeparateSequences.pl ../REF.$tmp
 cd ..; mkdir -p comp
 
+# Execution:
 # count=0
-for nameRes in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
-	# let count++;
-	# if [ $count -gt 200 ] ; then
-	#	echo "too many contigs to bsub!\n";
-	#	exit
-	# fi
-	formatdb -p F -i Reference/$nameRes
-	megablast -F T -m 8 -e 1e-20 -d Reference/$nameRes -i $pre.$nameRes.fna -a $cores -o comp/comp.$nameRes.blast
-done
+if [[ $ABA_LOW_MEM == "no" ]] && [[ "$cores" -ge "$(find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*" | wc -l)" ]] ; then
+	(
+	for nameRes in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
+		formatdb -p F -i Reference/$nameRes &
+	done
+	) 2>&1 | cat -u >> formatdb_parallel_log_out.txt
+	(
+	for nameRes in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
+		megablast -F T -m 8 -e 1e-20 -d Reference/$nameRes -i $pre.$nameRes.fna -a $cores_split -o comp/comp.$nameRes.blast &
+	done
+	) 2>&1 | cat -u >> megablast_parallel_log_out.txt
+else
+	for nameRes in `find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"` ; do
+		# let count++;
+		# if [ $count -gt 200 ] ; then
+		#	echo "too many contigs to bsub!\n";
+		#	exit
+		# fi
+		formatdb -p F -i Reference/$nameRes
+		megablast -F T -m 8 -e 1e-20 -d Reference/$nameRes -i $pre.$nameRes.fna -a $cores -o comp/comp.$nameRes.blast
+	done
+fi
 echo -e "\nDONE\n"
-
