@@ -50,7 +50,7 @@ ABA_CHECK_OVERLAP=1; export ABA_CHECK_OVERLAP # This will try to overlap contigs
 ABA_splitContigs=1; export ABA_splitContigs # This will split contigs. This is good to split the orign, and to find rearrangement. A split contigs has the suffix _i (i the part)
 ABA_WORD_SIZE=20; export ABA_WORD_SIZE # This sets the word size. This is critical for speed issues in nucmer. Default is 20
 ABA_COMPARISON=promer; export ABA_COMPARISON # This sets promer as the comparison method to use (default). It can be changed to 'nucmer'
-ABA_SPLIT_PARTS=5; export ABA_SPLIT_PARTS # The input sequences will be splitted into this number of parts/contigs and processed in parallel when possible
+ABA_SPLIT_PARTS=5; export ABA_SPLIT_PARTS # The input sequences will be splitted into this number of parts/contigs and processed in parallel when possible. By default, number of contigs in the sequence provided as input
 ABA_LOW_MEM=yes; export ABA_LOW_MEM # This sets low memory mode and no parallel processing is going to be performed, by default is deactivated
 Check the script 'abacas2.showACT.sh' if you want to automatically check the comparisons in the Artemis Comparison Tool (ACT)
 
