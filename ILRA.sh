@@ -396,7 +396,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		eval $(grep "count1=" megablast_parallel_log_out.txt | tail -1)
 		eval $(grep "sequence=" megablast_parallel_log_out.txt | tail -1)
 	done
-	cat *.fa.blast > comp.self1.blast; rm *.fa$ *.fa.blast
+	cat *.fa.blast > comp.self1.blast; rm *.fa *.fa.blast
 	ILRA.addLengthBlast.pl $dir/1.Filtering/01.assembly.fa $dir/1.Filtering/01.assembly.fa comp.self1.blast &> /dev/null
 	
 	#### 2a. Delete contained contigs
