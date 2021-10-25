@@ -128,7 +128,7 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 			fi
 		done
 		) 2>&1 | cat -u >> abacas2.doTilingGraph.pl_parallel_log_out.txt
-		eval $(grep "count=" abacas2.doTilingGraph.pl_parallel_log_out.txt | sort | tail -1)
+		eval $(grep "count=" abacas2.doTilingGraph.pl_parallel_log_out.txt | tail -1)
 		eval $(grep "element=" abacas2.doTilingGraph.pl_parallel_log_out.txt | tail -1)
 	done
 elif [[ $ABA_LOW_MEM == "yes" ]] ; then
@@ -186,7 +186,7 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 			fi
 		done
 		) 2>&1 | cat -u >> formatdb_parallel_log_out.txt
-		eval $(grep "count=" formatdb_parallel_log_out.txt | sort | tail -1)
+		eval $(grep "count=" formatdb_parallel_log_out.txt | tail -1)
 		eval $(grep "element=" formatdb_parallel_log_out.txt | tail -1)
 	done
 	element=${arr[0]}
@@ -206,7 +206,7 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 			fi
 		done
 		) 2>&1 | cat -u >> megablast_parallel_log_out.txt
-		eval $(grep "count=" megablast_parallel_log_out.txt | sort | tail -1)
+		eval $(grep "count=" megablast_parallel_log_out.txt | tail -1)
 		eval $(grep "element=" megablast_parallel_log_out.txt | tail -1)
 	done
 elif [[ $ABA_LOW_MEM == "yes" ]] ; then
