@@ -398,7 +398,8 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 	done
 	cat *.fa.blast > comp.self1.blast; rm *.fa$ *.fa.blast
 	ILRA.addLengthBlast.pl $dir/1.Filtering/01.assembly.fa $dir/1.Filtering/01.assembly.fa comp.self1.blast &> /dev/null
-	# 2a. Delete contained contigs
+	
+	#### 2a. Delete contained contigs
 	# We want the query to be always the smaller one
 	echo -e "\n\nSTEP 2a: Delete contained contigs starting..."; echo -e "Current date/time: $(date)\n"
 	awk '$3>99 && $4>500 && $13 < $14' comp.self1.blast.length | ILRA.getOverlap.pl > 02.ListContained.txt
@@ -409,7 +410,8 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 	echo "Filtering the MegaBLAST output for hits > 2Kb and >99% identity. Please change manually within the pipeline (section 2a) these parameters if needed"
 	ILRA.deleteContigs.pl List.Contained.fofn $dir/1.Filtering/01.assembly.fa 02.assembly.fa
 	cat comp.self1.blast.length | awk '$3> 99 && $4 > 2000' | ILRA.deleteEntryinBlast.pl List.Contained.fofn > Blast.merge.blast.length
-	# 2b. Find overlaps
+	
+	#### 2b. Find overlaps
 	# Get a bam files to do the merge
 	echo -e "\n\nSTEP 2b: Find overlaps starting..."; echo -e "Current date/time: $(date)\n"
 	if [ -f $illuminaReads\_1.fastq.gz ]; then
@@ -492,9 +494,9 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 			echo "The iCORN2 fragment size used is iCORN2_fragmentSize="$iCORN2_fragmentSize. "Please check iCORN2 help and change manually within the pipeline (section 4) if needed"
 			echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt"
 			icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn 5 &> icorn2.serial_bowtie2.sh_log_out.txt
-		# Cleaned assembly:
+	# Cleaned assembly:
 			ln -fs ICORN2.03b.assembly.fa.[$(expr $number_iterations_icorn + 1)] 04.assembly.fa
-		# Summary of iCORN2 results:
+	# Summary of iCORN2 results:
 			mkdir -p $dir/7.Stats; icorn2.collectResults.pl $PWD > ../7.Stats/07.iCORN2.final_corrections.results.txt
 			echo -e "### Total SNP: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$6;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
 			echo -e "### Total INS: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$7;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
@@ -503,7 +505,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 			echo -e "A preview of the correction by iCORN2 is:"
 			cat ../7.Stats/07.iCORN2.final_corrections.results.txt
 		else
-		# Bypass if Illumina reads not provided
+	# Bypass if Illumina reads not provided
 			echo -e "Illumina reads NOT PROVIDED and iCORN2 is not executed. STEP 4 for correction using short reads is skipped\n"
 			ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
 		fi		
@@ -526,12 +528,12 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 				pilon --genome $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta --bam ill_reads$i.bam --output genome_pilon$i --outdir $dir/4.pilon/iter_$i --changes --vcf --tracks &> pilon_log_out.txt
 			fi
 		done
-		# Cleaned assembly:
+	# Cleaned assembly:
 			echo -e "Check out the log of pilon in the file pilon_log_out.txt and *.changes in the subfolders. The numbers of changes by pilon in the $number_iterations_icorn iterations are:" 
 			wc -l $(find . -name "*.changes")
 			ln -fs $dir/4.pilon/iter_$number_iterations_icorn/genome_pilon$number_iterations_icorn.fasta 04.assembly.fa
 		else
-		# Bypass if Illumina reads not provided
+	# Bypass if Illumina reads not provided
 			echo -e "Illumina reads NOT PROVIDED and pilon is not executed. STEP 4 for correction using short reads is skipped\n"
 			ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
 		fi		
@@ -552,7 +554,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		echo -e "\n\nSTEP 5: Circlator starting..."; echo -e "Current date/time: $(date)\n"
 		mkdir -p $dir/5.Circlator; cd $dir/5.Circlator; rm -rf *
 		if grep -q -E "$seqs_circl_1|$seqs_circl_2" $(find $dir -name "04.assembly.fa"); then
-		# Map the corrected reads
+	# Map the corrected reads
 			if [ $long_reads_technology == "pacbio" ]; then
 				minimap2 -x map-pb -H -t $cores -d minimap2_index_pacbio.mmi $(find $dir -name "04.assembly.fa") &> mapping_corrected_reads_log_out.txt
 				minimap2 -x map-pb -t $cores -a minimap2_index_pacbio.mmi $correctedReads > Mapped.corrected.04.sam 2>> mapping_corrected_reads_log_out.txt
@@ -560,7 +562,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 				minimap2 -x map-ont -t $cores -d minimap2_index_nanopore.mmi $(find $dir -name "04.assembly.fa") &> mapping_corrected_reads_log_out.txt
 				minimap2 -x map-ont -t $cores -a minimap2_index_nanopore.mmi $correctedReads > Mapped.corrected.04.sam 2>> mapping_corrected_reads_log_out.txt
 			fi
-		# Circlator:
+	# Circlator:
 			seq_ids=$(awk '{print $3}' Mapped.corrected.04.sam | grep -E "$seqs_circl_1|$seqs_circl_2" | tail -n +2 | sort | uniq)
 			for i in $seq_ids; do
 				cat Mapped.corrected.04.sam | grep $i | awk '{ print ">"$1"\n"$10 }' >> ForCirc.reads.fasta
@@ -572,20 +574,20 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 			awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.Ref.fasta > ForCirc.Ref_2.fasta
 			echo -e "Check out the log of the mapping of the corrected reads and circlator in the files mapping_corrected_reads_log_out.txt and circlator_log_out.txt"
 			circlator all ForCirc.Ref_2.fasta ForCirc.reads_2.fasta Out.Circ --threads $cores &> circlator_log_out.txt
-		# Delete the plastids/organelles/circular sequences from the current assembly version (04.assembly.fa)
+	# Delete the plastids/organelles/circular sequences from the current assembly version (04.assembly.fa)
 			for i in $seq_ids; do
 				echo $i >> List.circular_sequences.fofn
 			done
 			ILRA.deleteContigs.pl List.circular_sequences.fofn $(find $dir -name "04.assembly.fa") 05.assembly.fa
 			if [ ! -s $dir/5.Circlator/Out.Circ/06.fixstart.fasta ]; then
-		# Bypass if circlator failed and didn't end
+	# Bypass if circlator failed and didn't end
 				echo -e "PLEASE be aware that Circlator HAS FAILED. Check its log and output for futher details. This may be due to some problems with the provided reads, or not enough/even coverage for the required contigs. Bypassing..."
 				ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
 			else
 			cat $PWD/Out.Circ/06.fixstart.fasta >> 05.assembly.fa;
 			fi			
 		else
-		# Bypass if the contigs names provided are not found
+	# Bypass if the contigs names provided are not found
 			ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
 			echo -e "The sequence identifiers provided for circularization were not found in the contig names. Circlator NOT EXECUTED. STEP 5 for circularization is skipped"
 		fi
