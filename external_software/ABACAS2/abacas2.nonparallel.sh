@@ -120,7 +120,10 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 			echo "element=${arr[$count + $i]}"
 			echo "count=$((i+1))"
 			if [[ $((i+1)) -ge "$cores" ]] || [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
-				echo "Another round needed because I reached the max of cores..."
+				echo "Another round of parallel processing may be needed if the max of cores is reached..."
+				if [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
+					echo "Parallel processing ended..."
+				fi
 				exit 1
 			fi
 		done
@@ -175,6 +178,10 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 			echo "element=${arr[$count + $i]}"
 			echo "count=$((i+1))"
 			if [[ $((i+1)) -ge "$cores" ]] || [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
+				echo "Another round of parallel processing may be needed if the max of cores is reached..."
+				if [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
+					echo "Parallel processing ended..."
+				fi
 				exit 1
 			fi
 		done
@@ -191,6 +198,10 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 			echo "element=${arr[$count + $i]}"
 			echo "count=$((i+1))"
 			if [[ $((i+1)) -ge "$cores" ]] || [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
+				echo "Another round of parallel processing may be needed if the max of cores is reached..."
+				if [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
+					echo "Parallel processing ended..."
+				fi
 				exit 1
 			fi
 		done
