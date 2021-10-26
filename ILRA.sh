@@ -378,25 +378,29 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 	echo -e "\n\nSTEP 2: MegaBLAST starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/2.MegaBLAST; cd $dir/2.MegaBLAST; rm -rf *
 	formatdb -p F -i $dir/1.Filtering/01.assembly.fa
-	# Process in the MegaBLAST simultaneously the individual contigs in blocks of at most 10 elements (manually change this number below if less than 10 cores available or running into memory issues))	
-	cat $dir/1.Filtering/01.assembly.fa | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
-	arr=($(ls | grep ".fa")); length_arr=${#arr[@]}; last_element="${arr[${#arr[@]}-1]}"; count1=1
-	while [ "$sequence" != "$last_element" ]; do		
-		count2=1
-		(
-		while [ $count2 -ne 11 ] && [ "$sequence" != "$last_element" ]; do
-			megablast -W 40 -F F -a $((cores / 10)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i ${arr[$count1 - 1]} | awk '$3>98 && $4>500 && $1 != $2' > comp.self1.${arr[$count1 - 1]}.blast &
-			echo "sequence=${arr[$count1 - 1]}"
-			echo "count1=$count1"
-			sequence=${arr[$count1 - 1]}
-			count1=$((count1 + 1))
-			count2=$((count2 + 1))
+	# Process in the MegaBLAST simultaneously the individual contigs in blocks of at most 10 elements (manually change this number below if required, for example because less than 10 cores available or running into memory issues))	
+	if [ "$cores" -ge 10 ]; then
+		cat $dir/1.Filtering/01.assembly.fa | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
+		arr=($(ls | grep ".fa")); length_arr=${#arr[@]}; last_element="${arr[${#arr[@]}-1]}"; count1=1
+		while [ "$sequence" != "$last_element" ]; do		
+			count2=1
+			(
+			while [ $count2 -ne 11 ] && [ "$sequence" != "$last_element" ]; do
+				megablast -W 40 -F F -a $((cores / 10)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i ${arr[$count1 - 1]} | awk '$3>98 && $4>500 && $1 != $2' > comp.self1.${arr[$count1 - 1]}.blast &
+				echo "sequence=${arr[$count1 - 1]}"
+				echo "count1=$count1"
+				sequence=${arr[$count1 - 1]}
+				count1=$((count1 + 1))
+				count2=$((count2 + 1))
+			done
+			) 2>&1 | cat -u >> megablast_parallel_log_out.txt		
+			eval $(grep "count1=" megablast_parallel_log_out.txt | tail -1)
+			eval $(grep "sequence=" megablast_parallel_log_out.txt | tail -1)
 		done
-		) 2>&1 | cat -u >> megablast_parallel_log_out.txt		
-		eval $(grep "count1=" megablast_parallel_log_out.txt | tail -1)
-		eval $(grep "sequence=" megablast_parallel_log_out.txt | tail -1)
-	done
-	cat *.fa.blast > comp.self1.blast; rm *.fa *.fa.blast
+		cat *.fa.blast > comp.self1.blast; rm *.fa *.fa.blast
+	else
+		megablast -W 40 -F F -a $cores -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i $dir/1.Filtering/01.assembly.fa | awk '$3>98 && $4>500 && $1 != $2' > comp.self1.blast
+	fi
 	ILRA.addLengthBlast.pl $dir/1.Filtering/01.assembly.fa $dir/1.Filtering/01.assembly.fa comp.self1.blast &> /dev/null
 	
 	#### 2a. Delete contained contigs
