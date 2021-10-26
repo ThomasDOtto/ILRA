@@ -378,7 +378,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 	echo -e "\n\nSTEP 2: MegaBLAST starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/2.MegaBLAST; cd $dir/2.MegaBLAST; rm -rf *
 	formatdb -p F -i $dir/1.Filtering/01.assembly.fa
-	# Process in the MegaBLAST simultaneously the individual contigs in blocks of at most 10 elements (manually change this number if less than 10 cores available)	
+	# Process in the MegaBLAST simultaneously the individual contigs in blocks of at most 10 elements (manually change this number below if less than 10 cores available or running into memory issues))	
 	cat $dir/1.Filtering/01.assembly.fa | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
 	arr=($(ls | grep ".fa")); length_arr=${#arr[@]}; last_element="${arr[${#arr[@]}-1]}"; count1=1
 	while [ "$sequence" != "$last_element" ]; do		
