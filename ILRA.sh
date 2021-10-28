@@ -388,7 +388,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 			while [ $count2 -ne 11 ] && [ "$sequence" != "$last_element" ]; do
 				megablast -W 40 -F F -a $((cores / 10)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i ${arr[$count1 - 1]} | awk '$3>98 && $4>500 && $1 != $2' > comp.self1.${arr[$count1 - 1]}.blast &
 				echo "sequence=${arr[$count1 - 1]}"
-				echo "count1=$count1"
+				echo "count1=$count1"; echo "count2=$count2"
 				sequence=${arr[$count1 - 1]}
 				count1=$((count1 + 1))
 				count2=$((count2 + 1))
