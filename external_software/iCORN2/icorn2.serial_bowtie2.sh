@@ -94,7 +94,6 @@ for ((i=$start;$i<=$end;i++)); do
 		java -XX:-UseParallelGC -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$part O=${part%.*}.dict &
 	done
 	) 2>&1 | cat -u >> processing_split_parts_createseqdictionary_log_out.txt	
-	
 	if [ $low_mem_mode == "no" ]; then
 # Executing in parallel each subset of the sequences
 		echo -e "Cores to be used simultaneously to process each split sequence: $cores_split"
@@ -103,12 +102,12 @@ for ((i=$start;$i<=$end;i++)); do
 		for part in $(ls | grep -e ".part.*.fa$"); do
 			java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true &
 		done
-		) 2>&1 | cat -u >> split_parts_processing_reordersam_log_out.txt
+		) 2>&1 | cat -u >> processing_split_parts_reordersam_log_out.txt
 		(
 		for part in $(ls | grep -e ".part.*.fa$"); do
 			icorn2.snpcall.correction.sh $part $part.bam $cores_split $readRoot_uncompressed $fragmentSize $part.$(($i+1)) $i &
 		done
-		) 2>&1 | cat -u >> split_parts_processing_correction_log_out.txt
+		) 2>&1 | cat -u >> processing_split_parts_correction_log_out.txt
 	elif [ $low_mem_mode == "yes" ]; then
 # Executing sequentially each subset of the sequences
 		echo -e "Cores to be used to sequentially process each split sequence: $((ICORN2_THREADS / 2))"
