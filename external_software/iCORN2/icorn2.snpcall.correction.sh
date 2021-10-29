@@ -28,7 +28,7 @@ rm $genome.out/gatk.realigned.${genome%.*}.bam $genome.out/gatk.realigned.${geno
 echo -e "\nSNP caller DONE... $genome\n"
 
 ### Call iCORN2 starter
-echo -e "\nCalling iCORN2 correct... $genome\n"
+echo -e "\nCalling icorn2.correct.sh... $genome\n"
 $ICORN2_HOME/icorn2.correct.sh $genome $genome.out $readRoot $fragmentSize $outname &> ../out.ICORN2.CORRECT.${genome%.*}.$iternum.o
 echo -e "\nicorn2.correct.sh DONE... $genome\n"
 return=$?
