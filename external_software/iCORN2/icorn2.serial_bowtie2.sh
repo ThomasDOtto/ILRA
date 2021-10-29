@@ -92,7 +92,7 @@ for ((i=$start;$i<=$end;i++)); do
 	) 2>&1 | cat -u >> processing_split_parts_faidx_log_out.txt
 	(
 	for part in $(ls | grep -e ".part.*.fa$"); do
-		java -XX:-UseParallelGC -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$part O=${part%.*}.dict TMP_DIR=../tmp_dir &
+		java -XX:-UseParallelGC -XX:ParallelGCThreads=$((ICORN2_THREADS / 2)) -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$part O=${part%.*}.dict TMP_DIR=../tmp_dir &
 	done
 	) 2>&1 | cat -u >> processing_split_parts_createseqdictionary_log_out.txt	
 	if [ $low_mem_mode == "no" ]; then
