@@ -179,7 +179,7 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 	done
 	
 	count1=1; block=0
-	echo -e "\nProcessing MegaBLAST simultaneously in blocks of at most $ABA_SPLIT_PARTS elements, please manually change and export the environmental variable 'ABA_SPLIT_PARTS' if required, for example if running into memory issues or less cores available...\n)"
+	echo -e "\nProcessing MegaBLAST simultaneously in blocks of at most $ABA_SPLIT_PARTS elements, please manually change and export the environmental variable 'ABA_SPLIT_PARTS' if required, for example if running into memory issues or less cores available...\n"
 	while [ $count1 -le $length_arr ]; do
 		count2=1
 		(
