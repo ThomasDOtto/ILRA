@@ -161,9 +161,10 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 	count1=1; block=0
 	echo -e "\nProcessing formatdb simultaneously in blocks of at most $cores elements, please decrease the number of cores if running into memory issues...\n)"
 	while [ $count1 -le $length_arr ]; do
-		count2=1; element=${arr[$count1 - 1]}; element=${element%.*}
+		count2=1 
 		(
 		while [ $count2 -le $cores ] && [ $count1 -le $length_arr ]; do
+			element=${arr[$count1 - 1]}; element=${element%.*}
 			formatdb -p F -i Reference/$element &
 			echo "sequence=$element"
 			(( count1++ ))
@@ -180,9 +181,10 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 	count1=1; block=0
 	echo -e "\nProcessing MegaBLAST simultaneously in blocks of at most $ABA_SPLIT_PARTS elements, please manually change and export the environmental variable 'ABA_SPLIT_PARTS' if required, for example if running into memory issues or less cores available...\n)"
 	while [ $count1 -le $length_arr ]; do
-		count2=1; element=${arr[$count1 - 1]}; element=${element%.*}
+		count2=1
 		(
 		while [ $count2 -le $ABA_SPLIT_PARTS ] && [ $count1 -le $length_arr ]; do
+			element=${arr[$count1 - 1]}; element=${element%.*}
 			megablast -F T -m 8 -e 1e-20 -d Reference/$element -i $pre.$element.fna -a $cores_split -o comp/comp.$element.blast &
 			echo "sequence=$element"
 			(( count1++ ))
