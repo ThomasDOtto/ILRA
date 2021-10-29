@@ -132,4 +132,5 @@ for ((i=$start;$i<=$end;i++)); do
 	echo "Current corrections:"; perl $ICORN2_HOME/icorn2.collectResults.pl .
 done
 rm "$readRoot_uncompressed"_1.fastq "$readRoot_uncompressed"_2.fastq
+rm -rf tmp_dir
 echo -e "\n\n\nTo look in into a correction, open the file ending with .1 in artemis and load the gff file onto it..."
