@@ -47,6 +47,11 @@ if [ "$splitter_parts" -gt $(grep -c ">" $referenceORG) ]; then
 	splitter_parts=$(grep -c ">" $referenceORG)
 fi
 
+cores_split=$((ICORN2_THREADS / splitter_parts)) # subset of cores for the simultaneous SNP calling threads
+if [ $cores_split -eq 0 ]; then
+	low_mem_mode="yes"; export low_mem_mode # export to be used also in other scripts
+fi
+
 
 ### Setting up the reference sequences...
 refRoot=$(echo $referenceORG | perl -nle '@ar=split(/\//); print $ar[($ar[scalar(@ar)]-1)]') # For getting a copy of the reference in the folder, without | in the name
@@ -67,7 +72,6 @@ readRoot_uncompressed=$PWD/"${readRoot##*/}"
 
 
 ### Executing iCORN2...
-cores_split=$((ICORN2_THREADS / splitter_parts)) # subset of cores for the simultaneous SNP calling threads
 for ((i=$start;$i<=$end;i++)); do
 	echo -e "\n\n\n#### ITERATION ++++ $i"	
 ### Call the mapper
@@ -80,13 +84,21 @@ for ((i=$start;$i<=$end;i++)); do
 # Separating the sequences and subsetting the alignment (with updated java, make sure not to use the java 1.7 that's required by iCORN2's GenomeAnalysisTK.jar, but a more recent one, for example the 1.8 that GATK requires))
 	echo -e "\nSeparating the sequences and batch analyzing them...\n"
 	fasta-splitter.pl --n-parts $splitter_parts --nopad --measure seq --line-length 0 --out-dir $PWD ref.fa
-	for part in $(ls | grep -e ".part.*.fa$"); do 
-		samtools faidx $part
-		java -XX:-UseParallelGC -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$part O=${part%.*}.dict &> CreateSequenceDictionary_$part.log_out.txt
+	(
+	for part in $(ls | grep -e ".part.*.fa$"); do
+		samtools faidx $part &
 	done
+	) 2>&1 | cat -u >> processing_split_parts_faidx_log_out.txt
+	(
+	for part in $(ls | grep -e ".part.*.fa$"); do
+		java -XX:-UseParallelGC -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$part O=${part%.*}.dict &
+	done
+	) 2>&1 | cat -u >> processing_split_parts_createseqdictionary_log_out.txt	
+	
 	if [ $low_mem_mode == "no" ]; then
 # Executing in parallel each subset of the sequences
 		echo -e "Cores to be used simultaneously to process each split sequence: $cores_split"
+		echo -e "\nProcessing simultaneously splitted sequences in blocks of at most $splitter_parts elements, please manually change the variable 'iCORN2_blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n)"
 		(
 		for part in $(ls | grep -e ".part.*.fa$"); do
 			java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true &
