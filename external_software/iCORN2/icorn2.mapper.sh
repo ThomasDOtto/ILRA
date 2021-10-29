@@ -45,9 +45,9 @@ echo -e "\nBowtie2 DONE"
 echo -e "\nCalling MarkDuplicatesSpark (GATK)..."
 # Add the argument -M marked_dup_metrics.txt if you want to gather the stats, but by default omitted as it slows down
 if [ $low_mem_mode == "yes" ]; then
-	$ICORN2_HOME/gatk MarkDuplicatesSpark -I $resultname/out.bam -O $resultname/out.sorted.markdup.bam -VS SILENT -OBI true --create-output-bam-splitting-index false --spark-master local[$((cores / 2))] &> $resultname/MarkDuplicatesSpark_log.out.txt
+	$ICORN2_HOME/gatk MarkDuplicatesSpark -I $resultname/out.bam -O $resultname/out.sorted.markdup.bam -VS SILENT -OBI true --create-output-bam-splitting-index false --tmp-dir tmp_dir --spark-master local[$((cores / 2))] &> $resultname/MarkDuplicatesSpark_log.out.txt
 elif [ $low_mem_mode == "no" ]; then
-	$ICORN2_HOME/gatk MarkDuplicatesSpark -I $resultname/out.bam -O $resultname/out.sorted.markdup.bam -VS SILENT -OBI true --create-output-bam-splitting-index false --spark-master local[$cores] &> $resultname/MarkDuplicatesSpark_log.out.txt
+	$ICORN2_HOME/gatk MarkDuplicatesSpark -I $resultname/out.bam -O $resultname/out.sorted.markdup.bam -VS SILENT -OBI true --create-output-bam-splitting-index false --tmp-dir tmp_dir --spark-master local[$cores] &> $resultname/MarkDuplicatesSpark_log.out.txt
 fi
 return=$?
 
