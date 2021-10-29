@@ -43,11 +43,11 @@ if [ -z "$low_mem_mode" ] ; then
 fi
 
 if [ "$splitter_parts" -gt $(grep -c ">" $referenceORG) ]; then
-	low_mem_mode="yes"; export low_mem_mode # export to be used also in other scripts
 	splitter_parts=$(grep -c ">" $referenceORG)
 fi
 
 cores_split=$((ICORN2_THREADS / splitter_parts)) # subset of cores for the simultaneous SNP calling threads
+
 if [ $cores_split -eq 0 ]; then
 	low_mem_mode="yes"; export low_mem_mode # export to be used also in other scripts
 fi
@@ -84,31 +84,84 @@ for ((i=$start;$i<=$end;i++)); do
 	ln -sf ../ICORN2.$refRoot.$i ref.fa
 # Separating the sequences and subsetting the alignment (with updated java, make sure not to use the java 1.7 that's required by iCORN2's GenomeAnalysisTK.jar, but a more recent one, for example the 1.8 that GATK requires))
 	echo -e "\nSeparating the sequences and batch analyzing them...\n"
-	fasta-splitter.pl --n-parts $splitter_parts --nopad --measure seq --line-length 0 --out-dir $PWD ref.fa
-	(
-	for part in $(ls | grep -e ".part.*.fa$"); do
-		samtools faidx $part &
+	fasta-splitter.pl --n-parts $splitter_parts --nopad --measure seq --line-length 0 --out-dir $PWD ref.fa	
+	arr=($(find . -name "*part*.fa" -exec basename {} \;)); length_arr=${#arr[@]}
+	count1=1; block=0
+	while [ $count1 -le $length_arr ]; do
+		count2=1
+		(
+		while [ $count2 -le $splitter_parts ] && [ $count1 -le $length_arr ]; do
+			samtools faidx ${arr[$count1 - 1]} &
+			echo "sequence=${arr[$((count1 - 1))]}"
+			(( count1++ ))
+			(( count2++ ))
+			echo "count1=$count1"; echo "count2=$count2"
+		done
+		(( block++ ))
+		echo "block=$block"; echo -e "\n"
+		) 2>&1 | cat -u >> processing_split_parts_faidx_log_out.txt
+		eval $(grep "count1=" processing_split_parts_faidx_log_out.txt | tail -1)
+		eval $(grep "block=" processing_split_parts_faidx_log_out.txt | tail -1)
 	done
-	) 2>&1 | cat -u >> processing_split_parts_faidx_log_out.txt
-	(
-	for part in $(ls | grep -e ".part.*.fa$"); do
-		java -XX:-UseParallelGC -XX:ParallelGCThreads=$((ICORN2_THREADS / 2)) -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$part O=${part%.*}.dict TMP_DIR=../tmp_dir &
+		
+	count1=1; block=0
+	while [ $count1 -le $length_arr ]; do
+		count2=1
+		(
+		while [ $count2 -le $splitter_parts ] && [ $count1 -le $length_arr ]; do
+			element=${arr[$count1 - 1]}; element2=${element%.*}
+			java -XX:-UseParallelGC -XX:ParallelGCThreads=$((ICORN2_THREADS / 2)) -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$element O=$element2.dict TMP_DIR=../tmp_dir &				
+			echo "sequence=$element"
+			(( count1++ ))
+			(( count2++ ))
+			echo "count1=$count1"; echo "count2=$count2"
+		done
+		(( block++ ))
+		echo "block=$block"; echo -e "\n"
+		) 2>&1 | cat -u >> processing_split_parts_createseqdictionary_log_out.txt
+		eval $(grep "count1=" processing_split_parts_createseqdictionary_log_out.txt | tail -1)
+		eval $(grep "block=" processing_split_parts_createseqdictionary_log_out.txt | tail -1)
 	done
-	) 2>&1 | cat -u >> processing_split_parts_createseqdictionary_log_out.txt	
 	if [ $low_mem_mode == "no" ]; then
 # Executing in parallel each subset of the sequences
 		echo -e "Cores to be used simultaneously to process each split sequence: $cores_split"
-		echo -e "\nProcessing simultaneously splitted sequences in blocks of at most $splitter_parts elements, please manually change the variable 'iCORN2_blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n)"
-		(
-		for part in $(ls | grep -e ".part.*.fa$"); do
-			java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true TMP_DIR=../tmp_dir &
+		echo -e "\nProcessing simultaneously splitted sequences in blocks of at most $splitter_parts elements, please manually change the variable 'iCORN2_blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n)"		
+		count1=1; block=0
+		while [ $count1 -le $length_arr ]; do
+			count2=1
+			(
+			while [ $count2 -le $splitter_parts ] && [ $count1 -le $length_arr ]; do
+				element=${arr[$count1 - 1]}; element2=${element%.*}
+				java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$element.bam SEQUENCE_DICTIONARY=${element2%.*}.dict REFERENCE_SEQUENCE=$element S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true TMP_DIR=../tmp_dir &
+				echo "sequence=$element"
+				(( count1++ ))
+				(( count2++ ))
+				echo "count1=$count1"; echo "count2=$count2"
+			done
+			(( block++ ))
+			echo "block=$block"; echo -e "\n"
+			) 2>&1 | cat -u >> processing_split_parts_reordersam_log_out.txt
+			eval $(grep "count1=" processing_split_parts_reordersam_log_out.txt | tail -1)
+			eval $(grep "block=" processing_split_parts_reordersam_log_out.txt | tail -1)
 		done
-		) 2>&1 | cat -u >> processing_split_parts_reordersam_log_out.txt
-		(
-		for part in $(ls | grep -e ".part.*.fa$"); do
-			icorn2.snpcall.correction.sh $part $part.bam $cores_split $readRoot_uncompressed $fragmentSize $part.$(($i+1)) $i &
-		done
-		) 2>&1 | cat -u >> processing_split_parts_correction_log_out.txt
+
+		count1=1; block=0
+		while [ $count1 -le $length_arr ]; do
+			count2=1
+			(
+			while [ $count2 -le $splitter_parts ] && [ $count1 -le $length_arr ]; do				
+				icorn2.snpcall.correction.sh ${arr[$count1 - 1]} ${arr[$count1 - 1]}.bam $cores_split $readRoot_uncompressed $fragmentSize ${arr[$count1 - 1]}.$(($i+1)) $i &				
+				echo "sequence=${arr[$count1 - 1]}"
+				(( count1++ ))
+				(( count2++ ))
+				echo "count1=$count1"; echo "count2=$count2"
+			done
+			(( block++ ))
+			echo "block=$block"; echo -e "\n"
+			) 2>&1 | cat -u >> processing_split_parts_correction_icorn2_log_out.txt
+			eval $(grep "count1=" processing_split_parts_correction_icorn2_log_out.txt | tail -1)
+			eval $(grep "block=" processing_split_parts_correction_icorn2_log_out.txt | tail -1)
+		done		
 	elif [ $low_mem_mode == "yes" ]; then
 # Executing sequentially each subset of the sequences
 		echo -e "Cores to be used to sequentially process each split sequence: $((ICORN2_THREADS / 2))"
