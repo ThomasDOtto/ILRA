@@ -52,6 +52,7 @@ if [ $cores_split -eq 0 ]; then
 	low_mem_mode="yes"; export low_mem_mode # export to be used also in other scripts
 fi
 
+mkdir -p tmp_dir # make local temporal dir to store gatk and picard
 
 ### Setting up the reference sequences...
 refRoot=$(echo $referenceORG | perl -nle '@ar=split(/\//); print $ar[($ar[scalar(@ar)]-1)]') # For getting a copy of the reference in the folder, without | in the name
@@ -91,7 +92,7 @@ for ((i=$start;$i<=$end;i++)); do
 	) 2>&1 | cat -u >> processing_split_parts_faidx_log_out.txt
 	(
 	for part in $(ls | grep -e ".part.*.fa$"); do
-		java -XX:-UseParallelGC -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$part O=${part%.*}.dict &
+		java -XX:-UseParallelGC -XX:ParallelGCThreads=$ICORN2_THREADS -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary R=$part O=${part%.*}.dict TMP_DIR=../tmp_dir &
 	done
 	) 2>&1 | cat -u >> processing_split_parts_createseqdictionary_log_out.txt	
 	if [ $low_mem_mode == "no" ]; then
@@ -100,7 +101,7 @@ for ((i=$start;$i<=$end;i++)); do
 		echo -e "\nProcessing simultaneously splitted sequences in blocks of at most $splitter_parts elements, please manually change the variable 'iCORN2_blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n)"
 		(
 		for part in $(ls | grep -e ".part.*.fa$"); do
-			java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true &
+			java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true TMP_DIR=../tmp_dir &
 		done
 		) 2>&1 | cat -u >> processing_split_parts_reordersam_log_out.txt
 		(
@@ -112,7 +113,7 @@ for ((i=$start;$i<=$end;i++)); do
 # Executing sequentially each subset of the sequences
 		echo -e "Cores to be used to sequentially process each split sequence: $((ICORN2_THREADS / 2))"
 		for part in $(ls | grep -e ".part.*.fa$"); do
-			java -XX:-UseParallelGC -XX:ParallelGCThreads=$((ICORN2_THREADS / 2)) -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true
+			java -XX:-UseParallelGC -XX:ParallelGCThreads=$((ICORN2_THREADS / 2)) -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true TMP_DIR=../tmp_dir
 			icorn2.snpcall.correction.sh $part $part.bam $((ICORN2_THREADS / 2)) $readRoot_uncompressed $fragmentSize $part.$(($i+1)) $i
 		done
 	fi
