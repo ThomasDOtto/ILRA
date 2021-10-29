@@ -432,7 +432,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		cat notcovered_OUT.fasta | awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} $2 {print ">"$0}' | grep ">" >> ../Excluded.contigs.fofn
 		echo -e "\n### New contigs merging overlapping contigs(ILRA.findoverlaps_ver3.pl):" >> ../Excluded.contigs.fofn
 		if [ $(cat log_OUT.txt | grep ^sequences: | awk '{ gsub("sequences: " , ""); print }') -eq 0 ]; then
-			echo "No filtering ILRA.findoverlaps_ver3.pl"
+			echo "Nothing filtered by ILRA.findoverlaps_ver3.pl"
 		else
 			cat results_OUT.txt >> ../Excluded.contigs.fofn
 		fi
