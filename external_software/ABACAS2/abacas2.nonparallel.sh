@@ -50,7 +50,7 @@ ABA_CHECK_OVERLAP=1; export ABA_CHECK_OVERLAP # This will try to overlap contigs
 ABA_splitContigs=1; export ABA_splitContigs # This will split contigs. This is good to split the orign, and to find rearrangement. A split contigs has the suffix _i (i the part)
 ABA_WORD_SIZE=20; export ABA_WORD_SIZE # This sets the word size. This is critical for speed issues in nucmer. Default is 20
 ABA_COMPARISON=promer; export ABA_COMPARISON # This sets promer as the comparison method to use (default). It can be changed to 'nucmer'
-ABA_SPLIT_PARTS=5; export ABA_SPLIT_PARTS # The input sequences will be splitted into this number of parts/contigs and processed in parallel when possible. By default, number of contigs in the sequence provided as input
+ABA_SPLIT_PARTS=10; export ABA_SPLIT_PARTS # The files will be processed in parallel and using this number of simultanous processess when possible. By default, 10
 ABA_LOW_MEM=yes; export ABA_LOW_MEM # This sets low memory mode and no parallel processing is going to be performed, by default is deactivated
 Check the script 'abacas2.showACT.sh' if you want to automatically check the comparisons in the Artemis Comparison Tool (ACT)
 
@@ -78,7 +78,7 @@ if [ -z "$ABA_CHECK_OVERLAP" ] ; then
         ABA_CHECK_OVERLAP=0; export ABA_CHECK_OVERLAP
 fi
 if [ -z "$ABA_SPLIT_PARTS" ] ; then
-        ABA_SPLIT_PARTS=$(grep -c ">" $contig); export ABA_SPLIT_PARTS
+        ABA_SPLIT_PARTS=10
 fi
 if [ -z "$ABA_LOW_MEM" ] ; then
         ABA_LOW_MEM="no"; export ABA_LOW_MEM
@@ -105,35 +105,34 @@ export ABA_MIN_LENGTH ABA_MIN_IDENTITY contig reference
 ### ABACAS2 runComparison
 echo -e "\nExecuting abacas2.runComparison.sh...\n"
 abacas2.runComparison.sh $reference $contig $cores $ABA_splitContigs
-arr=($(find . -name "*.coords" -execdir bash -c 'printf "%s\n" "${@%.*}"' bash {} + | sed 's|^./||' | grep -v "Contigs.*"))
+arr=($(find . -name "*.coords" -exec basename {} \; | grep -v Contigs)); length_arr=${#arr[@]}
 echo -e "\nDONE\n"
 
 
 ### ABACAS2 TillingGraph
 echo -e "\nExecuting abacas2.doTilingGraph.pl...\n"
 if [[ $ABA_LOW_MEM == "no" ]] ; then
-	count=0
-	while [ "$element" != "${arr[${#arr[@]}-1]}" ]; do
+	echo -e "\nProcessing abacas2.doTilingGraph simultaneously in blocks of at most $cores elements, please decrease the number of cores if running into memory issues...\n)"
+	count1=1; block=0
+	while [ $count1 -le $length_arr ]; do
+		count2=1
 		(
-		for i in $(seq 0 ${#arr[@]}); do
-			abacas2.doTilingGraph.pl ${arr[$count + $i]}.coords $contig Res &
-			echo "element=${arr[$count + $i]}"
-			echo "count=$((i+1))"
-			if [[ $((i+1)) -ge "$cores" ]] || [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
-				echo "Another round of parallel processing may be needed if the max of cores is reached..."
-				if [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
-					echo "Parallel processing ended..."
-				fi
-				exit 1
-			fi
+		while [ $count2 -le $cores ] && [ $count1 -le $length_arr ]; do
+			abacas2.doTilingGraph.pl ${arr[$count1 - 1]} $contig Res &
+			echo "sequence=${arr[$((count1 - 1))]}"
+			(( count1++ ))
+			(( count2++ ))
+			echo "count1=$count1"; echo "count2=$count2"
 		done
+		(( block++ ))
+		echo "block=$block"; echo -e "\n"
 		) 2>&1 | cat -u >> abacas2.doTilingGraph.pl_parallel_log_out.txt
-		eval $(grep "count=" abacas2.doTilingGraph.pl_parallel_log_out.txt | tail -1)
-		eval $(grep "element=" abacas2.doTilingGraph.pl_parallel_log_out.txt | tail -1)
+		eval $(grep "count1=" abacas2.doTilingGraph.pl_parallel_log_out.txt | tail -1)
+		eval $(grep "block=" abacas2.doTilingGraph.pl_parallel_log_out.txt | tail -1)
 	done
 elif [[ $ABA_LOW_MEM == "yes" ]] ; then
 	for x in "${arr[@]}" ; do
-		abacas2.doTilingGraph.pl $x.coords $contig Res
+		abacas2.doTilingGraph.pl $x $contig Res
 	done
 fi
 echo -e "\nDONE\n"
@@ -155,59 +154,46 @@ echo -e "\nDONE\n"
 ### Blasting:
 echo -e "\nExecuting megablast...\n"
 # Preparation:
-ref=$reference
-pre=Res
-if [ -z "$pre" ] ; then
-   echo "usage <reference> Res"
-fi
-tmp=$$
-ln -sf $ref REF.$tmp
-mkdir -p Reference; cd Reference
-SeparateSequences.pl ../REF.$tmp
-cd ..; mkdir -p comp
-
+ref=$reference; pre=Res; tmp=$$; ln -sf $ref REF.$tmp
+mkdir -p Reference; cd Reference; SeparateSequences.pl ../REF.$tmp; cd ..; mkdir -p comp
 # Execution:
-# count=0
 if [[ $ABA_LOW_MEM == "no" ]] ; then
-	element=${arr[0]}
-	count=0
-	while [ "$element" != "${arr[${#arr[@]}-1]}" ]; do
+	count1=1; block=0
+	echo -e "\nProcessing formatdb simultaneously in blocks of at most $cores elements, please decrease the number of cores if running into memory issues...\n)"
+	while [ $count1 -le $length_arr ]; do
+		count2=1; element=${arr[$count1 - 1]}; element=${element%.*}
 		(
-		for i in $(seq 0 ${#arr[@]}); do
-			formatdb -p F -i Reference/${arr[$count + $i]} &
-			echo "element=${arr[$count + $i]}"
-			echo "count=$((i+1))"
-			if [[ $((i+1)) -ge "$cores" ]] || [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
-				echo "Another round of parallel processing may be needed if the max of cores is reached..."
-				if [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
-					echo "Parallel processing ended..."
-				fi
-				exit 1
-			fi
+		while [ $count2 -le $cores ] && [ $count1 -le $length_arr ]; do
+			formatdb -p F -i Reference/$element &
+			echo "sequence=$element"
+			(( count1++ ))
+			(( count2++ ))
+			echo "count1=$count1"; echo "count2=$count2"
 		done
+		(( block++ ))
+		echo "block=$block"; echo -e "\n"
 		) 2>&1 | cat -u >> formatdb_parallel_log_out.txt
-		eval $(grep "count=" formatdb_parallel_log_out.txt | tail -1)
-		eval $(grep "element=" formatdb_parallel_log_out.txt | tail -1)
+		eval $(grep "count1=" formatdb_parallel_log_out.txt | tail -1)
+		eval $(grep "block=" formatdb_parallel_log_out.txt | tail -1)
 	done
-	element=${arr[0]}
-	count=0
-	while [ "$element" != "${arr[${#arr[@]}-1]}" ]; do
+	
+	count1=1; block=0
+	echo -e "\nProcessing MegaBLAST simultaneously in blocks of at most $ABA_SPLIT_PARTS elements, please manually change and export the environmental variable 'ABA_SPLIT_PARTS' if required, for example if running into memory issues or less cores available...\n)"
+	while [ $count1 -le $length_arr ]; do
+		count2=1; element=${arr[$count1 - 1]}; element=${element%.*}
 		(
-		for i in $(seq 0 ${#arr[@]}); do
-			megablast -F T -m 8 -e 1e-20 -d Reference/${arr[$count + $i]} -i $pre.${arr[$count + $i]}.fna -a $cores_split -o comp/comp.${arr[$count + $i]}.blast &
-			echo "element=${arr[$count + $i]}"
-			echo "count=$((i+1))"
-			if [[ $((i+1)) -ge "$cores" ]] || [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
-				echo "Another round of parallel processing may be needed if the max of cores is reached..."
-				if [[ ${arr[$count + $i]} == ${arr[${#arr[@]}-1]} ]]; then
-					echo "Parallel processing ended..."
-				fi
-				exit 1
-			fi
+		while [ $count2 -le $ABA_SPLIT_PARTS ] && [ $count1 -le $length_arr ]; do
+			megablast -F T -m 8 -e 1e-20 -d Reference/$element -i $pre.$element.fna -a $cores_split -o comp/comp.$element.blast &
+			echo "sequence=$element"
+			(( count1++ ))
+			(( count2++ ))
+			echo "count1=$count1"; echo "count2=$count2"
 		done
+		(( block++ ))
+		echo "block=$block"; echo -e "\n"
 		) 2>&1 | cat -u >> megablast_parallel_log_out.txt
-		eval $(grep "count=" megablast_parallel_log_out.txt | tail -1)
-		eval $(grep "element=" megablast_parallel_log_out.txt | tail -1)
+		eval $(grep "count1=" megablast_parallel_log_out.txt | tail -1)
+		eval $(grep "block=" megablast_parallel_log_out.txt | tail -1)
 	done
 elif [[ $ABA_LOW_MEM == "yes" ]] ; then
 	for nameRes in "${arr[@]}" ; do
