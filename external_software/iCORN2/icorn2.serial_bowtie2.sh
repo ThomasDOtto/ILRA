@@ -132,7 +132,7 @@ for ((i=$start;$i<=$end;i++)); do
 			(
 			while [ $count2 -le $splitter_parts ] && [ $count1 -le $length_arr ]; do
 				element=${arr[$count1 - 1]}; element2=${element%.*}
-				java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$element.bam SEQUENCE_DICTIONARY=${element2%.*}.dict REFERENCE_SEQUENCE=$element S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true TMP_DIR=../tmp_dir &
+				java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores_split -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$element.bam SEQUENCE_DICTIONARY=$element2.dict REFERENCE_SEQUENCE=$element S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true TMP_DIR=../tmp_dir &
 				echo "sequence=$element"
 				(( count1++ ))
 				(( count2++ ))
