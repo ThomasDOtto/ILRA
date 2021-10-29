@@ -496,7 +496,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 		echo -e "\n\nSTEP 4: iCORN2 starting..."; echo -e "Current date/time: $(date)\n"
 		mkdir -p $dir/4.iCORN2; cd $dir/4.iCORN2; rm -rf *
 		if [ -f $illuminaReads\_1.fastq.gz ]; then
-			iCORN2_fragmentSize=500; iCORN2_blocks_size=5
+			iCORN2_fragmentSize=500; iCORN2_blocks_size=10
 			echo "The iCORN2 fragment size used is iCORN2_fragmentSize=$iCORN2_fragmentSize. Please check iCORN2 help and change manually within the pipeline (section 4) if needed"
 			echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt"
 			icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn $iCORN2_blocks_size &> icorn2.serial_bowtie2.sh_log_out.txt
