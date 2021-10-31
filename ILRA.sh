@@ -363,7 +363,8 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	mkdir -p $dir/1.Filtering; cd $dir/1.Filtering; rm -rf *
 	echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' | ILRA.fasta2singleLine.pl - > 01.assembly.fa
-	echo "After this step:"; assembly-stats 01.assembly.fa | head -n 2
+	echo "Before this step:"; assembly-stats $assembly | head -n 2
+	echo "\nAfter this step:"; assembly-stats 01.assembly.fa | head -n 2
 	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 1 time (secs): $((time2-time1))"; echo -e "STEP 1 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
@@ -443,7 +444,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		echo -e "Illumina reads NOT PROVIDED and no filtering by ILRA.findoverlaps_ver3.pl\n"
 		cp 02.assembly.fa 03.assembly.fa
 	fi
-	echo "After this step:"; assembly-stats 02.assembly.fa | head -n 2; assembly-stats 03.assembly.fa | head -n 2
+	echo "\nAfter this step:"; assembly-stats 02.assembly.fa | head -n 2; assembly-stats 03.assembly.fa | head -n 2
 	echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 2 time (secs): $((time2-time1))"; echo -e "STEP 2 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
@@ -479,7 +480,7 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 		echo -e "Reference genome NOT PROVIDED and ABACAS2 not executed. STEP 3 for reordering and renaming is skipped\n"
 		ln -fs 03.assembly.fa 03b.assembly.fa
 	fi
-	echo "After this step:"; assembly-stats 03b.assembly.fa | head -n 2
+	echo "\nAfter this step:"; assembly-stats 03b.assembly.fa | head -n 2
 	echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 3 time (secs): $((time2-time1))"; echo -e "STEP 3 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
@@ -508,7 +509,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 			echo -e "### Total INS: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$7;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
 			echo -e "### Total DEL: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$8;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
 			echo -e "### Total HETERO: " >> ../7.Stats/07.iCORN2.final_corrections.results.txt; cat ../7.Stats/07.iCORN2.final_corrections.results.txt | awk '{sum+=$9;} END{print sum;}' >> ../7.Stats/07.iCORN2.final_corrections.results.txt
-			echo -e "A preview of the correction by iCORN2 is:"
+			echo -e "\nA preview of the correction by iCORN2 is:"
 			cat ../7.Stats/07.iCORN2.final_corrections.results.txt
 		else
 	# Bypass if Illumina reads not provided
@@ -544,7 +545,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 			ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
 		fi		
 	fi
-echo "After this step:"; assembly-stats 04.assembly.fa | head -n 2
+echo "\nAfter this step:"; assembly-stats 04.assembly.fa | head -n 2
 echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)"
 time2=`date +%s`; echo -e "STEP 4 time (secs): $((time2-time1))"; echo -e "STEP 4 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
@@ -603,7 +604,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		mkdir -p $dir/5.Circlator; cd $dir/5.Circlator
 		ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
 	fi
-echo "After this step:"; assembly-stats 05.assembly.fa | head -n 2
+echo "\nAfter this step:"; assembly-stats 05.assembly.fa | head -n 2
 echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)"
 time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"; echo -e "STEP 5 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 fi
@@ -652,7 +653,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		else
 			cat 06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../$name.ILRA.fasta
 		fi
-		echo "After this step:"; assembly-stats 06.assembly.fa | head -n 2
+		echo "\nAfter this step:"; assembly-stats 06.assembly.fa | head -n 2
 		echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)"
 		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs): $((time2-time1))"; echo -e "STEP 6 Centrifuge time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 	fi
@@ -722,7 +723,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		else
 			mv $name.ILRA.fasta ../../$name.ILRA.fasta
 		fi
-		echo "After this step:"; assembly-stats ../../$name.ILRA.fasta | head -n 2
+		echo "\nAfter this step:"; assembly-stats ../../$name.ILRA.fasta | head -n 2
 		echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)"
 		time2=`date +%s`; echo -e "STEP 6 blast time (secs): $((time2-time1))"; echo -e "STEP 6 blast time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 	fi
