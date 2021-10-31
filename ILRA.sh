@@ -381,7 +381,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 	formatdb -p F -i $dir/1.Filtering/01.assembly.fa
 	blocks_size=10	
 	if [ $cores -ge $blocks_size ]; then
-		echo -e "\nProcessing in the MegaBLAST simultaneously the individual contigs in blocks of at most $blocks_size elements, please manually change the variable 'blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n)"
+		echo -e "\nProcessing in the MegaBLAST simultaneously the individual contigs in blocks of at most $blocks_size elements, please manually change the variable 'blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n"
 		cat $dir/1.Filtering/01.assembly.fa | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
 		arr=($(find . -name "*.fa" -exec basename {} \;)); length_arr=${#arr[@]}; count1=1; block=0
 		while [ $count1 -le $length_arr ]; do
