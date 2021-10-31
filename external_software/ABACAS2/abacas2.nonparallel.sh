@@ -112,7 +112,7 @@ echo -e "\nDONE\n"
 ### ABACAS2 TillingGraph
 echo -e "\nExecuting abacas2.doTilingGraph.pl...\n"
 if [[ $ABA_LOW_MEM == "no" ]] ; then
-	echo -e "\nProcessing abacas2.doTilingGraph simultaneously in blocks of at most $cores elements, please decrease the number of cores if running into memory issues...\n)"
+	echo -e "\nProcessing abacas2.doTilingGraph simultaneously in blocks of at most $cores elements, please decrease the number of cores if running into memory issues...\n"
 	count1=1; block=0
 	while [ $count1 -le $length_arr ]; do
 		count2=1
@@ -152,14 +152,14 @@ echo -e "\nDONE\n"
 
 
 ### Blasting:
-echo -e "\nExecuting megablast...\n"
+echo -e "\nExecuting MegaBLAST...\n"
 # Preparation:
 ref=$reference; pre=Res; tmp=$$; ln -sf $ref REF.$tmp
 mkdir -p Reference; cd Reference; SeparateSequences.pl ../REF.$tmp; cd ..; mkdir -p comp
 # Execution:
 if [[ $ABA_LOW_MEM == "no" ]] ; then
 	count1=1; block=0
-	echo -e "\nProcessing formatdb simultaneously in blocks of at most $cores elements, please decrease the number of cores if running into memory issues...\n)"
+	echo -e "\nProcessing formatdb simultaneously in blocks of at most $cores elements, please decrease the number of cores if running into memory issues...\n"
 	while [ $count1 -le $length_arr ]; do
 		count2=1 
 		(
