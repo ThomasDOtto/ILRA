@@ -74,7 +74,8 @@ readRoot_uncompressed=$PWD/"${readRoot##*/}"
 
 ### Executing iCORN2...
 for ((i=$start;$i<=$end;i++)); do
-	echo -e "\n\n\n#### ITERATION ++++ $i"	
+	echo -e "\n\n\n#### ITERATION ++++ $i"
+	time1=`date +%s`
 ### Call the mapper
 	echo -e "\nCalling the mapper...\n"
 	$ICORN2_HOME/icorn2.mapper.sh ICORN2.$refRoot.$i 13 3 $readRoot ICORN2_$i 1200 $ICORN2_THREADS
@@ -180,10 +181,12 @@ for ((i=$start;$i<=$end;i++)); do
 	echo "Rej.SNP" >> ICORN2_$i/iter.$i.General.stats; awk '/^Rej.SNP$/,/^Rej.INS$/' $(find $PWD/ICORN2_$i -name "*General.stats" | grep -v iter) | sed "/Rej.SNP/d" | sed "/Rej.INS/d" | sort >> ICORN2_$i/iter.$i.General.stats
 	echo "Rej.INS" >> ICORN2_$i/iter.$i.General.stats; awk '/^Rej.INS$/,/^Rej.DEL$/' $(find $PWD/ICORN2_$i -name "*General.stats" | grep -v iter) | sed "/Rej.INS/d" | sed "/Rej.DEL/d" | sort >> ICORN2_$i/iter.$i.General.stats
 	echo "Rej.DEL" >> ICORN2_$i/iter.$i.General.stats; awk -v RS='(^|\n)Rej.DEL\n' 'END{printf "%s", $0}' $(find $PWD/ICORN2_$i -name "*General.stats" | grep -v iter) | sort >> ICORN2_$i/iter.$i.General.stats
-# Collecting results:	
-	echo -e "\nIteration $i DONE"
+# Collecting results:
 	echo "Current corrections:"; perl $ICORN2_HOME/icorn2.collectResults.pl .
+	time2=`date +%s`
+	echo -e "\nIteration $i DONE"
+	echo -e "Elapsed time (secs): $((time2-time1))"; echo -e "Elapsed time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 done
-rm "$readRoot_uncompressed"_1.fastq "$readRoot_uncompressed"_2.fastq
-rm -rf tmp_dir
+
+rm "$readRoot_uncompressed"_1.fastq "$readRoot_uncompressed"_2.fastq; rm -rf tmp_dir
 echo -e "\n\n\nTo look in into a correction, open the file ending with .1 in artemis and load the gff file onto it..."
