@@ -659,7 +659,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 	fi
 	if [[ $mode == "blast" || $mode == "both" ]]; then
 	# Final filtering, masking and reformatting to conform the requirements of DDBJ/ENA/Genbank
-		mkdir -p $dir/6.Decontamination/Genbank_upload; cd $dir/6.Decontamination/Genbank_upload; rm -rf *
+		mkdir -p $dir/6.Decontamination/blast_filtering_for_Genbank_upload; cd $dir/6.Decontamination/blast_filtering_for_Genbank_upload; rm -rf *
 		time1=`date +%s`
 		echo -e "\n\nSTEP 6: Blasting and decontamination starting..."; echo -e "Current date/time: $(date)\n"
 		if [ $mode == "blast" ]; then
