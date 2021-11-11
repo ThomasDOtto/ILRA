@@ -364,7 +364,7 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	echo -e "### Excluded contigs based on length threshold: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	perl -S ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' | ILRA.fasta2singleLine.pl - > 01.assembly.fa
 	echo "Before this step:"; assembly-stats $assembly | head -n 2
-	echo "\nAfter this step:"; assembly-stats 01.assembly.fa | head -n 2
+	echo -e "\nAfter this step:"; assembly-stats 01.assembly.fa | head -n 2
 	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 1 time (secs): $((time2-time1))"; echo -e "STEP 1 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
@@ -444,7 +444,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		echo -e "Illumina reads NOT PROVIDED and no filtering by ILRA.findoverlaps_ver3.pl\n"
 		cp 02.assembly.fa 03.assembly.fa
 	fi
-	echo "\nAfter this step:"; assembly-stats 02.assembly.fa | head -n 2; assembly-stats 03.assembly.fa | head -n 2
+	echo -e "\nAfter this step:"; assembly-stats 02.assembly.fa | head -n 2; assembly-stats 03.assembly.fa | head -n 2
 	echo -e "\nSTEP 2: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 2 time (secs): $((time2-time1))"; echo -e "STEP 2 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
@@ -480,7 +480,7 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 		echo -e "Reference genome NOT PROVIDED and ABACAS2 not executed. STEP 3 for reordering and renaming is skipped\n"
 		ln -fs 03.assembly.fa 03b.assembly.fa
 	fi
-	echo "\nAfter this step:"; assembly-stats 03b.assembly.fa | head -n 2
+	echo -e "\nAfter this step:"; assembly-stats 03b.assembly.fa | head -n 2
 	echo -e "\nSTEP 3: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 3 time (secs): $((time2-time1))"; echo -e "STEP 3 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
@@ -545,7 +545,7 @@ if [[ $debug == "all" || $debug == "step4" ]]; then
 			ln -fs $dir/3.ABACAS2/03b.assembly.fa 04.assembly.fa
 		fi		
 	fi
-echo "\nAfter this step:"; assembly-stats 04.assembly.fa | head -n 2
+echo -e "\nAfter this step:"; assembly-stats 04.assembly.fa | head -n 2
 echo -e "\nSTEP 4: DONE"; echo -e "Current date/time: $(date)"
 time2=`date +%s`; echo -e "STEP 4 time (secs): $((time2-time1))"; echo -e "STEP 4 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 debug="all"
@@ -604,7 +604,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		mkdir -p $dir/5.Circlator; cd $dir/5.Circlator
 		ln -fs $(find $dir -name "04.assembly.fa") 05.assembly.fa
 	fi
-echo "\nAfter this step:"; assembly-stats 05.assembly.fa | head -n 2
+echo -e "\nAfter this step:"; assembly-stats 05.assembly.fa | head -n 2
 echo -e "\nSTEP 5: DONE"; echo -e "Current date/time: $(date)"
 time2=`date +%s`; echo -e "STEP 5 time (secs): $((time2-time1))"; echo -e "STEP 5 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 fi
@@ -653,7 +653,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		else
 			cat 06.assembly.fa | perl -nle 'if (/>(\S+)$/){ $n=$1; print ">".$ENV{name}."_with_ref_".$n } else { print }' | ILRA.fasta2singleLine.pl - | awk '/^>/ { if (name) {printf("%s_%d\n%s", name, len, seq)} name=$0; seq=""; len = 0; next} NF > 0 {seq = seq $0 "\n"; len += length()} END { if (name) {printf("%s_%d\n%s", name, len, seq)} }' > ../$name.ILRA.fasta
 		fi
-		echo "\nAfter this step:"; assembly-stats 06.assembly.fa | head -n 2
+		echo -e "\nAfter this step:"; assembly-stats 06.assembly.fa | head -n 2
 		echo -e "\nSTEP 6 Centrifuge: DONE"; echo -e "Current date/time: $(date)"
 		time2=`date +%s`; echo -e "STEP 6 Centrifuge time (secs): $((time2-time1))"; echo -e "STEP 6 Centrifuge time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 	fi
@@ -723,7 +723,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		else
 			mv $name.ILRA.fasta ../../$name.ILRA.fasta
 		fi
-		echo "\nAfter this step:"; assembly-stats ../../$name.ILRA.fasta | head -n 2
+		echo -e "\nAfter this step:"; assembly-stats ../../$name.ILRA.fasta | head -n 2
 		echo -e "\nSTEP 6 BLAST: DONE"; echo -e "Current date/time: $(date)"
 		time2=`date +%s`; echo -e "STEP 6 blast time (secs): $((time2-time1))"; echo -e "STEP 6 blast time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 	fi
@@ -797,9 +797,14 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 	fi
 
 	# Getting whether the organism is eukaryote for the following steps:
-	mkdir -p $(dirname $0)/databases; cd $(dirname $0)/databases; wget "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxcat.zip" &> taxcat_log
-	pigz -d -p $cores taxcat.zip; cd $dir/7.Stats
-	top_level=$(awk -v taxid="$taxonid" '{ if ($3 == taxid) { print $1 } }' $(dirname $0)/databases/taxcat); rm $(dirname $0)/databases/taxcat
+	databases=$(dirname $0)/databases; mkdir -p $databases
+	if [ -f $databases/taxcat ]; then
+		top_level=$(awk -v taxid="$taxonid" '{ if ($3 == taxid) { print $1 } }' $databases/taxcat)
+	else
+		cd $databases; wget "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxcat.zip" &> taxcat_log
+		pigz -d -p $cores taxcat.zip; cd $dir/7.Stats
+		top_level=$(awk -v taxid="$taxonid" '{ if ($3 == taxid) { print $1 } }' $databases/taxcat)
+	fi	
 	
 	# Comparing with reference genes (QUAST):
 	echo -e "\nRunning QUAST..." 
