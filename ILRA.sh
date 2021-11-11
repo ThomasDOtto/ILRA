@@ -74,7 +74,7 @@ echo -e "Current date/time: $(date)\n"
 ##### Checking Arguments / Variables:
 echo -e "\nI'm now quickly checking and showing the arguments that are going to be used in the ILRA run...\n"
 if [[ -d "$dir/2.MegaBLAST" ]]; then
-    echo -e "PLEASE keep in mind the output directory already exists, so this is potentially a rerunning. ILRA is going to clean the existing folders and rerun. If you want to run ILRA only from a particular step, please use the argument '-d '...\n"
+	echo -e "PLEASE keep in mind the output directory already exists, so this is potentially a rerunning. ILRA is going to clean the existing folders and rerun. If you want to run ILRA only from a particular step, please use the argument '-d '...\n"
 fi
 
 if [[ $assembly == /* ]]; then
@@ -110,8 +110,8 @@ elif [ $perform_correction == "no" ]; then
 fi
 
 if [[ -z "$illuminaReads" ]] && [[ $perform_correction == "yes" ]]; then
-		echo -e "YOU HAVE NOT PROVIDED ILLUMINA READS. Please rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will then skip some steps accordingly..."
-		exit 1
+	echo -e "YOU HAVE NOT PROVIDED ILLUMINA READS. Please rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will then skip some steps accordingly..."
+	exit 1
 elif [[ $illuminaReads == /* ]]; then
 	echo -e "Checking Illumina short reads..."
 elif [[ $illuminaReads != /* ]]; then
@@ -124,7 +124,7 @@ if [ -f $illuminaReads\_1.fastq.gz ]; then
 else
 	if [ $perform_correction == "yes" ]; then
 		echo -e "PLEASE be aware of the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz"
-	  	echo -e "ILRA is not detecting the Illumina reads files as you provided them. If you want to use Illumina reads for polishing, please check naming, paths and that the files do exist. Otherwise rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will skip some steps accordingly..."
+		echo -e "ILRA is not detecting the Illumina reads files as you provided them. If you want to use Illumina reads for polishing, please check naming, paths and that the files do exist. Otherwise rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will skip some steps accordingly..."
 		exit 1
 	fi
 fi
