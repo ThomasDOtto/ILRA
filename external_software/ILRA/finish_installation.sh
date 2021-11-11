@@ -30,7 +30,10 @@ echo -e "\n\n\nI'm downloading and installing an updated copy of Miniconda3 in t
 echo -e "\n\n\nIf for some reason an outdated python or conda is required in your system, please ignore the miniconda3 folder created by this script (which may have failed), go to https://repo.anaconda.com/miniconda/ and download and install manually the corresponding Linux installer\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR; wget "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 mkdir -p Miniconda3; bash Miniconda3-latest-Linux-x86_64.sh -b -f -s -p $EXTERNAL_SOFTWARE_DIR/Miniconda3; rm Miniconda3-latest-Linux-x86_64.sh
-
+if [[ ! -f $EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda ]]; then
+  echo "Download/Installation of Miniconda3 failed, please check manually the script and logs..."
+  exit 1
+fi
 
 #### Install packages in an environment via conda:
 echo -e "\n\n\nI'm downloading and installing several packages through conda...\n\n\n"
@@ -65,33 +68,52 @@ cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name reads_analyzer.py | grep /envs/
 
 
 #### Setting up iCORN2:
-cd $EXTERNAL_SOFTWARE_DIR/iCORN2/
+cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 # Getting FASTA Splitter:
 echo -e "\n\n\nGetting fasta-splitter.pl (v0.2.6)...\n\n\n"
 wget http://kirill-kryukov.com/study/tools/fasta-splitter/files/fasta-splitter-0.2.6.zip; unzip -qq fasta-splitter-0.2.6.zip; rm fasta-splitter-0.2.6.zip; chmod 775 fasta-splitter.pl
 $EXTERNAL_SOFTWARE_DIR/iCORN2/fasta-splitter.pl --version
+if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/fasta-splitter.pl ]]; then
+  echo "Download/Installation of fasta-splitter failed, please check manually the script and logs..."
+  exit 1
+fi
 # Getting GATK:
 echo -e "\n\n\nGetting GATK (v4.2.2.0)...\n\n\n"
 wget https://github.com/broadinstitute/gatk/releases/download/4.2.2.0/gatk-4.2.2.0.zip; unzip -qq gatk-4.2.2.0.zip; rm gatk-4.2.2.0.zip; chmod 775 gatk-4.2.2.0/gatk; ln -fs gatk-4.2.2.0/gatk gatk
 $EXTERNAL_SOFTWARE_DIR/iCORN2/gatk --version
+if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/gatk ]]; then
+  echo "Download/Installation of gatk failed, please check manually the script and logs..."
+  exit 1
+fi
 # Getting the outdated java version required for iCORN2:
 echo -e "\n\n\nGetting JAVA v1.7 required by iCORN2's SNP caller...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://files-cdn.liferay.com/mirrors/download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz; tar -xzf jdk-7u80-linux-x64.tar.gz; rm jdk-7u80-linux-x64.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin; chmod 775 *
 $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin/java -version
+if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin/java ]]; then
+  echo "Download/Installation of java failed, please check manually the script and logs..."
+  exit 1
+fi
 # Getting the outdated java version required for GATK
 echo -e "\n\n\nGetting JAVA v1.8 required by GATK v4... This one must be in the PATH when executing iCORN2 and it is also enough for all the JAVA-related computation in ILRA\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz; tar -xzf OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz; rm OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin; chmod 775 *
 $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java -version
+if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java ]]; then
+  echo "Download/Installation of java failed, please check manually the script and logs..."
+  exit 1
+fi
 # Getting picard:
 echo -e "\n\n\nSetting up iCORN2 dependencies..."
 echo -e "Getting picard (v2.26.2)...\n\n\n"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget https://github.com/broadinstitute/picard/releases/download/2.26.2/picard.jar
 $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java -jar $EXTERNAL_SOFTWARE_DIR/iCORN2/picard.jar ReorderSam --version
-
+if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/picard.jar ]]; then
+  echo "Download/Installation of picard failed, please check manually the script and logs..."
+  exit 1
+fi
 
 echo -e "\n\n\nALL DONE\n\n\n"
