@@ -36,9 +36,9 @@ fi
 smalt index -k $kmer -s $stepsize Genome.index.$tmp $genome > out.$tmp.txt
 echo -e "\n\nExtra parameter (SMALT_PARAMETER): $SMALT_PARAMETER"
 if [ "$fastqR" = "0" ] ; then
-	smalt map $SMALT_PARAMETER -f samsoft Genome.index.$tmp $fastqF | samtools sort -@ $threads -u -m 2G --write-index -o $resultname.bam##idx##$resultname.bam.bai - >> out.$tmp.txt
+	smalt map $SMALT_PARAMETER -f samsoft Genome.index.$tmp $fastqF | samtools view -@ threads -f 0x2 -u - | samtools sort -@ $threads -u -m 2G --write-index -o $resultname.bam##idx##$resultname.bam.bai - >> out.$tmp.txt
 else
-	smalt map $SMALT_PARAMETER -f samsoft -i $insertSize Genome.index.$tmp $fastqF $fastqR | samtools sort -@ $threads -u -m 2G --write-index -o $resultname.bam##idx##$resultname.bam.bai - >> out.$resultname.$tmp.txt
+	smalt map $SMALT_PARAMETER -f samsoft -i $insertSize Genome.index.$tmp $fastqF $fastqR | samtools view -@ threads -f 0x2 -u - | samtools sort -@ $threads -u -m 2G --write-index -o $resultname.bam##idx##$resultname.bam.bai - >> out.$resultname.$tmp.txt
 	smaltOK=$?
 	if [ $smaltOK -ne 0 ] ; then
 		echo "Problems with SMALT: $smaltOK"
