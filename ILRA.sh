@@ -633,7 +633,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			perl -S fasta_to_fastq.pl $dir/5.Circlator/05.assembly.fa ? &> 05.assembly.fa.fq # assuming default "fake" quality 30 (? symbol, see https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
 			echo -e "\nPlease customize the organisms to be removed in the file /bin/ILRA_exclude_taxons_recentrifuge.txt. Currently:"; cat $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
 			source $(dirname $0)/bin/ILRA_exclude_taxons_recentrifuge.txt
-			echo -e "\nCheck out the log of Recentrifuge in the files rcf_log_out.txt and rextract_log_out.txt"
+			echo -e "\nCheck out the log of Recentrifuge in the files rcf_log_out.txt and rextract_log_out.txt. Organism to keep via Taxon ID provided: $taxonid"
 			rextract -f classification.txt -i $taxonid $TAXONS_TO_EXCLUDE -n $databases/taxdump -q 05.assembly.fa.fq &> rextract_log_out.txt
 			sed -n '1~4s/^@/>/p;2~4p' *.fastq > 06.assembly.fa
 	# Save contigs
