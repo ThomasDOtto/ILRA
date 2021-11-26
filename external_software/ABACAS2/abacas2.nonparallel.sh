@@ -40,7 +40,7 @@ abacas2.nonparallel.sh <Reference> <Contigs to order> <Cores>. Optional: <Min al
 
 Reference:           Fasta (or multi-fasta) against which the contigs should be ordered
 Contigs:             Contigs or query that should be ordered
-Cores		     Cores to use
+Cores		     Cores to use (if 0 is provided, all available cores are used)
 Min aligment length: Alignment length significance threshold (default 200)
 Identity cutoff:     Threshold for identity to place contigs (default 95)
 Do BLAST:	     Does BLAST for the ACT comparison (by default, 1). It can be changed to 0 to deactivate
@@ -79,6 +79,9 @@ if [ -z "$ABA_CHECK_OVERLAP" ] ; then
 fi
 if [ -z "$ABA_SPLIT_PARTS" ] ; then
         ABA_SPLIT_PARTS=10
+fi
+if [ "$cores" -eq 0 ]; then
+	cores=$(nproc) # If cores=0, use all cores available by default
 fi
 if [ -z "$ABA_LOW_MEM" ] ; then
         ABA_LOW_MEM="no"; export ABA_LOW_MEM
