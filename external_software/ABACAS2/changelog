@@ -1,3 +1,4 @@
+* Kept only scripts relevant for ILRA (i.e., removed the rest of the scripts, such as abacas.parallel.sh)
 * Now using the faster and more efficient MUMmer4 (v4.0.0rc1)
 * abacas2.nonparallel.sh:
   - Removed MemBig option. Rewrote usage page. Number of cores is a new argument
