@@ -15,14 +15,14 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-### Modified by José Luis Ruiz to improve performance and to be used as part of the ILRA pipeline in 2022
+### Modified by José Luis Ruiz in 2022 to improve performance and to be used as part of the ILRA pipeline
 
 reference=$1
 contig=$2
 cores=$3
 ABA_MIN_LENGTH=$4
 ABA_MIN_IDENTITY=$5
-
+ABA_DO_BLAST=$6
 
 ### Make sure that perl finds the libraries
 PERL5LIB=$(dirname "$0"):$PERL5LIB; export PERL5LIB
@@ -36,22 +36,22 @@ if [ -z "$contig" ] || [ -z "$reference" ] || [ -z "$ABA_MIN_LENGTH" ] ; then
 *** Abacas II ***       For any disturbation with this program, please don't blame Sammy!
 
 ### Usage
-abacas2.nonparallel.sh <Reference> <Contigs to order> <Cores>. Optional: <Min aligment length> <Identity cutoff>
+abacas2.nonparallel.sh <Reference> <Contigs to order> <Cores>. Optional: <Min aligment length> <Identity cutoff> <Do BLAST>
 
 Reference:           Fasta (or multi-fasta) against which the contigs should be ordered
 Contigs:             Contigs or query that should be ordered
 Cores		     Cores to use
 Min aligment length: Alignment length significance threshold (default 200)
 Identity cutoff:     Threshold for identity to place contigs (default 95)
+Do BLAST:	     Does BLAST for the ACT comparison (by default, 1). It can be changed to 0 to deactivate
 
-
-### Further parameters via envinromental variables:
-ABA_CHECK_OVERLAP=1; export ABA_CHECK_OVERLAP # This will try to overlap contigs
-ABA_splitContigs=1; export ABA_splitContigs # This will split contigs. This is good to split the orign, and to find rearrangement. A split contigs has the suffix _i (i the part)
-ABA_WORD_SIZE=20; export ABA_WORD_SIZE # This sets the word size. This is critical for speed issues in nucmer. Default is 20
-ABA_COMPARISON=nucmer; export ABA_COMPARISON # This sets nucmer as the comparison method to use (default). It can be changed to 'promer'
-ABA_SPLIT_PARTS=10; export ABA_SPLIT_PARTS # The files will be processed in parallel and using this number of simultanous processess when possible. By default, 10
-ABA_LOW_MEM=yes; export ABA_LOW_MEM # This sets low memory mode and no parallel processing is going to be performed, by default is deactivated
+### Further parameters via environmental variables:
+ABA_CHECK_OVERLAP=1; export ABA_CHECK_OVERLAP	# This will try to overlap contigs
+ABA_splitContigs=1; export ABA_splitContigs	# This will split contigs. This is good to split the orign, and to find rearrangement. A split contigs has the suffix _i (i the part)
+ABA_WORD_SIZE=20; export ABA_WORD_SIZE		# This sets the word size. This is critical for speed issues in nucmer. Default is 20
+ABA_COMPARISON=nucmer; export ABA_COMPARISON	# This sets nucmer as the comparison method to use (default). It can be changed to 'promer'
+ABA_SPLIT_PARTS=10; export ABA_SPLIT_PARTS	# The files will be processed in parallel and using this number of simultanous processess when possible. By default, 10
+ABA_LOW_MEM=yes; export ABA_LOW_MEM		# This sets low memory mode and no parallel processing is going to be performed, by default is deactivated
 Check the script 'abacas2.showACT.sh' if you want to automatically check the comparisons in the Artemis Comparison Tool (ACT)
 
 ### Results
@@ -69,10 +69,10 @@ fi
 
 ### Check and set arguments by default if not provided
 if [ -z "$ABA_MIN_LENGTH" ] ; then
-	ABA_MIN_LENGTH=200; export ABA_MIN_LENGTH
+        ABA_MIN_LENGTH=200; export ABA_MIN_LENGTH
 fi
 if [ -z "$ABA_MIN_IDENTITY" ] ; then
-	ABA_MIN_IDENTITY=95; export ABA_MIN_IDENTITY
+        ABA_MIN_IDENTITY=95; export ABA_MIN_IDENTITY
 fi
 if [ -z "$ABA_CHECK_OVERLAP" ] ; then
         ABA_CHECK_OVERLAP=0; export ABA_CHECK_OVERLAP
@@ -82,7 +82,7 @@ if [ -z "$ABA_SPLIT_PARTS" ] ; then
 fi
 if [ -z "$ABA_LOW_MEM" ] ; then
         ABA_LOW_MEM="no"; export ABA_LOW_MEM
-	cores_split=$((cores / ABA_SPLIT_PARTS)) # subset of cores for the simultaneous processing
+        cores_split=$((cores / ABA_SPLIT_PARTS)) # subset of cores for the simultaneous processing
 elif [ $ABA_LOW_MEM == "no" ]; then
 	cores_split=$((cores / ABA_SPLIT_PARTS)) # subset of cores for the simultaneous processing
 fi
@@ -95,6 +95,9 @@ if [ "$ABA_MIN_IDENTITY" -gt "99" ] ; then
 fi
 if [ -z "$ABA_COMPARISON" ] ; then
         ABA_COMPARISON="nucmer"; export ABA_COMPARISON
+fi
+if [ -z "$ABA_DO_BLAST" ] ; then
+        ABA_DO_BLAST=1; export ABA_DO_BLAST
 fi
 
 tmp=$$
@@ -155,60 +158,63 @@ echo -e "\nDONE\n"
 
 
 ### Blasting:
-echo -e "\nExecuting MegaBLAST...\n"
-# Preparation:
-ref=$reference; pre=Res; tmp=$$; ln -sf $ref REF.$tmp
-mkdir -p Reference; cd Reference; SeparateSequences.pl ../REF.$tmp; cd ..; mkdir -p comp
-# Execution:
-if [[ $ABA_LOW_MEM == "no" ]] ; then
-	count1=1; block=0
-	echo -e "\nProcessing formatdb simultaneously in blocks of at most $cores elements, please decrease the number of cores if running into memory issues...\n"
-	while [ $count1 -le $length_arr ]; do
-		count2=1 
-		(
-		while [ $count2 -le $cores ] && [ $count1 -le $length_arr ]; do
-			element=${arr[$count1 - 1]}; element=${element%.*}
-			formatdb -p F -i Reference/$element &
-			echo "sequence=$element"
-			(( count1++ ))
-			(( count2++ ))
-			echo "count1=$count1"; echo "count2=$count2"
+if [ "$ABA_DO_BLAST" -eq 1 ]; then
+	echo -e "\nExecuting MegaBLAST...\n"
+	# Preparation:
+	ref=$reference; pre=Res; tmp=$$; ln -sf $ref REF.$tmp
+	mkdir -p Reference; cd Reference; SeparateSequences.pl ../REF.$tmp; cd ..; mkdir -p comp
+	# Execution:
+	if [[ $ABA_LOW_MEM == "no" ]] ; then
+		count1=1; block=0
+		echo -e "\nProcessing formatdb simultaneously in blocks of at most $cores elements, please decrease the number of cores if running into memory issues...\n"
+		while [ $count1 -le $length_arr ]; do
+			count2=1 
+			(
+			while [ $count2 -le $cores ] && [ $count1 -le $length_arr ]; do
+				element=${arr[$count1 - 1]}; element=${element%.*}
+				formatdb -p F -i Reference/$element &
+				echo "sequence=$element"
+				(( count1++ ))
+				(( count2++ ))
+				echo "count1=$count1"; echo "count2=$count2"
+			done
+			(( block++ ))
+			echo "block=$block"; echo -e "\n"
+			) 2>&1 | cat -u >> formatdb_parallel_log_out.txt
+			eval $(grep "count1=" formatdb_parallel_log_out.txt | tail -1)
+			eval $(grep "block=" formatdb_parallel_log_out.txt | tail -1)
 		done
-		(( block++ ))
-		echo "block=$block"; echo -e "\n"
-		) 2>&1 | cat -u >> formatdb_parallel_log_out.txt
-		eval $(grep "count1=" formatdb_parallel_log_out.txt | tail -1)
-		eval $(grep "block=" formatdb_parallel_log_out.txt | tail -1)
-	done
-	
-	count1=1; block=0
-	echo -e "\nProcessing MegaBLAST simultaneously in blocks of at most $ABA_SPLIT_PARTS elements, please manually change and export the environmental variable 'ABA_SPLIT_PARTS' if required, for example if running into memory issues or less cores available...\n"
-	while [ $count1 -le $length_arr ]; do
-		count2=1
-		(
-		while [ $count2 -le $ABA_SPLIT_PARTS ] && [ $count1 -le $length_arr ]; do
-			element=${arr[$count1 - 1]}; element=${element%.*}
-			megablast -F T -m 8 -e 1e-20 -d Reference/$element -i $pre.$element.fna -a $cores_split -o comp/comp.$element.blast &
-			echo "sequence=$element"
-			(( count1++ ))
-			(( count2++ ))
-			echo "count1=$count1"; echo "count2=$count2"
+		
+		count1=1; block=0
+		echo -e "\nProcessing MegaBLAST simultaneously in blocks of at most $ABA_SPLIT_PARTS elements, please manually change and export the environmental variable 'ABA_SPLIT_PARTS' if required, for example if running into memory issues or less cores available...\n"
+
+		while [ $count1 -le $length_arr ]; do
+			count2=1
+			(
+			while [ $count2 -le $ABA_SPLIT_PARTS ] && [ $count1 -le $length_arr ]; do
+				element=${arr[$count1 - 1]}; element=${element%.*}
+				megablast -F T -m 8 -e 1e-20 -d Reference/$element -i $pre.$element.fna -a $cores_split -o comp/comp.$element.blast &
+				echo "sequence=$element"
+				(( count1++ ))
+				(( count2++ ))
+				echo "count1=$count1"; echo "count2=$count2"
+			done
+			(( block++ ))
+			echo "block=$block"; echo -e "\n"
+			) 2>&1 | cat -u >> megablast_parallel_log_out.txt
+			eval $(grep "count1=" megablast_parallel_log_out.txt | tail -1)
+			eval $(grep "block=" megablast_parallel_log_out.txt | tail -1)
 		done
-		(( block++ ))
-		echo "block=$block"; echo -e "\n"
-		) 2>&1 | cat -u >> megablast_parallel_log_out.txt
-		eval $(grep "count1=" megablast_parallel_log_out.txt | tail -1)
-		eval $(grep "block=" megablast_parallel_log_out.txt | tail -1)
-	done
-elif [[ $ABA_LOW_MEM == "yes" ]] ; then
-	for nameRes in "${arr[@]}" ; do
-		# let count++;
-		# if [ $count -gt 200 ] ; then
-		#	echo "too many contigs to bsub!\n";
-		#	exit
-		# fi
-		formatdb -p F -i Reference/$nameRes
-		megablast -F T -m 8 -e 1e-20 -d Reference/$nameRes -i $pre.$nameRes.fna -a $cores -o comp/comp.$nameRes.blast
-	done
+	elif [[ $ABA_LOW_MEM == "yes" ]] ; then
+		for nameRes in "${arr[@]}" ; do
+			# let count++;
+			# if [ $count -gt 200 ] ; then
+			#	echo "too many contigs to bsub!\n";
+			#	exit
+			# fi
+			formatdb -p F -i Reference/$nameRes
+			megablast -F T -m 8 -e 1e-20 -d Reference/$nameRes -i $pre.$nameRes.fna -a $cores -o comp/comp.$nameRes.blast
+		done
+	fi
 fi
 echo -e "\nDONE\n"
