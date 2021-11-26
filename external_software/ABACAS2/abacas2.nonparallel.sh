@@ -49,7 +49,7 @@ Identity cutoff:     Threshold for identity to place contigs (default 95)
 ABA_CHECK_OVERLAP=1; export ABA_CHECK_OVERLAP # This will try to overlap contigs
 ABA_splitContigs=1; export ABA_splitContigs # This will split contigs. This is good to split the orign, and to find rearrangement. A split contigs has the suffix _i (i the part)
 ABA_WORD_SIZE=20; export ABA_WORD_SIZE # This sets the word size. This is critical for speed issues in nucmer. Default is 20
-ABA_COMPARISON=promer; export ABA_COMPARISON # This sets promer as the comparison method to use (default). It can be changed to 'nucmer'
+ABA_COMPARISON=nucmer; export ABA_COMPARISON # This sets nucmer as the comparison method to use (default). It can be changed to 'promer'
 ABA_SPLIT_PARTS=10; export ABA_SPLIT_PARTS # The files will be processed in parallel and using this number of simultanous processess when possible. By default, 10
 ABA_LOW_MEM=yes; export ABA_LOW_MEM # This sets low memory mode and no parallel processing is going to be performed, by default is deactivated
 Check the script 'abacas2.showACT.sh' if you want to automatically check the comparisons in the Artemis Comparison Tool (ACT)
@@ -92,6 +92,9 @@ fi
 if [ "$ABA_MIN_IDENTITY" -gt "99" ] ; then
 	echo "Your identity might be too high $ABA_MIN_IDENTITY > 99 "
 	exit;
+fi
+if [ -z "$ABA_COMPARISON" ] ; then
+        ABA_COMPARISON="nucmer"; export ABA_COMPARISON
 fi
 
 tmp=$$
