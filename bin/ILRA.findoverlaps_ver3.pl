@@ -429,9 +429,10 @@ sub evaluateOverlaps{
 	my $counter = 1;
 	LOOP: foreach my $key1 (keys %$coverage){          #loop over sequences
 	    foreach my $key2 (keys %{$$coverage{$key1}}){  #loop over position
-		if ($counter > 1000000){                   #only use first million bases for calculation
-		    last LOOP;
-		}
+		#if ($counter > 1000000){                   #only use first million bases for calculation
+		#    last LOOP;
+		#} # This is commented for ensuring reproducibility, especially for larger genes. TDO suggestion for further improvement: To use larger contigs, as they might be more stable. Something like 20% of the size of the genome (target) for the calculation
+
 		$sum = $sum + $$coverage{$key1}{$key2};
 		$counter++;
 	    }
