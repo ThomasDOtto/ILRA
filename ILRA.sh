@@ -636,6 +636,10 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			echo -e "\nCheck out the log of Recentrifuge in the files rcf_log_out.txt and rextract_log_out.txt. Organism to keep via Taxon ID provided: $taxonid"
 			rextract -f classification.txt -i $taxonid $TAXONS_TO_EXCLUDE -n $databases/taxdump -q 05.assembly.fa.fq &> rextract_log_out.txt
 			sed -n '1~4s/^@/>/p;2~4p' *.fastq > 06.assembly.fa
+	# Include the ones that may be unclassified:
+			for i in $(grep "unclassified" classification.txt | cut -f1 | sort | uniq); do
+				cat $dir/5.Circlator/05.assembly.fa | ILRA.fasta2singleLine.pl - | grep -A1 "$i" >> 06.assembly.fa				
+			done
 	# Save contigs
 			echo -e "\n### Excluded contigs that are not recognized by Centrifuge as the species of interest:" >> ../Excluded.contigs.fofn
 			comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
