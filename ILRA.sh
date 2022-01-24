@@ -468,9 +468,9 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 	# Save the contigs
 		# echo -e "\n### Overlapping contigs_2 (ABACAS2)" >> ../Excluded.contigs.fofn # Uncomment if ABA_CHECK_OVERLAP=1
 		# zcat *.overlap_report.gz >> ../Excluded.contigs.fofn # Uncomment if ABA_CHECK_OVERLAP=1
-		echo -e "\n### Final sequences not mapped to the reference: (ABACAS2)" >> ../Excluded.contigs.fofn
+		echo -e "\n### Final sequences not mapped to the reference: (ABACAS2, these are contained into the bin and are listed here but not removed)" >> ../Excluded.contigs.fofn
 		cat Res.abacasBin.fna | grep ">" >> ../Excluded.contigs.fofn
-		echo -e "\n### Final sequences mapped to the reference: (ABACAS2)" >> ../Excluded.contigs.fofn
+		echo -e "\n### Final sequences mapped to the reference: (ABACAS2, these are reordered and merged into new contigs corresponding to the reference)" >> ../Excluded.contigs.fofn
 		for i in $(ls | grep .contigs.gff); do
 			echo "# "$(echo $i | sed 's/^[^.]*.\([^.]*\)..*/\1/')":" >> ../Excluded.contigs.fofn
 			cat $i | grep contig | awk '{ print $9 }' | sed 's/^[^"]*"\([^"]*\)".*/\1/' | sed 's/.*=//' >> ../Excluded.contigs.fofn
@@ -641,7 +641,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 				cat $dir/5.Circlator/05.assembly.fa | ILRA.fasta2singleLine.pl - | grep -A1 "$i" >> 06.assembly.fa				
 			done
 	# Save contigs
-			echo -e "\n### Excluded contigs that are not recognized by Centrifuge as the species of interest:" >> ../Excluded.contigs.fofn
+			echo -e "\n### Excluded contigs that are not recognized by Centrifuge as the species of interest (unclassified contigs are kept):" >> ../Excluded.contigs.fofn
 			comm -23 <(cat $dir/5.Circlator/05.assembly.fa | grep ">" | sort) <(cat 06.assembly.fa | grep ">" | sort) >> ../Excluded.contigs.fofn
 		fi
 		if [ -s 06.assembly.fa ]; then
