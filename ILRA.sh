@@ -21,6 +21,7 @@ for argument in $options; do
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format)
 		-f | -filter_contig_size # Size threshold to filter the contigs (bp)
+		-F | -Filter out the contigs in the long reads assembly not covered by Illumina short reads by a certain threshold ('no' /'yes' by default)
 		-I | -Illumina_reads # Root name of the paired-end Illumina reads (FASTQ format, must be gzipped and name root_1.fastq.gz and root_2.fastq.gz prior execution)
 		-C | -Correction_Illumina_reads # Whether illumina reads are provided and all steps of correction should be performed ('no' /'yes' by default)
 		-R | -Range_insert_size # Insert size range of the Illumina reads to use in mapping by SMALT (bp)
@@ -53,6 +54,7 @@ for argument in $options; do
 		-i*) number_iterations_icorn=${arguments[index]} ;;
 		-t*) cores=${arguments[index]} ;;
 		-f*) contigs_threshold_size=${arguments[index]} ;;
+		-F*) contigs_illumina_filter=${arguments[index]} ;;
 		-R*) InsertsizeRange=${arguments[index]} ;;
 		-T*) taxonid=${arguments[index]} ;;
 		-g*) gff_file=${arguments[index]} ;;
@@ -105,9 +107,17 @@ fi
 if [ -z "$perform_correction" ]; then
 	perform_correction="yes"
 elif [ $perform_correction == "no" ]; then
-	echo -e "You have deactivated correction based on short reads..."
-	illuminaReads=""
+	echo -e "You have deactivated the filtering out of contigs in the assembly not covered by short Illumina reads..."
+	perform_correction=""
 fi
+
+if [ -z "$contigs_illumina_filter" ]; then
+	contigs_illumina_filter="yes"
+elif [ $contigs_illumina_filter == "no" ]; then
+	echo -e "You have deactivated correction based on short reads..."
+	contigs_illumina_filter=""
+fi
+
 
 if [[ -z "$illuminaReads" ]] && [[ $perform_correction == "yes" ]]; then
 	echo -e "YOU HAVE NOT PROVIDED ILLUMINA READS. Please rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will then skip some steps accordingly..."
@@ -428,9 +438,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 	# Find overlaps
 		ILRA.findoverlaps_ver3.pl Blast.merge.blast.length first.bam 02.assembly.fa OUT 1> ILRA.findoverlaps_ver3.pl_log_out.txt 2> ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt
 		echo -e "\nCheck out the log of ILRA.findoverlaps_ver3.pl in the files log_OUT.txt, results_OUT.txt, ILRA.findoverlaps_ver3.pl_log_out.txt, and ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt"
-	# Save the contigs
-		echo -e "\n### Contigs not covered: (ILRA.findoverlaps_ver3.pl)" >> ../Excluded.contigs.fofn
-		cat notcovered_OUT.fasta | awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} $2 {print ">"$0}' | grep ">" >> ../Excluded.contigs.fofn
+	# Save the contigs		
 		echo -e "\n### New contigs merging overlapping contigs(ILRA.findoverlaps_ver3.pl):" >> ../Excluded.contigs.fofn
 		if [ $(cat log_OUT.txt | grep ^sequences: | awk '{ gsub("sequences: " , ""); print }') -eq 0 ]; then
 			echo "Nothing filtered by ILRA.findoverlaps_ver3.pl"
@@ -438,7 +446,13 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 			cat results_OUT.txt >> ../Excluded.contigs.fofn
 		fi
 	# Cleaned assembly
-		cp mergedseq_OUT.fasta 03.assembly.fa
+		if [ $contigs_illumina_filter == "yes" ]; then
+		  echo -e "\n### Contigs not covered: (ILRA.findoverlaps_ver3.pl)" >> ../Excluded.contigs.fofn
+		  cat notcovered_OUT.fasta | awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} $2 {print ">"$0}' | grep ">" >> ../Excluded.contigs.fofn
+		  cp mergedseq_OUT.fasta 03.assembly.fa
+		else
+		  cat mergedseq_OUT.fasta notcovered_OUT.fasta > 03.assembly.fa
+		fi
 	else
 	# Bypass if Illumina reads not provided
 		echo -e "Illumina reads NOT PROVIDED and no filtering by ILRA.findoverlaps_ver3.pl\n"
