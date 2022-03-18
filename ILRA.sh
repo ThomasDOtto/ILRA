@@ -21,7 +21,7 @@ for argument in $options; do
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format)
 		-f | -filter_contig_size # Size threshold to filter the contigs (bp)
-		-F | -Filter out the contigs in the long reads assembly not covered by Illumina short reads by a certain threshold ('no' /'yes' by default)
+		-F | -Do you have even Illumina reads coverage sp contigs in the long reads assembly not covered by Illumina short reads by a certain threshold will be filtered out ('no' /'yes' by default)
 		-I | -Illumina_reads # Root name of the paired-end Illumina reads (FASTQ format, must be gzipped and name root_1.fastq.gz and root_2.fastq.gz prior execution)
 		-C | -Correction_Illumina_reads # Whether illumina reads are provided and all steps of correction should be performed ('no' /'yes' by default)
 		-R | -Range_insert_size # Insert size range of the Illumina reads to use in mapping by SMALT (bp)
