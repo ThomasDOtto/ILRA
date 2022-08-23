@@ -1,24 +1,28 @@
 # ILRA
-Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing) by cleaning and merging contigs, correcting homopolymer tracks and circularizing plastids. 
+Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing of genomes) by cleaning and merging contigs, correcting homopolymer tracks and circularizing plastids. 
 
 ## Installation
 ILRA is based on several standard tools and novel scripts. We suggest three different alternatives for installation. Please choose one of:
 
 
 1) Users without a bioinformatics setup can use our Linux virtual machine (https://q-r.to/ILRA_VM). You will need to install VirtualBox (https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html), set up Ubuntu x64 and mount the downloaded disc (.vdi). See the file 'VM.install.pdf' for further help. The username is 'bioinfo' and the password 'Glasgow2020'.
+Please be aware that the ILRA version within the VM may be outdated. Please double check and update if necessary following option 2.
 
 
-
-2) The fastest option is to use the folder 'external_software', which contains a wrapper script to install the required software and PATH to set. To install and setup everything required to run ILRA, please execute:
+2) The fastest option is to use the folder 'external_software', which contains scripts to install the required software (mainly through miniconda) and a suggestion of the PATH to set. To install and setup everything required to run ILRA, please execute:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
-cd ILRA
-bash external_software/ILRA/finish_installation.sh &> external_software/ILRA/finish_installation_log.txt # Check log to ensure successful installation of dependencies
+cd ILRA/external_software/ILRA/
+bash ILRA_installation.sh 2>&1 | tee external_software/ILRA/ILRA_installation.sh # Check log to ensure successful installation of dependencies
 ```
+This should work if you already have miniconda installed. Plese keep in mind the ILRA_installation.sh is commented to assist with the installation of miniconda, and that the versions of the tools installed by conda are not frozen, so you may need to manually change installed versions if conda fails with new dependencies problems.
+If not executing the light mode that skips decontamination (by default, or argument '-m light'), a folder 'databases' is going to be automatically created and multiple databases must be also installed. ILRA is going to try and do it automatically or to provide instructions in the log after a first execution.
 
 
+3) The last and less recommended option is to manually install the required software.
+If you want to manually install the software, check out in the file external_software/ILRA/ILRA_installation.sh the list of required tools, which must be in the PATH when running. Please be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang statements (first line #!) so everything works in your system. The software and dependencies are automatically checked and the pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly. You may also need to make scripts executable (chmod) and to make source or export so that the PATH variable and others are available for all scripts.
+If not executing the light mode that skips decontamination (by default, or argument '-m light'), a folder 'databases' is going to be automatically created and multiple databases must be also installed. ILRA is going to try and do it automatically or to provide instructions in the log after a first execution.
 
-3) The last and less recommended option is to manually install the required software (please find the list and further details in the 'INSTALL' file).
 
 
 
@@ -27,31 +31,28 @@ bash external_software/ILRA/finish_installation.sh &> external_software/ILRA/fin
 cd ILRA
 source external_software/ILRA/path_to_source # To set up the PATH if you have followed option 2 for installation above
 # Light mode:
-ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -q no | tee -a $PWD/test_data/out_ILRA_test_log.txt
-# Decontamination based on centrifuge and blast. Both mode:
-ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test_m_both -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -m both -q no | tee -a $PWD/test_data/out_ILRA_test_m_both_log.txt
+ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -q no 2>&1 | tee -a $PWD/test_data/out_ILRA_test_log.txt
+# Decontamination based on kraken2 and blast. Both mode:
+ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test_m_both -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -m both -q no 2>&1 | tee -a $PWD/test_data/out_ILRA_test_m_both_log.txt
 ```
-The test run will take around 5 minutes in 'light' mode and around 15 minutes in 'both' mode using 4 cores.
+The test run will take around 5 minutes in 'light' mode and around 10 minutes in 'both' mode using 4 cores.
 
-Please go through the output file 'out_ILRA_test_log.txt' to get the details on the pipeline processing and final output. For the test run, QUAST and BUSCO are expected to fail given the input assembly is an artificial subset.
+Please go through the output file 'out_ILRA_test_log.txt' to get the details on the pipeline processing and final output. For the test run, the last step of quality control (QUAST,BUSCO,gtools, telomere analyses...) is disconnected with '-q no'
 
 
 
 ## ILRA arguments
-```
-ILRA.sh -a <Assembly> -o <Results directory> -c <Long reads corrected reads> -n <Name> -r <Reference genome> -I <Root name of Illumina short reads> -t <Number of cores to use> -s <First sequence name to circularize> -S <Second sequence name to circularize> -i <Number of iterations for iCORN2> -f <Size threshold for discarding contigs> -R <Insert size range for Illumina short reads> -T <NCBI taxonomy id to extract> -g <GFF reference genes annotation file> -L <Long reads sequencing technology> -e <Telomeric sequence left> -E <Telomeric sequence right> -m <Execution mode> -C <Perform error correction by short reads> -d <Step to commence the run> -q <Whether to include an extra step for quality assessment> -p <Whether to use Pilon for shorrt reads correction> -h <Show help>
-```
-Parameters are not positional. If you did not provide a required parameter, the pipeline may exit or use default values if possible (check the help, the log after execution, and the 'Arguments / Variables' section in the ILRA main script 'ILRA.sh').
-
 Please refer to the help for futher details:
 ```
 ILRA.sh -h
 ```
+Parameters are not positional. If you did not provide a required parameter, the pipeline may exit or use default values if possible (check the help, the log after execution, and the 'Arguments / Variables' section in the ILRA main script 'ILRA.sh').
+
 In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output (the file 'Name.ILRA.fasta').
 
 Please provide or not the arguments '-C' and '-I' to indicate whether to use short reads to perform error correction (iCORN2) and to find overlapped contigs (ILRA.findoverlaps_ver3.pl).
 
-Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) are going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon is used for short reads correction (default 'no') and the argument '-q' determines whether a final extra step for assessing the quality and completeness of the corrected assembly (QUAST, BUSCO, amongst others), gathering sequences, analyzing telomeres... is included (default 'yes').
+Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) are going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon is used for short reads correction (default 'no') and the argument '-q' determines whether a final extra step for assessing the quality and completeness of the corrected assembly (QUAST, BUSCO, gathering sequences, analyzing telomeres...) is included (default 'yes').
 
 Finally, ILRA can be run in alternative modes (argument '-m'): 
 * '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive.
@@ -64,9 +65,9 @@ Finally, ILRA can be run in alternative modes (argument '-m'):
 ## Comments
 We used ILRA to improve many genomes. The novel Plasmodium de novo assemblies included in the article are in the folder 'PlasmodiumGenomes' and in Zenodo (doi:XXX)
 
-ILRA is a continuation of the IPA (https://github.com/ThomasDOtto/IPA) project. We felt to rename the script as our updated version works with every long-read technology.
+ILRA is a continuation of the IPA project (https://github.com/ThomasDOtto/IPA). We felt to rename the script as our updated version works with every long-read technology.
   
-Please cite this preprint when using ILRA for your publications:
+Please cite this reference and our Zenodo tag when using ILRA for your publications:
 
 > From contigs to chromosomes: automatic Improvement of Long Read Assemblies (ILRA)
 > 
