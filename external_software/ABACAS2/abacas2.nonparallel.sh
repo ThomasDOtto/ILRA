@@ -116,7 +116,7 @@ export ABA_MIN_LENGTH ABA_MIN_IDENTITY contig reference
 ### ABACAS2 runComparison
 echo -e "\nExecuting abacas2.runComparison.sh...\n"
 abacas2.runComparison.sh $reference $contig $cores $ABA_splitContigs
-arr=($(find . -name "*.coords" -print 0 | xargs -0 ls -lS | grep -v Contigs | sed 's,.* ,,g')); length_arr=${#arr[@]}
+arr=($(ls -lS | awk '{print $9}' | awk 'NF' | grep -v Contigs | egrep .coords$)); length_arr=${#arr[@]}
 echo -e "\nDONE\n"
 
 
