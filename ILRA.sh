@@ -436,7 +436,7 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 	if [ $cores -ge $blocks_size ]; then
 		echo -e "\nProcessing in the MegaBLAST simultaneously the individual contigs in blocks of at most $blocks_size elements, please manually change the variable 'blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n"
 		cat $dir/1.Filtering/01.assembly.fa | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
-		arr=($(find . -name "*.fa" -exec basename {} \;))
+		arr=($(find . -name "*.fa" -print0 | xargs -0 ls -lS | sed 's,.*/,,g'))
 		parallel --verbose -j $blocks_size megablast -W 40 -F F -a $((cores / blocks_size)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out.txt
 		cat *.fa.blast | awk '$3>98 && $4>500 && $1 != $2' > comp.self1.blast; rm *.fa *.fa.blast
 	else
