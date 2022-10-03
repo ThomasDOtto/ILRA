@@ -111,7 +111,7 @@ for ((i=$start;$i<=$end;i++)); do
 		if (( f > maxsize)); then echo $f >> larger_contigs.txt; fi
 	done
 	if [ -s larger_contigs.txt ]; then rm $(ls | grep "splitter-part") && fasta-splitter --part-size $maxsize --nopad --measure seq --line-length 0 --out-dir $PWD --part-num-prefix .splitter-part- ref.fa; fi
-	arr=($(find . -name "*splitter-part*" -exec basename {} \; | grep -v ref.fa)); length_arr=${#arr[@]}
+	arr=($(ls -lS | awk '{print $9}' | awk 'NF' | grep -v ref.fa | grep "splitter-part")); length_arr=${#arr[@]}	
 	echo -e "\nPlease note iCORN2 is likely going to fail if any of the sequences being processed is larger than or around 300Mb...Keep this in mind if there are segmentation errors later on in SNP-o-matic\n"
 	
 	# Parallel processing of the sequences...
