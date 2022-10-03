@@ -20,6 +20,7 @@ perl $ICORN2_HOME/icorn2.Correct.pl ../$inputname gatk_variants.variants.${input
 
 ### Get it into correct sequence length
 perl $ICORN2_HOME/fasta2singleLine.pl $resultname $resultname.$tmp
-perl $ICORN2_HOME/fasta2multipleLine.pl $resultname.$tmp $resultname 80
-rm $resultname.$tmp $resultname.tmp
+mv $resultname.$tmp $resultname
+#perl $ICORN2_HOME/fasta2multipleLine.pl $resultname.$tmp $resultname 80
+#rm $resultname.tmp
 
