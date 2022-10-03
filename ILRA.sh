@@ -737,7 +737,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		fi
 	# BLAST to screen the submitted sequences against: (this and all the blast commands or thresholds are following Genbank requirements, the NCBI's Foreign Contamination Screen)
 	cat ../../$name.ILRA.fasta | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
-	arr=($(find . -name "*.fa" -exec basename {} \; | grep -v ref.fa))
+	arr=($(ls -lS | awk '{print $9}' | awk 'NF' | egrep .fa$ | grep -v ref.fa))	
 	# 1. Common contaminants database that contains vector sequences, bacterial insertion sequences, E. coli and phage genomes...
 		parallel -q --verbose -j $blocks_size blastn -query {} -db $databases/contam_in_euks.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $((cores / blocks_size)) -out {}.contam_in_euks_genbank.out ::: ${arr[@]} &> blast_contam_euks_log_out.txt
 		cat *.fa.contam_in_euks_genbank.out | egrep -v "^#" | awk '($3>=98.0 && $4>=50)||($3>=94.0 && $4>=100)||($3>=90.0 && $4>=200)' > contam_in_euks_genbank.out; rm *.fa.contam_in_euks_genbank.out
