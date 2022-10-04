@@ -43,7 +43,8 @@ for argument in $options; do
 		-t | -threads # Number of cores to use in multithreaded steps
 		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run ('step1', 'step2', 'step3', 'step4', 'step5', 'step6', or 'step7')
 		-D | -databases # Folder for storing the databases for the decontamination step (by default, 'databases' under ILRA main folder)
-		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the kraken2 database to /dev/shm (RAM) so execution is faster ('no' /'yes' by default)
+		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('no' /'yes' by default)
+		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
 		-b | -block_size # Block size for parallel processing (by default, 10)
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
@@ -76,6 +77,7 @@ for argument in $options; do
 		-d*) debug=${arguments[index]} ;;
 		-D*) databases=${arguments[index]} ;;
 		-K*) kraken2_fast=${arguments[index]} ;;
+		-k*) kraken2_databases=${arguments[index]} ;;
 		-b*) blocks_size=${arguments[index]} ;;
 		-p*) pilon=${arguments[index]} ;;
 		-P*) parts_icorn2_split=${arguments[index]} ;;
@@ -200,7 +202,9 @@ fi
 if [ -z "$kraken2_fast" ]; then
 	kraken2_fast="yes"
 fi
-
+if [ -z "$kraken2_databases" ]; then
+	kraken2_databases="standard_eupathdb_48_kraken2_db"
+fi
 
 if [ -z "$pilon" ]; then
 	pilon="no"
@@ -674,10 +678,10 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 		# usr/bin/time if required to measure the time and peak of memory
 		# /usr/bin/time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" command_to_execute
 		if [[ $kraken2_fast == "yes" ]]; then
-			cp -ru $databases/standard_eupathdb_48_kraken2_db /dev/shm/
-			kraken2 --db /dev/shm/standard_eupathdb_48_kraken2_db --threads $cores --memory-mapping --classified-out classification.txt --unclassified-out classification_unknwn.txt --report report.txt --output kraken2_output.txt --use-names $dir/5.Circlator/05.assembly.fa 1> kraken2_log_out.txt 2> kraken2_log_warnings_errors.txt
+			cp -ru $databases/$kraken2_databases /dev/shm/
+			kraken2 --db /dev/shm/$kraken2_databases --threads $cores --memory-mapping --classified-out classification.txt --unclassified-out classification_unknwn.txt --report report.txt --output kraken2_output.txt --use-names $dir/5.Circlator/05.assembly.fa 1> kraken2_log_out.txt 2> kraken2_log_warnings_errors.txt
 		elif [[ $kraken2_fast == "no" ]]; then
-			kraken2 --db $databases/standard_eupathdb_48_kraken2_db --threads $cores --classified-out classification.txt --unclassified-out classification_unknwn.txt --report report.txt --output kraken2_output.txt --use-names $dir/5.Circlator/05.assembly.fa 1> kraken2_log_out.txt 2> kraken2_log_warnings_errors.txt
+			kraken2 --db $databases/$kraken2_databases --threads $cores --classified-out classification.txt --unclassified-out classification_unknwn.txt --report report.txt --output kraken2_output.txt --use-names $dir/5.Circlator/05.assembly.fa 1> kraken2_log_out.txt 2> kraken2_log_warnings_errors.txt
 		fi
 		echo -e "Please check the files report.txt, kraken2_log_out.txt and kraken2_log_out_warnings_errors.txt"
 		if [ -s report.txt ]; then
