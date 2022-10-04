@@ -135,9 +135,7 @@ if [[ $correctedReads == /* ]]; then
 	echo -e "Corrected long reads provided correctly"
 elif [ -z "$correctedReads" ]; then
 	echo -e "CORRECTED READS NOT PROVIDED, Circlator is going to be skipped"
-else
-	echo -e "Assuming the corrected reads are in the current pathway... If errors please provide absolute pathways as arguments"
-	correctedReads=$PWD/$correctedReads
+	echo -e "If errors, please provide absolute pathways as arguments"	
 fi
 
 if [ -z "$perform_correction" ]; then
@@ -608,8 +606,8 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 	if [[ ! -d "$dir/4.iCORN2" ]] && [[ ! -d "$dir/4.pilon" ]]; then
 		mkdir -p $dir/4.iCORN2_pilon; ln -sf $assembly $dir/4.iCORN2_pilon/04.assembly.fa
 	fi
-	if [[ $correctedReads == /* ]]; then
-		time1=`date +%s`
+	time1=`date +%s`
+	if [ ! -z "$correctedReads" ]; then
 		echo -e "\n\nSTEP 5: Circlator starting..."; echo -e "Current date/time: $(date)\n"
 		mkdir -p $dir/5.Circlator; cd $dir/5.Circlator; rm -rf *
 		if grep -q -E "$seqs_circl_1|$seqs_circl_2" $(find $dir -name "04.assembly.fa"); then
