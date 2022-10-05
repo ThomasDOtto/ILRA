@@ -146,8 +146,8 @@ if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java ]]; then
   exit 1
 fi
 # Getting picard:
-ln -sf $(find $conda_envs_path/ILRA_env -name picard.jar) picard.jar
-ln -sf $conda_envs_path/ILRA_env/bin/picard picard
+ln -sf $(find $conda_envs_path/ILRA_env -name picard.jar) ../../picard.jar
+ln -sf $conda_envs_path/ILRA_env/bin/picard ../../picard
 # picard MarkDuplicates --version
 
 
