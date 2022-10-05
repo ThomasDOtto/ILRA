@@ -80,7 +80,7 @@ echo -e "\n\n\nThe JAVA options used by Pilon by default may be not appropriate 
 
 ### Busco requires outdated dependencies, so new environment
 echo -e "\n\n\nBUSCO requires outdated dependencies, so new environment...\n\n\n"
-mamba create -n busco -c conda-forge -c bioconda busco=5.4.0
+mamba create -n busco -y -c conda-forge -c bioconda busco=5.4.0
 rm -rf $(dirname $conda_envs_path)/pkgs/*;rm -rf $conda_envs_path/ILRA_env/pkgs/*  # Conda creates a huge amount of intermediate files when installing packages, and these can be removed afterwards
 # Required to make previous versions of busco work:
 # $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/pip install numpy==1.17.3
