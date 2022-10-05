@@ -40,7 +40,7 @@ echo -e "\n\n\nI'm downloading and installing several packages through conda...\
 conda create -n ILRA_env -y -c conda-forge mamba
 conda_envs_path=$(conda env list | egrep ILRA_env$ | sed 's,ILRA_env,,g' | sed 's/^ *//g')
 source $conda_envs_path/ILRA_env/bin/activate
-mamba install -y -c conda-forge pigz gawk curl openmp
+mamba install -y -c conda-forge pigz gawk curl openmp parallel
 mamba install -y -c bioconda kraken2==2.1.2 krakentools taxonkit blast-legacy blast samtools smalt pyfastaq minimap2 winnowmap assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge hmmer gatk4 picard plotsr seqkit fasta-splitter
 rm -rf $(dirname $conda_envs_path)/pkgs/*;rm -rf $conda_envs_path/ILRA_env/pkgs/*  # Conda creates a huge amount of intermediate files when installing packages, and these can be removed afterwards
 echo -e "/nMake sure that samtools is a recent version/n"
