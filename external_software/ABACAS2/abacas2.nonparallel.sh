@@ -131,7 +131,7 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 		rm abacas2.doTilingGraph.pl_parallel_log_out.txt abacas2.doTilingGraph.pl_parallel_log_out_2.txt *.fna *.plot *.gff
 		parallel --verbose --joblog abacas2.doTilingGraph.pl_parallel_log_out_2.txt -j 2 abacas2.doTilingGraph.pl {} $contig Res ::: ${arr[@]} &> abacas2.doTilingGraph.pl_parallel_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' abacas2.doTilingGraph.pl_parallel_log_out_2.txt > tmp && mv tmp abacas2.doTilingGraph.pl_parallel_log_out_2.txt		
-	fi	
+	fi
 	# Manual parallelization if GNU's parallel is not available... 
 	#count1=1; block=0
 	#while [ $count1 -le $length_arr ]; do
@@ -205,6 +205,12 @@ if [ "$ABA_DO_BLAST" -eq 1 ]; then
 		echo -e "\nProcessing MegaBLAST simultaneously in blocks of at most $ABA_SPLIT_PARTS elements, please use and export the variable 'ABA_SPLIT_PARTS' to reduce the number if running into memory issues...\n"
 		parallel --verbose --joblog megablast_parallel_log_out_2.txt -j $ABA_SPLIT_PARTS megablast -F T -m 8 -e 1e-20 -d Reference/{} -i $pre.{}.fna -a $((cores_split*2)) -o comp/comp.{}.blast ::: $(echo ${arr[@]} | sed 's,.coords,,g') &> megablast_parallel_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2.txt > tmp && mv tmp megablast_parallel_log_out_2.txt
+		# Control if failed due to any reason (likely too much RAM...)
+		if [ "$(awk '{ print $8 }' abacas2.doTilingGraph.pl_parallel_log_out_2.txt | grep -c "9")" -gt 0 ]; then
+			rm -rf megablast_parallel_log_out.txt megablast_parallel_log_out_2.txt comp/
+			parallel --verbose --joblog megablast_parallel_log_out_2.txt -j 2 megablast -F T -m 8 -e 1e-20 -d Reference/{} -i $pre.{}.fna -a $((cores_split*2)) -o comp/comp.{}.blast ::: $(echo ${arr[@]} | sed 's,.coords,,g') &> megablast_parallel_log_out.txt
+			awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2.txt > tmp && mv tmp megablast_parallel_log_out_2.txt
+		fi
 		# Manual parallelization if GNU's parallel is not available... 
 		#count1=1; block=0
 		#while [ $count1 -le $length_arr ]; do
