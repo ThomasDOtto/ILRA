@@ -49,6 +49,7 @@ for argument in $options; do
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
 		-A | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
+		-B | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
 		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
 		-M | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 200g=200GB used)
 		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
@@ -80,6 +81,7 @@ for argument in $options; do
 		-K*) kraken2_fast=${arguments[index]} ;;
 		-k*) kraken2_databases=${arguments[index]} ;;
 		-b*) blocks_size=${arguments[index]} ;;
+		-B*) abacas2_blast=${arguments[index]} ;;
 		-p*) pilon=${arguments[index]} ;;
 		-P*) parts_icorn2_split=${arguments[index]} ;;
 		-A*) abacas2_split=${arguments[index]} ;;
@@ -160,6 +162,9 @@ fi
 
 if [ -z "$abacas2_split" ]; then
 	abacas2_split=$blocks_size
+fi
+if [ -z "$abacas2_blast" ]; then
+	abacas2_blast=1
 fi
 
 if [[ -z "$illuminaReads" ]] && [[ $perform_correction == "yes" ]]; then
@@ -512,8 +517,8 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 	mkdir -p $dir/3.ABACAS2; cd $dir/3.ABACAS2; rm -rf *
 	if [ "$doAbacas2" -eq 1 ]; then
 		ABA_CHECK_OVERLAP=0; export ABA_CHECK_OVERLAP; ABA_COMPARISON=nucmer; export ABA_COMPARISON; ABA_SPLIT_PARTS=$abacas2_split; export ABA_SPLIT_PARTS; Min_Alignment_Length=1000; Identity_Cutoff=98
-		echo -e "ABACAS2 parameters are:\nABA_CHECK_OVERLAP=0\nABA_COMPARISON=nucmer\nMin_Alignment_Length=1000\nIdentity_Cutoff=98\nPlease check ABACAS2 help and change manually within the pipeline (section 3) these parameters if needed"
-		abacas2.nonparallel.sh $reference $dir/2.MegaBLAST/03.assembly.fa $cores $Min_Alignment_Length $Identity_Cutoff 1> abacas_log_out.txt 2> abacas_log_out_warnings_errors.txt
+		echo -e "ABACAS2 parameters are:\nABA_CHECK_OVERLAP=0\nABA_COMPARISON=nucmer\nMin_Alignment_Length=1000\nIdentity_Cutoff=98\nBlast=$abacas2_blast\nPlease check ABACAS2 help and change manually within the pipeline (section 3) these parameters if needed"
+		abacas2.nonparallel.sh $reference $dir/2.MegaBLAST/03.assembly.fa $cores $Min_Alignment_Length $Identity_Cutoff $abacas2_blast 1> abacas_log_out.txt 2> abacas_log_out_warnings_errors.txt
 		echo -e "\nCheck out the log of abacas2.nonparallel.sh in the files abacas_log_out.txt and abacas_log_out_warnings_errors.txt"
 	# Break  and delete N's
 		fastaq trim_Ns_at_end Genome.abacas.fasta 03b.assembly.fa
