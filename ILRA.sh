@@ -445,7 +445,8 @@ if [[ $debug == "all" || $debug == "step2" ]]; then
 		echo -e "\nProcessing in the MegaBLAST simultaneously the individual contigs in blocks of at most $blocks_size elements, please manually change the variable 'blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n"
 		cat $dir/1.Filtering/01.assembly.fa | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
 		arr=($(ls -lS | awk '{print $9}' | awk 'NF' | egrep .fa$))
-		parallel --verbose -j $blocks_size megablast -W 40 -F F -a $((cores / blocks_size)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out.txt
+		parallel --verbose --joblog megablast_parallel_log_out_2.txt -j $blocks_size megablast -W 40 -F F -a $((cores / blocks_size *2)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out.txt
+		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2.txt > tmp && mv tmp megablast_parallel_log_out_2.txt
 		cat *.fa.blast | awk '$3>98 && $4>500 && $1 != $2' > comp.self1.blast; rm *.fa *.fa.blast
 	else
 		megablast -W 40 -F F -a $cores -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i $dir/1.Filtering/01.assembly.fa | awk '$3>98 && $4>500 && $1 != $2' > comp.self1.blast
@@ -747,19 +748,24 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 	cat ../../$name.ILRA.fasta | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
 	arr=($(ls -lS | awk '{print $9}' | awk 'NF' | egrep .fa$ | grep -v ref.fa))	
 	# 1. Common contaminants database that contains vector sequences, bacterial insertion sequences, E. coli and phage genomes...
-		parallel -q --verbose -j $blocks_size blastn -query {} -db $databases/contam_in_euks.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $((cores / blocks_size)) -out {}.contam_in_euks_genbank.out ::: ${arr[@]} &> blast_contam_euks_log_out.txt
+		parallel -q --verbose --joblog blast_contam_euks_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/contam_in_euks.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $((cores / blocks_size)) -out {}.contam_in_euks_genbank.out ::: ${arr[@]} &> blast_contam_euks_log_out.txt
+		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' blast_contam_euks_log_out_2.txt > tmp && mv tmp blast_contam_euks_log_out_2.txt
 		cat *.fa.contam_in_euks_genbank.out | egrep -v "^#" | awk '($3>=98.0 && $4>=50)||($3>=94.0 && $4>=100)||($3>=90.0 && $4>=200)' > contam_in_euks_genbank.out; rm *.fa.contam_in_euks_genbank.out
-		parallel -q --verbose -j $blocks_size blastn -query {} -db $databases/contam_in_prok.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $((cores / blocks_size)) -out {}.contam_in_proks_genbank.out ::: ${arr[@]} &> blast_contam_proks_log_out.txt
+		parallel -q --verbose --joblog blast_contam_proks_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/contam_in_prok.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $((cores / blocks_size)) -out {}.contam_in_proks_genbank.out ::: ${arr[@]} &> blast_contam_proks_log_out.txt
+		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' blast_contam_proks_log_out_2.txt > tmp && mv tmp blast_contam_proks_log_out_2.txt
 		cat *.fa.contam_in_proks_genbank.out | egrep -v "^#" | awk '($3>=98.0 && $4>=50)||($3>=94.0 && $4>=100)||($3>=90.0 && $4>=200)' > contam_in_proks_genbank.out; rm *.fa.contam_in_proks_genbank.out
 	# 2. A database of adaptors linkers and primers
-		parallel --verbose -j $cores vecscreen -d $databases/adaptors_for_screening_euks.fa -f3 -i {} -o {}.vecscreen_in_euks_genbank ::: ${arr[@]} &> vecscreen_contam_euks_log_out.txt
+		parallel --verbose --joblog vecscreen_contam_euks_log_out_2.txt -j $cores vecscreen -d $databases/adaptors_for_screening_euks.fa -f3 -i {} -o {}.vecscreen_in_euks_genbank ::: ${arr[@]} &> vecscreen_contam_euks_log_out.txt
+		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' vecscreen_contam_euks_log_out_2.txt > tmp && mv tmp vecscreen_contam_euks_log_out_2.txt
 		cat *.fa.vecscreen_in_euks_genbank > vecscreen_in_euks_genbank; rm *.fa.vecscreen_in_euks_genbank
-		parallel --verbose -j $cores vecscreen -d $databases/adaptors_for_screening_proks.fa -f3 -i {} -o {}.vecscreen_in_proks_genbank ::: ${arr[@]} &> vecscreen_contam_proks_log_out.txt
+		parallel --verbose --joblog vecscreen_contam_proks_log_out_2.txt -j $cores vecscreen -d $databases/adaptors_for_screening_proks.fa -f3 -i {} -o {}.vecscreen_in_proks_genbank ::: ${arr[@]} &> vecscreen_contam_proks_log_out.txt
+		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' vecscreen_contam_proks_log_out_2.txt > tmp && mv tmp vecscreen_contam_proks_log_out_2.txt
 		cat *.fa.vecscreen_in_proks_genbank > vecscreen_in_proks_genbank; rm *.fa.vecscreen_in_proks_genbank
 		VSlistTo1HitPerLine.sh suspect=0 weak=0 vecscreen_in_euks_genbank > vecscreen_in_euks_genbank.out
 		VSlistTo1HitPerLine.sh suspect=0 weak=0 vecscreen_in_proks_genbank > vecscreen_in_proks_genbank.out
 	# 3. A database of mitochondrial genomes
-		parallel --verbose -j $blocks_size blastn -query {} -db $databases/mito -out {}.mito_sequences -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 98.6 -soft_masking true -outfmt 7 -num_threads $((cores / blocks_size)) ::: ${arr[@]} &> blast_mito_log_out.txt
+		parallel --verbose --joblog blast_mito_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/mito -out {}.mito_sequences -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 98.6 -soft_masking true -outfmt 7 -num_threads $((cores / blocks_size)) ::: ${arr[@]} &> blast_mito_log_out.txt
+		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' blast_mito_log_out_2.txt > tmp && mv tmp blast_mito_log_out_2.txt
 		cat *.fa.mito_sequences | egrep -v "^#" > mito_sequences; rm *.fa.mito_sequences
 	# Deal with several hits: (from the BLAST output get the largest alignments and then the largest % of identity)
 		if [ "$(cat mito_sequences | wc -l)" -gt 0 ]; then
@@ -778,7 +784,8 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			echo -e "\n#Contig chosen to be labelled as mitochondrion based on % identity (> 98.6%) and the largest alignments:" $seq_mit >> mito_sequences.out
 		fi
 	# 4. A database of ribosomal RNA genes
-		parallel --verbose -j $blocks_size blastn -query {} -db $databases/rrna -task megablast -template_length 18 -template_type coding -window_size 120 -word_size 12 -xdrop_gap 20 -no_greedy -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 1E-9 -gapextend 2 -gapopen 4 -penalty -4 -perc_identity 95 -reward 3 -soft_masking true -outfmt 7 -num_threads $((cores / blocks_size)) -out {}.rrna_genbank.out ::: ${arr[@]} &> blast_rrna_log_out.txt
+		parallel --verbose --joblog blast_rrna_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/rrna -task megablast -template_length 18 -template_type coding -window_size 120 -word_size 12 -xdrop_gap 20 -no_greedy -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 1E-9 -gapextend 2 -gapopen 4 -penalty -4 -perc_identity 95 -reward 3 -soft_masking true -outfmt 7 -num_threads $((cores / blocks_size)) -out {}.rrna_genbank.out ::: ${arr[@]} &> blast_rrna_log_out.txt
+		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' blast_rrna_log_out_2.txt > tmp && mv tmp blast_rrna_log_out_2.txt
 		cat *.fa.rrna_genbank.out | egrep -v "^#" | awk '$4>=100' > rrna_genbank.out; rm *.fa.rrna_genbank.out
 	# 5. The chromosomes of unrelated organisms. Foreign organisms are those that belong to a different taxonomic group compared to the organism whose sequences are being screened.
 	# This is a requirement by the NCBI's Foreign Contamination Screen, but we skipped it here, because ILRA can alternatively use kraken2 to get rid of contamination of other organisms.
