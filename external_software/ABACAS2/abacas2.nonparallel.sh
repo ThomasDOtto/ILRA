@@ -125,7 +125,7 @@ echo -e "\nExecuting abacas2.doTilingGraph.pl for $length_arr elements...\n"
 if [[ $ABA_LOW_MEM == "no" ]] ; then
 	echo -e "\nProcessing abacas2.doTilingGraph simultaneously in blocks of at most $ABA_SPLIT_PARTS elements, please use and export the variable 'ABA_SPLIT_PARTS' to reduce the number if running into memory issues...\n"
 	parallel --verbose --joblog abacas2.doTilingGraph.pl_parallel_log_out_2.txt -j $ABA_SPLIT_PARTS abacas2.doTilingGraph.pl {} $contig Res ::: ${arr[@]} &> abacas2.doTilingGraph.pl_parallel_log_out.txt
-	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' abacas2.doTilingGraph.pl_parallel_log_out_2.txt
+	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' abacas2.doTilingGraph.pl_parallel_log_out_2.txt > tmp && mv tmp abacas2.doTilingGraph.pl_parallel_log_out_2.txt
 	# Manual parallelization if GNU's parallel is not available... 
 	#count1=1; block=0
 	#while [ $count1 -le $length_arr ]; do
@@ -175,7 +175,7 @@ if [ "$ABA_DO_BLAST" -eq 1 ]; then
 	if [[ $ABA_LOW_MEM == "no" ]] ; then
 		echo -e "\nProcessing formatdb simultaneously in blocks of at most $cores elements, please use less cores to reduce the number if running into memory issues...\n"
 		parallel --verbose --joblog formatdb_parallel_log_out_2.txt -j $cores formatdb -p F -i Reference/{} ::: $(echo ${arr[@]} | sed 's,.coords,,g') &> formatdb_parallel_log_out.txt
-		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' formatdb_parallel_log_out_2.txt
+		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' formatdb_parallel_log_out_2.txt > tmp && mv tmp formatdb_parallel_log_out_2.txt
 		# Manual parallelization if GNU's parallel is not available... 
 		#count1=1; block=0
 		#while [ $count1 -le $length_arr ]; do
@@ -198,7 +198,7 @@ if [ "$ABA_DO_BLAST" -eq 1 ]; then
 
 		echo -e "\nProcessing MegaBLAST simultaneously in blocks of at most $ABA_SPLIT_PARTS elements, please use and export the variable 'ABA_SPLIT_PARTS' to reduce the number if running into memory issues...\n"
 		parallel --verbose --joblog megablast_parallel_log_out_2.txt -j $ABA_SPLIT_PARTS megablast -F T -m 8 -e 1e-20 -d Reference/{} -i $pre.{}.fna -a $cores_split -o comp/comp.{}.blast ::: $(echo ${arr[@]} | sed 's,.coords,,g') &> megablast_parallel_log_out.txt
-		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2.txt
+		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2.txt > tmp && mv tmp megablast_parallel_log_out_2.txt
 		# Manual parallelization if GNU's parallel is not available... 
 		#count1=1; block=0
 		#while [ $count1 -le $length_arr ]; do
