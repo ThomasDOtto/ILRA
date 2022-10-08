@@ -79,7 +79,8 @@ fi
 ### Decompressing the Illumina short reads...
 # This may be time-consuming, but unfortunately it is mandatory, since SNP-o-matic in the iCORN2's correction step does not allow gzipped .fastq.
 # Since it's supossed to only use a core, decompression of both sets of pairs can be done simultaneously...
-parallel --verbose -j 2 "pigz -dfc -p $cores $readRoot\_{}.fastq.gz > $PWD/"${readRoot##*/}"\_{}.fastq" ::: {1..2} &> processing_decompressing_log_out.txt
+parallel --verbose --joblog processing_decompressing_log_out_2.txt -j 2 "pigz -dfc -p $cores $readRoot\_{}.fastq.gz > $PWD/"${readRoot##*/}"\_{}.fastq" ::: {1..2} &> processing_decompressing_log_out.txt
+awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_decompressing_log_out_2.txt
 readRoot_uncompressed=$PWD/"${readRoot##*/}"
 
 
@@ -115,7 +116,8 @@ for ((i=$start;$i<=$end;i++)); do
 	echo -e "\nPlease note iCORN2 is likely going to fail if any of the sequences being processed is larger than or around 300Mb...Keep this in mind if there are segmentation errors later on in SNP-o-matic\n"
 	
 	# Parallel processing of the sequences...
-	parallel --verbose -j $cores samtools faidx {} ::: ${arr[@]} &> processing_split_parts_faidx_log_out.txt
+	parallel --verbose --joblog processing_split_parts_faidx_log_out_2.txt -j $cores samtools faidx {} ::: ${arr[@]} &> processing_split_parts_faidx_log_out.txt
+	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_split_parts_faidx_log_out_2.txt
 	# Manual parallelization if GNU's parallel is not available... 
 	#count1=1; block=0
 	#while [ $count1 -le $length_arr ]; do
@@ -135,7 +137,8 @@ for ((i=$start;$i<=$end;i++)); do
 	#	eval $(grep "block=" processing_split_parts_faidx_log_out.txt | tail -1)
 	#done
 
-	parallel --verbose -j $cores java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary -R {}.fa -O {}.dict -TMP_DIR ../tmp_dir ::: $(echo ${arr[@]} | sed 's,.fa,,g') &> processing_split_parts_createseqdictionary_log_out.txt
+	parallel --verbose --joblog processing_split_parts_createseqdictionary_log_out_2.txt -j $cores java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary -R {}.fa -O {}.dict -TMP_DIR ../tmp_dir ::: $(echo ${arr[@]} | sed 's,.fa,,g') &> processing_split_parts_createseqdictionary_log_out.txt
+	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_split_parts_createseqdictionary_log_out_2.txt
 	# Manual parallelization if GNU's parallel is not available...
 	#count1=1; block=0
 	#while [ $count1 -le $length_arr ]; do
@@ -210,7 +213,8 @@ for ((i=$start;$i<=$end;i++)); do
 		#done
 		# This block was working with a previous version, which performed all the ReorderSam before the correction. However, this accumulated a lot of bam files, requesting too much space somethimes. So I incorporated the ReorderSam execution within the icorn2.snpcall.correction.sh
 		
-		parallel --verbose -j $((parallel_block_size * 2)) icorn2.snpcall.correction.sh {} $cores_split $readRoot_uncompressed $fragmentSize {}.$(($i+1)) $i ::: ${arr[@]} &> processing_split_parts_correction_icorn2_log_out.txt
+		parallel --verbose --joblog processing_split_parts_correction_icorn2_log_out_2.txt -j $((parallel_block_size * 2)) icorn2.snpcall.correction.sh {} $cores_split $readRoot_uncompressed $fragmentSize {}.$(($i+1)) $i ::: ${arr[@]} &> processing_split_parts_correction_icorn2_log_out.txt
+		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_split_parts_correction_icorn2_log_out_2.txt
 		# 2X the size of the blocks because it's not very intensive and snp-o-matic only uses one core, so it can accumulate
 		#
 	elif [ $low_mem_mode == "yes" ]; then
