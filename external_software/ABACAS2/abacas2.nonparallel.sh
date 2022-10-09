@@ -129,7 +129,8 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 	# Control if failed due to any reason (likely too much RAM...)
 	if [ "$(awk '{ print $8 }' abacas2.doTilingGraph.pl_parallel_log_out_2.txt | grep -c "9")" -gt 0 ]; then
 		rm abacas2.doTilingGraph.pl_parallel_log_out.txt abacas2.doTilingGraph.pl_parallel_log_out_2.txt *.fna *.plot *.gff
-		parallel --verbose --joblog abacas2.doTilingGraph.pl_parallel_log_out_2.txt -j 2 abacas2.doTilingGraph.pl {} $contig Res ::: ${arr[@]} &> abacas2.doTilingGraph.pl_parallel_log_out.txt
+		echo -e "\nAdjusting parallel processing of TillingGraph to save RAM by executing only blocks of 3"
+		parallel --verbose --joblog abacas2.doTilingGraph.pl_parallel_log_out_2.txt -j 3 abacas2.doTilingGraph.pl {} $contig Res ::: ${arr[@]} &> abacas2.doTilingGraph.pl_parallel_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' abacas2.doTilingGraph.pl_parallel_log_out_2.txt > tmp && mv tmp abacas2.doTilingGraph.pl_parallel_log_out_2.txt		
 	fi
 	# Manual parallelization if GNU's parallel is not available... 
