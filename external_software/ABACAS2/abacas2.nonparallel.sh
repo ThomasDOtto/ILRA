@@ -127,7 +127,7 @@ if [[ $ABA_LOW_MEM == "no" ]] ; then
 	parallel --verbose --joblog abacas2.doTilingGraph.pl_parallel_log_out_2.txt -j $ABA_SPLIT_PARTS abacas2.doTilingGraph.pl {} $contig Res ::: ${arr[@]} &> abacas2.doTilingGraph.pl_parallel_log_out.txt
 	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' abacas2.doTilingGraph.pl_parallel_log_out_2.txt > tmp && mv tmp abacas2.doTilingGraph.pl_parallel_log_out_2.txt
 	# Control if failed due to any reason (likely too much RAM...)
-	if [ "$(awk '{ print $8 }' abacas2.doTilingGraph.pl_parallel_log_out_2.txt | grep -c "9")" -gt 0 ]; then
+	if [ "$(awk '{ print $9 }' abacas2.doTilingGraph.pl_parallel_log_out_2.txt | grep -c "9")" -gt 0 ]; then
 		rm abacas2.doTilingGraph.pl_parallel_log_out.txt abacas2.doTilingGraph.pl_parallel_log_out_2.txt *.fna *.plot *.gff
 		echo -e "\nAdjusting parallel processing of TillingGraph to save RAM by executing only blocks of 3"
 		parallel --verbose --joblog abacas2.doTilingGraph.pl_parallel_log_out_2.txt -j 3 abacas2.doTilingGraph.pl {} $contig Res ::: ${arr[@]} &> abacas2.doTilingGraph.pl_parallel_log_out.txt
@@ -207,7 +207,7 @@ if [ "$ABA_DO_BLAST" -eq 1 ]; then
 		parallel --verbose --joblog megablast_parallel_log_out_2.txt -j $ABA_SPLIT_PARTS megablast -F T -m 8 -e 1e-20 -d Reference/{} -i $pre.{}.fna -a $((cores_split*2)) -o comp/comp.{}.blast ::: $(echo ${arr[@]} | sed 's,.coords,,g') &> megablast_parallel_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2.txt > tmp && mv tmp megablast_parallel_log_out_2.txt
 		# Control if failed due to any reason (likely too much RAM...)
-		if [ "$(awk '{ print $8 }' abacas2.doTilingGraph.pl_parallel_log_out_2.txt | grep -c "9")" -gt 0 ]; then
+		if [ "$(awk '{ print $9 }' abacas2.doTilingGraph.pl_parallel_log_out_2.txt | grep -c "9")" -gt 0 ]; then
 			rm -rf megablast_parallel_log_out.txt megablast_parallel_log_out_2.txt comp/
 			parallel --verbose --joblog megablast_parallel_log_out_2.txt -j 2 megablast -F T -m 8 -e 1e-20 -d Reference/{} -i $pre.{}.fna -a $((cores_split*2)) -o comp/comp.{}.blast ::: $(echo ${arr[@]} | sed 's,.coords,,g') &> megablast_parallel_log_out.txt
 			awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2.txt > tmp && mv tmp megablast_parallel_log_out_2.txt
