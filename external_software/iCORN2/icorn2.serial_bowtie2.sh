@@ -90,6 +90,7 @@ for ((i=$start;$i<=$end;i++)); do
 	time1=`date +%s`
 ### Call the mapper
 	echo -e "\nCalling the mapper...\n"
+	echo -e "\n\n\n#### ITERATION ++++ $i" &>> icorn2.mapper_log_out.txt
 	$ICORN2_HOME/icorn2.mapper.sh ICORN2.$refRoot.$i 13 3 $readRoot_uncompressed ICORN2_$i 1200 $cores &>> icorn2.mapper_log_out.txt
 	echo -e "\nMapper DONE\n"
 ### Call SNP caller and correction in splitted sequences:
