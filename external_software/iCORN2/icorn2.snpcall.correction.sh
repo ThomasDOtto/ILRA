@@ -12,9 +12,9 @@ iternum=$6
 
 ### Create the bam file:
 java_memory_2=${java_memory::-1} # Excessive use of RAM by the parallel execution of ReorderSam, so try and limit within the user specified range
-# 2X the size of the blocks in the parallel execution of this script because it's not very intensive and snp-o-matic only uses one core, so it can accumulate
+# 1.25X the size of the blocks in the parallel execution of this script to make sure RAM is not filled and jobs can accumulate
 if [ $seq_parts -eq 0 ]; then
-	java_memory_reorder_sam="$((java_memory_2 / (( parallel_block_size * 2 )) ))"g
+	java_memory_reorder_sam="$((java_memory_2 / (( parallel_block_size * 5/4 )) ))"g
 else
 	java_memory_reorder_sam="$((java_memory_2 / seq_parts ))"g
 fi
