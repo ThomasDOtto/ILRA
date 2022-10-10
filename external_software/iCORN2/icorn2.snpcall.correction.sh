@@ -14,15 +14,16 @@ iternum=$6
 java_memory_2=${java_memory::-1} # Excessive use of RAM by the parallel execution of ReorderSam, so try and limit within the user specified range
 # 1.25X the size of the blocks in the parallel execution of this script to make sure RAM is not filled and jobs can accumulate
 if [ $seq_parts -eq 0 ]; then
-	java_memory_reorder_sam="$((java_memory_2 / (( parallel_block_size * 5/4 )) ))"g
+	#java_memory_reorder_sam="$((java_memory_2 / (( parallel_block_size * 5/4 )) ))"g
+	java_memory_reorder_sam="$((java_memory_2 / (( parallel_block_size )) ))"g
 else
 	java_memory_reorder_sam="$((java_memory_2 / seq_parts ))"g
 fi
-export _JAVA_OPTIONS="-Xms1g -Xmx$java_memory_reorder_sam"
+export _JAVA_OPTIONS="-Xms5g -Xmx$java_memory_reorder_sam"
 
 java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -jar $ICORN2_HOME/picard.jar ReorderSam -INPUT out.sorted.markdup.bam -OUTPUT $genome.bam -SEQUENCE_DICTIONARY ${genome%.*}.dict -REFERENCE_SEQUENCE $genome -S true -VERBOSITY WARNING -COMPRESSION_LEVEL 1 -CREATE_INDEX true -TMP_DIR ../tmp_dir
 
-export _JAVA_OPTIONS="-Xms1g -Xmx$java_memory"
+export _JAVA_OPTIONS="-Xms5g -Xmx$java_memory"
 
 aln=$genome.bam
 cores=$((cores * 3))
