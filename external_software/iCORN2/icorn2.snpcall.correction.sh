@@ -18,11 +18,11 @@ if [ $seq_parts -eq 0 ]; then
 else
 	java_memory_reorder_sam="$((java_memory_2 / seq_parts ))"g
 fi
-export _JAVA_OPTIONS="-Xms10g -Xmx$java_memory_reorder_sam"
+export _JAVA_OPTIONS="-Xms1g -Xmx$java_memory_reorder_sam"
 
 java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -jar $ICORN2_HOME/picard.jar ReorderSam -INPUT out.sorted.markdup.bam -OUTPUT $genome.bam -SEQUENCE_DICTIONARY ${genome%.*}.dict -REFERENCE_SEQUENCE $genome -S true -VERBOSITY WARNING -COMPRESSION_LEVEL 1 -CREATE_INDEX true -TMP_DIR ../tmp_dir
 
-export _JAVA_OPTIONS="-Xms10g -Xmx$java_memory"
+export _JAVA_OPTIONS="-Xms1g -Xmx$java_memory"
 
 aln=$genome.bam
 cores=$((cores * 3))
