@@ -1,0 +1,22 @@
+iCORN2 has been extensively updated, mainly to achieve parallization and avoid errors related to memory usage or sequences above a certain size. Some of the most relevant changes are listed below:
+* Kept only scripts relevant for ILRA (i.e., removed LSF scripts, icorn2.cutHomopolymerTracks.pl, icorn2.startSNP.sh, icorn2.stats2csv.pl, etc)
+* iCORN2 now automatically processes single sequences simultaneously (i.e., contigs or chromosomes via GNU's parallel) instead of the full sequences, applying in the step of error correction either SNP-o-matic (as the previous version of iCORN2) or Pilon (for contigs/chromosomes larger than an user-specified value, by default ~60 Mb, which seems to be the upper limit for SNP-o-matic giving segmentation errors)
+* iCORN2 now automatically checks and reports whether a process in the execution of GNU's parallel has been killed due to RAM usage, and tries to re-launch them
+* Changes in the script icorn2.serial_bowtie2.sh
+  - Rewrote usage page. Added new arguments, defined their default values, exported them... Amongst others:
+    + The size of the blocks of sequences that would be processed simultaneously using GNU's parallel (number of cores automatically distributed). This may be reduced to avoid intensive RAM usage. 
+    + Whether to activate the low memory mode, which would reduce the number of cores at some steps and deactivate the simultaneous processing (so contigs would be processed sequentially, as in the previous version of iCORN2)
+  - Updated versions of picard and GATK are now requiring a temporal directory, which is automatically created and removed afterwards
+  - SNP-o-matic is the only step within iCORN2 and ILRA not accepting fastq.gz files. Thus, iCORN2 is first decompressing the reads (will be removed afterwards)
+  - The new script icorn2.mapper.sh replaces the older icorn2.bowtie2.sh
+  - A new script, icorn2.snpcall.correction.sh, gathers the previous steps of SNP calling and error correction. It is executed simultaneously on the splitted parts (sequentially and with less cores if low memory mode is activated). It also includes the execution of samtools faidx, picards's CreateSequenceDictionary, picard's ReorderSam... (if low memory mode is activated some steps are executed sequencitally and not simultaneously to avoid intensive RAM usage)
+  - The splitted parts are finally automatically merged, and results have been shown to be identical to the old and slower processing
+* Changes in the script icorn2.mapper.sh
+  - iCORN2 is now only using Bowtie2 in --very-sensitive mode
+  - Rewrote usage page. The basename of the Illumina short reads is now provided as an argument to map in Bowtie2 and exported to be incorporated in the header of the alignment file
+  - All the downstream processing of the SAM file (i.e., reheading, converting to bam, sorting...) is now done in a one-line pipe from Bowtie2. SAMtools is also now multithreaded and much faster, and capable of converting to BAM, sorting and indexing in the same command, which were all different steps in the previous version of iCORN2
+  - GATK's MarkDuplicatesSpark (multithreaded) replaces the previous MarkDuplicates.jar
+* Changes in the script icorn2.snpcall.correction.sh
+  - The modified SNP caller (GenomeAnalysisTK.jar) wasn't using the multithreaded option (-nt) for RealignerTargetCreator and UnifiedGenotyper in the previous version of iCORn2. It is now and performance is better
+  - The JAVA version used by the modified SNP caller is the outdated v1.7, which is now explicitely mentioned as a requirement in the updated installation instructions. However, GATK requires v1.8. It is independently downloaded. Versions are included in the documentation and absolute paths are used in the scripts, so no different versions are used
+  - Allocated RAM for JAVA is now provided through an argument and automatically redistributed to avoid excessive use of memory, for example by the parallel execution of ReorderSam or Pilon/SNP-o-matic

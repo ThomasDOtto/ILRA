@@ -1,0 +1,46 @@
+- Bash and Perl scripts
+- Dependencies:
+* GNU's parallel
+* samtools
+* bowtie2
+* iCORN2's GenomeAnalysisTK.jar + JAVA v1.7
+* GATK' MarkDuplicatesSpark + JAVA v1.8
+* Picard's ReorderSam + Picard's CreateSequenceDictionary
+* Pilon
+* pigz
+* fasta-splitter
+
+- Export the PERLIB:
+export PERL5LIB=/path/to/iCORN2:$PERL5LIB
+
+- Installation instructions:
+### Some dependencies through conda:
+echo -e "\n\n\nI'm installing iCORN2...\n\n\n"
+conda create -n iCORN2 -y -q -c conda-forge mamba
+conda activate iCORN2
+mamba install -y -q -c bioconda -c conda-forge -c anaconda parallel samtools pigz picard fasta-splitter snpomatic pilon gatk4
+
+### Manual bowtie2 binaries due to conflicts
+cd $(dirname $(which parallel))
+wget -q https://github.com/BenLangmead/bowtie2/releases/download/v2.5.0/bowtie2-2.5.0-linux-x86_64.zip
+unzip -qq bowtie2-2.5.0-linux-x86_64.zip && rm bowtie2-2.5.0-linux-x86_64.zip && ln -sf bowtie2-2.5.0-linux-x86_64/bowtie2 .
+
+### Links in the iCORN2 folder
+iCORN2_folder=/path/to/iCORN2
+cd $iCORN2_folder
+ln -sf $(which findknownsnps) findknownsnps
+ln -sf $(which fasta-splitter) fasta-splitter
+ln -sf $(which gatk) gatk
+ln -sf $(find $conda_envs_path/ILRA_env -name picard.jar | head -1) picard.jar
+ln -sf $(which picard) picard
+
+### JAVA versions required:
+echo -e "I'm installing iCORN2...Getting JAVA v1.7 required by iCORN2's SNP caller"
+wget -q https://files-cdn.liferay.com/mirrors/download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz && tar -xzf jdk-7u80-linux-x64.tar.gz && rm jdk-7u80-linux-x64.tar.gz
+cd $iCORN2_folder/jdk1.7.0_80/bin && chmod 775 * && cd $iCORN2_folder
+$iCORN2_folder/jdk1.7.0_80/bin/java -version
+echo -e "I'm installing iCORN2...Getting JAVA v1.8 required by GATK v4. This one must be in the PATH when executing iCORN2"
+wget -q https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz && tar -xzf OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz && rm OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz
+cd $iCORN2_folder/jdk8u302-b08/bin && chmod 775 *
+$iCORN2_folder/jdk8u302-b08/bin/java -version
+
