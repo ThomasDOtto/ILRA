@@ -1,0 +1,9 @@
+- Bash and Perl scripts
+- Dependencies:
+* GNU's parallel
+* BLAST: formatdb + megablast
+* Mummer4: promer + nucmer + delta-filter + show-coords
+* act
+
+- Export the PERLIB:
+export PERL5LIB=/path/to/ABACAS2:$PERL5LIB
