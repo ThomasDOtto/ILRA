@@ -2,14 +2,10 @@
 Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing of genomes) by cleaning and merging contigs, correcting homopolymer tracks and circularizing plastids. 
 
 ## Installation
-ILRA is based on several standard tools and novel scripts. We suggest three different alternatives for installation. Please choose one of:
+ILRA is based on several standard tools and novel scripts. We suggest two alternatives for installation. Please choose one of:
 
 
-1) Users without a bioinformatics setup can use our Linux virtual machine (https://q-r.to/ILRA_VM). You will need to install VirtualBox (https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html), set up Ubuntu x64 and mount the downloaded disc (.vdi). See the file 'VM.install.pdf' for further help. The username is 'bioinfo' and the password 'Glasgow2020'.
-Please be aware that the ILRA version within the VM may be outdated. Please double check and update if necessary following option 2.
-
-
-2) The fastest option is to use the folder 'external_software', which contain some of the required software, a script to install dependencies (mainly through miniconda), and a suggestion of the PATH to be set. To install and setup everything required to run ILRA, please execute:
+1) The fastest option is to use the folder 'external_software', which contain some of the required software, a script to install dependencies (mainly through miniconda), and a suggestion of the PATH to be set. To install and setup everything required to run ILRA, please execute:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA/external_software/ILRA/
@@ -21,7 +17,7 @@ This should work if you already have miniconda3 installed, and also install mini
 If not executing the light mode that skips the decontamination step in ILRA (by default, or argument '-m light'), many databases will be required and must be also installed. ILRA is going to try and do it automatically, or to provide instructions after a first execution.
 
 
-3) The last and less recommended option is to manually install the required software.
+2) The last and less recommended option is to manually install the required software.
 If you want to manually install the software, check out in the file external_software/ILRA/ILRA_installation.sh the list of required tools, which must be in the PATH when running. Please be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang statements (first line #!) so everything works in your system. The software and dependencies are automatically checked and the pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly. You may also need to make scripts executable ('chmod' command) and to make source or export so that the PATH variable and others are available for all scripts.
 
 
@@ -124,4 +120,4 @@ Please cite this reference and our Zenodo tag when using ILRA for your publicati
 ```
 
 ## Support
-Please report any [issue](https://github.com/ThomasDOtto/ILRA/issues) or [contact](joseluis.ruiz@csic.es) us to request support.
+Please report any [issue](https://github.com/ThomasDOtto/ILRA/issues) or [contact us](mailto:joseluis.ruiz@csic.es?subject=[GitHub]%20Source%20ILRA%20Support) to request support.
