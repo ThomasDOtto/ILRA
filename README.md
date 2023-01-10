@@ -93,7 +93,7 @@ The location of the downloaded databases to be used in the decontamination step 
 
 
 ## Comments
-We used ILRA to improve many genomes. The novel Plasmodium de novo assemblies included in the article are in the folder 'PlasmodiumGenomes', in Zenodo (doi:10.5281/zenodo.7516750) and NCBI (accession:XXX).
+We used ILRA to improve many genomes. The novel Plasmodium de novo assemblies included in the article are in the folder 'PlasmodiumGenomes', in Zenodo (doi: [10.5281/zenodo.7516750](https://doi.org/10.5281/zenodo.7516750) and NCBI (accession:XXX).
 
 ILRA is a continuation of the IPA project (https://github.com/ThomasDOtto/IPA). We felt to rename the tool as our updated version works with every long-read technology.
   
