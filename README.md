@@ -123,4 +123,5 @@ Please cite this reference and our Zenodo tag when using ILRA for your publicati
 }
 ```
 
-
+## Support
+Please report any [issue](https://github.com/ThomasDOtto/ILRA/issues) or [contact](joseluis.ruiz@csic.es) us to request support.
