@@ -82,13 +82,11 @@ usage: ILRA.sh [options]
 
 Parameters are not positional. If you did not provide a required parameter, the pipeline may exit or use default values if possible (check the help page above, the log after execution, or the 'Arguments / Variables' section in the ILRA main script 'ILRA.sh').
 
-In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output with the argument '-n' as name (the file 'name.ILRA.fasta').
+In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output with the argument '-n' as name (the file 'name.ILRA.fasta' in the folder provided by the argument '-o').
 
-Please do provide or not the arguments '-C' and '-I' to indicate whether to use short reads to perform error correction (iCORN2 / Pilon) and to find and and filter out overlapping contigs.
+Please do provide or not the arguments '-C' and '-I' to indicate whether to use short reads to perform error correction (iCORN2 / Pilon iteratively with argument '-i' as number of iterations), and to find and filter out overlapping contigs.
 
-Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) are going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon is used for short reads correction (default 'no') and the argument '-q' determines whether a final extra step for assessing the quality and completeness of the corrected assembly (QUAST, BUSCO, gathering sequences, analyzing telomeres...) is included (default 'yes').
-
-More arguments... XXX
+Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) is going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon is used for short reads correction (default 'no'), the argument '-q' determines whether a final extra step for assessing the quality and completeness of the corrected assembly (QUAST, BUSCO, gathering sequences, analyzing telomeres...) is included (default 'yes'), the argument 
 
 Finally, ILRA can be run in alternative modes (argument '-m'): 
 * '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive.
@@ -101,7 +99,7 @@ Finally, ILRA can be run in alternative modes (argument '-m'):
 ## Comments
 We used ILRA to improve many genomes. The novel Plasmodium de novo assemblies included in the article are in the folder 'PlasmodiumGenomes', in Zenodo (doi:10.5281/zenodo.7516750) and NCBI (accession:XXX).
 
-ILRA is a continuation of the IPA project (https://github.com/ThomasDOtto/IPA). We felt to rename the script as our updated version works with every long-read technology.
+ILRA is a continuation of the IPA project (https://github.com/ThomasDOtto/IPA). We felt to rename the tool as our updated version works with every long-read technology.
   
 Please cite this reference and our Zenodo tag when using ILRA for your publications:
 
