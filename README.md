@@ -80,20 +80,20 @@ usage: ILRA.sh [options]
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)
 ```
 
-Parameters are not positional. If you did not provide a required parameter, the pipeline may exit or use default values if possible (check the help page above, the log after execution, or the 'Arguments / Variables' section in the ILRA main script 'ILRA.sh').
+Parameters are not positional. If you did not provide a required parameter, the pipeline may exit or use default values if possible (check the help page above, the log after execution, or the 'Arguments / Variables' section in the ILRA main script 'ILRA.sh'). For example, if the argument '-f' is not provided, contigs shorter than 5,000 bp by default will be filtered out. 
 
 In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output with the argument '-n' as name (the file 'name.ILRA.fasta' in the folder provided by the argument '-o').
 
-Please do provide or not the arguments '-C' and '-I' to indicate whether to use short reads to perform error correction (iCORN2 / Pilon iteratively with argument '-i' as number of iterations), and to find and filter out overlapping contigs.
+Please do provide or not the arguments '-C', '-c', '-R' and '-I' to indicate whether to use short reads to perform error correction (iCORN2 / Pilon iteratively with argument '-i' as number of iterations), and to find and filter out overlapping contigs (if coverage by Illumina short reads is even, argument 'F'). Please do provide the long reads sequencing technology used with the argument '-L'.
 
-Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) is going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon is used for short reads correction (default 'no'), the argument '-q' determines whether a final extra step for assessing the quality and completeness of the corrected assembly (QUAST, BUSCO, gathering sequences, analyzing telomeres...) is included (default 'yes'), the argument 
+Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2 and the argument '-B' to perform blasting) is going to be skipped, and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST, or the presence of certain names in the contigs marking the sequences to circularize (arguments '-s' and '-S') would mean that Circlator is executed or not. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon is used for short reads correction (default 'no'), the argument '-q' determines whether a final extra step for assessing the quality and completeness of the corrected assembly (i.e., QUAST, BUSCO, gathering sequences, looking in the telomeres for the sequenes provided by the arguments '-e' and '-E'...) is included (default 'yes'), the argument 'M' is required to control the maximum RAM memory used, the argument '-l' activates a 'low memory' mode at the expense of more processing time, the arguments '-b', '-P' and '-A' provide the number of parts to split the sequences and simultaneously process in ILRA, iCORN2/Pilon and ABACAS2, respectively, and the argument '-t' provides the number of cores to be used when multithreading is possible.
 
 Finally, ILRA can be run in alternative modes (argument '-m'): 
 * '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive.
 * '-m blast': To perform decontamination and formatting for online submission based on blasting against databases, which would be less computationally expensive.
 * '-m both': To perform both. 
 * '-m light': To skip decontamination and expedite the process (default if argument not provided).
-
+The location of the downloaded databases to be used in the decontamination step should be provided with the argument '-D' and the location of the kraken2 database should be provided with the argument '-k'. The taxon id of the organism of interest that should be kept when filtering must be provided with the argument '-T'.
 
 
 ## Comments
