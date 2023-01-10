@@ -43,6 +43,7 @@ Please go through the output file 'out_ILRA_test_log.txt' to get the details on 
 Please refer to the help page for futher details:
 ```
 ILRA.sh -h
+
 usage: ILRA.sh [options]
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format, can be gzipped)
@@ -78,11 +79,12 @@ usage: ILRA.sh [options]
 		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)
 ```
-Parameters are not positional. If you did not provide a required parameter, the pipeline may exit or use default values if possible (check the help, the log after execution, or the 'Arguments / Variables' section in the ILRA main script 'ILRA.sh').
 
-In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output (the file 'Name.ILRA.fasta').
+Parameters are not positional. If you did not provide a required parameter, the pipeline may exit or use default values if possible (check the help page above, the log after execution, or the 'Arguments / Variables' section in the ILRA main script 'ILRA.sh').
 
-Please do provide or not the arguments '-C' and '-I' to indicate whether to use short reads to perform error correction (iCORN2) and to find overlapped contigs (ILRA.findoverlaps_ver3.pl).
+In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output with the argument '-n' as name (the file 'name.ILRA.fasta').
+
+Please do provide or not the arguments '-C' and '-I' to indicate whether to use short reads to perform error correction (iCORN2 / Pilon) and to find and and filter out overlapping contigs.
 
 Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2) are going to be skipped and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon is used for short reads correction (default 'no') and the argument '-q' determines whether a final extra step for assessing the quality and completeness of the corrected assembly (QUAST, BUSCO, gathering sequences, analyzing telomeres...) is included (default 'yes').
 
