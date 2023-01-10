@@ -43,6 +43,40 @@ Please go through the output file 'out_ILRA_test_log.txt' to get the details on 
 Please refer to the help page for futher details:
 ```
 ILRA.sh -h
+usage: ILRA.sh [options]
+		-h | -help # Type this to get help
+		-a | -assembly # Name of the long reads assembly to correct (FASTA format, can be gzipped)
+		-f | -filter_contig_size # Size threshold to filter the contigs (bp)
+		-F | -Do you have even Illumina reads coverage? If yes contigs in the long reads assembly not covered by Illumina short reads by a certain threshold will be filtered out ('no' /'yes' by default)
+		-I | -Illumina_reads # Root name of the paired-end Illumina reads (FASTQ format, must be gzipped and name root_1.fastq.gz and root_2.fastq.gz prior execution)
+		-C | -Correction_Illumina_reads # Whether illumina reads are provided and all steps of correction should be performed ('no' /'yes' by default)
+		-R | -Range_insert_size # Insert size range of the Illumina reads to use in mapping by SMALT (bp)
+		-i | -iterations_iCORN2 # Number of iterations to perform in iCORN2
+		-r | -reference # Reference file (full pathway, FASTA format)
+		-g | -gff_file # Reference annotation file (full pathway, GFF format)
+		-c | -corrected_reads # Corrected long reads for circulatization of the contigs containing the strings by -s and -S (FASTQ format, can be gzipped)
+		-s | -seq_circularize_1 # Regex pattern to find in the contig names and circularize
+		-S | -Seq_circularize_2 # Regex pattern to find in the contig names and circularize
+		-L | -Long_reads_technology # Technology of long reads sequencing (pb/ont)
+		-T | -Taxon_ID # NCBI taxon ID or a scientific name
+		-e | -ending_telomere_seq_1 # Telomere-associated sequence to search in the first strand
+		-E | -Ending_telomere_seq_2 # Telomere-associated sequence to search in the second strand
+		-o | -output # Output folder (absolute pathway)
+		-n | -name # Base name of the output file
+		-t | -threads # Number of cores to use in multithreaded steps
+		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run ('step1', 'step2a', 'step2b', 'step3', 'step4', 'step4i', 'step5', 'step6', or 'step7')
+		-D | -databases # Folder for storing the databases for the decontamination step (by default, 'databases' under ILRA main folder)
+		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('no' /'yes' by default)
+		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
+		-b | -block_size # Block size for parallel processing (by default, 10)
+		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
+		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
+		-A | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
+		-B | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
+		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
+		-M | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 200g=200GB used)
+		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
+		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)
 ```
 Parameters are not positional. If you did not provide a required parameter, the pipeline may exit or use default values if possible (check the help, the log after execution, or the 'Arguments / Variables' section in the ILRA main script 'ILRA.sh').
 
