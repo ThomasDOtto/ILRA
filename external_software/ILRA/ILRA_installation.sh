@@ -56,11 +56,10 @@ else
 fi
 conda_dir=$(dirname $conda_exec | sed 's,/bin,,g'); export PATH=$conda_dir/bin:$PATH
 echo -e "\n\n\nI'm downloading and installing several packages through conda in $conda_dir, so ILRA and other dependencies work...\n\n\n"
-echo -e "First mamba replacing conda to reduce time, and then:\npigz\ngawk\ncurl\nopenmp\nparallel\nkraken2\nkrakentools\ntaxonkit\nblast-legacy\nblast\nsamtools\nsmalt\npyfastaq\nminimap2\nwinnowmap\nassembly-stats\nfastqc\nbedtools\npilon\nbwakit\nspades\nmummer4\nprodigal\nrecentrifuge\nhmmer\ngatk4\npicard\nplotsr\nseqkit\nfasta-splitter\nsnpomatic\ngit\n\n\n"
-conda create -n ILRA_env -y -q 
-conda_envs_path=$(conda env list | egrep ILRA_env$ | sed 's,ILRA_env,,g' | sed 's/^ *//g' | tail -1)
+echo -e "First mamba replacing conda to reduce time, and then populating the environment ILRA_env with:\npigz\ngawk\ncurl\nopenmp\nparallel\nkraken2\nkrakentools\ntaxonkit\nblast-legacy\nblast\nsamtools\nsmalt\npyfastaq\nminimap2\nwinnowmap\nassembly-stats\nfastqc\nbedtools\npilon\nbwakit\nspades\nmummer4\nprodigal\nrecentrifuge\nhmmer\ngatk4\npicard\nplotsr\nseqkit\nfasta-splitter\nsnpomatic\ngit\n\n\n"
+conda_envs_path=$(dirname $conda_exec | sed 's,/bin,/envs,g')
 echo -e "\n\n\nThe pathway to conda environments is $conda_envs_path...\n\n\n"
-echo -e "\n\n\nI'm populating the environment ILRA_env...\n\n\n"
+conda create -n ILRA_env -y -q 
 conda install -n ILRA_env -y -q -c conda-forge mamba
 source $conda_envs_path/ILRA_env/bin/activate
 mamba install -y -q -c conda-forge pigz gawk curl openmp parallel
