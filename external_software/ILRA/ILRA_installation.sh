@@ -57,7 +57,7 @@ fi
 conda_dir=$(dirname $conda_exec | sed 's,/bin,,g'); export PATH=$conda_dir/bin:$PATH
 echo -e "\n\n\nI'm downloading and installing several packages through conda in $conda_dir...\n\n\n"
 conda create -n ILRA_env -y -q -c conda-forge mamba
-conda_envs_path=$(conda env list | egrep ILRA_env$ | sed 's,ILRA_env,,g' | sed 's/^ *//g')
+conda_envs_path=$(conda env list | egrep ILRA_env$ | sed 's,ILRA_env,,g' | sed 's/^ *//g' | grep $EXTERNAL_SOFTWARE_DIR)
 echo -e "\n\n\nThe pathway to conda environments is $conda_envs_path...\n\n\n"
 echo -e "\n\n\nI'm populating the environment ILRA_env...\n\n\n"
 source $conda_envs_path/ILRA_env/bin/activate
