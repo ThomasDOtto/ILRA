@@ -56,11 +56,12 @@ else
 fi
 conda_dir=$(dirname $conda_exec | sed 's,/bin,,g'); export PATH=$conda_dir/bin:$PATH
 echo -e "\n\n\nI'm downloading and installing several packages through conda in $conda_dir...\n\n\n"
-conda create -n ILRA_env -y -q -c conda-forge mamba
+conda create -n ILRA_env -y -q 
 conda_envs_path=$(conda env list | egrep ILRA_env$ | sed 's,ILRA_env,,g' | sed 's/^ *//g' | grep $EXTERNAL_SOFTWARE_DIR)
 echo -e "\n\n\nThe pathway to conda environments is $conda_envs_path...\n\n\n"
 echo -e "\n\n\nI'm populating the environment ILRA_env...\n\n\n"
 source $conda_envs_path/ILRA_env/bin/activate
+conda install -y -q -c conda-forge mamba
 mamba install -y -q -c conda-forge pigz gawk curl openmp parallel
 mamba install -y -q -c bioconda -c conda-forge -c anaconda kraken2==2.1.2 krakentools taxonkit blast-legacy blast samtools==1.16.1 smalt pyfastaq minimap2 winnowmap assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge hmmer gatk4 picard plotsr seqkit fasta-splitter snpomatic git
 rm -rf $(dirname $conda_envs_path)/pkgs/*;rm -rf $conda_envs_path/ILRA_env/pkgs/*  # Conda creates a huge amount of intermediate files when installing packages, and these can be removed afterwards
@@ -71,7 +72,7 @@ echo -e "\n\n\nThe JAVA options used by Pilon by default may be not appropriate 
 
 #### Install circlator
 echo -e "\n\n\nI'm installing circlator...\n\n\n"
-$conda_envs_path/ILRA_env/bin/pip3 install circlator
+$conda_envs_path/ILRA_env/bin/pip3 -q install circlator
 # Fix canu and nucmer detection by circlator:
 sed -i 's,Canu,canu,g' $(find $conda_envs_path/ILRA_env -name external_progs.py)
 sed -i "s,'nucmer': '3.1','nucmer': '0.0',g" $(find $conda_envs_path/ILRA_env -name external_progs.py)
@@ -87,7 +88,7 @@ unzip -qq bowtie2-2.5.0-linux-x86_64.zip && rm bowtie2-2.5.0-linux-x86_64.zip &&
 #### Install jvarkit:
 echo -e "\n\n\nI'm installing jvarkit...\n\n\n"
 git clone -q "https://github.com/lindenb/jvarkit.git"; JAVA_HOME=$conda_envs_path/ILRA_env
-cd jvarkit && ./gradlew samfixcigar && mv dist/samfixcigar.jar ../samfixcigar.jar
+cd jvarkit && ./gradlew -q samfixcigar && mv dist/samfixcigar.jar ../samfixcigar.jar
 
 #### Install BUSCO (it requires outdated dependencies, so new environment):
 echo -e "\n\n\nI'm installing BUSCO...\n\n\n"
