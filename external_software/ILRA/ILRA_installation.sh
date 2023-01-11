@@ -55,13 +55,14 @@ else
    conda_exec=$(which conda)
 fi
 conda_dir=$(dirname $conda_exec | sed 's,/bin,,g'); export PATH=$conda_dir/bin:$PATH
-echo -e "\n\n\nI'm downloading and installing several packages through conda in $conda_dir...\n\n\n"
+echo -e "\n\n\nI'm downloading and installing several packages through conda in $conda_dir, so ILRA and other dependencies work...\n\n\n"
+echo -e "First mamba replacing conda to reduce time, and then\npigz\ngawk\ncurl\nopenmp\nparallel\nkraken2\nkrakentools\ntaxonkit\nblast-legacy\nblast\nsamtools\nsmalt\npyfastaq\nminimap2\nwinnowmap\nassembly-stats\nfastqc\nbedtools\npilon\nbwakit\nspades\nmummer4\nprodigal\nrecentrifuge\nhmmer\ngatk4\npicard\nplotsr\nseqkit\nfasta-splitter\nsnpomatic\ngit"
 conda create -n ILRA_env -y -q 
-conda_envs_path=$(conda env list | egrep ILRA_env$ | sed 's,ILRA_env,,g' | sed 's/^ *//g' | grep $EXTERNAL_SOFTWARE_DIR)
+conda_envs_path=$(conda env list | egrep ILRA_env$ | sed 's,ILRA_env,,g' | sed 's/^ *//g' | tail -1)
 echo -e "\n\n\nThe pathway to conda environments is $conda_envs_path...\n\n\n"
 echo -e "\n\n\nI'm populating the environment ILRA_env...\n\n\n"
+conda install -n ILRA_env -y -q -c conda-forge mamba
 source $conda_envs_path/ILRA_env/bin/activate
-conda install -y -q -c conda-forge mamba
 mamba install -y -q -c conda-forge pigz gawk curl openmp parallel
 mamba install -y -q -c bioconda -c conda-forge -c anaconda kraken2==2.1.2 krakentools taxonkit blast-legacy blast samtools==1.16.1 smalt pyfastaq minimap2 winnowmap assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge hmmer gatk4 picard plotsr seqkit fasta-splitter snpomatic git
 rm -rf $(dirname $conda_envs_path)/pkgs/*;rm -rf $conda_envs_path/ILRA_env/pkgs/*  # Conda creates a huge amount of intermediate files when installing packages, and these can be removed afterwards
