@@ -21,12 +21,12 @@ If not executing the light mode that skips the decontamination step in ILRA (by 
 If you want to manually install the software, check out in the file external_software/ILRA/ILRA_installation.sh the list of required tools, which must be in the PATH when running. Please be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang statements (first line #!) so everything works in your system. The software and dependencies are automatically checked and the pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly. You may also need to make scripts executable ('chmod' command) and to make source or export so that the PATH variable and others are available for all scripts.
 
 
-## Quick start
+## Quick start / Minimal examples
 ```
 source ILRA/external_software/ILRA/path_to_source # To set up the PATH if you have followed option 2 for installation above
 cd ILRA/test_data
 # 'Light' mode skipping decontamination:
-ILRA.sh -a assembly_Pf_test.fasta -o out_ILRA_test -c corrected_reads_Pf_test_subset.fastq.gz -n test -r PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I Illumina_short_reads_Pf_test_subset -t 4 -g PlasmoDB-50_Pfalciparum3D7.gff -L pb -q no 2>&1 | tee -a out_ILRA_test_log.txt
+ILRA.sh -a assembly_Pf_test.fasta -o out_ILRA_test -c corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I Illumina_short_reads_Pf_test_subset -t 4 -g PlasmoDB-50_Pfalciparum3D7.gff -L pb -q no 2>&1 | tee -a out_ILRA_test_log.txt
 # 'Both' mode with decontamination based on kraken2 and blast:
 ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test_m_both -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -m both -q no 2>&1 | tee -a $PWD/test_data/out_ILRA_test_m_both_log.txt
 ```
