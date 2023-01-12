@@ -28,7 +28,7 @@ cd ILRA/test_data
 # 'Light' mode skipping decontamination:
 ILRA.sh -a assembly_Pf_test.fasta -o out_ILRA_test -c corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I Illumina_short_reads_Pf_test_subset -t 4 -g PlasmoDB-50_Pfalciparum3D7.gff -L pb -q no 2>&1 | tee -a out_ILRA_test_log.txt
 # 'Both' mode with decontamination based on kraken2 and blast:
-ILRA.sh -a $PWD/test_data/assembly_Pf_test.fasta -o $PWD/test_data/out_ILRA_test_m_both -c $PWD/test_data/corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I $PWD/test_data/Illumina_short_reads_Pf_test_subset -t 4 -g $PWD/test_data/PlasmoDB-50_Pfalciparum3D7.gff -L pb -m both -q no 2>&1 | tee -a $PWD/test_data/out_ILRA_test_m_both_log.txt
+ILRA.sh -a assembly_Pf_test.fasta -o out_ILRA_test -c corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I Illumina_short_reads_Pf_test_subset -t 4 -g PlasmoDB-50_Pfalciparum3D7.gff -L pb -q no -m both 2>&1 | tee -a out_ILRA_test_mode_both_log.txt
 ```
 The test run will take around 5 minutes in 'light' mode and around 10 minutes in 'both' mode using 4 cores.
 
