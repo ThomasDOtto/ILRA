@@ -17,7 +17,7 @@ This should work if you already have miniconda3 installed, and also install mini
 If not executing the light mode that skips the decontamination step in ILRA (by default, or argument '-m light'), many databases will be required and must be also installed. ILRA is going to try and do it automatically, or to provide instructions after a first execution.
 
 
-2) The last and less recommended option is to manually install the required software.
+2) The less recommended option is to manually install the required software.
 If you want to manually install the software, check out in the file external_software/ILRA/ILRA_installation.sh the list of required tools, which must be in the PATH when running. Please be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang statements (first line #!) so everything works in your system. The software and dependencies are automatically checked and the pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly. You may also need to make scripts executable ('chmod' command) and to make source or export so that the PATH variable and others are available for all scripts.
 
 
