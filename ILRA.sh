@@ -332,7 +332,7 @@ if [[ $mode == "blast" || $mode == "taxon" || $mode == "both" ]]; then
 	echo -e "\nPLEASE note some local databases for the decontamination step (kraken2 and blast according to DDBJ/ENA/Genbank requirements) are needed"
 	echo -e "These databases are large, particularly the kraken2 database, so please be aware that the RAM memory usage at the step 6 of ILRA may reach hundreds of GBs. Rerun with '-m light' or '-m blast' to skip if not acceptable"
 	echo -e "ILRA is now going to check or give you instructions so the databases are downloaded and placed in the corresponding folders"
-	if [[ -f $databases/taxdump/names.dmp ]] && [[ -f $databases/taxdump/nodes.dmp ]] && [ "$(find $databases -name hash.k2d | wc -l)" -gt 0 ]; then
+	if [[ -f $databases/taxdump/names.dmp ]] && [[ -f $databases/taxdump/nodes.dmp ]] && [ "$(find -L $databases -name hash.k2d | wc -l)" -gt 0 ]; then
 		echo -e "\nGood, ILRA is detecting all of the required databases for decontamination based on taxonomic classification in "$databases"\n"
 	else
 		echo -e "\nILRA will exit until these steps are performed. Please note 'wget' may not complete the download and then uncompressing would give errors. You would need to remove any incomplete file and restart download"
