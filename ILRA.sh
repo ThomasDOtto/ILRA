@@ -43,7 +43,7 @@ for argument in $options; do
 		-t | -threads # Number of cores to use in multithreaded steps
 		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run ('step1', 'step2a', 'step2b', 'step3', 'step4', 'step4i', 'step5', 'step6', or 'step7')
 		-D | -databases # Folder for storing the databases for the decontamination step (by default, 'databases' under ILRA main folder)
-		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('no' /'yes' by default)
+		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('yes' / 'no' by default)
 		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
 		-b | -block_size # Block size for parallel processing (by default, 10)
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
@@ -212,7 +212,7 @@ else
 fi
 
 if [ -z "$kraken2_fast" ]; then
-	kraken2_fast="yes"
+	kraken2_fast="no"
 fi
 if [ -z "$kraken2_databases" ]; then
 	kraken2_databases="standard_eupathdb_48_kraken2_db"
