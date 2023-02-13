@@ -59,7 +59,7 @@ conda_envs_path=$(dirname $conda_exec | sed 's,/bin,/envs,g')
 echo -e "\n\n\nThe pathway to conda environments is $conda_envs_path...\n\n\n"
 conda create -n ILRA_env -y -q 
 conda install -n ILRA_env -y -q -c conda-forge mamba
-source $conda_envs_path/ILRA_env/bin/activate
+eval "$(conda shell.bash hook)"; conda activate ILRA_env
 mamba install -y -q -c conda-forge pigz gawk curl openmp parallel
 mamba install -y -q -c bioconda -c conda-forge -c anaconda kraken2==2.1.2 krakentools taxonkit blast-legacy blast samtools==1.16.1 smalt pyfastaq minimap2 winnowmap assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge hmmer gatk4 picard plotsr seqkit fasta-splitter snpomatic git
 rm -rf $(dirname $conda_envs_path)/pkgs/*;rm -rf $conda_envs_path/ILRA_env/pkgs/*  # Conda creates a huge amount of intermediate files when installing packages, and these can be removed afterwards
