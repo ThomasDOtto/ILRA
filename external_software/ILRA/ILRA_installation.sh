@@ -40,13 +40,11 @@ if [ "$conda_install" == "yes" ]; then
 	echo -e "\nProceeding with conda installation\n"
 	cd $EXTERNAL_SOFTWARE_DIR && wget -q "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	mkdir -p Miniconda3 && bash Miniconda3-latest-Linux-x86_64.sh -b -f -s -p $EXTERNAL_SOFTWARE_DIR/Miniconda3 && rm Miniconda3-latest-Linux-x86_64.sh
+	if [[ ! -f $EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda ]]; then
+		echo "Installation of Miniconda3 failed, please check manually... Exiting..."
+   		exit 1
+	fi
 fi
-
-if [[ ! -f $EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda ]]; then
-   echo "Installation of Miniconda3 failed or still not in the PATH, please check manually... Exiting..."
-   exit 1
-fi
-
 
 #### Install packages via conda:
 if [ "$conda_install" == "yes" ]; then
