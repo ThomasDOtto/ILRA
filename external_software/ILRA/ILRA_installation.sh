@@ -52,7 +52,7 @@ if [ "$conda_install" == "yes" ]; then
 else
    conda_exec=$(which conda)
 fi
-conda_dir=$(dirname $conda_exec | sed 's,/bin,,g'); export PATH=$conda_dir/bin:$PATH
+conda_dir=$(dirname $conda_exec | sed 's,/bin$,,g'); export PATH=$conda_dir/bin:$PATH
 echo -e "\n\n\nI'm downloading and installing several packages through conda in $conda_dir, so ILRA and other dependencies work...\n\n\n"
 echo -e "First mamba replacing conda to reduce time, and then populating the environment ILRA_env with:\npigz\ngawk\ncurl\nopenmp\nparallel\nkraken2\nkrakentools\ntaxonkit\nblast-legacy\nblast\nsamtools\nsmalt\npyfastaq\nminimap2\nwinnowmap\nassembly-stats\nfastqc\nbedtools\npilon\nbwakit\nspades\nmummer4\nprodigal\nrecentrifuge\nhmmer\ngatk4\npicard\nplotsr\nseqkit\nfasta-splitter\nsnpomatic\ngit\n\n\n"
 conda_envs_path=$(dirname $conda_exec | sed 's,/bin$,/envs,g')
