@@ -13,20 +13,28 @@ iternum=$6
 ### Create the bam file:
 java_memory_2=${java_memory::-1} # Excessive use of RAM by the parallel execution of ReorderSam, so try and limit within the user specified range
 # 1.25X the size of the blocks in the parallel execution of this script to make sure RAM is not filled and jobs can accumulate
-if [ $seq_parts -eq 0 ]; then
-	#java_memory_reorder_sam="$((java_memory_2 / (( parallel_block_size * 5/4 )) ))"g
-	java_memory_reorder_sam="$((java_memory_2 / (( parallel_block_size )) ))"g
+if [[ $seq_parts -eq 0 ]]; then
+	#java_memory_reorder_sam="$((java_memory_2 / (( parallel_block_size )) ))"g
+	java_memory_reorder_sam="$(echo "scale=2; $java_memory_2 / ($parallel_block_size * (5 / 4))" | bc | sed 's,\..*,,g')"g
+	echo $parallel_block_size
+#else
+#	java_memory_reorder_sam="$((java_memory_2 / seq_parts ))"g
+#	echo "Parts of the sequence: $seq_parts"
+fi
+
+if [ ! -z "$length_arr" ]; then
+	java_memory_reorder_sam="$(echo "scale=2; $java_memory_2 / ($length_arr * (5 / 4))" | bc | sed 's,\..*,,g')"g
+	echo -e "\nParts of the sequence: $length_arr"
 else
-	java_memory_reorder_sam="$((java_memory_2 / seq_parts ))"g
+	echo "Sequences not found, exiting... please check manually"
+	exit 1
 fi
 
-if [ ! -z "$length_arr" ] ; then
-	java_memory_reorder_sam="$((java_memory_2 / length_arr ))"g
-fi
-
+echo -e "\nPlease manually tweak the number of blocks for parallel processing or the number of contigs/sequences splitted if running into memory issues (e.g. incomplete files, freezing...) or using below a lower max value than min value:"
+echo -e "\nReadjusting java memory options: -Xms5g -Xmx$java_memory_reorder_sam\n"
 export _JAVA_OPTIONS="-Xms5g -Xmx$java_memory_reorder_sam"
 java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -Djava.io.tmpdir=../tmp_dir -jar $ICORN2_HOME/picard.jar ReorderSam -INPUT out.sorted.markdup.bam -OUTPUT $genome.bam -SEQUENCE_DICTIONARY ${genome%.*}.dict -REFERENCE_SEQUENCE $genome -S true -VERBOSITY WARNING -COMPRESSION_LEVEL 1 -CREATE_INDEX true -TMP_DIR ../tmp_dir
-
+echo -e "\nReadjusting java memory options: -Xms5g -Xmx$java_memory\n"
 export _JAVA_OPTIONS="-Xms5g -Xmx$java_memory"
 
 aln=$genome.bam
@@ -46,9 +54,9 @@ if (( genome_size < maxsize)); then
 	mkdir -p $genome.out
 	### Call the SNP caller
 	echo -e "\nCalling the SNP caller... $genome\n"
-	$ICORN2_HOME/jdk1.7.0_80/bin/java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T RealignerTargetCreator -I $aln -o $genome.out/gatk_variants.realign.${genome%.*}.intervals -R $genome -nt $cores &> $genome.out/gatk.1.${genome%.*}.log_out.txt
-	$ICORN2_HOME/jdk1.7.0_80/bin/java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T IndelRealigner -I $aln -o $genome.out/gatk.realigned.${genome%.*}.bam -targetIntervals $genome.out/gatk_variants.realign.${genome%.*}.intervals -R $genome &> $genome.out/gatk.2.${genome%.*}.log_out.txt
-	$ICORN2_HOME/jdk1.7.0_80/bin/java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T UnifiedGenotyper -I $genome.out/gatk.realigned.${genome%.*}.bam -pnrm POOL -o $genome.out/gatk_variants.variants.${genome%.*}.vcf -ploidy 1 -glm POOLBOTH -R $genome -nt $cores &> $genome.out/gatk.3.${genome%.*}.log_out.txt
+	$ICORN2_HOME/jdk1.7.0_80/bin/java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -Djava.io.tmpdir=../tmp_dir -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T RealignerTargetCreator -I $aln -o $genome.out/gatk_variants.realign.${genome%.*}.intervals -R $genome -nt $cores &> $genome.out/gatk.1.${genome%.*}.log_out.txt
+	$ICORN2_HOME/jdk1.7.0_80/bin/java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -Djava.io.tmpdir=../tmp_dir -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T IndelRealigner -I $aln -o $genome.out/gatk.realigned.${genome%.*}.bam -targetIntervals $genome.out/gatk_variants.realign.${genome%.*}.intervals -R $genome &> $genome.out/gatk.2.${genome%.*}.log_out.txt
+	$ICORN2_HOME/jdk1.7.0_80/bin/java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -Djava.io.tmpdir=../tmp_dir -jar $ICORN2_HOME/GenomeAnalysisTK.jar -T UnifiedGenotyper -I $genome.out/gatk.realigned.${genome%.*}.bam -pnrm POOL -o $genome.out/gatk_variants.variants.${genome%.*}.vcf -ploidy 1 -glm POOLBOTH -R $genome -nt $cores &> $genome.out/gatk.3.${genome%.*}.log_out.txt
 	rm $genome.out/gatk.realigned.${genome%.*}.bam $genome.out/gatk.realigned.${genome%.*}.bai $aln ${aln%.*}.bai
 	echo -e "\nSNP caller DONE... $genome\n"
 

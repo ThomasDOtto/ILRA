@@ -67,7 +67,7 @@ if [ $cores_split -eq 0 ]; then
 fi
 
 export low_mem_mode
-mkdir -p tmp_dir # make local temporal dir to store gatk and picard
+mkdir -p tmp_dir; export TMPDIR=$PWD/tmp_dir # make local temporal dir to store gatk and picard, amongst other temps...
 
 ### Setting up the reference sequences...
 refRoot=$(echo $referenceORG | perl -nle '@ar=split(/\//); print $ar[($ar[scalar(@ar)]-1)]') # For getting a copy of the reference in the folder, without | in the name and single line:
@@ -77,7 +77,7 @@ fi
 
 
 ### Decompressing the Illumina short reads...
-# This may be time-consuming, but unfortunately it is mandatory, since SNP-o-matic in the iCORN2's correction step does not allow gzipped .fastq.
+# This may be time-consuming, but unfortunately it is mandatory, since SNP-o-matic in the iCORN2's correction step does not allow gzipped .fastq
 # Since it's supossed to only use a core, decompression of both sets of pairs can be done simultaneously...
 if [ "$(find $PWD -name "*.fastq" | wc -l)" -eq 0 ]; then
 	parallel --verbose --joblog processing_decompressing_log_out_2.txt -j 2 "pigz -dfc -p $cores $readRoot\_{}.fastq.gz > $PWD/"${readRoot##*/}"\_{}.fastq" ::: {1..2} &> processing_decompressing_log_out.txt
@@ -150,7 +150,7 @@ for ((i=$start;$i<=$end;i++)); do
 	else
 		echo "None"
 	fi
-	echo -e "\n So, Pilon is going to be used for the following files instead of iCORN2: (the final output sequences would be corrected, but the iCORN2 statistics would be incomplete because not accouting for the Pilon-corrected sequences)"
+	echo -e "\nSo, Pilon is going to be used for the following files instead of iCORN2: (the final output sequences would be corrected, but the iCORN2 statistics would be incomplete because not accouting for the Pilon-corrected sequences)"
 	for f in $(ls -l | grep "splitter-part" | sed 's,  *, ,g' | cut -d " " -f5); do
 		if (( f > maxsize)); then
 			echo $f >> larger_contigs3.txt
@@ -211,7 +211,7 @@ for ((i=$start;$i<=$end;i++)); do
 	if [ $low_mem_mode == "no" ]; then
 # Executing in parallel each subset of the sequences
 		echo -e "Cores to be used simultaneously to process each split sequence: $cores_split"
-		echo -e "\nProcessing simultaneously splitted sequences in blocks of at most $parallel_block_size elements, please change the variable 'blocks_size (-b)' or 'parts_icorn2_split' (-P) in the ILRA.sh main script if required, for example because less cores available or running into memory issues..."
+		echo -e "\nProcessing simultaneously splitted sequences in blocks of at most $parallel_block_size elements, please change the variable 'blocks_size (-b)' or 'parts_icorn2_split' (-P) in the ILRA.sh main script if required, for example because less cores available or running into memory issues, freezing, incomplete files..."
 		echo -e "\nPlease be aware that temp files adding up to hundreds of GBs can be created during the parallel execution of iCORN2...\n"
 
 		#java_memory_2=${java_memory::-1} # Excessive use of RAM by the parallel execution of ReorderSam, so try and limit within the user specified range
@@ -262,7 +262,7 @@ for ((i=$start;$i<=$end;i++)); do
 		#done
 		# This block was working with a previous version, which performed all the ReorderSam before the correction. However, this accumulated a lot of bam files, requesting too much space somethimes. So I incorporated the ReorderSam execution within the icorn2.snpcall.correction.sh
 		
-		parallel --verbose --joblog processing_split_parts_correction_icorn2_log_out_2.txt -j $((parallel_block_size * 2)) icorn2.snpcall.correction.sh {} $cores_split $readRoot_uncompressed $fragmentSize {}.$(($i+1)) $i ::: ${arr[@]} &> processing_split_parts_correction_icorn2_log_out.txt
+		parallel --verbose --joblog processing_split_parts_correction_icorn2_log_out_2.txt -j $parallel_block_size icorn2.snpcall.correction.sh {} $cores_split $readRoot_uncompressed $fragmentSize {}.$(($i+1)) $i "&>" {}.snpcall.correction.log ::: ${arr[@]} &> processing_split_parts_correction_icorn2_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_split_parts_correction_icorn2_log_out_2.txt > tmp && mv tmp processing_split_parts_correction_icorn2_log_out_2.txt
 		# 2X the size of the blocks because it's not very intensive and snp-o-matic only uses one core, so it can accumulate
 		
@@ -272,7 +272,7 @@ for ((i=$start;$i<=$end;i++)); do
 			echo $(awk '$9 == 9 {print}' processing_split_parts_correction_icorn2_log_out_2.txt | awk '{ print $11 }')
 			arr=($(awk '$9 == 9 {print}' processing_split_parts_correction_icorn2_log_out_2.txt | awk '{ print $11 }')); length_arr=${#arr[@]}; export length_arr
 			cores_split=$((cores / length_arr))
-			parallel --verbose --joblog processing_split_parts_correction_icorn2_log_out_2_2.txt -j $((parallel_block_size * 2)) icorn2.snpcall.correction.sh {} $cores_split $readRoot_uncompressed $fragmentSize {}.$(($i+1)) $i ::: ${arr[@]} &> processing_split_parts_correction_icorn2_log_out2.txt
+			parallel --verbose --joblog processing_split_parts_correction_icorn2_log_out_2_2.txt -j $parallel_block_size icorn2.snpcall.correction.sh {} $cores_split $readRoot_uncompressed $fragmentSize {}.$(($i+1)) $i "&>" {}.snpcall.correction.log ::: ${arr[@]} &> processing_split_parts_correction_icorn2_log_out2.txt
 			awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_split_parts_correction_icorn2_log_out_2_2.txt > tmp && mv tmp processing_split_parts_correction_icorn2_log_out_2_2.txt
 		fi
 	elif [ $low_mem_mode == "yes" ]; then
