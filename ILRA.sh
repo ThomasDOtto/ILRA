@@ -156,8 +156,7 @@ fi
 if [ -z "$contigs_illumina_filter" ]; then
 	contigs_illumina_filter="yes"
 elif [ $contigs_illumina_filter == "no" ]; then
-	echo -e "You have deactivated correction based on short reads..."
-	contigs_illumina_filter=""
+	echo -e "You have deactivated correction based on using short reads to find and remove overlapping contigs..."	
 fi
 
 if [ -z "$blocks_size" ]; then
@@ -504,10 +503,12 @@ if [[ $debug == "all" || $debug == "step2b" ]]; then
 		fi
 	# Cleaned assembly
 		if [ $contigs_illumina_filter == "yes" ]; then
+			echo -e "\nRemoving overlapping contigs based on Illumina short reads...\n"
 			echo -e "\n### Contigs not covered: (ILRA.findoverlaps_ver3.pl)" >> ../Excluded.contigs.fofn
 			cat notcovered_OUT.fasta | awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} $2 {print ">"$0}' | grep ">" >> ../Excluded.contigs.fofn
 			cp mergedseq_OUT.fasta 03.assembly.fa
 		else
+			echo -e "\nSkipping removing overlapping contigs based on Illumina short reads because of uneven coverage...\n"
 			cat mergedseq_OUT.fasta notcovered_OUT.fasta > 03.assembly.fa
 		fi
 		rm $(find $dir/2.MegaBLAST/ -name "first.bam*") $(find $dir/2.MegaBLAST/ -name "Genome*") # Cleaning
