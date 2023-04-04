@@ -1,13 +1,13 @@
 #!/bin/bash
 
-#### This is a wrapper script to install all ILRA dependencies available through conda, and others that are external, such as iCORN2.
+echo -e "\nThis is a wrapper script to install and link all ILRA dependencies available through conda (multiple environments due to dependency conflicts) and others external, such as iCORN2, jvarkit, outdated java...\n"
 
 #### Get the directory of the script:
 EXTERNAL_SOFTWARE_DIR=$(dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ))
 echo "The folder with external software is $EXTERNAL_SOFTWARE_DIR"
 
 #### Setting permissions of executables:
-echo -e "\n\nSetting permissions of executables...\n\n"
+echo -e "\n\nSetting permissions of executables in $EXTERNAL_SOFTWARE_DIR...\n\n"
 # (https://github.com/oXis/gtool)
 chmod 775 $EXTERNAL_SOFTWARE_DIR/gtool.py
 # ftp://ftp.ncbi.nlm.nih.gov/blast/demo/vecscreen
@@ -22,11 +22,9 @@ cd $EXTERNAL_SOFTWARE_DIR/ABACAS2 && chmod 775 *
 # (https://sourceforge.net/projects/icorn/files/, but the version here is updated and better optimized)
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2 && chmod 775 *
 
-
-#### Download and install Miniconda:
-echo -e "\n\nInstalling dependencies through conda...\n\n"
+#### Download and install Miniconda if required:
 export conda_install=""
-type conda >/dev/null 2>&1 || { echo >&2 "Conda is required to be installed... and is not being found in the PATH. Conda installation within ILRA folder is going to happen in 30 seconds. Please kill the process and correct the PATH if not necessary, otherwise let the installation continue..."; export conda_install="yes"; }
+type conda >/dev/null 2>&1 || { echo >&2 "Conda is required to be installed... and is not being found in the PATH. Conda installation within ILRA folder (external_software/miniconda3) is going to happen in 30 seconds. Please kill the process and correct the PATH if not necessary, otherwise let the installation continue..."; export conda_install="yes"; }
 secs=$((1 * 30))
 while [ $secs -gt 0 ]; do
    echo -ne "$secs\033[0K\r"
@@ -35,101 +33,46 @@ while [ $secs -gt 0 ]; do
 done
 
 if [ "$conda_install" == "yes" ]; then
-	echo -e "\n\n\nI'm downloading and installing an updated copy of Miniconda3 in the folder external_software/miniconda3 to create ILRA environment\n\n\n"
+	echo -e "\n\n\nI'm downloading and installing an updated copy of Miniconda3 in the folder external_software/miniconda3 to create ILRA environments\n\n\n"
 	echo -e "\nIf for some reason an outdated python or conda is required in your system, please kill this process and and go to https://repo.anaconda.com/miniconda/ to download and install manually the corresponding Linux installer\n"
 	echo -e "\nProceeding with conda installation\n"
 	cd $EXTERNAL_SOFTWARE_DIR && wget -q "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
-	mkdir -p Miniconda3 && bash Miniconda3-latest-Linux-x86_64.sh -b -f -s -p $EXTERNAL_SOFTWARE_DIR/Miniconda3 && rm Miniconda3-latest-Linux-x86_64.sh
-	if [[ ! -f $EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda ]]; then
+	mkdir -p miniconda3 && bash Miniconda3-latest-Linux-x86_64.sh -b -f -s -p $EXTERNAL_SOFTWARE_DIR/miniconda3 && rm Miniconda3-latest-Linux-x86_64.sh
+	if [[ ! -f $EXTERNAL_SOFTWARE_DIR/miniconda3/bin/conda ]]; then
 		echo "Installation of Miniconda3 failed, please check manually... Exiting..."
-   		exit 1
+   	exit 1
+	else
+		export PATH=$EXTERNAL_SOFTWARE_DIR/miniconda3/bin:$PATH
 	fi
 fi
 
 #### Install packages via conda:
-if [ "$conda_install" == "yes" ]; then
-   conda_exec="$EXTERNAL_SOFTWARE_DIR/Miniconda3/bin/conda"
-else
-   conda_exec=$(which conda)
-fi
-conda_dir=$(dirname $conda_exec | sed 's,/bin$,,g'); export PATH=$conda_dir/bin:$PATH
-echo -e "\n\n\nI'm downloading and installing several packages through conda in $conda_dir, so ILRA and other dependencies work...\n\n\n"
-echo -e "First mamba replacing conda to reduce time, and then populating the environment ILRA_env with:\npigz\ngawk\ncurl\nopenmp\nparallel\nkraken2\nkrakentools\ntaxonkit\nblast-legacy\nblast\nsamtools\nsmalt\npyfastaq\nminimap2\nwinnowmap\nassembly-stats\nfastqc\nbedtools\npilon\nbwakit\nspades\nmummer4\nprodigal\nrecentrifuge\nhmmer\ngatk4\npicard\nplotsr\nseqkit\nfasta-splitter\nsnpomatic\ngit\n\n\n"
+conda_exec=$(which conda)
+conda_dir=$(dirname $conda_exec | sed 's,/bin$,,g')
 conda_envs_path=$(dirname $conda_exec | sed 's,/bin$,/envs,g')
-echo -e "\n\n\nThe pathway to conda environments is $conda_envs_path...\n\n\n"
-conda create -n ILRA_env -y -q 
-conda install -n ILRA_env -y -q -c conda-forge mamba
-eval "$(conda shell.bash hook)"; conda activate ILRA_env
-mamba install -y -q -c conda-forge pigz gawk curl openmp parallel
-mamba install -y -q -c bioconda -c conda-forge -c anaconda kraken2==2.1.2 krakentools taxonkit blast-legacy blast samtools==1.16.1 smalt pyfastaq minimap2 winnowmap assembly-stats fastqc bedtools pilon bwakit spades mummer4 prodigal recentrifuge hmmer gatk4 picard plotsr seqkit fasta-splitter snpomatic git
-rm -rf $(dirname $conda_envs_path)/pkgs/*;rm -rf $conda_envs_path/ILRA_env/pkgs/*  # Conda creates a huge amount of intermediate files when installing packages, and these can be removed afterwards
+echo -e "\n\nInstalling dependencies through conda...\n\n"
+echo -e "\n\n\nI'm downloading and installing several packages through conda in $conda_dir...\n\n\n"
+echo -e "First mamba replacing conda to reduce time, and then populating the environments based on the .yml files (keep in mind, this is frozen versions of the software)..."
+echo -e "The pathway to conda environments is $conda_envs_path...\n"
 
-#### Small comment to pilon:
-echo -e "\n\n\nThe JAVA options used by Pilon by default may be not appropriate for processing large genomes. For example, heap memory may not be enough. Please keep in mind that any pilon-related error may be due to this and require manual tuning. You can manually set up the environmental variable _JAVA_OPTIONS to use other -Xms or -Xmx values if needed. For example, to set minimum 5GB and maximum 250GB, use export _JAVA_OPTIONS='-Xms5g -Xmx250g'"
-# export _JAVA_OPTIONS='-Xms1g -Xmx5g'
+conda install -y -q -c conda-forge mamba
+mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_1.yml
+mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_2.yml
+mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_3.yml
+mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_4.yml
+rm -rf $(find $(which conda | sed 's,/bin/conda,,g') -type d -name pkgs) # Remove temp files
 
-#### Install circlator
-echo -e "\n\n\nI'm installing circlator...\n\n\n"
-$conda_envs_path/ILRA_env/bin/pip3 -q install circlator
-# Fix canu and nucmer detection by circlator:
+export PATH=$conda_envs_path/ILRA_env/bin/:$PATH
+
+#### Manual fixes
+echo -e "\n\n\nManually fixing some dependencies and soft linking so only one conda environment has to be activated / only one directory has to be included in the PATH...\n\n\n"
+## Fix canu and nucmer detection by circlator and spades 3.15.3 not working with modern version of python3
 sed -i 's,Canu,canu,g' $(find $conda_envs_path/ILRA_env -name external_progs.py)
 sed -i "s,'nucmer': '3.1','nucmer': '0.0',g" $(find $conda_envs_path/ILRA_env -name external_progs.py)
-# Fix spades 3.15.3 not working with python 3.10
 sed -i 's,collections.Hashable,collections.abc.Hashable,g' $(find $conda_envs_path/ILRA_env -name constructor.py | grep spades | grep pyyaml3)
-
-#### Install Bowtie2:
-cd $conda_envs_path/ILRA_env/bin
-echo -e "\n\n\nI'm installing Bowtie2...\n\n\n"
-wget -q https://github.com/BenLangmead/bowtie2/releases/download/v2.5.0/bowtie2-2.5.0-linux-x86_64.zip
-unzip -qq bowtie2-2.5.0-linux-x86_64.zip && rm bowtie2-2.5.0-linux-x86_64.zip && ln -sf bowtie2-2.5.0-linux-x86_64/bowtie2 .
-
-#### Install jvarkit:
-echo -e "\n\n\nI'm installing jvarkit...\n\n\n"
-git clone -q "https://github.com/lindenb/jvarkit.git"; JAVA_HOME=$conda_envs_path/ILRA_env
-cd jvarkit && ./gradlew -q samfixcigar && mv dist/samfixcigar.jar ../samfixcigar.jar
-
-#### Install BUSCO (it requires outdated dependencies, so new environment):
-echo -e "\n\n\nI'm installing BUSCO...\n\n\n"
-mamba create -n busco -y -q -c conda-forge -c bioconda -c anaconda busco=5.4.4
-rm -rf $(dirname $conda_envs_path)/pkgs/*;rm -rf $conda_envs_path/ILRA_env/pkgs/*  # Conda creates a huge amount of intermediate files when installing packages, and these can be removed afterwards
-# Required to make previous versions of busco work:
-# $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/pip install numpy==1.17.3
-# Small manual fix to the shebang in BUSCO so it uses the appropriate python and numpy versions
-# sed -i "1s%.*%\#\!$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/python%" $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/busco
-# Make it usable from the main environ
-cd $conda_envs_path/ILRA_env/bin
-ln -sf $conda_envs_path/ILRA_env/envs/busco/bin/busco busco; ln -sf $conda_envs_path/ILRA_env/envs/busco/bin/metaeuk metaeuk; ln -sf $conda_envs_path/ILRA_env/envs/busco/bin/pplacer pplacer; ln -sf $(dirname $(find $conda_envs_path/ILRA_env/envs/busco -name sepp.py))/*.py .; ln -sf $conda_envs_path/ILRA_env/envs/busco/bin/run_sepp.py run_sepp.py
-sed -i "s,/usr/bin/env python3,$conda_envs_path/ILRA_env/envs/busco/bin/python3,g" busco
-
-#### Install QUAST (it requires outdated dependencies, so new environment):
-echo -e "\n\n\nI'm installing QUAST...\n\n\n"
-mamba create -n quast -y -q -c bioconda -c conda-forge -c anaconda quast==5.2.0
-rm -rf $(dirname $conda_envs_path)/pkgs/*;rm -rf $conda_envs_path/ILRA_env/pkgs/*  # Conda creates a huge amount of intermediate files when installing packages, and these can be removed afterwards
-# Required to make previous versions of quast work:
-# Small manual fix to QUAST
-# echo -e "\n\n\nFew scripts from QUAST needs to be manually updated, addressing...\n\n\n"
-# cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name jsontemplate.py | grep /envs/quast/)) && rm jsontemplate.py && wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/site_packages/jsontemplate/jsontemplate.py"
-# cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name misc.py | grep ra_utils | grep /envs/quast/)) && rm misc.py && wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/ra_utils/misc.py"
-# cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name reads_analyzer.py | grep /envs/quast/)) && rm reads_analyzer.py && wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/reads_analyzer.py"
-# Make it usable from the main environ
-cd $conda_envs_path/ILRA_env/bin; ln -sf $conda_envs_path/ILRA_env/envs/quast/bin/quast.py quast.py
-
-#### Install syri
-echo -e "\n\n\nI'm installing syri...\n\n\n"
-mamba create -n syri_env -y -q -c bioconda -c conda-forge -c anaconda syri
-rm -rf $(dirname $conda_envs_path)/pkgs/*;rm -rf $conda_envs_path/ILRA_env/pkgs/*  # Conda creates a huge amount of intermediate files when installing packages, and these can be removed afterwards
-# Make it usable from the main environ
-cd $conda_envs_path/ILRA_env/bin; ln -sf $conda_envs_path/ILRA_env/envs/syri_env/bin/syri syri
-
-#### Install assembly-stats graphical:
-echo -e "\n\n\nI'm installing assembly-stats graphical...\n\n\n"
-cd $conda_envs_path/ILRA_env/bin
-wget -q https://github.com/rjchallis/assembly-stats/archive/refs/tags/17.02.tar.gz && tar -xzf 17.02.tar.gz && rm 17.02.tar.gz
-ln -sf assembly-stats-17.02/pl/asm2stats.* .
-chmod 775 asm2stats.*
-sed -i 's,/usr/bin/perl -w,/usr/bin/env perl,g' asm2stats.*
-
-#### Fix kraken2 2.1.2 within conda (e.g. for database building):
+## Fix busco so it can be used from the main environment (but it uses the python version in the subenvironment)
+sed -i "s,/usr/bin/env python3,$conda_envs_path/ILRA_env_busco/bin/python3,g" $conda_envs_path/ILRA_env_busco/bin/busco
+## Fix and improve kraken2 2.1.2 within conda (i.e. fix download for database building and improve masking with parallel):
 # https://github.com/DerrickWood/kraken2/issues/518, you just have to manually replace 'ftp' by 'https' in the line 46 of the file 'rsync_from_ncbi.pl'
 echo -e "\n\n\nI'm fixing some issues with kraken2...(see the content and comments within the script)\n\n\n"
 sed -i 's,#^ftp:,#^https:,g' $conda_envs_path/ILRA_env/libexec/rsync_from_ncbi.pl
@@ -146,6 +89,57 @@ sed -i "s,x/g' },x/g'\n},g" temp
 sed -i 's,; export,\nexport,g' temp
 rm mask_low_complexity.sh; mv temp mask_low_complexity.sh; chmod 775 mask_low_complexity.sh
 
+#### Soft linking to the main directory:
+cd $conda_envs_path/ILRA_env/bin/
+ln -sf $conda_envs_path/ILRA_env_busco/bin/busco busco
+ln -sf $conda_envs_path/ILRA_env_busco/bin/metaeuk metaeuk
+ln -sf $conda_envs_path/ILRA_env_busco/bin/pplacer pplacer
+ln -sf $(dirname $(find $conda_envs_path/ILRA_env_busco -name sepp.py))/*.py .
+ln -sf $conda_envs_path/ILRA_env_busco/bin/run_sepp.py run_sepp.py
+ln -sf $conda_envs_path/ILRA_env_busco/bin/bowtie2* .
+ln -sf $conda_envs_path/ILRA_env_busco/bin/seqtk seqtk
+ln -sf $conda_envs_path/ILRA_env_busco/bin/time time
+ln -sf $conda_envs_path/ILRA_env_busco/bin/weave weave
+ln -sf $conda_envs_path/ILRA_env_quast/bin/quast.py quast.py
+ln -sf $conda_envs_path/ILRA_env_syri/bin/syri syri
+## Required to make previous versions of busco work:
+# $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/pip install numpy==1.17.3
+# Small manual fix to the shebang in BUSCO so it uses the appropriate python and numpy versions
+# sed -i "1s%.*%\#\!$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/python%" $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/busco
+# Make it usable from the main environ
+## Required to make previous versions of quast work:
+# Small manual fix to QUAST
+# echo -e "\n\n\nFew scripts from QUAST needs to be manually updated, addressing...\n\n\n"
+# cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name jsontemplate.py | grep /envs/quast/)) && rm jsontemplate.py && wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/site_packages/jsontemplate/jsontemplate.py"
+# cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name misc.py | grep ra_utils | grep /envs/quast/)) && rm misc.py && wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/ra_utils/misc.py"
+# cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name reads_analyzer.py | grep /envs/quast/)) && rm reads_analyzer.py && wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/reads_analyzer.py"
+
+#### Install jvarkit:
+echo -e "\n\n\nI'm installing jvarkit...\n\n\n"
+git clone -q "https://github.com/lindenb/jvarkit.git"; JAVA_HOME=$conda_envs_path/ILRA_env
+cd jvarkit && ./gradlew -q samfixcigar && mv dist/samfixcigar.jar ../samfixcigar.jar
+
+#### Install bbtools:
+echo -e "\n\n\nI'm installing bbtools...\n\n\n"
+wget https://downloads.sourceforge.net/project/bbmap/BBMap_39.01.tar.gz; tar -xzf BBMap_39.01.tar.gz && rm BBMap_39.01.tar.gz
+ln -sf $(find bbmap/ -name "*.sh") .
+
+#### Install assembly-stats graphical:
+echo -e "\n\n\nI'm installing assembly-stats graphical...\n\n\n"
+cd $conda_envs_path/ILRA_env/bin
+wget -q https://github.com/rjchallis/assembly-stats/archive/refs/tags/17.02.tar.gz && tar -xzf 17.02.tar.gz && rm 17.02.tar.gz
+ln -sf assembly-stats-17.02/pl/asm2stats.* .
+chmod 775 asm2stats.*
+sed -i 's,/usr/bin/perl -w,/usr/bin/env perl,g' asm2stats.*
+
+#### Install NGenomeSyn:
+echo -e "\n\n\nI'm installing NGenomeSyn...\n\n\n"
+cd $conda_envs_path/ILRA_env/bin
+wget -q https://github.com/hewm2008/NGenomeSyn/archive/v1.41.tar.gz && tar -xzf v1.41.tar.gz && rm v1.41.tar.gz
+chmod -R 775 NGenomeSyn-1.41/bin/*
+ln -sf NGenomeSyn-1.41/bin/GetTwoGenomeSyn.pl .; ln -sf NGenomeSyn-1.41/bin/NGenomeSyn .
+sed -i 's,/usr/bin/perl -w,/usr/bin/env perl,g' GetTwoGenomeSyn.pl
+sed -i 's,/usr/bin/perl -w,/usr/bin/env perl,g' NGenomeSyn
 
 #### Install iCORN2:
 echo -e "\n\n\nI'm installing iCORN2...\n\n\n"
@@ -169,7 +163,7 @@ ln -sf $(which picard) picard
 echo -e "I'm installing iCORN2...Getting JAVA v1.7 required by iCORN2's SNP caller"
 wget -q https://files-cdn.liferay.com/mirrors/download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz && tar -xzf jdk-7u80-linux-x64.tar.gz && rm jdk-7u80-linux-x64.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin && chmod 775 *
-$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin/java -version
+#$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin/java -version
 if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin/java ]]; then
   echo "Download/Installation of java failed, please check manually the script and logs..."
   exit 1
@@ -179,13 +173,13 @@ echo -e "I'm installing iCORN2...Getting JAVA v1.8 required by GATK v4. This one
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget -q https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz && tar -xzf OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz && rm OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin && chmod 775 *
-$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java -version
+#$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java -version
 if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java ]]; then
   echo "Download/Installation of java failed, please check manually the script and logs..."
   exit 1
 fi
 
 
-echo -e "\n\n\nALL DONE\n\n\n"
+echo -e "\n\n\nALL DONE. You must make sure that the directory $conda_envs_path/ILRA_env/bin/ is in the PATH before ILRA execution\n\n\n"
 
 
