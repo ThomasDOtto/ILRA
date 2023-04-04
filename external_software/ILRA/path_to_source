@@ -1,15 +1,26 @@
 #### Get the directory of the script:
 export EXTERNAL_SOFTWARE_DIR=$(dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ))
-conda_envs_path=$(conda env list | egrep ILRA_env$ | sed 's,ILRA_env,,g' | sed 's/^ *//g' | sed 's/^base  *//g' | sed 's,*  ,,g')
+echo -e "\n\n"
+type conda >/dev/null 2>&1 || { echo >&2 "Conda is required to be installed... and is not being found in the PATH. I'm assuming conda has been installed within external_software/miniconda3 folder and adding to the path. Otherwise, please double check manually or install conda beforehand..."; export conda_within_ILRA="yes"; }
+
+if [ "$conda_within_ILRA" == "yes" ]; then
+	conda_dir=$EXTERNAL_SOFTWARE_DIR/miniconda3/bin
+else	
+	conda_dir=$(dirname $(which conda))
+fi
+
+conda_envs_path=$(echo $conda_dir | sed 's,/bin$,/envs,g')
 
 #### Set PATH:
-export PATH=$(dirname $EXTERNAL_SOFTWARE_DIR):$(dirname $EXTERNAL_SOFTWARE_DIR)/bin:$EXTERNAL_SOFTWARE_DIR:$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/condabin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/bin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/quast/bin:$EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:$HOME/.local/bin:$conda_envs_path/ILRA_env/bin:$STORE/bin:$PATH
-
-### Set PERL5LIB (the programs are supposed to do it but it may help to set these beforehand...):
-export PERL5LIB=$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$PERL5LIB
-
-### Set JAVA options (heap memory) for pilon. If larger genomes, you may need to increase this and if smaller genomes or less amount of memory available, you may want to decrease this
-echo -e "\n\n\nThe JAVA options can be used to allocate max RAM usage (heap memory may not be enough in some cases). Please keep in mind that any Pilon- or ILRA-related error may be due to this and require manual tuning. You can manually set up the environmental variable _JAVA_OPTIONS to use other -Xms or -Xmx values if needed. For example, to set minimum 5GB and maximum 250GB, I'm using: export _JAVA_OPTIONS='-Xms5g -Xmx250g'"
-export _JAVA_OPTIONS='-Xms5g -Xmx250g'
-
+echo -e "\nPlease run manually next and before ILRA execution:\nexport PATH=$conda_envs_path/ILRA_env/bin:$conda_dir:$(dirname $EXTERNAL_SOFTWARE_DIR):$(dirname $EXTERNAL_SOFTWARE_DIR)/bin:$EXTERNAL_SOFTWARE_DIR:$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$HOME/bin:$PATH\n\nexport PERL5LIB=$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$PERL5LIB\n\n"
 echo -e "\n\n\nCheck out other environmental variables automatically set in ILRA.sh that may need to change...\n\n\n"
+echo -e "\n\nPlease behave and be mindful with any queueing system, the resources you are using, the versions of the software that are in the PATH and are being used... etc\n\n"
+
+
+
+
+
+
+
+
+
