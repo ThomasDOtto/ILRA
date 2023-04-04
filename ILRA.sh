@@ -31,7 +31,7 @@ for argument in $options; do
 		-i | -iterations_iCORN2 # Number of iterations to perform in iCORN2
 		-r | -reference # Reference file (full pathway, FASTA format)
 		-g | -gff_file # Reference annotation file (full pathway, GFF format)
-		-c | -corrected_reads # Corrected long reads for circulatization of the contigs containing the strings by -s and -S (FASTQ format, can be gzipped)
+		-c | -corrected_reads # Corrected long reads for circulatization of the contigs containing the strings by -s and -S (FASTQ or fasta format, can be gzipped)
 		-s | -seq_circularize_1 # Regex pattern to find in the contig names and circularize
 		-S | -Seq_circularize_2 # Regex pattern to find in the contig names and circularize
 		-L | -Long_reads_technology # Technology of long reads sequencing (pb/ont)
@@ -213,6 +213,7 @@ fi
 if [ -z "$kraken2_fast" ]; then
 	kraken2_fast="no"
 fi
+
 if [ -z "$kraken2_databases" ]; then
 	kraken2_databases="standard_eupathdb_48_kraken2_db"
 fi
@@ -266,12 +267,13 @@ if [ -z "$taxonid" ]; then
 	echo "NCBI taxon id: "$taxonid
 fi
 
+if [ -z "$databases" ]; then
+	databases=$(dirname $0)/databases
+fi
+
 if [ $mode == "light" ]; then
-	echo "Execution mode is $mode"
+	echo "Execution mode is $mode. Databases are/should be located in the folder $databases"
 elif [[ $mode == "blast" || $mode == "taxon" || $mode == "both" ]]; then
-	if [ -z "$databases" ]; then
-		databases=$(dirname $0)/databases
-	fi
 	mkdir -p $databases
 	echo "Execution mode is $mode. Databases are/should be located in the folder $databases"
 fi
@@ -303,6 +305,15 @@ if [ -z "$debug" ]; then
 fi
 export debug
 
+if [[ $assembly = *.gz ]]; then
+	mkdir -p $dir; pigz -p $cores -dc $assembly > $dir/$(basename ${assembly%.*})
+	assembly=$dir/$(basename ${assembly%.*})
+fi
+
+if [[ $blocks_size -gt $(grep -c ">" $assembly) ]]; then
+	blocks_size=$(grep -c ">" $assembly)
+fi
+
 echo -e "assembly="$assembly
 echo -e "dir="$dir
 if [[ $correctedReads == /* ]]; then
@@ -322,9 +333,22 @@ echo -e "InsertsizeRange="$InsertsizeRange
 echo -e "The telomere sequences used are:\nLeft:\t" $telomere_seq_1"\nRight:\t" $telomere_seq_2
 echo -e "The block size for parallel processing is:" $blocks_size
 
-echo -e "\nPATH with paths to all tools must be properly set: export PATH=\$PATH:... either in the bashrc or bash_profile files in HOME directory, activating a conda environment... etc"
+echo -e "\nPATH with paths to all tools must be properly set: export PATH=...:\$PATH either in the bashrc or bash_profile files in HOME directory, activating a conda environment... etc"
 echo -e "\nPlease be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang (first line #!) statements so everything works in your system. Many software and dependencies are also required and are being automatically checked at the beginning of each step execution. You can resume a step for which you did not have the software ready with -d argument. The pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly... You may also need to make scripts executable (chmod), to make source, export... etc, so that the PATH variable and others are available for all scripts"
 echo -e "If the pipeline keeps running, congrats! All the required software is available"
+
+##### Checking if there's an interrupted ILRA run that should be resumed
+if [[ $debug == "all" ]] && [[ -d "$dir" ]]; then
+	step_to_resume=$(ls $dir | egrep '^[0-9].' | sort | tail -1 | sed 's,\..*,,g')
+	echo -e "\n The directory $dir already exists, and ILRA is going to resume the step$step_to_resume in few seconds... If this is not correct, please stop ILRA with Ctrl+C and remove the directory, or specify another output dir with '-o'\n"
+	secs=$((1 * 30))
+	while [ $secs -gt 0 ]; do
+		echo -ne "$secs\033[0K\r"
+		sleep 1
+		: $((secs--))
+	done
+	export debug="step$step_to_resume"
+fi
 
 ##### Checking the installed databases:
 if [[ $mode == "blast" || $mode == "taxon" || $mode == "both" ]]; then
@@ -402,15 +426,6 @@ if [[ $mode == "blast" || $mode == "taxon" || $mode == "both" ]]; then
 	fi
 fi
 
-if [[ $assembly = *.gz ]]; then
-	mkdir -p $dir; cd $dir; cp $assembly .
-	pigz -p $cores -d *.gz
-	assembly=$dir/$(basename ${assembly%.*})
-fi
-
-if [[ $blocks_size -gt $(grep -c ">" $assembly) ]]; then
-	blocks_size=$(grep -c ">" $assembly)
-fi
 
 ##### ILRA execution STEPS:
 # 1.  Discard smaller contigs
@@ -452,7 +467,7 @@ if [[ $debug == "all" || $debug == "step2a" ]]; then
 		echo -e "\nProcessing in the MegaBLAST simultaneously the individual contigs in blocks of at most $blocks_size elements, please manually change the variable 'blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n"
 		cat $dir/1.Filtering/01.assembly.fa | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
 		arr=($(ls -lS | sort -k 5 -n | awk '{print $9}' | awk 'NF' | egrep .fa$))
-		parallel --verbose --joblog megablast_parallel_log_out_2.txt -j $blocks_size megablast -W 40 -F F -a $((cores / blocks_size *2)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog megablast_parallel_log_out_2.txt -j $blocks_size megablast -W 40 -F F -a $((cores / blocks_size *2)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2.txt > tmp && mv tmp megablast_parallel_log_out_2.txt
 		# Control if failed due to any reason (likely too much RAM...)
 		if [ "$(awk '{ print $9 }' megablast_parallel_log_out_2.txt | grep -c "9")" -gt 0 ]; then
@@ -460,7 +475,7 @@ if [[ $debug == "all" || $debug == "step2a" ]]; then
 			echo $(awk '$9 == 9 {print}' megablast_parallel_log_out_2.txt | awk '{ print $24 }')
 			arr=($(awk '$9 == 9 {print}' megablast_parallel_log_out_2.txt | awk '{ print $24 }')); length_arr=${#arr[@]}; export length_arr
 			cores_split=$((cores / 3))
-			parallel --verbose --joblog megablast_parallel_log_out_2_2.txt -j 3 megablast -W 40 -F F -a $cores_split -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out2.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog megablast_parallel_log_out_2_2.txt -j 3 megablast -W 40 -F F -a $cores_split -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out2.txt
 			awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2_2.txt > tmp && mv tmp megablast_parallel_log_out_2_2.txt
 		fi
 		cat *.fa.blast | awk '$3>98 && $4>500 && $1 != $2' > comp.self1.blast; rm *.fa *.fa.blast
@@ -489,7 +504,7 @@ if [[ $debug == "all" || $debug == "step2b" ]]; then
 	cd $dir/2.MegaBLAST
 	if [ -f $illuminaReads\_1.fastq.gz ]; then
 		echo -e "SMALT parameters are: k-mer size=20, step-size=3, insert size range="$InsertsizeRange". Please check SMALT help and change manually within the pipeline (section 2b) these parameters if needed"
-		ILRA.runSMALT_ver2.sh 02.assembly.fa 20 3 $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz first $InsertsizeRange $cores &> ILRA.runSMALT_ver2.sh_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" ILRA.runSMALT_ver2.sh 02.assembly.fa 20 3 $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz first $InsertsizeRange $cores &> ILRA.runSMALT_ver2.sh_log_out.txt
 		echo -e "Check out the log of ILRA.runSMALT_ver2.sh in the file ILRA.runSMALT_ver2.sh_log_out.txt"
 	# Find overlaps
 		ILRA.findoverlaps_ver3.pl Blast.merge.blast.length first.bam 02.assembly.fa OUT 1> ILRA.findoverlaps_ver3.pl_log_out.txt 2> ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt
@@ -579,7 +594,7 @@ if [[ $debug == "all" || $debug == "step4" || $debug == "step4i" ]]; then
 			iCORN2_fragmentSize=500
 			echo "The iCORN2 fragment size used is iCORN2_fragmentSize=$iCORN2_fragmentSize. Please check iCORN2 help and change manually within the pipeline (section 4) if needed"
 			echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt"
-			icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn $blocks_size $cores $java_memory $parts_icorn2_split $low_mem &> icorn2.serial_bowtie2.sh_log_out.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn $blocks_size $cores $java_memory $parts_icorn2_split $low_mem &> icorn2.serial_bowtie2.sh_log_out.txt
 			if [ "$(find . -name "larger_contigs2.txt" | wc -l)" -gt 0 ]; then
 				echo -e "\nPlease note iCORN2 is likely going to fail if any of the sequences being processed is larger than or around 60Mb... The program tried to handle this and divide the input sequences accordingly but failed...\n"
 				echo -e "\n\nThe size of at least one individual contig or chromosome within the input sequence is ~60Mb... iCORN2 used Pilon to correct some sequences. If allowed to continue, there would be segmentation errors later on in SNP-o-matic... Please double check iCORN2 log\n\n"
@@ -619,14 +634,14 @@ if [[ $debug == "all" || $debug == "step4" || $debug == "step4i" ]]; then
 			for i in $(seq 1 1 $number_iterations_icorn); do
 				if [ "$i" -eq 1 ]; then
 					mkdir -p $dir/4.pilon/iter_1
-					bowtie2-build --threads $cores $dir/3.ABACAS2/03b.assembly.fa genome_iter1 &> bowtie_log_out.txt 2> bowtie_log_out.txt
-					bowtie2 -t -x genome_iter1 -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq.gz -2 $illuminaReads\_2.fastq.gz 2>> bowtie_log_out.txt | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads1.bam##idx##ill_reads1.bam.bai" &>> bowtie_log_out.txt
-					pilon --genome $dir/3.ABACAS2/03b.assembly.fa --bam ill_reads1.bam --output genome_pilon1 --outdir $dir/4.pilon/iter_1 --changes --vcf --tracks &>> pilon_log_out.txt
+					\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" bowtie2-build --threads $cores $dir/3.ABACAS2/03b.assembly.fa genome_iter1 &> bowtie_log_out.txt 2> bowtie_log_out.txt
+					\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" bowtie2 -t -x genome_iter1 -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq.gz -2 $illuminaReads\_2.fastq.gz 2>> bowtie_log_out.txt | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads1.bam##idx##ill_reads1.bam.bai" &>> bowtie_log_out.txt
+					\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" pilon --genome $dir/3.ABACAS2/03b.assembly.fa --bam ill_reads1.bam --output genome_pilon1 --outdir $dir/4.pilon/iter_1 --changes --vcf --tracks &>> pilon_log_out.txt
 				else
 					mkdir -p $dir/4.pilon/iter_$i
-					bowtie2-build --threads $cores $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta genome_iter$i &> bowtie_log_out.txt
-					bowtie2 -t -x genome_iter$i -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq.gz -2 $illuminaReads\_2.fastq.gz 2>> bowtie_log_out.txt | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads$i.bam##idx##ill_reads$i.bam.bai" &>> bowtie_log_out.txt
-					pilon --genome $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta --bam ill_reads$i.bam --output genome_pilon$i --outdir $dir/4.pilon/iter_$i --changes --vcf --tracks &>> pilon_log_out.txt
+					\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" bowtie2-build --threads $cores $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta genome_iter$i &> bowtie_log_out.txt
+					\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" bowtie2 -t -x genome_iter$i -p $cores -X 1200 --very-sensitive -N 1 -L 31 --rdg 5,2 -1 $illuminaReads\_1.fastq.gz -2 $illuminaReads\_2.fastq.gz 2>> bowtie_log_out.txt | samtools sort -l 9 -m 2G -@ $cores --write-index -o "ill_reads$i.bam##idx##ill_reads$i.bam.bai" &>> bowtie_log_out.txt
+					\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" pilon --genome $dir/4.pilon/iter_[$(expr $i - 1)]/genome_pilon[$(expr $i - 1)].fasta --bam ill_reads$i.bam --output genome_pilon$i --outdir $dir/4.pilon/iter_$i --changes --vcf --tracks &>> pilon_log_out.txt
 				fi
 			done
 	# Cleaned assembly:
@@ -657,7 +672,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 		mkdir -p $dir/5.Circlator; cd $dir/5.Circlator; rm -rf *
 		if grep -q -E "$seqs_circl_1|$seqs_circl_2" $(find $dir -name "04.assembly.fa"); then
 	# Map the corrected reads (minimap2 can be used and it's faster, but meryl+winnowmap is currently recommended to map long reads against repetitive sequences)
-			meryl count k=15 threads=$cores output merylDB $(find $dir -name "04.assembly.fa") &> meryl_count_log_out.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" meryl count k=15 threads=$cores output merylDB $(find $dir -name "04.assembly.fa") &> meryl_count_log_out.txt
 			meryl print greater-than distinct=0.9998 merylDB > repetitive_k15.txt 2> meryl_print_log_out.txt
 			if [ $long_reads_technology == "pacbio" ]; then
 				#minimap2 -x map-pb -H -t $cores -d minimap2_index_pacbio.mmi $(find $dir -name "04.assembly.fa") &> mapping_corrected_reads_log_out.txt
@@ -679,7 +694,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 			awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.reads.fasta > ForCirc.reads_2.fasta
 			awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.Ref.fasta > ForCirc.Ref_2.fasta
 			echo -e "Check out the log of the mapping of the corrected reads and circlator in the files mapping_corrected_reads_log_out.txt and circlator_log_out.txt"
-			circlator all ForCirc.Ref_2.fasta ForCirc.reads_2.fasta Out.Circ --threads $cores &> circlator_log_out.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" circlator all ForCirc.Ref_2.fasta ForCirc.reads_2.fasta Out.Circ --threads $cores &> circlator_log_out.txt
 	# Delete the plastids/organelles/circular sequences from the current assembly version (04.assembly.fa)
 			for i in $seq_ids; do
 				echo $i >> List.circular_sequences.fofn
@@ -717,17 +732,15 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 	if [[ $mode == "taxon" || $mode == "both" ]]; then
 		time1=`date +%s`
 		echo -e "\n\nSTEP 6: Kraken2 decontamination starting..."; echo -e "Current date/time: $(date)\n"
-		mkdir -p $dir/6.Decontamination; cd $dir/6.Decontamination; rm -rf *
-		# usr/bin/time if required to measure the time and peak of memory
-		# /usr/bin/time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" command_to_execute
+		mkdir -p $dir/6.Decontamination; cd $dir/6.Decontamination; rm -rf *		
 		if [[ $kraken2_fast == "yes" ]]; then
 			echo -e "\nPreparing database $databases/$kraken2_databases for fast access in RAM...\n"
 			cp -ru $databases/$kraken2_databases /dev/shm/
 			echo -e "\nExecuting kraken2...\n"
-			kraken2 --db /dev/shm/$kraken2_databases --threads $cores --memory-mapping --classified-out classification.txt --unclassified-out classification_unknwn.txt --report report.txt --output kraken2_output.txt --use-names $dir/5.Circlator/05.assembly.fa 1> kraken2_log_out.txt 2> kraken2_log_warnings_errors.txt			
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" kraken2 --db /dev/shm/$kraken2_databases --threads $cores --memory-mapping --classified-out classification.txt --unclassified-out classification_unknwn.txt --report report.txt --output kraken2_output.txt --use-names $dir/5.Circlator/05.assembly.fa 1> kraken2_log_out.txt 2> kraken2_log_warnings_errors.txt
 		elif [[ $kraken2_fast == "no" ]]; then
 			echo -e "\nExecuting kraken2...\n"
-			kraken2 --db $databases/$kraken2_databases --threads $cores --classified-out classification.txt --unclassified-out classification_unknwn.txt --report report.txt --output kraken2_output.txt --use-names $dir/5.Circlator/05.assembly.fa 1> kraken2_log_out.txt 2> kraken2_log_warnings_errors.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" kraken2 --db $databases/$kraken2_databases --threads $cores --classified-out classification.txt --unclassified-out classification_unknwn.txt --report report.txt --output kraken2_output.txt --use-names $dir/5.Circlator/05.assembly.fa 1> kraken2_log_out.txt 2> kraken2_log_warnings_errors.txt
 		fi
 		echo -e "Please check the files report.txt, kraken2_log_out.txt and kraken2_log_out_warnings_errors.txt"
 		if [ -s report.txt ]; then
@@ -735,7 +748,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			cat report.txt > report_final.txt; echo -e "\n\nNumber of classified contigs at the genus level: $(cat report.txt | awk '$4 == "G" {print $2"\t"$5}' | awk '{s+=$1}END{print s}')" >> report_final.txt
 			echo -e "\nTaxonomy IDs at the genus level assigned to the contigs:" >> report_final.txt; echo -e "#Contig\tTaxID\n$(awk '$4 == "G" {print $2"\t"$5}' report.txt)\n" >> report_final.txt
 	# Extract contigs classified as different organisms
-			rcf -n $databases/taxdump -k kraken2_output.txt -o recentrifuge_contamination_report.html -e CSV &> rcf_log_out.txt # Add --sequential if problems with multithreading
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" rcf -n $databases/taxdump -k kraken2_output.txt -o recentrifuge_contamination_report.html -e CSV &> rcf_log_out.txt # Add --sequential if problems with multithreading
 			re='^[0-9]+$' # Deal with the user providing taxon id or taxon names
 			if [[ $taxonid =~ $re ]]; then
 				taxon_name=$(taxonkit list --ids $taxonid -n -r --data-dir $databases/taxdump | grep $taxonid)
@@ -747,7 +760,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			echo -e "\nIf not correct, please provide it explicitely using the -T argument and rerun. Kraken2 output will be filtered to retain that taxa and below"
 			echo -e "\nCheck out the logs in the files rcf_log_out.txt and extract_kraken2_log_out.txt"
 			echo -e "\nExtracting reads...\n"
-			extract_kraken_reads.py -k kraken2_output.txt -U $dir/5.Circlator/05.assembly.fa -o 06.assembly.fa -t $taxonid -r report.txt --include-children &> extract_kraken2_log_out.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" extract_kraken_reads.py -k kraken2_output.txt -U $dir/5.Circlator/05.assembly.fa -o 06.assembly.fa -t $taxonid -r report.txt --include-children &> extract_kraken2_log_out.txt
 	# Include the ones that may be unclassified:
 			#if [ -s classification_unknwn.txt ]; then
 			#	cat classification_unknwn.txt >> 06.assembly.fa
@@ -792,23 +805,23 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 	cat ../../$name.ILRA.fasta | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
 	arr=($(ls -lS | awk '{print $9}' | awk 'NF' | egrep .fa$ | grep -v ref.fa))
 	# 1. Common contaminants database that contains vector sequences, bacterial insertion sequences, E. coli and phage genomes...
-		parallel -q --verbose --joblog blast_contam_euks_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/contam_in_euks.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $((cores / blocks_size)) -out {}.contam_in_euks_genbank.out ::: ${arr[@]} &> blast_contam_euks_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel -q --verbose --joblog blast_contam_euks_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/contam_in_euks.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $((cores / blocks_size)) -out {}.contam_in_euks_genbank.out ::: ${arr[@]} &> blast_contam_euks_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' blast_contam_euks_log_out_2.txt > tmp && mv tmp blast_contam_euks_log_out_2.txt
 		cat *.fa.contam_in_euks_genbank.out | egrep -v "^#" | awk '($3>=98.0 && $4>=50)||($3>=94.0 && $4>=100)||($3>=90.0 && $4>=200)' > contam_in_euks_genbank.out; rm *.fa.contam_in_euks_genbank.out
-		parallel -q --verbose --joblog blast_contam_proks_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/contam_in_prok.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $((cores / blocks_size)) -out {}.contam_in_proks_genbank.out ::: ${arr[@]} &> blast_contam_proks_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel -q --verbose --joblog blast_contam_proks_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/contam_in_prok.fa -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 90.0 -outfmt "7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -num_threads $((cores / blocks_size)) -out {}.contam_in_proks_genbank.out ::: ${arr[@]} &> blast_contam_proks_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' blast_contam_proks_log_out_2.txt > tmp && mv tmp blast_contam_proks_log_out_2.txt
 		cat *.fa.contam_in_proks_genbank.out | egrep -v "^#" | awk '($3>=98.0 && $4>=50)||($3>=94.0 && $4>=100)||($3>=90.0 && $4>=200)' > contam_in_proks_genbank.out; rm *.fa.contam_in_proks_genbank.out
 	# 2. A database of adaptors linkers and primers
-		parallel --verbose --joblog vecscreen_contam_euks_log_out_2.txt -j $cores vecscreen -d $databases/adaptors_for_screening_euks.fa -f3 -i {} -o {}.vecscreen_in_euks_genbank ::: ${arr[@]} &> vecscreen_contam_euks_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog vecscreen_contam_euks_log_out_2.txt -j $cores vecscreen -d $databases/adaptors_for_screening_euks.fa -f3 -i {} -o {}.vecscreen_in_euks_genbank ::: ${arr[@]} &> vecscreen_contam_euks_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' vecscreen_contam_euks_log_out_2.txt > tmp && mv tmp vecscreen_contam_euks_log_out_2.txt
 		cat *.fa.vecscreen_in_euks_genbank > vecscreen_in_euks_genbank; rm *.fa.vecscreen_in_euks_genbank
-		parallel --verbose --joblog vecscreen_contam_proks_log_out_2.txt -j $cores vecscreen -d $databases/adaptors_for_screening_proks.fa -f3 -i {} -o {}.vecscreen_in_proks_genbank ::: ${arr[@]} &> vecscreen_contam_proks_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog vecscreen_contam_proks_log_out_2.txt -j $cores vecscreen -d $databases/adaptors_for_screening_proks.fa -f3 -i {} -o {}.vecscreen_in_proks_genbank ::: ${arr[@]} &> vecscreen_contam_proks_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' vecscreen_contam_proks_log_out_2.txt > tmp && mv tmp vecscreen_contam_proks_log_out_2.txt
 		cat *.fa.vecscreen_in_proks_genbank > vecscreen_in_proks_genbank; rm *.fa.vecscreen_in_proks_genbank
 		VSlistTo1HitPerLine.sh suspect=0 weak=0 vecscreen_in_euks_genbank > vecscreen_in_euks_genbank.out
 		VSlistTo1HitPerLine.sh suspect=0 weak=0 vecscreen_in_proks_genbank > vecscreen_in_proks_genbank.out
 	# 3. A database of mitochondrial genomes
-		parallel --verbose --joblog blast_mito_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/mito -out {}.mito_sequences -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 98.6 -soft_masking true -outfmt 7 -num_threads $((cores / blocks_size)) ::: ${arr[@]} &> blast_mito_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog blast_mito_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/mito -out {}.mito_sequences -task megablast -word_size 28 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 0.0001 -perc_identity 98.6 -soft_masking true -outfmt 7 -num_threads $((cores / blocks_size)) ::: ${arr[@]} &> blast_mito_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' blast_mito_log_out_2.txt > tmp && mv tmp blast_mito_log_out_2.txt
 		cat *.fa.mito_sequences | egrep -v "^#" > mito_sequences; rm *.fa.mito_sequences
 	# Deal with several hits: (from the BLAST output get the largest alignments and then the largest % of identity)
@@ -828,7 +841,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			echo -e "\n#Contig chosen to be labelled as mitochondrion based on % identity (> 98.6%) and the largest alignments:" $seq_mit >> mito_sequences.out
 		fi
 	# 4. A database of ribosomal RNA genes
-		parallel --verbose --joblog blast_rrna_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/rrna -task megablast -template_length 18 -template_type coding -window_size 120 -word_size 12 -xdrop_gap 20 -no_greedy -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 1E-9 -gapextend 2 -gapopen 4 -penalty -4 -perc_identity 95 -reward 3 -soft_masking true -outfmt 7 -num_threads $((cores / blocks_size)) -out {}.rrna_genbank.out ::: ${arr[@]} &> blast_rrna_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog blast_rrna_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/rrna -task megablast -template_length 18 -template_type coding -window_size 120 -word_size 12 -xdrop_gap 20 -no_greedy -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 1E-9 -gapextend 2 -gapopen 4 -penalty -4 -perc_identity 95 -reward 3 -soft_masking true -outfmt 7 -num_threads $((cores / blocks_size)) -out {}.rrna_genbank.out ::: ${arr[@]} &> blast_rrna_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' blast_rrna_log_out_2.txt > tmp && mv tmp blast_rrna_log_out_2.txt
 		cat *.fa.rrna_genbank.out | egrep -v "^#" | awk '$4>=100' > rrna_genbank.out; rm *.fa.rrna_genbank.out
 	# 5. The chromosomes of unrelated organisms. Foreign organisms are those that belong to a different taxonomic group compared to the organism whose sequences are being screened.
@@ -875,6 +888,8 @@ debug=""
 fi
 
 #### 7. Evaluate the assemblies, get telomere sequences counts, GC stats, sequencing depth, converting files...
+mkdir -p $dir/data; cd $dir/data; ln -sf $assembly .; ln -sf $illuminaReads\_1.fastq.gz .; ln -sf $illuminaReads\_2.fastq.gz .
+
 if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 	test_installation_dependencies.sh
 	if [[ ! -d "$dir/6.Decontamination" ]] && [[ ! -d "$dir/5.Circlator" ]]; then
@@ -934,7 +949,7 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 
 	# Getting whether the organism is eukaryote for the following steps:
 	if [[ $mode == "light" || $mode == "blast" ]]; then
-		mkdir -p $databases/taxdump && cd $databases/taxdump && wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip && unzip taxdmp.zip && rm taxdmp.zip
+		mkdir -p $databases/taxdump && cd $databases/taxdump && wget -q https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip && unzip -o -qq taxdmp.zip && rm taxdmp.zip
 		re='^[0-9]+$' # Deal with the user providing taxon id or taxon names
 		if [[ $taxonid =~ $re ]]; then
 			taxon_name=$(taxonkit list --ids $taxonid -n -r --data-dir $databases/taxdump | grep $taxonid)
@@ -955,53 +970,253 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 	echo -e "Please be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene ID) are accepted"
 	echo -e "Please be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not, to use the '--eukaryote' argument in quast.py. If your species is prokaryotic QUAST would also work. In other cases, you may need to manually run quast.py with the argument '--fungus' for fungi or the arguments '--large' and '--memory-efficient' for large genomes. If the taxon ID is not known or present in the NCBI taxonomy databases, this step will be skipped..."
 	echo -e "Current NCBI taxon ID: $taxonid"
-	echo -e "Check out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats/quast_results"
+	cd $dir/7.Stats
 	if [ "$top_level"=="E" ]; then
 		if [ -z "$reference" ]; then
-			echo -e "Running QUAST eukaryote without reference..."
-			quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta --threads $cores --labels $name --eukaryote &> quast.py_log_out.txt
 		else
 			if [ -f $illuminaReads\_1.fastq.gz ]; then
-				if [ -z "$gff_file" ]; then
-					echo -e "Running QUAST --eukaryote with reference and structural variants calling and processing mode..."
-					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --eukaryote &> quast.py_log_out.txt
+				if [ -z "$gff_file" ]; then					
+					if [ ! -z "$correctedReads" ]; then
+						if [[ $correctedReads == *.fasta.gz || $correctedReads == *.fa.gz ]]; then
+							pigz -p $cores -dc $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $(basename $correctedReads).fq.gz --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $(basename $correctedReads).fq.gz --eukaryote &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq.gz
+						elif [[ $correctedReads == *.fasta || $correctedReads == *.fa ]]; then
+							seqtk seq -F '#' $correctedReads | pigz -c -p $cores --fast > $(basename $correctedReads).fq
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $(basename $correctedReads).fq --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $(basename $correctedReads).fq --eukaryote &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq
+						elif [[ $correctedReads == *.fastq.gz || $correctedReads == *.fq.gz || $correctedReads == *.fastq || $correctedReads == *.fq ]]; then
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $correctedReads --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $correctedReads --eukaryote &> quast.py_log_out.txt
+							fi
+						fi
+					else
+						\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --eukaryote &> quast.py_log_out.txt
+					fi
 				else
-					echo -e "Running QUAST --eukaryote with reference, with gff file and with structural variants calling and processing mode..."
-					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --eukaryote &> quast.py_log_out.txt
+					if [ ! -z "$correctedReads" ]; then
+						if [[ $correctedReads == *.fasta.gz || $correctedReads == *.fa.gz ]]; then
+							pigz -p $cores -dc $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $(basename $correctedReads).fq.gz --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $(basename $correctedReads).fq.gz --eukaryote &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq.gz
+						elif [[ $correctedReads == *.fasta || $correctedReads == *.fa ]]; then
+							seqtk seq -F '#' $correctedReads | pigz -c -p $cores --fast > $(basename $correctedReads).fq
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $(basename $correctedReads).fq --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $(basename $correctedReads).fq --eukaryote &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq
+						elif [[ $correctedReads == *.fastq.gz || $correctedReads == *.fq.gz || $correctedReads == *.fastq || $correctedReads == *.fq ]]; then
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $correctedReads --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $correctedReads --eukaryote &> quast.py_log_out.txt
+							fi
+						fi
+					else
+						\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --eukaryote &> quast.py_log_out.txt
+					fi
 				fi
 			else
-				if [ -z "$gff_file" ]; then
-					echo -e "Running QUAST --eukaryote with reference..."
-					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
+				if [ -z "$gff_file" ]; then					
+					if [ ! -z "$correctedReads" ]; then
+						if [[ $correctedReads == *.fasta.gz || $correctedReads == *.fa.gz ]]; then
+							pigz -p $cores -dc $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pacbio $(basename $correctedReads).fq.gz --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --nanopore $(basename $correctedReads).fq.gz --eukaryote &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq.gz
+						elif [[ $correctedReads == *.fasta || $correctedReads == *.fa ]]; then
+							seqtk seq -F '#' $correctedReads | pigz -c -p $cores --fast > $(basename $correctedReads).fq
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pacbio $(basename $correctedReads).fq --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --nanopore $(basename $correctedReads).fq --eukaryote &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq
+						elif [[ $correctedReads == *.fastq.gz || $correctedReads == *.fq.gz || $correctedReads == *.fastq || $correctedReads == *.fq ]]; then
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pacbio $correctedReads --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --nanopore $correctedReads --eukaryote &> quast.py_log_out.txt
+							fi
+						fi
+					else
+						\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --eukaryote &> quast.py_log_out.txt
+					fi
 				else
-					echo -e "Running QUAST --eukaryote with reference and with gff file..."
-					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --eukaryote &> quast.py_log_out.txt
+					if [ ! -z "$correctedReads" ]; then
+						if [[ $correctedReads == *.fasta.gz || $correctedReads == *.fa.gz ]]; then
+							pigz -p $cores -dc $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pacbio $(basename $correctedReads).fq.gz --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --nanopore $(basename $correctedReads).fq.gz --eukaryote &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq.gz
+						elif [[ $correctedReads == *.fasta || $correctedReads == *.fa ]]; then
+							seqtk seq -F '#' $correctedReads | pigz -c -p $cores --fast > $(basename $correctedReads).fq
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pacbio $(basename $correctedReads).fq --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --nanopore $(basename $correctedReads).fq --eukaryote &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq
+						elif [[ $correctedReads == *.fastq.gz || $correctedReads == *.fq.gz || $correctedReads == *.fastq || $correctedReads == *.fq ]]; then
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pacbio $correctedReads --eukaryote &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --nanopore $correctedReads --eukaryote &> quast.py_log_out.txt
+							fi
+						fi
+					else
+						\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --eukaryote &> quast.py_log_out.txt
+					fi
 				fi
 			fi
-		fi
+		fi			
+	echo -e "Check out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats/quast_results"
 	elif [ "$top_level"=="P" ]; then
 		if [ -z "$reference" ]; then
-			echo -e "Running QUAST without reference..."
-			quast.py ../$name.ILRA.fasta --threads $cores --labels $name --space-efficient &> quast.py_log_out.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta --threads $cores --labels $name &> quast.py_log_out.txt
 		else
 			if [ -f $illuminaReads\_1.fastq.gz ]; then
-				if [ -z "$gff_file" ]; then
-					echo -e "Running QUAST prokaryote with reference and structural variants calling and processing mode..."
-					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz &> quast.py_log_out.txt
+				if [ -z "$gff_file" ]; then					
+					if [ ! -z "$correctedReads" ]; then
+						if [[ $correctedReads == *.fasta.gz || $correctedReads == *.fa.gz ]]; then
+							pigz -p $cores -dc $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $(basename $correctedReads).fq.gz &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $(basename $correctedReads).fq.gz &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq.gz
+						elif [[ $correctedReads == *.fasta || $correctedReads == *.fa ]]; then
+							seqtk seq -F '#' $correctedReads | pigz -c -p $cores --fast > $(basename $correctedReads).fq
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $(basename $correctedReads).fq &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $(basename $correctedReads).fq &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq
+						elif [[ $correctedReads == *.fastq.gz || $correctedReads == *.fq.gz || $correctedReads == *.fastq || $correctedReads == *.fq ]]; then
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $correctedReads &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $correctedReads &> quast.py_log_out.txt
+							fi
+						fi
+					else
+						\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz &> quast.py_log_out.txt
+					fi
 				else
-					echo -e "Running QUAST prokaryote with reference, with gff file and with structural variants calling and processing mode..."
-					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz &> quast.py_log_out.txt
+					if [ ! -z "$correctedReads" ]; then
+						if [[ $correctedReads == *.fasta.gz || $correctedReads == *.fa.gz ]]; then
+							pigz -p $cores -dc $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $(basename $correctedReads).fq.gz &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $(basename $correctedReads).fq.gz &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq.gz
+						elif [[ $correctedReads == *.fasta || $correctedReads == *.fa ]]; then
+							seqtk seq -F '#' $correctedReads | pigz -c -p $cores --fast > $(basename $correctedReads).fq
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $(basename $correctedReads).fq &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $(basename $correctedReads).fq &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq
+						elif [[ $correctedReads == *.fastq.gz || $correctedReads == *.fq.gz || $correctedReads == *.fastq || $correctedReads == *.fq ]]; then
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --pacbio $correctedReads &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz --nanopore $correctedReads &> quast.py_log_out.txt
+							fi
+						fi
+					else
+						\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pe1 $illuminaReads\_1.fastq.gz --pe2 $illuminaReads\_2.fastq.gz &> quast.py_log_out.txt
+					fi
 				fi
 			else
-				if [ -z "$gff_file" ]; then
-					echo -e "Running QUAST prokaryote with reference..."
-					quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --space-efficient &> quast.py_log_out.txt
+				if [ -z "$gff_file" ]; then					
+					if [ ! -z "$correctedReads" ]; then
+						if [[ $correctedReads == *.fasta.gz || $correctedReads == *.fa.gz ]]; then
+							pigz -p $cores -dc $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pacbio $(basename $correctedReads).fq.gz &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --nanopore $(basename $correctedReads).fq.gz &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq.gz
+						elif [[ $correctedReads == *.fasta || $correctedReads == *.fa ]]; then
+							seqtk seq -F '#' $correctedReads | pigz -c -p $cores --fast > $(basename $correctedReads).fq
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pacbio $(basename $correctedReads).fq &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --nanopore $(basename $correctedReads).fq &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq
+						elif [[ $correctedReads == *.fastq.gz || $correctedReads == *.fq.gz || $correctedReads == *.fastq || $correctedReads == *.fq ]]; then
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --pacbio $correctedReads &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name --nanopore $correctedReads &> quast.py_log_out.txt
+							fi
+						fi
+					else
+						\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference --threads $cores --labels $name &> quast.py_log_out.txt
+					fi
 				else
-					echo -e "Running QUAST prokaryote with reference and with gff file..."
-					quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --space-efficient &> quast.py_log_out.txt
+					if [ ! -z "$correctedReads" ]; then
+						if [[ $correctedReads == *.fasta.gz || $correctedReads == *.fa.gz ]]; then
+							pigz -p $cores -dc $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pacbio $(basename $correctedReads).fq.gz &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --nanopore $(basename $correctedReads).fq.gz &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq.gz
+						elif [[ $correctedReads == *.fasta || $correctedReads == *.fa ]]; then
+							seqtk seq -F '#' $correctedReads | pigz -c -p $cores --fast > $(basename $correctedReads).fq
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pacbio $(basename $correctedReads).fq &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --nanopore $(basename $correctedReads).fq &> quast.py_log_out.txt
+							fi
+							rm $(basename $correctedReads).fq
+						elif [[ $correctedReads == *.fastq.gz || $correctedReads == *.fq.gz || $correctedReads == *.fastq || $correctedReads == *.fq ]]; then
+							if [ $long_reads_technology == "pacbio" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --pacbio $correctedReads &> quast.py_log_out.txt
+							elif [ $long_reads_technology == "ont2d" ]; then
+								\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name --nanopore $correctedReads &> quast.py_log_out.txt
+							fi
+						fi
+					else
+						\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" quast.py ../$name.ILRA.fasta -r $reference -g $gff_file --threads $cores --labels $name &> quast.py_log_out.txt
+					fi
 				fi
 			fi
 		fi
+	echo -e "Check out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats/quast_results"
 	fi
 
 	# Asessing genome completeness (BUSCO):
@@ -1011,13 +1226,13 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 	echo -e "Check out the file busco_log_out.txt and the BUSCO reports within the folder 7.Stats/busco_results"
 	if [ "$top_level"=="E" ]; then
 		echo -e "Running BUSCO for eukaryotes in the mode '--auto-lineage-euk'"
-		busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	elif [ "$top_level"=="P" ]; then
 		echo -e "Running BUSCO for prokaryotes in the mode '--auto-lineage-prok'"
-		busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	else
 		echo -e "Running BUSCO in the automatic mode, '--auto-lineage'"
-		busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	fi
 	rm -rf $dir/7.Stats/busco_results/downloads
 	cat $(find . -name busco.log) | grep "|" | grep -v "#"
@@ -1028,28 +1243,69 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 		mkdir -p $dir/7.Stats/plotsr_results; cd $dir/7.Stats/plotsr_results/
 		# minimap2 -ax asm5 -t $cores --eqx ../$name.ILRA.fasta $reference | samtools sort -l 9 -m 2G -@ $cores --write-index -o "$dir/7.Stats/plotsr_results/plotsr.bam##idx##$dir/7.Stats/plotsr_results/plotsr.bam.bai"
 		# (minimap2 can be used and it's faster, but meryl+winnowmap is currently recommended to map against repetitive sequences)
-		cp ../../$name.ILRA.fasta assembly_ILRA.fasta; cp $reference ref.fa # only the matching contigs can be shown with this visualization, so prepare copies renaming the contigs
+		ln -sf ../../$name.ILRA.fasta assembly_ILRA.fasta; ln -sf $reference ref.fa # only the matching contigs can be shown with this visualization, so prepare copies renaming the contigs
 		paste <(for f in $(grep ">" ref.fa | sort); do grep ">" assembly_ILRA.fasta | sort | grep ${f:1} | sed -r 's/^.{1}//'; done) <(for f in $(grep ">" ref.fa | sort); do if [ $(echo $(grep ">" assembly_ILRA.fasta | sort | grep ${f:1} | sed -r 's/^.{1}//') | sed '/^$/d' | wc -l) -gt 0 ]; then echo ${f:1}; fi; done) | awk ' NF==2 {print $0} ' > contigs_pairs.txt
 		seqkit replace -p "(.+)" -r '{kv}' -k contigs_pairs.txt -j $cores -m to_remove --quiet assembly_ILRA.fasta | awk '!/to_remove/' RS=">" ORS=">" | sed 's,>$,,g' > assembly_ILRA_reduced_comp_ref.fasta
 		ref_to_rm=$(comm -23 <(grep ">" ref.fa | sed 's,^>,,g') <(cat contigs_pairs.txt | awk '{print $2}'))
-		for f in $(grep ">" ref.fa | grep -v $ref_to_rm); do ILRA.fasta2singleLine.pl ref.fa | grep -A1 $f >> ref_reduced_comp_assembly.fasta; done
-		samtools faidx ref_reduced_comp_assembly.fasta; picard CreateSequenceDictionary -R ref_reduced_comp_assembly.fasta -O ref_reduced_comp_assembly.fasta.dict &> indexing_ref_log_out.txt # Prepare reference to fix cigar
-		meryl count k=19 threads=$cores output merylDB assembly_ILRA_reduced_comp_ref.fasta &> meryl_count_log_out.txt
+		for f in $(comm -23 <(cat ref.fa | grep ">") <(echo $ref_to_rm | tr ' ' '\n' | sed 's/^/>/')); do ILRA.fasta2singleLine.pl ref.fa | grep -A1 $f >> ref_reduced_comp_assembly.fasta; done
+		samtools faidx ref_reduced_comp_assembly.fasta; \time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" picard CreateSequenceDictionary -R ref_reduced_comp_assembly.fasta -O ref_reduced_comp_assembly.fasta.dict &> indexing_ref_log_out.txt # Prepare reference to fix cigar
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" meryl count k=19 threads=$cores output merylDB assembly_ILRA_reduced_comp_ref.fasta &> meryl_count_log_out.txt
 		meryl print greater-than distinct=0.9998 merylDB > repetitive_k19.txt 2> meryl_print_log_out.txt
 		winnowmap -W repetitive_k19.txt -ax asm5 -t $cores ref_reduced_comp_assembly.fasta assembly_ILRA_reduced_comp_ref.fasta 2> winnowmap_log_out.txt | samtools view -@ $cores -h -F 260 -F 2048 -o plotsr.sam
 		javarkit_samfixcigar=$(for path in $(echo ${PATH//:/ } | cut -d" " -f1,2,3,4,5); do find $path -name samfixcigar.jar; done | head -1) # Look for the jar file in the first 5 folders in $PATH
 		$(dirname $javarkit_samfixcigar)/java -jar $javarkit_samfixcigar -o plotsr_fix.sam -R ref_reduced_comp_assembly.fasta plotsr.sam # Updated java version and the precise pathway to the jar are required
 		# Get structural rearrangements (syri) and plotsr
-		syri -c plotsr_fix.sam -r ref_reduced_comp_assembly.fasta -q assembly_ILRA_reduced_comp_ref.fasta -F B --nc $cores --seed 1 --dir . --prefix plotsr_ &> syri_log_out.txt # syri fails if there are M in the bam cigar string, hence the reformat above
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" syri -c plotsr_fix.sam -r ref_reduced_comp_assembly.fasta -q assembly_ILRA_reduced_comp_ref.fasta -F B --nc $cores --seed 1 --dir . --prefix plotsr_ &> syri_log_out.txt # syri fails if there are M in the bam cigar string, hence the reformat above
 		echo -e "#file\tname\ttags\n$PWD/ref_reduced_comp_assembly.fasta\treference\tlw:1.5\n$PWD/assembly_ILRA_reduced_comp_ref.fasta\tassembly\tlw:1.5" > genomes.txt
 		plotsr --sr plotsr_syri.out --genomes genomes.txt -o plotsr_assembly_reference_plot.pdf
+	fi
+
+	# Visualization of syntenic relationships on multiple contigs (NGenomeSyn):
+	if [ ! -z "$reference" ]; then
+		mkdir -p $dir/7.Stats/NGenomeSyn; cd $dir/7.Stats/NGenomeSyn/
+		a=../../$name.ILRA.fasta
+		b=$reference # Get individual contigs and iterate
+		cat $a | awk '{
+		        if (substr($0, 1, 1)==">") {filename=(substr($0,2) "_first.fa")}
+		        print $0 >> filename
+		        close(filename)
+		}'
+		cat $b | awk '{
+		        if (substr($0, 1, 1)==">") {filename=(substr($0,2) "_second.fa")}
+		        print $0 >> filename
+		        close(filename)
+		}'
+		for f in $(ls | egrep _first.fa$); do
+			for i in $(ls | egrep _second.fa$); do
+				perl $(dirname $(which GetTwoGenomeSyn.pl))/NGenomeSyn-1.41/bin/GetTwoGenomeSyn.pl -InGenomeA $f -InGenomeB $i -OutPrefix ${f%.*}vs${i%.*} -MappingBin minimap2 -MinLenA $(assembly-stats $f | grep sum | sed 's/^sum = //g;s/, .*//g') -MinLenB $(assembly-stats $i | grep sum | sed 's/^sum = //g;s/, .*//g') -NumThreads $cores &>> GetTwoGenomeSyn.pl_log_out.txt
+			done
+		done
+		rm $(ls | egrep .fa$)
+		tar -cf NGenomeSyn_full_out.tar . &>> GetTwoGenomeSyn.pl_log_out.txt
+		rm $(ls | egrep -v '.png$|.tar$|_log_out.txt$')
 	fi
 
 	# Assembly metric visualisations (https://github.com/rjchallis/assembly-stats)
 	mkdir -p $dir/7.Stats/asm2stats_results; cd $dir/7.Stats/asm2stats_results
 	asm2stats.pl ../../$name.ILRA.fasta > output.json
 	asm2stats.minmaxgc.pl ../../$name.ILRA.fasta > output.minmaxgc.json
-	time2=`date +%s`; echo -e "STEP 7 time (secs): $((time2-time1))"; echo -e "STEP 7 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
+
+	# Visualization of telomeres and corrected reads coverage (tapestry)
+	if [ ! -z "$correctedReads" ]; then
+		mkdir -p $dir/7.Stats/tapestry; cd $dir/7.Stats/tapestry/
+		if [[ $correctedReads == *.fasta.gz || $correctedReads == *.fa.gz ]]; then
+			pigz -p $cores -dc $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
+			weave -a ../../$name.ILRA.fasta -r $(basename $correctedReads).fq.gz -t TTAGGG CTTATT $telomere_seq_1 $telomere_seq_2 -o out -c $cores &> weave_log_out.txt
+		elif [[ $correctedReads == *.fastq.gz || $correctedReads == *.fq.gz ]]; then
+			weave -a ../../$name.ILRA.fasta -r $correctedReads -t TTAGGG CTTATT $telomere_seq_1 $telomere_seq_2 -o out -c $cores &> weave_log_out.txt
+		elif [[ $correctedReads == *.fasta || $correctedReads == *.fa ]]; then
+			pigz -c -p $cores --fast $correctedReads > $(basename $correctedReads).gz
+			weave -a ../../$name.ILRA.fasta -r $(basename $correctedReads).gz -t TTAGGG CTTATT $telomere_seq_1 $telomere_seq_2 -o out -c $cores &> weave_log_out.txt
+		fi
+		cd out; rm -rf $(ls | egrep -v '.tsv$|.html$')
+	fi
+
+	time2=`date +%s`; echo -e "\nSTEP 7 time (secs): $((time2-time1))"; echo -e "STEP 7 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 	echo -e "\n\nSTEP 7: DONE"; echo -e "Current date/time: $(date)"
 else
 	echo "The STEP 7 for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... have been skipped"
@@ -1069,11 +1325,13 @@ if [[ -d "$dir/4.iCORN2" ]]; then
 fi
 if [[ -d "$dir/4.pilon" ]]; then
 	for i in $(seq 1 1 $number_iterations_icorn); do
-		samtools view -@ $cores -T $dir/3.ABACAS2/03b.assembly.fa -C -o $dir/4.pilon/ill_reads$i.bam.cram ill_reads$i.bam &> $dir/4.pilon/ill_reads$i.bam_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" samtools view -@ $cores -T $dir/3.ABACAS2/03b.assembly.fa -C -o $dir/4.pilon/ill_reads$i.bam.cram ill_reads$i.bam &> $dir/4.pilon/ill_reads$i.bam_log_out.txt
 	done
 fi
 if [ -f $dir/5.Circlator/Mapped.corrected.04.sam ]; then
-	samtools view -@ $cores -T $(find $dir -name "04.assembly.fa") -C -o $dir/5.Circlator/Mapped.corrected.04.sam.cram $dir/5.Circlator/Mapped.corrected.04.sam
+	samtools view -@ $cores -T $(find $dir -name "04.assembly.fa") -C -o $dir/5.Circlator/Mapped.corrected.04.sam.cram $dir/5.Circlator/Mapped.corrected.04.sam	
+fi
+if [ -f $dir/5.Circlator/Out.Circ/01.mapreads.bam ]; then
 	samtools view -@ $cores -T $dir/5.Circlator/ForCirc.Ref_2.fasta -C -o $dir/5.Circlator/Out.Circ/01.mapreads.bam.cram $dir/5.Circlator/Out.Circ/01.mapreads.bam
 fi
 for i in $(find $dir -regex '.*\(.fq$\|.fastq$\|.fa$\|.fasta$\|.fna$\|.plot$\|.vcf$\|ICORN2.03b.assembly.fa.[1-10]\)$' | grep -v $name.ILRA.fasta | grep -v "01.assembly.fa" | grep -v "03.assembly.fa" | grep -v "03b.assembly.fa" | grep -v "04.assembly.fa" | grep -v "05.assembly.fa"); do
@@ -1090,6 +1348,9 @@ for f in $(find . -type f -name "*out*"); do
 	cp $f $dir/all_logs/$(echo $f | sed -e 's,/,_,g' -e 's,^._,,g')
 done
 
+echo -e "\n\n\n\n\n(List of output files)" > $dir/all_output_files_log_out.txt
+ls -Rslh $dir &> $dir/all_output_files_log_out.txt
+
 echo -e "\nILRA IS DONE"; echo -e "Current date/time: $(date)\n"
 echo -e "Original assembly file: "$assembly
 echo -e "Final corrected assembly file: "$dir"/"$name.ILRA.fasta
@@ -1098,7 +1359,4 @@ echo -e "To assess the running please look for the expected output and log files
 end=`date +%s`; runtime=$((end-start))
 echo -e "\nCores: $cores"
 echo -e "Final runtime (hours): $((runtime / 3600))"
-echo -e "($runtime secs, check out time for each step after the statements 'STEP X: DONE')"
-
-echo -e "\n\n\n\n\n(List of output files)" > $dir/all_output_files_log_out.txt
-ls -Rslh $dir &> $dir/all_output_files_log_out.txt
+echo -e "($runtime secs, check out time for each step after the statements 'STEP X: DONE' or in the logs the output of GNU's time)"
