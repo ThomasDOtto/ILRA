@@ -1,5 +1,5 @@
 # ILRA
-Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing of genomes) by cleaning and merging contigs, correcting homopolymer tracks and circularizing plastids. 
+Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing of genomes) with steps such as  cleaning and merging contigs, correcting homopolymer tracks, circularizing plastids and quality control.
 
 ## Installation
 ILRA is based on several standard tools and novel scripts. We suggest two alternatives for installation. Please choose one of:
@@ -11,10 +11,14 @@ git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA/external_software/ILRA/
 bash ILRA_installation.sh 2>&1 | tee ILRA_installation.sh.log # Check log to ensure successful installation of dependencies
 ```
+This should work if you already have miniconda3 installed, and also install miniconda3 if not available. The versions of the tools installed by conda are frozen, so please do not install other versions to avoid conflicts or you may need to manually change installed versions or open issues if required or dependencies problems. The full instalation above, including cloning the repository, took ~40 minutes.
 
-This should work if you already have miniconda3 installed, and also install miniconda3 if not available. Plese keep in mind that in the ILRA_installation.sh script most of the versions of the tools installed by conda are not frozen, so please open an issue or you may need to manually change installed versions if conda fails with new dependencies problems.
+If not executing the 'light' mode that skips the decontamination step in ILRA (by default, or argument '-m light'), many databases will be required and must be also installed. ILRA is going to try and do it automatically, and alternatively instructions are going to be provided after a first execution.
 
-If not executing the light mode that skips the decontamination step in ILRA (by default, or argument '-m light'), many databases will be required and must be also installed. ILRA is going to try and do it automatically, or to provide instructions after a first execution.
+After installation and prior execution, please manually export the required after executing:
+```
+source ILRA/external_software/ILRA/path_to_source
+```
 
 
 2) The less recommended option is to manually install the required software.
