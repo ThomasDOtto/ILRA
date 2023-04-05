@@ -176,7 +176,7 @@ if [[ -z "$illuminaReads" ]] && [[ $perform_correction == "yes" ]]; then
 elif [[ $illuminaReads == /* ]]; then
 	echo -e "Checking Illumina short reads..."
 elif [[ $illuminaReads != /* ]]; then
-	echo -e "Not sure where Illumina reads are... Trying to look for them in the current pathway... If errors please provide absolute pathways as arguments"
+	echo -e "Not sure where Illumina reads are... Assuming they are in the current pathway... If errors please provide absolute pathways as arguments"
 	illuminaReads=$PWD/$illuminaReads
 fi
 
@@ -195,12 +195,12 @@ if [ -z "$reference" ]; then
 	doAbacas2=0
 else
 	doAbacas2=1
-fi
-
-if [[ $reference == /* ]]; then
-	echo -e "Reference provided correctly"
-else
-	echo -e "If errors with the reference please provide absolute pathways as arguments"
+	if [[ $reference == /* ]]; then
+		echo -e "Reference provided correctly"
+	else
+		echo -e "Not sure where reference is... Assuming it is in the current pathway... If errors please provide absolute pathways as arguments"
+		reference=$PWD/$reference	
+	fi
 fi
 
 if [ -z "$mode" ]; then
