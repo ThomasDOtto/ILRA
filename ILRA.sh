@@ -626,7 +626,7 @@ if [[ $debug == "all" || $debug == "step4" || $debug == "step4i" ]]; then
 			for ((i=1;$i<=$number_iterations_icorn;i++)); do
 				sed -s -e $'$a\\\n' $(ls | egrep .$i.o$) > log.$i.out
 				rm -rf $(ls | egrep .$i.o$) tmp_dir
-				cd $dir/4.iCORN2/ICORN2_$i; ll &> list_files_prev_cleaning.txt; rm *.bam *.bai *.fa *.fai *.dict 
+				cd $dir/4.iCORN2/ICORN2_$i; ls -l &> list_files_prev_cleaning.txt; rm *.bam *.bai *.fa *.fai *.dict 
 				cd $dir/4.iCORN2/
 			done
 			# Cleaning:
