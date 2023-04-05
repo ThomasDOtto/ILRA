@@ -705,6 +705,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 			awk 'BEGIN {RS = ">"; FS = "\n"; ORS = ""} {if ($2) print ">"$0}' ForCirc.Ref.fasta > ForCirc.Ref_2.fasta
 			echo -e "Check out the log of the mapping of the corrected reads and circlator in the files mapping_corrected_reads_log_out.txt and circlator_log_out.txt"
 			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" circlator all ForCirc.Ref_2.fasta ForCirc.reads_2.fasta Out.Circ --threads $cores &> circlator_log_out.txt
+			rm -rf $dir/5.Circlator/merylDB # Cleaning
 	# Delete the plastids/organelles/circular sequences from the current assembly version (04.assembly.fa)
 			for i in $seq_ids; do
 				echo $i >> List.circular_sequences.fofn
@@ -1268,6 +1269,7 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" syri -c plotsr_fix.sam -r ref_reduced_comp_assembly.fasta -q assembly_ILRA_reduced_comp_ref.fasta -F B --nc $cores --seed 1 --dir . --prefix plotsr_ &> syri_log_out.txt # syri fails if there are M in the bam cigar string, hence the reformat above
 		echo -e "#file\tname\ttags\n$PWD/ref_reduced_comp_assembly.fasta\treference\tlw:1.5\n$PWD/assembly_ILRA_reduced_comp_ref.fasta\tassembly\tlw:1.5" > genomes.txt
 		plotsr --sr plotsr_syri.out --genomes genomes.txt -o plotsr_assembly_reference_plot.pdf
+		rm -rf $(ls | egrep -v ".pdf$|.out$|.fasta$|.txt$") # Cleaning
 	fi
 
 	# Visualization of syntenic relationships on multiple contigs (NGenomeSyn):
