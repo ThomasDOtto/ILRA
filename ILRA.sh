@@ -560,7 +560,7 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 		ABA_CHECK_OVERLAP=0; export ABA_CHECK_OVERLAP; ABA_COMPARISON=nucmer; export ABA_COMPARISON; ABA_SPLIT_PARTS=$abacas2_split; export ABA_SPLIT_PARTS; Min_Alignment_Length=1000; Identity_Cutoff=98
 		echo -e "ABACAS2 parameters are:\nABA_CHECK_OVERLAP=0\nABA_COMPARISON=nucmer\nMin_Alignment_Length=1000\nIdentity_Cutoff=98\nBlast=$abacas2_blast\nsplit_parts=$ABA_SPLIT_PARTS\nPlease check ABACAS2 help and change manually within the pipeline (section 3) these parameters if needed"
 		abacas2.nonparallel.sh $reference $dir/2.MegaBLAST/03.assembly.fa $cores $Min_Alignment_Length $Identity_Cutoff $abacas2_blast 1> abacas_log_out.txt 2> abacas_log_out_warnings_errors.txt
-		rm $(find $dir/3.ABACAS2/ -name "Ref.*") # Cleaning
+		rm -rf $(find $dir/3.ABACAS2/ -name "Ref.*") $(find $dir/3.ABACAS2/ -name "Res.*") $(find $dir/3.ABACAS2/ -name "*.coords") $dir/3.ABACAS2/Reference # Cleaning		
 		echo -e "\nCheck out the log of abacas2.nonparallel.sh in the files abacas_log_out.txt and abacas_log_out_warnings_errors.txt"
 	# Break  and delete N's
 		fastaq trim_Ns_at_end Genome.abacas.fasta 03b.assembly.fa
@@ -604,6 +604,7 @@ if [[ $debug == "all" || $debug == "step4" || $debug == "step4i" ]]; then
 			echo "The iCORN2 fragment size used is iCORN2_fragmentSize=$iCORN2_fragmentSize. Please check iCORN2 help and change manually within the pipeline (section 4) if needed"
 			echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt"
 			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn $blocks_size $cores $java_memory $parts_icorn2_split $low_mem &> icorn2.serial_bowtie2.sh_log_out.txt
+			for i in $(find $dir -type d -name "ICORN2_*"); do cd $i && tar cf out_all.tar *.out && rm -rf *.out; done; cd $dir/4.iCORN2 # Cleaning
 			if [ "$(find . -name "larger_contigs2.txt" | wc -l)" -gt 0 ]; then
 				echo -e "\nPlease note iCORN2 is likely going to fail if any of the sequences being processed is larger than or around 60Mb... The program tried to handle this and divide the input sequences accordingly but failed...\n"
 				echo -e "\n\nThe size of at least one individual contig or chromosome within the input sequence is ~60Mb... iCORN2 used Pilon to correct some sequences. If allowed to continue, there would be segmentation errors later on in SNP-o-matic... Please double check iCORN2 log\n\n"
