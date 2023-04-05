@@ -203,6 +203,15 @@ else
 	fi
 fi
 
+if [ ! -z "$gff_file" ]; then
+	if [[ $gff_file == /* ]]; then
+		echo -e "GFF file with genes provided correctly"
+	else
+		echo -e "Not sure where gff file is... Assuming it is in the current pathway... If errors please provide absolute pathways as arguments"
+		gff_file=$PWD/$gff_file	
+	fi
+fi
+
 if [ -z "$mode" ]; then
 	mode="light"
 	echo "LIGHT MODE activated, steps for decontamination and preparation for online databases steps will be skipped ..."
@@ -1265,16 +1274,9 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 		mkdir -p $dir/7.Stats/NGenomeSyn; cd $dir/7.Stats/NGenomeSyn/
 		a=../../$name.ILRA.fasta
 		b=$reference # Get individual contigs and iterate
-		cat $a | awk '{
-		        if (substr($0, 1, 1)==">") {filename=(substr($0,2) "_first.fa")}
-		        print $0 >> filename
-		        close(filename)
-		}'
-		cat $b | awk '{
-		        if (substr($0, 1, 1)==">") {filename=(substr($0,2) "_second.fa")}
-		        print $0 >> filename
-		        close(filename)
-		}'
+		cat $a | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) "_first.fa")} print $0 >> filename close(filename) }'
+		cat $b | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) "_second.fa")} print $0 >> filename close(filename) }'
+		for f in $(ls | egrep .fa-.*); do mv $f $(echo $f | sed 's,.fa-.*,.fa,g'); done
 		for f in $(ls | egrep _first.fa$); do
 			for i in $(ls | egrep _second.fa$); do
 				perl $(dirname $(which GetTwoGenomeSyn.pl))/NGenomeSyn-1.41/bin/GetTwoGenomeSyn.pl -InGenomeA $f -InGenomeB $i -OutPrefix ${f%.*}vs${i%.*} -MappingBin minimap2 -MinLenA $(assembly-stats $f | grep sum | sed 's/^sum = //g;s/, .*//g') -MinLenB $(assembly-stats $i | grep sum | sed 's/^sum = //g;s/, .*//g') -NumThreads $cores &>> GetTwoGenomeSyn.pl_log_out.txt
@@ -1299,8 +1301,8 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 		elif [[ $correctedReads == *.fastq.gz || $correctedReads == *.fq.gz ]]; then
 			weave -a ../../$name.ILRA.fasta -r $correctedReads -t TTAGGG CTTATT $telomere_seq_1 $telomere_seq_2 -o out -c $cores &> weave_log_out.txt
 		elif [[ $correctedReads == *.fasta || $correctedReads == *.fa ]]; then
-			pigz -c -p $cores --fast $correctedReads > $(basename $correctedReads).gz
-			weave -a ../../$name.ILRA.fasta -r $(basename $correctedReads).gz -t TTAGGG CTTATT $telomere_seq_1 $telomere_seq_2 -o out -c $cores &> weave_log_out.txt
+			cat $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
+			weave -a ../../$name.ILRA.fasta -r $(basename $correctedReads).fq.gz -t TTAGGG CTTATT $telomere_seq_1 $telomere_seq_2 -o out -c $cores &> weave_log_out.txt
 		fi
 		cd out; rm -rf $(ls | egrep -v '.tsv$|.html$')
 	fi
