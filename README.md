@@ -1,46 +1,50 @@
 # ILRA
-Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing of genomes) with steps such as  cleaning and merging contigs, correcting homopolymer tracks, circularizing plastids and quality control.
+Improvement of Long Read Assemblies (ILRA) is a pipeline to help in the post-assembly process (finishing of genomes) with steps such as cleaning and merging contigs, correcting homopolymer tracks, circularizing plastids and quality control.
 
 ## Installation
 ILRA is based on several standard tools and novel scripts. We suggest two alternatives for installation. Please choose one of:
 
 
-1) The fastest option is to use the folder 'external_software', which contain some of the required software, a script to install dependencies (mainly through miniconda), and a suggestion of the PATH to be set. To install and setup everything required to run ILRA, please execute:
+1) The fastest option is to use the folder 'external_software', which contain some of the required software, a script to install dependencies (mainly through miniconda and downloading binaries), and a suggestion of the PATH to be set. To install and setup everything required to run ILRA, please execute:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA/external_software/ILRA/
 bash ILRA_installation.sh 2>&1 | tee ILRA_installation.sh.log # Check log to ensure successful installation of dependencies
 ```
-This should work if you already have miniconda3 installed, and also install miniconda3 if not available. The versions of the tools installed by conda are frozen ('.yml' files), so please do not install other versions to avoid conflicts or you may need to manually change installed versions or open issues if required or dependencies problems. The full instalation above, including cloning the repository, took ~40 minutes.
+This should work systems-wide if you already have miniconda3 installed, and also install miniconda3 in the same directory if not available. The versions of the tools installed by conda are frozen ('.yml' files), so please do not install other versions to avoid conflicts. You may need to manually change installed versions or please open an [issue](https://github.com/ThomasDOtto/ILRA/issues) for any installation-related aspect. The full instalation above, including 'git clone' of the repository, took ~40 minutes.
 
-If not executing the 'light' mode that skips the decontamination step in ILRA (by default, or argument '-m light'), many databases will be required and must be also installed. ILRA is going to try and do it automatically, and alternatively instructions are going to be provided after a first execution.
+If not executing the 'light' mode that skips the decontamination step in ILRA (by default, or argument '-m light'), many databases will be required and must be also installed. ILRA is going to try and do it automatically, and instructions are going to be provided after a first execution.
 
-After installation and prior execution, please manually export the required after executing:
+After installation and prior execution, please manually export the PATH required after executing:
 ```
 source ILRA/external_software/ILRA/path_to_source
 ```
 
 
 2) The less recommended option is to manually install the required software.
-If you want to manually install the software, check out in the files 'external_software/ILRA/ILRA_installation.sh' and in the '.yml' files (i.e. frozen conda environments) the list of required tools, which must be in the PATH when running. Please be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang statements (i.e. first line #!) so everything works in your system. The software and dependencies are automatically checked and the pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly. You may also need to make scripts executable ('chmod' command) and to make source or export so that the PATH variable and others are available for all scripts.
-
-
-## Quick start / Minimal examples
-```
-source ILRA/external_software/ILRA/path_to_source # To set up the PATH if you have followed option 2 for installation above
-cd ILRA/test_data
-# 'Light' mode skipping decontamination:
-ILRA.sh -a assembly_Pf_test.fasta -o out_ILRA_test -c corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I Illumina_short_reads_Pf_test_subset -t 4 -g PlasmoDB-50_Pfalciparum3D7.gff -L pb -q no 2>&1 | tee -a out_ILRA_test_log.txt
-# 'Both' mode with decontamination based on kraken2 and blast:
-ILRA.sh -a assembly_Pf_test.fasta -o out_ILRA_test_mode_both -c corrected_reads_Pf_test_subset.fastq.gz -n test -r $PWD/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I Illumina_short_reads_Pf_test_subset -t 4 -g PlasmoDB-50_Pfalciparum3D7.gff -L pb -q no -m both 2>&1 | tee -a out_ILRA_test_mode_both_log.txt
-```
-The test run will take around 5 minutes in 'light' mode and around 10 minutes in 'both' mode using 4 cores.
-
-Please go through the output file 'out_ILRA_test_log.txt' to get the details on the pipeline processing steps and final output. For the test run, the last step of quality control (using QUAST, BUSCO, gtools, telomere analyses...) is disconnected by using '-q no'.
-
+If you want to manually install the software, check out the files 'external_software/ILRA/ILRA_installation.sh' and in the '.yml' files (i.e. frozen conda environments) the list of required tools, which must be in the PATH when running. Please be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang statements (i.e. first line #!) so everything works in your system. The software and dependencies are automatically checked and the pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly. You may also need to make scripts executable ('chmod' command) and to make source or export so that the PATH variable and others are available for all scripts.
 
 
 ## ILRA arguments
+Please find a minimal example in the [test_data](https://github.com/ThomasDOtto/ILRA/tree/main/test_data) subfolder and a brief ILRA walktrough below.
+
+
+Parameters are not positional and all are going to be automatically handled by the pipeline (i.e. if you did not provide a required parameter, the pipeline may exit or use default values if possible). For example, if the argument '-f' is not provided, contigs shorter than 5,000 bp by default will be filtered out. 
+
+In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output with the argument '-n' as name (the file 'name.ILRA.fasta', in the folder provided by the argument '-o').
+
+Please do provide or not the arguments '-C', '-c', '-R' and '-I' to indicate whether to use short reads to perform error correction (iCORN2 / Pilon iteratively, with argument '-i' as number of iterations), and to find and filter out overlapping contigs (if coverage by Illumina short reads is even, argument 'F'). Please do provide the long reads sequencing technology used with the argument '-L'.
+
+Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2 and the argument '-B' to perform blasting) is going to be skipped, and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST, or the presence of certain names in the contigs marking the sequences to circularize (arguments '-s' and '-S') would mean that Circlator is executed or not. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon should be used for short reads correction instead of iCORN2 (default 'no'). The argument '-q' determines whether a final extra step for assessing the quality and completeness of the corrected assembly (i.e., QUAST, BUSCO, gathering sequences, looking in the telomeres for the sequenes provided by the arguments '-e' and '-E'...) is included (default 'yes'). The argument 'M' is required to control the maximum RAM memory used, and the argument '-l' activates a 'low memory' mode at the expense of more processing time. The arguments '-b', '-P' and '-A' provide the number of parts to split the sequences and to simultaneously process in ILRA, iCORN2/Pilon and ABACAS2, respectively. The argument '-t' provides the number of cores to be used when multithreading is possible.
+
+Finally, ILRA can be run in alternative modes (argument '-m'): 
+* '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive.
+* '-m blast': To perform decontamination and formatting for online submission based on blasting against databases, which would be less computationally expensive.
+* '-m both': To perform both. 
+* '-m light': To skip decontamination and expedite the process (default if argument not provided).
+The location of the downloaded databases to be used in the decontamination step should be provided with the argument '-D' and the location of the kraken2 database should be provided with the argument '-k'. The taxon id of the organism of interest that should be kept when filtering must be provided with the argument '-T'.
+
+
 Please refer to the help page for futher details:
 ```
 ILRA.sh -h
@@ -80,21 +84,6 @@ usage: ILRA.sh [options]
 		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)
 ```
-
-Parameters are not positional. If you did not provide a required parameter, the pipeline may exit or use default values if possible (check the help page above, the log after execution, or the 'Arguments / Variables' section in the ILRA main script 'ILRA.sh'). For example, if the argument '-f' is not provided, contigs shorter than 5,000 bp by default will be filtered out. 
-
-In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output with the argument '-n' as name (the file 'name.ILRA.fasta', in the folder provided by the argument '-o').
-
-Please do provide or not the arguments '-C', '-c', '-R' and '-I' to indicate whether to use short reads to perform error correction (iCORN2 / Pilon iteratively, with argument '-i' as number of iterations), and to find and filter out overlapping contigs (if coverage by Illumina short reads is even, argument 'F'). Please do provide the long reads sequencing technology used with the argument '-L'.
-
-Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2 and the argument '-B' to perform blasting) is going to be skipped, and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST, or the presence of certain names in the contigs marking the sequences to circularize (arguments '-s' and '-S') would mean that Circlator is executed or not. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon should be used for short reads correction instead of iCORN2 (default 'no'). The argument '-q' determines whether a final extra step for assessing the quality and completeness of the corrected assembly (i.e., QUAST, BUSCO, gathering sequences, looking in the telomeres for the sequenes provided by the arguments '-e' and '-E'...) is included (default 'yes'). The argument 'M' is required to control the maximum RAM memory used, and the argument '-l' activates a 'low memory' mode at the expense of more processing time. The arguments '-b', '-P' and '-A' provide the number of parts to split the sequences and to simultaneously process in ILRA, iCORN2/Pilon and ABACAS2, respectively. The argument '-t' provides the number of cores to be used when multithreading is possible.
-
-Finally, ILRA can be run in alternative modes (argument '-m'): 
-* '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive.
-* '-m blast': To perform decontamination and formatting for online submission based on blasting against databases, which would be less computationally expensive.
-* '-m both': To perform both. 
-* '-m light': To skip decontamination and expedite the process (default if argument not provided).
-The location of the downloaded databases to be used in the decontamination step should be provided with the argument '-D' and the location of the kraken2 database should be provided with the argument '-k'. The taxon id of the organism of interest that should be kept when filtering must be provided with the argument '-T'.
 
 
 ## Comments
