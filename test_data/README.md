@@ -1,4 +1,4 @@
-## Quick start / Minimal examples
+## Quick start / Minimal example
 ```
 source ILRA/external_software/ILRA/path_to_source # To get the PATH that must be exported if you have followed the conda-based solution for installation
 cd ILRA/test_data
