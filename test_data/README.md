@@ -10,8 +10,7 @@ The output of this test run is contained in the folder 'out_ILRA_test' and the l
 
 
 Please note that the majority of intermediate files have been removed for the sake of simplicitiy in this walkthrough, keeping only relevant logs and output files as results. The input sequences were a mock subset with 4 contigs. This run in 'light' mode with 4 threads took ~1 hour and required ~30 GB RAM. The majority of runtime (~50 minutes) and RAM usage corresponded to the last step of quality assesment of the already-corrected sequences (which could be ommited with the parameter '-q no').
-This was a run in the default 'light mode'. Once several external databases are downloaded, a full run including '-m both' to activate the decontamination step based on taxonomy classification and blasting would require the installation of the databases and 
-
+This was a run in the default 'light mode'. Once several external databases are downloaded, a full run including '-m both' to activate the decontamination step based on taxonomy classification and blasting would require the installation of the databases and ~5 more minutes and ~70 GB of RAM, and one contig would be identified as contamination and discarded
 
 Please go through the output file 'out_ILRA_test_log.txt' and the folder 'out_ILRA_test' to get the details on the pipeline processing steps and the final output. Here, we provide the following overview:
 
