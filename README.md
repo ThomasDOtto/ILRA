@@ -26,24 +26,22 @@ If you want to manually install the software, check out the files 'external_soft
 
 
 ## ILRA arguments
-Please find a minimal example in the [test_data](https://github.com/ThomasDOtto/ILRA/tree/main/test_data) subfolder and a brief ILRA walktrough below.
+Please find a guided minimal example in the [test_data](https://github.com/ThomasDOtto/ILRA/tree/main/test_data) subfolder and a brief ILRA walktrough below.
 
-
-Parameters are not positional and all are going to be automatically handled by the pipeline (i.e. if you did not provide a required parameter, the pipeline may exit or use default values if possible). For example, if the argument '-f' is not provided, contigs shorter than 5,000 bp by default will be filtered out. 
+Parameters are not positional and all are going to be automatically handled by the pipeline (i.e. if you did not provide a required parameter, the pipeline may exit asking for it or use default values if possible). For example, if the argument '-f' is not provided, contigs shorter than 5,000 bp by default will be filtered out. 
 
 In general, from an assembly as input (argument '-a'), ILRA is going to provide a polished assembly as output with the argument '-n' as name (the file 'name.ILRA.fasta', in the folder provided by the argument '-o').
 
-Please do provide or not the arguments '-C', '-c', '-R' and '-I' to indicate whether to use short reads to perform error correction (iCORN2 / Pilon iteratively, with argument '-i' as number of iterations), and to find and filter out overlapping contigs (if coverage by Illumina short reads is even, argument 'F'). Please do provide the long reads sequencing technology used with the argument '-L'.
+Please do provide or not the arguments '-C', '-c', '-R' and '-I' to indicate whether to use short reads to perform error correction (i.e. iCORN2 / Pilon iteratively, with argument '-i' as number of iterations), and to find and filter out overlapping contigs (if coverage by Illumina short reads is even, argument 'F'). Please do provide the long reads sequencing technology used with the argument '-L'.
 
-Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2 and the argument '-B' to perform blasting) is going to be skipped, and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST, or the presence of certain names in the contigs marking the sequences to circularize (arguments '-s' and '-S') would mean that Circlator is executed or not. The debug mode (argument '-d' makes possible to resumen the execution of ILRA from a particular step). The argument '-p' determine whether Pilon should be used for short reads correction instead of iCORN2 (default 'no'). The argument '-q' determines whether a final extra step for assessing the quality and completeness of the corrected assembly (i.e., QUAST, BUSCO, gathering sequences, looking in the telomeres for the sequenes provided by the arguments '-e' and '-E'...) is included (default 'yes'). The argument 'M' is required to control the maximum RAM memory used, and the argument '-l' activates a 'low memory' mode at the expense of more processing time. The arguments '-b', '-P' and '-A' provide the number of parts to split the sequences and to simultaneously process in ILRA, iCORN2/Pilon and ABACAS2, respectively. The argument '-t' provides the number of cores to be used when multithreading is possible.
+Depending on whether you provided a reference genome (argument '-r'), reordering and renaming of the contigs (ABACAS2 and the argument '-B' to perform blasting) is going to be skipped, and assessment by QUAST would be run without the reference. Similarly, the availability of a reference annotation (argument '-g') would determine the mode to run QUAST, or the presence of certain names in the contigs marking the sequences to circularize (arguments '-s' and '-S') would mean that Circlator is executed or not. ILRA would automatically resume any previous attempt or incomplete run, and the debug mode (argument '-d') makes possible to resume the execution of ILRA from a particular step. The argument '-p' determine whether Pilon should be used for short reads correction instead of iCORN2 (default 'no'). The argument '-q' determines whether a rather computationally expensive extra step for assessing the quality and completeness of the corrected assembly (i.e., QUAST, BUSCO, gathering sequences, looking in the telomeres for the sequenes provided by the arguments '-e' and '-E'...) is included (default 'yes'). The argument 'M' is required to control the maximum RAM used, and the argument '-l' activates a 'low memory' mode at the expense of more processing time. The arguments '-b', '-P' and '-A' provide the number of parts to split the sequences and to simultaneously process in ILRA, iCORN2/Pilon and ABACAS2, respectively. The argument '-t' provides the number of cores to be used when multithreading is possible.
 
 Finally, ILRA can be run in alternative modes (argument '-m'): 
-* '-m taxon': To perform decontamination based on taxonomic classification, which would be more computationally expensive.
-* '-m blast': To perform decontamination and formatting for online submission based on blasting against databases, which would be less computationally expensive.
-* '-m both': To perform both. 
-* '-m light': To skip decontamination and expedite the process (default if argument not provided).
-The location of the downloaded databases to be used in the decontamination step should be provided with the argument '-D' and the location of the kraken2 database should be provided with the argument '-k'. The taxon id of the organism of interest that should be kept when filtering must be provided with the argument '-T'.
-
+* '-m taxon':	To perform decontamination based on taxonomic classification, which would be more computationally expensive.
+* '-m blast':	To perform decontamination and formatting for online submission based on blasting against databases, which would be less computationally expensive.
+* '-m both':	To perform both. 
+* '-m light':	To skip decontamination and expedite the process (default if argument not provided).
+The location of the downloaded databases to be used in the decontamination step should be provided with the argument '-D' and the location of the kraken2 database should be provided with the argument '-k'. The taxon id of the organism of interest that should be kept when filtering must be provided with the argument '-T'. A first execution of ILRA will provide comprehensive isntructions to perform the installation of the databases.
 
 Please refer to the help page for futher details:
 ```
@@ -85,13 +83,12 @@ usage: ILRA.sh [options]
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)
 ```
 
-
 ## Comments
 We used ILRA to improve many genomes. The novel Plasmodium de novo assemblies included in the article are in the folder 'PlasmodiumGenomes' within this repository, in Zenodo ([10.5281/zenodo.7516750](https://doi.org/10.5281/zenodo.7516750)) and NCBI ([PRJNA714074](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA714074) / [PRJNA757237](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA757237)).
 
 ILRA is a continuation of the IPA project (https://github.com/ThomasDOtto/IPA). We felt to rename the tool as our updated version works with every long-read technology.
   
-Please cite this reference and our Zenodo tag when using ILRA for your publications:
+Please cite this reference and our [Zenodo](https://doi.org/10.5281/zenodo.7516750) tag when using ILRA for your publications:
 
 > From contigs to chromosomes: automatic Improvement of Long Read Assemblies (ILRA)
 > 
@@ -114,4 +111,4 @@ Please cite this reference and our Zenodo tag when using ILRA for your publicati
 ```
 
 ## Support
-Please report any [issue](https://github.com/ThomasDOtto/ILRA/issues) or [contact us](mailto:joseluis.ruiz@csic.es?subject=[GitHub]%20Source%20ILRA%20Support) to request support.
+ILRA is under active maintenance. Please report any [issue](https://github.com/ThomasDOtto/ILRA/issues) or [contact us](mailto:joseluis.ruiz@csic.es?subject=[GitHub]%20Source%20ILRA%20Support) to request support.
