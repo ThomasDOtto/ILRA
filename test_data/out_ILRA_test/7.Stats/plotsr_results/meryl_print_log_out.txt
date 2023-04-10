@@ -1,0 +1,13 @@
+
+Found 1 command tree.
+
+PROCESSING TREE #1 using 64 threads.
+  opGreaterThan
+    threshold=41
+    fraction-distinct=0.999800
+    merylDB
+    print to (stdout)
+
+Cleaning up.
+
+Bye.

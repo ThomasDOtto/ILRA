@@ -1,0 +1,10 @@
+[M::mm_idx_gen::0.497*0.93] collected minimizers
+[M::mm_idx_gen::0.597*1.42] sorted minimizers
+[M::main::0.598*1.42] loaded/built the index for 16 target sequence(s)
+[M::mm_mapopt_update::0.650*1.38] mid_occ = 200
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 16
+[M::mm_idx_stat::0.676*1.37] distinct minimizers: 1767986 (94.69% are singletons); average occurrences: 1.283; average spacing: 9.381; total length: 21282515
+[M::worker_pipeline::1.006*1.28] mapped 3 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -c -x asm10 -B5 -O4,16 --no-long-join -r 200 -N 50 -s 65 -z 200 --mask-level 0.9 --min-occ 200 -g 2500 --score-N 2 --cs -t 4 /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/test.fasta
+[M::main] Real time: 1.043 sec; CPU: 1.309 sec; Peak RSS: 0.146 GB

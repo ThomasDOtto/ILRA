@@ -1,0 +1,64 @@
+
+Found 1 command tree.
+
+Counting 678 (estimated) thousand canonical 19-mers from 1 input file:
+    sequence-file: assembly_ILRA_reduced_comp_ref.fasta
+
+
+SIMPLE MODE
+-----------
+
+  19-mers
+    -> 274877906944 entries for counts up to 65535.
+    -> 4096 Gbits memory used
+
+  694723 input bases
+    -> expected max count of 2778, needing 0 extra bits.
+    -> no memory used
+
+  512 GB memory needed
+
+
+COMPLEX MODE
+------------
+
+prefix     # of   struct   kmers/    segs/      min     data    total
+  bits   prefix   memory   prefix   prefix   memory   memory   memory
+------  -------  -------  -------  -------  -------  -------  -------
+     1     2  P  9616  B   169 kM   197  S  8192  B  1576 kB  1585 kB
+     2     4  P    15 kB    84 kM    96  S    16 kB  1536 kB  1551 kB
+     3     8  P    28 kB    42 kM    47  S    32 kB  1504 kB  1532 kB
+     4    16  P    53 kB    21 kM    23  S    64 kB  1472 kB  1525 kB
+     5    32  P   103 kB    10 kM    11  S   128 kB  1408 kB  1511 kB
+     6    64  P   205 kB  5428  M     6  S   256 kB  1536 kB  1741 kB
+     7   128  P   407 kB  2714  M     3  S   512 kB  1536 kB  1943 kB
+     8   256  P   812 kB  1357  M     2  S  1024 kB  2048 kB  2860 kB
+     9   512  P  1620 kB   679  M     1  S  2048 kB  2048 kB  3668 kB
+    10  1024  P  3240 kB   340  M     1  S  4096 kB  4096 kB  7336 kB  Best Value!
+    11  2048  P  6480 kB   170  M     1  S  8192 kB  8192 kB    14 MB
+    12  4096  P    12 MB    85  M     1  S    16 MB    16 MB    28 MB
+    13  8192  P    25 MB    43  M     1  S    32 MB    32 MB    57 MB
+    14    16 kP    50 MB    22  M     1  S    64 MB    64 MB   114 MB
+    15    32 kP   101 MB    11  M     1  S   128 MB   128 MB   229 MB
+
+
+FINAL CONFIGURATION
+-------------------
+
+Estimated to require 7336 kB memory out of 251 GB allowed.
+Estimated to require 2 batches.
+
+Configured complex mode for 0.007 GB memory per batch, and up to 2 batches.
+
+Start counting with THREADED method.
+Used 0.264 GB / 251.338 GB to store       683242 kmers; need 0.002 GB to sort        36228 kmers
+
+Input complete.  Writing results to 'merylDB', using 4 threads.
+finishIteration()--
+
+Finished counting.
+
+Cleaning up.
+
+Bye.
+mem=0 RSS=276192 elapsed=0:00.70 cpu.sys=0.08 .user=0.39

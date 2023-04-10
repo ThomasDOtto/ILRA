@@ -1,0 +1,3 @@
+test_with_ref_Pf3D7_01_v3_642993	Pf3D7_01_v3
+test_with_ref_Pf3D7_API_v3_34249	Pf3D7_API_v3
+test_with_ref_Pf_M76611_6054	Pf_M76611

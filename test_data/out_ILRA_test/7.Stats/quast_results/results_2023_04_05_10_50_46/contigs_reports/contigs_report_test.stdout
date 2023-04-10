@@ -1,0 +1,113 @@
+Aligning contigs to reference...
+	Aligning contigs to the reference
+Filtering alignments...
+Parsing coords...
+Loading reference...
+	Loaded [Pf3D7_01_v3]
+	Loaded [Pf3D7_02_v3]
+	Loaded [Pf3D7_03_v3]
+	Loaded [Pf3D7_04_v3]
+	Loaded [Pf3D7_05_v3]
+	Loaded [Pf3D7_06_v3]
+	Loaded [Pf3D7_07_v3]
+	Loaded [Pf3D7_08_v3]
+	Loaded [Pf3D7_09_v3]
+	Loaded [Pf3D7_10_v3]
+	Loaded [Pf3D7_11_v3]
+	Loaded [Pf3D7_12_v3]
+	Loaded [Pf3D7_13_v3]
+	Loaded [Pf3D7_14_v3]
+	Loaded [Pf3D7_API_v3]
+	Loaded [Pf_M76611]
+	Total Regions: 16
+	Total Region Length: 21282515
+Analyzing contigs...
+CONTIG: test_with_ref_Pf3D7_01_v3_642993 (642993bp)
+Best alignment score: 217728.6 (LEN: 222763, IDY: 97.74), Total number of alignments: 15
+			Looking for the best set of alignments (out of 15 total alignments)
+			Skipping redundant alignments after choosing the best set of alignments
+		Skipping redundant alignment 718115 718368 | 31884 31631 | 254 254 | 95.67 | Pf3D7_12_v3 test_with_ref_Pf3D7_01_v3_642993
+		Skipping redundant alignment 1639011 1639175 | 39137 38973 | 165 165 | 95.76 | Pf3D7_12_v3 test_with_ref_Pf3D7_01_v3_642993
+		Skipping redundant alignment 304 13609 | 583532 570156 | 13306 13377 | 97.71 | Pf3D7_08_v3 test_with_ref_Pf3D7_01_v3_642993
+		Skipping redundant alignment 1638476 1638581 | 588211 588106 | 106 106 | 95.28 | Pf3D7_12_v3 test_with_ref_Pf3D7_01_v3_642993
+		Skipping redundant alignment 1 68 | 603220 603153 | 68 68 | 100.0 | Pf3D7_04_v3 test_with_ref_Pf3D7_01_v3_642993
+		Skipping redundant alignment 1 68 | 612658 612591 | 68 68 | 100.0 | Pf3D7_04_v3 test_with_ref_Pf3D7_01_v3_642993
+		Skipping redundant alignment 1 68 | 618964 618897 | 68 68 | 100.0 | Pf3D7_04_v3 test_with_ref_Pf3D7_01_v3_642993
+		This contig has several significant sets of alignments. [An ambiguously mapped contig]
+		Using only the very best set (option --ambiguity-usage is set to "one").
+			The best set is below. Score: 484647.4, number of alignments: 8, unaligned bases: 145975
+		This contig is misassembled.
+		This contig is partially unaligned. (Aligned 497018 out of 642993 non-N bases (77.30%))
+			Excluding internal overlap of size 2278 between Alignment 1 and 2: 220176 421893 | 307483 509774 | 201718 202292 --> 222442 421893 | 309761 509774 | 199452 200014
+			Real Alignment 1: 76 222465 | 86998 309760 | 222390 222763 | 97.74 | Pf3D7_01_v3 test_with_ref_Pf3D7_01_v3_642993
+			  Indel (> 5bp) between these two alignments: insertion of length 24; 0 mismatches (number of Ns: 0)
+			Real Alignment 2: 222442 421893 | 309761 509774 | 199452 200014 | 97.74 | Pf3D7_01_v3 test_with_ref_Pf3D7_01_v3_642993
+			  Gap between these two alignments (local misassembly). Inconsistency = 27
+			Excluding internal overlap of size 17 between Alignment 3 and 4: 461113 477341 | 548405 564736 | 16229 16332 --> 461130 477341 | 548422 564736 | 16212 16315
+			Real Alignment 3: 422446 460626 | 510300 548421 | 38181 38122 | 96.64 | Pf3D7_01_v3 test_with_ref_Pf3D7_01_v3_642993
+			  Gap between these two alignments (local misassembly). Inconsistency = 503
+			Excluding internal overlap of size 35 between Alignment 4 and 5: 481906 487132 | 564702 569961 | 5227 5260 --> 481941 487132 | 564737 569961 | 5192 5225
+			Real Alignment 4: 461130 477341 | 548422 564736 | 16212 16315 | 98.61 | Pf3D7_01_v3 test_with_ref_Pf3D7_01_v3_642993
+			  Extensive misassembly (relocation, inconsistency = 4599) between these two alignments
+			Real Alignment 5: 481941 487132 | 564737 569961 | 5192 5225 | 96.83 | Pf3D7_01_v3 test_with_ref_Pf3D7_01_v3_642993
+			  Indel (> 5bp) between these two alignments: deletion of length 29; 165 mismatches (number of Ns: 0)
+			Real Alignment 6: 487356 500554 | 570156 583362 | 13199 13207 | 97.83 | Pf3D7_01_v3 test_with_ref_Pf3D7_01_v3_642993
+			  Extensive misassembly (translocation) between these two alignments
+			Real Alignment 7: 435814 436202 | 588332 588723 | 389 392 | 95.41 | Pf3D7_07_v3 test_with_ref_Pf3D7_01_v3_642993
+			  Extensive misassembly (translocation) between these two alignments
+			Real Alignment 8: 26 998 | 615280 614301 | 973 980 | 96.33 | Pf3D7_03_v3 test_with_ref_Pf3D7_01_v3_642993
+		Unaligned bases: 145975
+
+CONTIG: test_with_ref_Pf3D7_API_v3_34249 (34249bp)
+Best alignment score: 23645.5 (LEN: 23655, IDY: 99.96), Total number of alignments: 2
+			Looking for the best set of alignments (out of 2 total alignments)
+			The best set is below. Score: 33983.2, number of alignments: 2, unaligned bases: 0
+		This contig is misassembled.
+			Real Alignment 1: 10596 34250 | 1 23655 | 23655 23655 | 99.96 | Pf3D7_API_v3 test_with_ref_Pf3D7_API_v3_34249
+			  Extensive misassembly (relocation, inconsistency = -34250) between these two alignments
+			Real Alignment 2: 1 10595 | 23656 34249 | 10595 10594 | 99.95 | Pf3D7_API_v3 test_with_ref_Pf3D7_API_v3_34249
+
+CONTIG: test_with_ref_Pf_M76611_6054 (6054bp)
+Best alignment score: 4674.9 (LEN: 4763, IDY: 98.15), Total number of alignments: 2
+			Looking for the best set of alignments (out of 2 total alignments)
+			The best set is below. Score: 5713.9, number of alignments: 2, unaligned bases: 0
+		This contig is misassembled.
+			Real Alignment 1: 1 1291 | 1291 1 | 1291 1291 | 99.92 | Pf_M76611 test_with_ref_Pf_M76611_6054
+			  Extensive misassembly (relocation, inconsistency = -5967) between these two alignments
+			Real Alignment 2: 1292 5967 | 6054 1292 | 4676 4763 | 98.15 | Pf_M76611 test_with_ref_Pf_M76611_6054
+
+Analyzing coverage...
+Writing SNPs into /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/minimap_output/test.used_snps
+
+Analysis is finished!
+Founded SNPs were written into /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/minimap_output/test.used_snps
+
+Results:
+	Local Misassemblies: 2
+	Misassemblies: 5
+		Relocations: 3
+		Translocations: 2
+		Inversions: 0
+	Scaffold gap extensive misassemblies: 0
+	Scaffold gap local misassemblies: 0
+	Fake misassemblies matched with structural variations: 0
+	Misassembled Contigs: 3
+	Misassembled Contig Bases: 683296
+	Misassemblies Inter-Contig Overlap ("Extra" Aligned Bases): 0
+Unaligned Contigs: 0 + 1 part
+Half Unaligned Contigs with Misassemblies: 0
+Unaligned Bases in Fully and Partially Unaligned Contigs: 145975
+
+Ambiguously Mapped Contigs: 1
+Total Bases in Ambiguously Mapped Contigs: 642993
+"Extra" Aligned Bases in Ambiguously Mapped Contigs: 0
+Note that --allow-ambiguity option was set to "one" and only first alignment per each of these contigs was used (there is no "extra" aligned bases).
+
+	Covered Bases in Reference: 536181
+	Raw Aligned Bases in Assembly: 537321
+	Total Aligned Bases in Assembly (with "Extras"): 537321
+
+	SNPs: 1225
+	Insertions: 5748
+	Deletions: 4816
+

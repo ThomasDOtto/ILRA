@@ -1,0 +1,36 @@
+2023-04-05 11:40:28 INFO	Created output directory out
+2023-04-05 11:40:28 INFO	Loading genome assembly
+2023-04-05 11:40:28 INFO	Loaded 3 contigs from ../../test.ILRA.fasta
+2023-04-05 11:40:28 INFO	Ploidy window size set to 30000 based on assembly N50 length 642993
+2023-04-05 11:40:28 INFO	Sampling 50 times coverage of 0.7 Mb assembly from >10000bp reads in /mnt/beegfs/user/bin/ILRA/test_data/corrected_reads_Pf_test_subset.fastq.gz
+Tapestry version 1.0.0
+Dependencies
+minimap2       2.24-r1122     /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2
+samtools       1.16.1         /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/samtools
+
+
+Welcome to Tapestry!
+
+Assembly to validate	../../test.ILRA.fasta
+Reads to sample from	/mnt/beegfs/user/bin/ILRA/test_data/corrected_reads_Pf_test_subset.fastq.gz
+Coverage to sample	50
+Minimum read length	10000
+Telomere sequence(s)	TTAGGG CTTATT CCCTAAACCCTAAACCCTAAA TTTAGGGTTTAGGGTTTAGGG
+Minimum contig alignment	2000
+Output directory	out
+
+  0%|          | 0/50 [00:00<?, ?it/s]  4%|▍         | 2/50 [00:00<00:05,  9.44it/s]  6%|▌         | 3/50 [00:00<00:05,  8.90it/s]  8%|▊         | 4/50 [00:00<00:05,  8.51it/s] 10%|█         | 5/50 [00:00<00:05,  8.26it/s] 12%|█▏        | 6/50 [00:00<00:05,  8.04it/s] 14%|█▍        | 7/50 [00:00<00:05,  8.04it/s] 16%|█▌        | 8/50 [00:00<00:05,  8.04it/s] 18%|█▊        | 9/50 [00:01<00:05,  7.86it/s] 20%|██        | 10/50 [00:01<00:05,  7.79it/s] 22%|██▏       | 11/50 [00:01<00:04,  7.89it/s] 24%|██▍       | 12/50 [00:01<00:04,  7.81it/s] 26%|██▌       | 13/50 [00:01<00:04,  7.69it/s] 28%|██▊       | 14/50 [00:01<00:04,  7.49it/s] 30%|███       | 15/50 [00:01<00:04,  7.53it/s] 32%|███▏      | 16/50 [00:02<00:04,  7.46it/s]                                               2023-04-05 11:40:30 INFO	Wrote 659 reads (10966658 bases, 16 times coverage) to out/reads.fastq.gz
+2023-04-05 11:40:30 WARNING	Only found 16 times coverage in reads longer than 10000, not 50 times; consider reducing minimum read length (-l)
+2023-04-05 11:40:30 INFO	Aligning reads out/reads.fastq.gz to assembly
+2023-04-05 11:40:34 INFO	Indexing out/reads_assembly.bam
+2023-04-05 11:40:34 INFO	Aligning contigs out/assembly.fasta to assembly
+2023-04-05 11:40:36 INFO	Indexing out/contigs_assembly.bam
+2023-04-05 11:40:36 INFO	Building alignments database out/alignments.db
+2023-04-05 11:40:36 INFO	Loading contig alignments into database
+2023-04-05 11:40:36 INFO	Loading read alignments into database
+2023-04-05 11:40:37 INFO	Finding neighbouring alignments
+  0%|          | 0/542 [00:00<?, ? alignments/s]                                                2023-04-05 11:40:37 INFO	Processing 3 contigs
+Processing contigs:   0%|          | 0/3 [00:00<?, ? contig/s]Processing contigs:  33%|███▎      | 1/3 [00:00<00:01,  1.79 contig/s]                                                                      2023-04-05 11:40:37 INFO	Calculating ploidy estimates
+Ploidy estimates:   0%|          | 0/3 [00:00<?, ? contig/s]                                                            2023-04-05 11:40:38 INFO	Generating contig details
+2023-04-05 11:40:38 INFO	Generating Tapestry report
+2023-04-05 11:40:38 INFO	Done

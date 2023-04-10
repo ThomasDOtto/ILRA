@@ -1,0 +1,8 @@
+test_with_ref_Pf3D7_01_v3_642993
+Extensive misassembly (relocation, inconsistency = 4599) between 548422 564736 and 564737 569961
+Extensive misassembly (translocation) between 570156 583362 and 588332 588723
+Extensive misassembly (translocation) between 588332 588723 and 615280 614301
+test_with_ref_Pf3D7_API_v3_34249
+Extensive misassembly (relocation, inconsistency = -34250) between 1 23655 and 23656 34249
+test_with_ref_Pf_M76611_6054
+Extensive misassembly (relocation, inconsistency = -5967) between 1291 1 and 6054 1292

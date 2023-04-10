@@ -1,0 +1,19 @@
+2023-04-05 11:39:01,139 - Reading Coords - INFO - syri:135 - Reading input from BAM file
+2023-04-05 11:39:02,195 - Reading Coords - WARNING - syri:135 - Reference chromosome Pf_M76611 do not have any directed alignments with its homologous chromosome in the query genome (Pf_M76611). Filtering out all corresponding alignments.
+2023-04-05 11:39:02,262 - syri - INFO - syri:214 - starting
+2023-04-05 11:39:02,263 - syri - INFO - syri:214 - Analysing chromosomes: ['Pf3D7_01_v3', 'Pf3D7_API_v3']
+2023-04-05 11:39:02,329 - syri.Pf3D7_01_v3 - INFO - mapstar:48 - Pf3D7_01_v3 (1, 11)
+2023-04-05 11:39:02,330 - syri.Pf3D7_01_v3 - INFO - mapstar:48 - Identifying Synteny for chromosome Pf3D7_01_v3
+2023-04-05 11:39:02,330 - syri.Pf3D7_API_v3 - INFO - mapstar:48 - Pf3D7_API_v3 (1, 11)
+2023-04-05 11:39:02,331 - syri.Pf3D7_API_v3 - INFO - mapstar:48 - Identifying Synteny for chromosome Pf3D7_API_v3
+2023-04-05 11:39:02,378 - syri.Pf3D7_01_v3 - INFO - mapstar:48 - Identifying Inversions for chromosome Pf3D7_01_v3
+2023-04-05 11:39:02,378 - syri.Pf3D7_API_v3 - INFO - mapstar:48 - Identifying Inversions for chromosome Pf3D7_API_v3
+2023-04-05 11:39:02,430 - syri.Pf3D7_01_v3 - INFO - mapstar:48 - Identifying translocation and duplication for chromosome Pf3D7_01_v3
+2023-04-05 11:39:02,430 - syri.Pf3D7_API_v3 - INFO - mapstar:48 - Identifying translocation and duplication for chromosome Pf3D7_API_v3
+2023-04-05 11:39:02,660 - getCTX - INFO - syri:214 - Identifying cross-chromosomal translocation and duplication for chromosome2023-04-05 11:39:02.659981
+2023-04-05 11:39:02,874 - local_variation - INFO - syri:225 - Finding SVs in synOut.txt, invOut.txt, TLOut.txt, invTLOut.txt, ctxOut.txt
+2023-04-05 11:39:03,855 - local_variation - INFO - syri:245 - Finding SNPs and small indels
+2023-04-05 11:39:04,019 - local_variation - INFO - syri:257 - Combining outputs
+2023-04-05 11:39:04,069 - local_variation - INFO - syri:262 - Generating table output
+2023-04-05 11:39:04,322 - local_variation - INFO - syri:267 - Generating VCF
+2023-04-05 11:39:04,375 - local_variation - WARNING - syri:275 - Finished syri

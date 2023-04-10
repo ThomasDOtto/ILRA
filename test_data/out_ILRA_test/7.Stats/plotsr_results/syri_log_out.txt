@@ -1,0 +1,17 @@
+Reading Coords - WARNING - Reference chromosome Pf_M76611 do not have any directed alignments with its homologous chromosome in the query genome (Pf_M76611). Filtering out all corresponding alignments.
+local_variation - WARNING - Finished syri
+invOut.txt  is empty. Skipping analysing it.
+TLOut.txt  is empty. Skipping analysing it.
+invTLOut.txt  is empty. Skipping analysing it.
+ctxOut.txt is empty. Skipping analysing it.
+inv Out.txt is empty. Skipping analysing it.
+TL Out.txt is empty. Skipping analysing it.
+invTL Out.txt is empty. Skipping analysing it.
+dup Out.txt is empty. Skipping analysing it.
+invDup Out.txt is empty. Skipping analysing it.
+ctxOut.txt is empty. Skipping analysing it.
+invOut.txt  is empty. Skipping analysing it.
+TLOut.txt  is empty. Skipping analysing it.
+invTLOut.txt  is empty. Skipping analysing it.
+ctxOut.txt is empty. Skipping analysing it.
+mem=0 RSS=100964 elapsed=0:19.57 cpu.sys=6.79 .user=3.34

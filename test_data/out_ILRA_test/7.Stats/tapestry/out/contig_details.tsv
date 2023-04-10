@@ -1,0 +1,4 @@
+Contig	Length	GC%	MedianReadDepth	StartTelomeres	EndTelomeres	StartMeanReadOverhangBases	EndMeanReadOverhangBases	UniqueBases	Unique%	Ploidys
+test_with_ref_Pf3D7_01_v3_642993	642993	20.5	14.5	81	0	None	None	123201	19	0:0.05,1:0.09,2:0.73,3:0.09,4:0.05
+test_with_ref_Pf3D7_API_v3_34249	34249	14.2	15.0	0	0	657	6984	23917	70	2:1.00
+test_with_ref_Pf_M76611_6054	6054	31.5	26.2	0	0	4497	5522	6054	100	4:1.00

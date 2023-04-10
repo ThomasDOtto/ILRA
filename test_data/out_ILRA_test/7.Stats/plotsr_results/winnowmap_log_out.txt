@@ -1,0 +1,15 @@
+[M::mm_idx_gen::0.002*4.30] reading downweighted kmers
+[M::mm_idx_gen::0.003*2.79] collected downweighted kmers, no. of kmers read=115
+[M::mm_idx_gen::0.003*2.78] saved the kmers in a bloom filter: hash functions=2 and size=14384 
+[M::mm_idx_gen::0.046*1.11] collected minimizers
+[M::mm_idx_gen::0.054*1.51] sorted minimizers
+[M::main::0.055*1.50] loaded/built the index for 3 target sequence(s)
+[M::main::0.055*1.50] running winnowmap in SV-aware mode
+[M::main::0.055*1.50] stage1-specific parameters minP:2000, incP:2.83, maxP:16000, sample:2000, min-qlen:10000, min-qcov:0.5, min-mapq:5, mid-occ:5000
+[M::main::0.055*1.50] stage2-specific parameters s2_bw:2000, s2_zdropinv:25
+[M::mm_idx_stat] kmer size: 19; skip: 50; is_hpc: 0; #seq: 3
+[M::mm_idx_stat::0.057*1.48] distinct minimizers: 20035 (96.31% are singletons); average occurrences: 1.069; average spacing: 25.241
+[M::worker_pipeline::1.273*1.20] mapped 3 sequences
+[M::main] Version: 2.03, pthreads=4, omp_threads=3
+[M::main] CMD: winnowmap -W repetitive_k19.txt -ax asm5 -t 4 ref_reduced_comp_assembly.fasta assembly_ILRA_reduced_comp_ref.fasta
+[M::main] Real time: 1.281 sec; CPU: 1.533 sec; Peak RSS: 0.221 GB

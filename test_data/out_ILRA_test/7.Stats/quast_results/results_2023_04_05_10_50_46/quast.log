@@ -1,0 +1,289 @@
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/quast.py ../test.ILRA.fasta -r /mnt/beegfs/user/bin/ILRA/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -g /mnt/beegfs/user/bin/ILRA/test_data/PlasmoDB-50_Pfalciparum3D7.gff --threads 4 --labels test --pe1 /mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset_1.fastq.gz --pe2 /mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset_2.fastq.gz --pacbio /mnt/beegfs/user/bin/ILRA/test_data/corrected_reads_Pf_test_subset.fastq.gz --eukaryote
+
+Version: 5.2.0
+
+System information:
+  OS: Linux-3.10.0-1160.45.1.el7.x86_64-x86_64-with-glibc2.17 (linux_64)
+  Python version: 3.10.9
+  CPUs number: 64
+
+Started: 2023-04-05 10:50:46
+
+Logging to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast.log
+
+CWD: /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats
+Main parameters: 
+  MODE: default, threads: 4, eukaryotic: true, min contig length: 500, min alignment length: 65, \
+  min alignment IDY: 95.0, ambiguity: one, min local misassembly length: 200, min extensive misassembly length: 1000
+
+Reference:
+  /mnt/beegfs/user/bin/ILRA/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta ==> PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326
+
+Contigs:
+  Pre-processing...
+  ../test.ILRA.fasta ==> test
+
+2023-04-05 10:50:48
+Running Reads analyzer...
+  Logging to files /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.log and /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err...
+  Pre-processing reads...
+  Running BWA...
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bwa index -p /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/test.fasta \
+/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/test.fasta \
+>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err \
+2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Pre-processing reads...
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bwa mem -t 2 /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/test.fasta \
+/mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset_1.fastq.gz \
+/mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset_2.fastq.gz \
+> test.pe1.sam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Running BWA for reference...
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bwa index -p /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta \
+/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta \
+>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err \
+2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bwa mem -t 2 /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta \
+/mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset_1.fastq.gz \
+/mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset_2.fastq.gz \
+> PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pe1.sam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 2 -h -S -f bam test.pe1.sam > test.pe1.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+markdup -r -t 2 --tmpdir /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats \
+test.pe1.bam test.pe1.dedup.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -t 2 -ax map-pb /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/test.fasta \
+/mnt/beegfs/user/bin/ILRA/test_data/corrected_reads_Pf_test_subset.fastq.gz \
+> test.pacbio1.sam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 2 -h -S -f bam test.pacbio1.sam > test.pacbio1.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+sort -t 4 --tmpdir . -m 62GB -o test.pe.sorted.bam test.pe.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+sort -t 4 --tmpdir . -m 62GB -o test.pacbio.sorted.bam test.pacbio.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+merge -t 2 test.bam test.pe.sorted.bam test.pacbio.sorted.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 2 -h test.bam > test.sam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Done.
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -H -S quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/test.sam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/test.sam.header 2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Sorting SAM-file...
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 2 -h -S -f bam quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/test.all.correct.sam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/test.bam 2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 2 -h -S -f bam PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pe1.sam \
+> PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pe1.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+flagstat -t 2 quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/test.bam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/test.stat 2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bedtools bamtobed -i quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/test.bam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/test.bed 2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+sort -k1,1 -k2,2n quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/test.bed \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/test.sorted.bed \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bedtools genomecov -i quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/test.sorted.bed \
+-g quast_results/results_2023_04_05_10_50_46/quast_corrected_input/test.fasta.fai \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/test.genomecov \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+markdup -r -t 2 --tmpdir /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats \
+PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pe1.bam PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pe1.dedup.bam \
+2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Analysis is finished.
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -t 2 -ax map-pb /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta \
+/mnt/beegfs/user/bin/ILRA/test_data/corrected_reads_Pf_test_subset.fastq.gz \
+> PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pacbio1.sam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 2 -h -S -f bam PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pacbio1.sam \
+> PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pacbio1.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+sort -t 4 --tmpdir . -m 62GB -o PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pe.sorted.bam \
+PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pe.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+sort -t 4 --tmpdir . -m 62GB -o PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pacbio.sorted.bam \
+PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pacbio.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+merge -t 2 PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bam PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pe.sorted.bam \
+PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.pacbio.sorted.bam 2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 2 -h PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bam > PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.sam \
+2>> /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Done.
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -H -S quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.sam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.sam.header \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Sorting SAM-file for reference...
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 2 -h -S -f bam quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.all.correct.sam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bam \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+flagstat -t 2 quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.stat \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bedtools bamtobed -i quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bed \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+sort -k1,1 -k2,2n quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bed \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.sorted.bed \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bedtools genomecov -i quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.sorted.bed \
+-g quast_results/results_2023_04_05_10_50_46/quast_corrected_input/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta.fai \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.genomecov \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Analysis for reference is finished.
+  Creating total report...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_report.txt, reads_report.tsv, and reads_report.tex
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 4 -h -f bam -F not unmapped quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.mapped.bam \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+sort -t 4 --tmpdir quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output \
+-m 62GB -o quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.mapped.sorted.bam \
+quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.mapped.bam \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 4 -h quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.mapped.sorted.bam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.all.correct.sorted.sam \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Calculating reads coverage...
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bedtools genomecov -ibam quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.mapped.sorted.bam \
+-g quast_results/results_2023_04_05_10_50_46/quast_corrected_input/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta.fai \
+-bga > quast_results/results_2023_04_05_10_50_46/reads_stats/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.cov_raw \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Calculating physical coverage...
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+view -t 4 -h -f bam -F proper_pair and not supplementary and not duplicate and template_length > -1000 and template_length < 1000 \
+quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bam \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.physical.bam \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/sambamba/sambamba_linux \
+sort -t 4 --tmpdir quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output \
+-m 62GB -o quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.physical.sorted.bam \
+quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.physical.bam \
+-n 2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bedtools bamtobed -i quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.physical.sorted.bam \
+-bedpe > quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.physical.bedpe \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+sort -k1,1 -k2,2n quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.physical.bed \
+> quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.physical.sorted.bed \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/bedtools genomecov -i quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.physical.sorted.bed \
+-g quast_results/results_2023_04_05_10_50_46/quast_corrected_input/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta.fai \
+-bga > quast_results/results_2023_04_05_10_50_46/reads_stats/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.physical.raw.cov \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+  Looking for trivial deletions (long zero-covered fragments)...
+  Trivial deletions: 3374 found
+    Saving to: /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/trivial_deletions.bed
+  Searching structural variations with GRIDSS...
+java -ea -Xmx16g -Dsamjdk.create_index=true -Dsamjdk.use_async_io_read_samtools=true \
+-Dsamjdk.use_async_io_write_samtools=true -Dsamjdk.use_async_io_write_tribble=true \
+-cp /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env_quast/lib/python3.10/site-packages/quast_libs/gridss/gridss-1.4.1.jar \
+gridss.CallVariants I=/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.mapped.sorted.bam \
+O=/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326_gridss/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.vcf \
+ASSEMBLY=/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326_gridss/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.gridss.bam \
+R=/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast_corrected_input/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta \
+WORKER_THREADS=4 WORKING_DIR=/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326_gridss \
+2>> quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err
+The tool returned non-zero. See quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err for stderr.
+    Saving to: /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326_structural_variations.bed
+  Structural variations are in /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bed
+  Coverage distribution along the reference genome is in /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.cov
+Done.
+
+2023-04-05 11:32:33
+Running Basic statistics processor...
+  Reference genome:
+    PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta, length = 21282515, num fragments = 16, GC % = 18.70
+  Contig files: 
+    test
+  Calculating N50 and L50...
+    test, N50 = 642993, L50 = 1, auN = 606837.5, Total length = 683296, GC % = 20.27, # N's per 100 kbp =  0.00
+  Drawing Nx plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats/Nx_plot.pdf
+  Drawing NGx plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats/NGx_plot.pdf
+  Drawing cumulative plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats/cumulative_plot.pdf
+  Drawing GC content plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats/GC_content_plot.pdf
+  Drawing test GC content plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats/test_GC_content_plot.pdf
+Done.
+
+2023-04-05 11:32:45
+Running Contig analyzer...
+  test
+  Logging to files /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/contigs_report_test.stdout and contigs_report_test.stderr...
+  Aligning contigs to the reference
+  /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -c -x asm10 -B5 \
+  -O4,16 --no-long-join -r 200 -N 50 -s 65 -z 200 --mask-level 0.9 --min-occ 200 -g \
+  2500 --score-N 2 --cs -t 4 quast_results/results_2023_04_05_10_50_46/quast_corrected_input/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta \
+  quast_results/results_2023_04_05_10_50_46/quast_corrected_input/test.fasta > quast_results/results_2023_04_05_10_50_46/contigs_reports/minimap_output/test.coords_tmp \
+  2>> quast_results/results_2023_04_05_10_50_46/contigs_reports/contigs_report_test.stderr
+  Analysis is finished.
+
+  Creating total report...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/misassemblies_report.txt, misassemblies_report.tsv, and misassemblies_report.tex
+  Transposed version of total report...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/transposed_report_misassemblies.txt, transposed_report_misassemblies.tsv, and transposed_report_misassemblies.tex
+  Creating total report...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/unaligned_report.txt, unaligned_report.tsv, and unaligned_report.tex
+  Drawing misassemblies by types plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/misassemblies_plot.pdf
+  Drawing misassemblies FRCurve plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/misassemblies_frcurve_plot.pdf
+Done.
+
+2023-04-05 11:32:52
+Running NA-NGA calculation...
+  test, Largest alignment = 477214, NA50 = 477214, LA50 = 1
+  Drawing cumulative plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/aligned_stats/cumulative_plot.pdf
+  Drawing NAx plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/aligned_stats/NAx_plot.pdf
+  Drawing NGAx plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/aligned_stats/NGAx_plot.pdf
+Done.
+
+2023-04-05 11:32:59
+Running Genome analyzer...
+  NOTICE: No file with operons were provided. Use the -O option if you want to specify it.
+  Loaded 40658 genomic features of type "ANY"
+  test
+  Analysis is finished.
+  Drawing genomic features cumulative plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/genome_stats/features_cumulative_plot.pdf
+  Drawing genomic features FRCurve plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/genome_stats/features_frcurve_plot.pdf
+  Skipping drawing # complete genomic features histogram... (less than 2 columns histogram makes no sense)
+  Skipping drawing Genome fraction, % histogram... (less than 2 columns histogram makes no sense)
+Done.
+
+NOTICE: Genes are not predicted by default. Use --gene-finding or --glimmer option to enable it.
+
+2023-04-05 11:33:08
+Creating large visual summaries...
+This may take a while: press Ctrl-C to skip this step..
+  1 of 2: Creating PDF with all tables and plots...
+  2 of 2: Creating Icarus viewers...
+Done
+
+2023-04-05 11:33:47
+RESULTS:
+  Text versions of total report are saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/report.txt, report.tsv, and report.tex
+  Text versions of transposed total report are saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/transposed_report.txt, transposed_report.tsv, and transposed_report.tex
+  HTML version (interactive tables and plots) is saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/report.html
+  PDF version (tables and plots) is saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/report.pdf
+  Icarus (contig browser) is saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/icarus.html
+  Log is saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast.log
+
+Finished: 2023-04-05 11:33:47
+Elapsed time: 0:43:01.423380
+NOTICEs: 2; WARNINGs: 0; non-fatal ERRORs: 0
+
+Thank you for using QUAST!

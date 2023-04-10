@@ -1,0 +1,30 @@
+All statistics are based on contigs of size >= 500 bp, unless otherwise noted (e.g., "# contigs (>= 0 bp)" and "Total length (>= 0 bp)" include all contigs).
+
+Assembly                       test  
+# total reads                  29208 
+# left                         13777 
+# right                        13751 
+# mapped                       33066 
+Mapped (%)                     113.21
+# properly paired              18444 
+Properly paired (%)            63.15 
+# singletons                   1345  
+Singletons (%)                 4.6   
+# misjoint mates               1176  
+Misjoint mates (%)             4.03  
+Avg. coverage depth            27    
+Coverage >= 1x (%)             98.11 
+Coverage >= 5x (%)             91.9  
+Coverage >= 10x (%)            89.92 
+# reference mapped             37871 
+Reference mapped (%)           129.63
+# reference properly paired    15074 
+Reference properly paired (%)  51.6  
+# reference singletons         1181  
+Reference singletons (%)       4.04  
+# reference misjoint mates     8990  
+Reference misjoint mates (%)   30.77 
+Reference avg. coverage depth  0     
+Reference coverage >= 1x (%)   4.86  
+Reference coverage >= 5x (%)   2.79  
+Reference coverage >= 10x (%)  2.67  

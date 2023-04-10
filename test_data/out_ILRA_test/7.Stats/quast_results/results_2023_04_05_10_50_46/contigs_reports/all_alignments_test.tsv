@@ -1,0 +1,25 @@
+S1	E1	S2	E2	Reference	Contig	IDY	Ambiguous	Best_group
+76	222465	86998	309760	Pf3D7_01_v3	test_with_ref_Pf3D7_01_v3_642993	97.74		True
+indel: indel (> 5bp)
+222442	421893	309761	509774	Pf3D7_01_v3	test_with_ref_Pf3D7_01_v3_642993	97.74		True
+local misassembly
+422446	460626	510300	548421	Pf3D7_01_v3	test_with_ref_Pf3D7_01_v3_642993	96.64		True
+local misassembly
+461130	477341	548422	564736	Pf3D7_01_v3	test_with_ref_Pf3D7_01_v3_642993	98.61		True
+relocation, inconsistency = 4599
+481941	487132	564737	569961	Pf3D7_01_v3	test_with_ref_Pf3D7_01_v3_642993	96.83		True
+indel: indel (> 5bp)
+487356	500554	570156	583362	Pf3D7_01_v3	test_with_ref_Pf3D7_01_v3_642993	97.83		True
+translocation
+435814	436202	588332	588723	Pf3D7_07_v3	test_with_ref_Pf3D7_01_v3_642993	95.41		True
+translocation
+26	998	615280	614301	Pf3D7_03_v3	test_with_ref_Pf3D7_01_v3_642993	96.33		True
+CONTIG	test_with_ref_Pf3D7_01_v3_642993	642993	misassembled
+10596	34250	1	23655	Pf3D7_API_v3	test_with_ref_Pf3D7_API_v3_34249	99.96		True
+relocation, inconsistency = -34250
+1	10595	23656	34249	Pf3D7_API_v3	test_with_ref_Pf3D7_API_v3_34249	99.95		True
+CONTIG	test_with_ref_Pf3D7_API_v3_34249	34249	misassembled
+1	1291	1291	1	Pf_M76611	test_with_ref_Pf_M76611_6054	99.92		True
+relocation, inconsistency = -5967
+1292	5967	6054	1292	Pf_M76611	test_with_ref_Pf_M76611_6054	98.15		True
+CONTIG	test_with_ref_Pf_M76611_6054	6054	misassembled

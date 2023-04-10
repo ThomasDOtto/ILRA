@@ -1,0 +1,859 @@
+[M::mm_idx_gen::0.033*1.06] collected minimizers
+[M::mm_idx_gen::0.050*1.81] sorted minimizers
+[M::main::0.051*1.79] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.053*1.74] mid_occ = 110
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.056*1.68] distinct minimizers: 45525 (97.12% are singletons); average occurrences: 1.171; average spacing: 9.387; total length: 500554
+[M::worker_pipeline::0.250*1.14] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_01_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_01_v3_second.A.fa
+[M::main] Real time: 0.263 sec; CPU: 0.292 sec; Peak RSS: 0.016 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Loading SVG module done
+convert   SVG ---> PNG ...
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.045*1.02] collected minimizers
+[M::mm_idx_gen::0.068*1.87] sorted minimizers
+[M::main::0.069*1.86] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.072*1.81] mid_occ = 76
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.075*1.76] distinct minimizers: 73631 (97.17% are singletons); average occurrences: 1.182; average spacing: 9.345; total length: 813289
+[M::worker_pipeline::0.237*1.23] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_02_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_02_v3_second.A.fa
+[M::main] Real time: 0.250 sec; CPU: 0.299 sec; Peak RSS: 0.019 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_02_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.047*1.00] collected minimizers
+[M::mm_idx_gen::0.073*1.89] sorted minimizers
+[M::main::0.074*1.87] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.078*1.83] mid_occ = 77
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.081*1.77] distinct minimizers: 86451 (97.21% are singletons); average occurrences: 1.168; average spacing: 9.435; total length: 952947
+[M::worker_pipeline::0.236*1.25] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_03_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_03_v3_second.A.fa
+[M::main] Real time: 0.250 sec; CPU: 0.304 sec; Peak RSS: 0.018 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_03_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.049*1.00] collected minimizers
+[M::mm_idx_gen::0.073*1.85] sorted minimizers
+[M::main::0.074*1.83] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.077*1.78] mid_occ = 75
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.081*1.74] distinct minimizers: 86896 (97.23% are singletons); average occurrences: 1.174; average spacing: 9.416; total length: 960348
+[M::worker_pipeline::0.243*1.23] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_04_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_04_v3_second.A.fa
+[M::main] Real time: 0.258 sec; CPU: 0.308 sec; Peak RSS: 0.018 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_04_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.056*1.00] collected minimizers
+[M::mm_idx_gen::0.084*1.86] sorted minimizers
+[M::main::0.085*1.84] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.089*1.80] mid_occ = 56
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.093*1.75] distinct minimizers: 116924 (97.30% are singletons); average occurrences: 1.185; average spacing: 9.354; total length: 1296330
+[M::worker_pipeline::0.258*1.26] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_05_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_05_v3_second.A.fa
+[M::main] Real time: 0.272 sec; CPU: 0.335 sec; Peak RSS: 0.021 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_05_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.056*1.01] collected minimizers
+[M::mm_idx_gen::0.086*1.89] sorted minimizers
+[M::main::0.087*1.87] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.091*1.82] mid_occ = 58
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.097*1.77] distinct minimizers: 112615 (96.46% are singletons); average occurrences: 1.191; average spacing: 9.393; total length: 1260333
+[M::worker_pipeline::0.271*1.27] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_06_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_06_v3_second.A.fa
+[M::main] Real time: 0.286 sec; CPU: 0.353 sec; Peak RSS: 0.021 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_06_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.055*1.01] collected minimizers
+[M::mm_idx_gen::0.084*1.89] sorted minimizers
+[M::main::0.085*1.87] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.089*1.82] mid_occ = 57
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.094*1.77] distinct minimizers: 111872 (97.33% are singletons); average occurrences: 1.165; average spacing: 9.436; total length: 1230026
+[M::worker_pipeline::0.255*1.27] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_07_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_07_v3_second.A.fa
+[M::main] Real time: 0.268 sec; CPU: 0.333 sec; Peak RSS: 0.022 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_07_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.055*1.01] collected minimizers
+[M::mm_idx_gen::0.086*1.92] sorted minimizers
+[M::main::0.086*1.91] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.091*1.86] mid_occ = 66
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.095*1.81] distinct minimizers: 117144 (97.25% are singletons); average occurrences: 1.182; average spacing: 9.380; total length: 1298687
+[M::worker_pipeline::0.268*1.28] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_08_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_08_v3_second.A.fa
+[M::main] Real time: 0.282 sec; CPU: 0.352 sec; Peak RSS: 0.021 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Loading SVG module done
+convert   SVG ---> PNG ...
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.056*1.01] collected minimizers
+[M::mm_idx_gen::0.087*1.90] sorted minimizers
+[M::main::0.088*1.89] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.093*1.84] mid_occ = 61
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.097*1.78] distinct minimizers: 123195 (97.44% are singletons); average occurrences: 1.195; average spacing: 9.296; total length: 1369055
+[M::worker_pipeline::0.281*1.26] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_09_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_09_v3_second.A.fa
+[M::main] Real time: 0.294 sec; CPU: 0.364 sec; Peak RSS: 0.023 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_09_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.061*1.02] collected minimizers
+[M::mm_idx_gen::0.093*1.89] sorted minimizers
+[M::main::0.093*1.88] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.099*1.83] mid_occ = 55
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.105*1.77] distinct minimizers: 138071 (97.05% are singletons); average occurrences: 1.192; average spacing: 9.423; total length: 1550819
+[M::worker_pipeline::0.269*1.29] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_10_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_10_v3_second.A.fa
+[M::main] Real time: 0.282 sec; CPU: 0.356 sec; Peak RSS: 0.022 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_10_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.068*1.00] collected minimizers
+[M::mm_idx_gen::0.102*1.84] sorted minimizers
+[M::main::0.102*1.83] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.110*1.77] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.117*1.71] distinct minimizers: 172758 (97.20% are singletons); average occurrences: 1.190; average spacing: 9.373; total length: 1926162
+[M::worker_pipeline::0.289*1.28] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_11_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_11_v3_second.A.fa
+[M::main] Real time: 0.303 sec; CPU: 0.379 sec; Peak RSS: 0.024 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_11_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.076*0.97] collected minimizers
+[M::mm_idx_gen::0.110*1.77] sorted minimizers
+[M::main::0.111*1.76] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.118*1.71] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.125*1.66] distinct minimizers: 186272 (97.38% are singletons); average occurrences: 1.194; average spacing: 9.316; total length: 2071910
+[M::worker_pipeline::0.321*1.25] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_12_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_12_v3_second.A.fa
+[M::main] Real time: 0.338 sec; CPU: 0.413 sec; Peak RSS: 0.028 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_12_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.088*0.98] collected minimizers
+[M::mm_idx_gen::0.124*1.73] sorted minimizers
+[M::main::0.124*1.73] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.135*1.66] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.143*1.62] distinct minimizers: 249485 (96.81% are singletons); average occurrences: 1.187; average spacing: 9.402; total length: 2785043
+[M::worker_pipeline::0.343*1.25] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_13_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_13_v3_second.A.fa
+[M::main] Real time: 0.360 sec; CPU: 0.441 sec; Peak RSS: 0.032 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_13_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.098*0.98] collected minimizers
+[M::mm_idx_gen::0.134*1.69] sorted minimizers
+[M::main::0.135*1.69] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.145*1.64] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.153*1.60] distinct minimizers: 289391 (97.19% are singletons); average occurrences: 1.188; average spacing: 9.389; total length: 3226795
+[M::worker_pipeline::0.348*1.26] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_14_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_14_v3_second.A.fa
+[M::main] Real time: 0.363 sec; CPU: 0.448 sec; Peak RSS: 0.036 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_14_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.006*1.53] collected minimizers
+[M::mm_idx_gen::0.010*2.22] sorted minimizers
+[M::main::0.010*2.15] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.011*2.04] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.012*1.90] distinct minimizers: 2930 (82.25% are singletons); average occurrences: 1.178; average spacing: 9.925; total length: 34250
+[M::worker_pipeline::0.054*1.18] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_API_v3_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_API_v3_second.A.fa
+[M::main] Real time: 0.061 sec; CPU: 0.067 sec; Peak RSS: 0.009 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_API_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.004*1.82] collected minimizers
+[M::mm_idx_gen::0.007*2.57] sorted minimizers
+[M::main::0.008*2.48] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.008*2.34] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.009*2.17] distinct minimizers: 589 (100.00% are singletons); average occurrences: 1.000; average spacing: 10.131; total length: 5967
+[M::worker_pipeline::0.051*1.20] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_01_v3_642993_firstvsPf_M76611_second.B.fa test_with_ref_Pf3D7_01_v3_642993_firstvsPf_M76611_second.A.fa
+[M::main] Real time: 0.057 sec; CPU: 0.062 sec; Peak RSS: 0.008 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_01_v3_642993_firstvsPf_M76611_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.032*1.06] collected minimizers
+[M::mm_idx_gen::0.047*1.84] sorted minimizers
+[M::main::0.047*1.82] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.050*1.77] mid_occ = 110
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.052*1.72] distinct minimizers: 45525 (97.12% are singletons); average occurrences: 1.171; average spacing: 9.387; total length: 500554
+[M::worker_pipeline::0.057*1.65] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_01_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_01_v3_second.A.fa
+[M::main] Real time: 0.068 sec; CPU: 0.102 sec; Peak RSS: 0.011 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_01_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.041*1.05] collected minimizers
+[M::mm_idx_gen::0.064*1.93] sorted minimizers
+[M::main::0.065*1.91] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.068*1.86] mid_occ = 76
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.071*1.82] distinct minimizers: 73631 (97.17% are singletons); average occurrences: 1.182; average spacing: 9.345; total length: 813289
+[M::worker_pipeline::0.074*1.77] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_02_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_02_v3_second.A.fa
+[M::main] Real time: 0.086 sec; CPU: 0.139 sec; Peak RSS: 0.011 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_02_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.048*1.00] collected minimizers
+[M::mm_idx_gen::0.075*1.88] sorted minimizers
+[M::main::0.075*1.87] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.079*1.82] mid_occ = 77
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.083*1.77] distinct minimizers: 86451 (97.21% are singletons); average occurrences: 1.168; average spacing: 9.435; total length: 952947
+[M::worker_pipeline::0.086*1.73] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_03_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_03_v3_second.A.fa
+[M::main] Real time: 0.098 sec; CPU: 0.157 sec; Peak RSS: 0.011 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_03_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.049*1.00] collected minimizers
+[M::mm_idx_gen::0.074*1.86] sorted minimizers
+[M::main::0.074*1.85] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.078*1.80] mid_occ = 75
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.082*1.75] distinct minimizers: 86896 (97.23% are singletons); average occurrences: 1.174; average spacing: 9.416; total length: 960348
+[M::worker_pipeline::0.086*1.70] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_04_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_04_v3_second.A.fa
+[M::main] Real time: 0.100 sec; CPU: 0.155 sec; Peak RSS: 0.011 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_04_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.055*1.02] collected minimizers
+[M::mm_idx_gen::0.085*1.89] sorted minimizers
+[M::main::0.085*1.87] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.089*1.83] mid_occ = 56
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.093*1.78] distinct minimizers: 116924 (97.30% are singletons); average occurrences: 1.185; average spacing: 9.354; total length: 1296330
+[M::worker_pipeline::0.097*1.74] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_05_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_05_v3_second.A.fa
+[M::main] Real time: 0.110 sec; CPU: 0.177 sec; Peak RSS: 0.014 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_05_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.054*1.01] collected minimizers
+[M::mm_idx_gen::0.081*1.87] sorted minimizers
+[M::main::0.082*1.86] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.086*1.81] mid_occ = 58
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.090*1.76] distinct minimizers: 112615 (96.46% are singletons); average occurrences: 1.191; average spacing: 9.393; total length: 1260333
+[M::worker_pipeline::0.094*1.72] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_06_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_06_v3_second.A.fa
+[M::main] Real time: 0.107 sec; CPU: 0.170 sec; Peak RSS: 0.013 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_06_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.054*1.02] collected minimizers
+[M::mm_idx_gen::0.083*1.90] sorted minimizers
+[M::main::0.084*1.88] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.088*1.83] mid_occ = 57
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.092*1.79] distinct minimizers: 111872 (97.33% are singletons); average occurrences: 1.165; average spacing: 9.436; total length: 1230026
+[M::worker_pipeline::0.095*1.75] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_07_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_07_v3_second.A.fa
+[M::main] Real time: 0.109 sec; CPU: 0.176 sec; Peak RSS: 0.011 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_07_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.057*0.99] collected minimizers
+[M::mm_idx_gen::0.087*1.85] sorted minimizers
+[M::main::0.088*1.84] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.092*1.79] mid_occ = 66
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.097*1.74] distinct minimizers: 117144 (97.25% are singletons); average occurrences: 1.182; average spacing: 9.380; total length: 1298687
+[M::worker_pipeline::0.101*1.70] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_08_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_08_v3_second.A.fa
+[M::main] Real time: 0.115 sec; CPU: 0.180 sec; Peak RSS: 0.014 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_08_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.057*1.01] collected minimizers
+[M::mm_idx_gen::0.088*1.88] sorted minimizers
+[M::main::0.089*1.87] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.094*1.82] mid_occ = 61
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.098*1.77] distinct minimizers: 123195 (97.44% are singletons); average occurrences: 1.195; average spacing: 9.296; total length: 1369055
+[M::worker_pipeline::0.102*1.73] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_09_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_09_v3_second.A.fa
+[M::main] Real time: 0.116 sec; CPU: 0.186 sec; Peak RSS: 0.016 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_09_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.060*1.01] collected minimizers
+[M::mm_idx_gen::0.092*1.88] sorted minimizers
+[M::main::0.093*1.87] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.098*1.82] mid_occ = 55
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.103*1.77] distinct minimizers: 138071 (97.05% are singletons); average occurrences: 1.192; average spacing: 9.423; total length: 1550819
+[M::worker_pipeline::0.107*1.74] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_10_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_10_v3_second.A.fa
+[M::main] Real time: 0.120 sec; CPU: 0.194 sec; Peak RSS: 0.015 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_10_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.071*0.98] collected minimizers
+[M::mm_idx_gen::0.104*1.79] sorted minimizers
+[M::main::0.105*1.78] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.112*1.73] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.119*1.68] distinct minimizers: 172758 (97.20% are singletons); average occurrences: 1.190; average spacing: 9.373; total length: 1926162
+[M::worker_pipeline::0.124*1.64] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_11_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_11_v3_second.A.fa
+[M::main] Real time: 0.138 sec; CPU: 0.213 sec; Peak RSS: 0.018 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_11_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.071*1.00] collected minimizers
+[M::mm_idx_gen::0.105*1.82] sorted minimizers
+[M::main::0.106*1.81] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.112*1.76] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.118*1.72] distinct minimizers: 186272 (97.38% are singletons); average occurrences: 1.194; average spacing: 9.316; total length: 2071910
+[M::worker_pipeline::0.122*1.69] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_12_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_12_v3_second.A.fa
+[M::main] Real time: 0.135 sec; CPU: 0.215 sec; Peak RSS: 0.019 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_12_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.087*0.98] collected minimizers
+[M::mm_idx_gen::0.123*1.73] sorted minimizers
+[M::main::0.124*1.72] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.132*1.67] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.140*1.63] distinct minimizers: 249485 (96.81% are singletons); average occurrences: 1.187; average spacing: 9.402; total length: 2785043
+[M::worker_pipeline::0.143*1.61] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_13_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_13_v3_second.A.fa
+[M::main] Real time: 0.158 sec; CPU: 0.241 sec; Peak RSS: 0.022 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_13_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.098*0.97] collected minimizers
+[M::mm_idx_gen::0.134*1.67] sorted minimizers
+[M::main::0.135*1.67] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.144*1.62] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.153*1.58] distinct minimizers: 289391 (97.19% are singletons); average occurrences: 1.188; average spacing: 9.389; total length: 3226795
+[M::worker_pipeline::0.157*1.56] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_14_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_14_v3_second.A.fa
+[M::main] Real time: 0.172 sec; CPU: 0.255 sec; Peak RSS: 0.025 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_14_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.006*1.47] collected minimizers
+[M::mm_idx_gen::0.010*2.21] sorted minimizers
+[M::main::0.010*2.12] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.012*1.99] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.013*1.84] distinct minimizers: 2930 (82.25% are singletons); average occurrences: 1.178; average spacing: 9.925; total length: 34250
+[M::worker_pipeline::0.035*1.28] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_API_v3_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_API_v3_second.A.fa
+[M::main] Real time: 0.041 sec; CPU: 0.047 sec; Peak RSS: 0.005 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Loading SVG module done
+convert   SVG ---> PNG ...
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.005*1.50] collected minimizers
+[M::mm_idx_gen::0.009*2.26] sorted minimizers
+[M::main::0.009*2.16] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.010*2.03] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.011*1.85] distinct minimizers: 589 (100.00% are singletons); average occurrences: 1.000; average spacing: 10.131; total length: 5967
+[M::worker_pipeline::0.016*1.53] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf3D7_API_v3_34249_firstvsPf_M76611_second.B.fa test_with_ref_Pf3D7_API_v3_34249_firstvsPf_M76611_second.A.fa
+[M::main] Real time: 0.021 sec; CPU: 0.025 sec; Peak RSS: 0.004 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf3D7_API_v3_34249_firstvsPf_M76611_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.033*1.09] collected minimizers
+[M::mm_idx_gen::0.049*1.84] sorted minimizers
+[M::main::0.049*1.82] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.052*1.76] mid_occ = 110
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.055*1.71] distinct minimizers: 45525 (97.12% are singletons); average occurrences: 1.171; average spacing: 9.387; total length: 500554
+[M::worker_pipeline::0.057*1.66] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_01_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_01_v3_second.A.fa
+[M::main] Real time: 0.068 sec; CPU: 0.101 sec; Peak RSS: 0.007 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_01_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.044*1.02] collected minimizers
+[M::mm_idx_gen::0.065*1.85] sorted minimizers
+[M::main::0.066*1.83] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.069*1.79] mid_occ = 76
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.073*1.73] distinct minimizers: 73631 (97.17% are singletons); average occurrences: 1.182; average spacing: 9.345; total length: 813289
+[M::worker_pipeline::0.076*1.70] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_02_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_02_v3_second.A.fa
+[M::main] Real time: 0.088 sec; CPU: 0.136 sec; Peak RSS: 0.010 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_02_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.048*1.02] collected minimizers
+[M::mm_idx_gen::0.073*1.88] sorted minimizers
+[M::main::0.074*1.87] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.077*1.82] mid_occ = 77
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.080*1.78] distinct minimizers: 86451 (97.21% are singletons); average occurrences: 1.168; average spacing: 9.435; total length: 952947
+[M::worker_pipeline::0.082*1.75] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_03_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_03_v3_second.A.fa
+[M::main] Real time: 0.095 sec; CPU: 0.152 sec; Peak RSS: 0.010 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_03_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.047*1.02] collected minimizers
+[M::mm_idx_gen::0.071*1.87] sorted minimizers
+[M::main::0.072*1.85] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.075*1.81] mid_occ = 75
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.078*1.77] distinct minimizers: 86896 (97.23% are singletons); average occurrences: 1.174; average spacing: 9.416; total length: 960348
+[M::worker_pipeline::0.080*1.74] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_04_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_04_v3_second.A.fa
+[M::main] Real time: 0.092 sec; CPU: 0.146 sec; Peak RSS: 0.011 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_04_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.057*1.00] collected minimizers
+[M::mm_idx_gen::0.087*1.87] sorted minimizers
+[M::main::0.087*1.85] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.092*1.81] mid_occ = 56
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.097*1.76] distinct minimizers: 116924 (97.30% are singletons); average occurrences: 1.185; average spacing: 9.354; total length: 1296330
+[M::worker_pipeline::0.099*1.74] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_05_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_05_v3_second.A.fa
+[M::main] Real time: 0.112 sec; CPU: 0.181 sec; Peak RSS: 0.015 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_05_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.055*1.01] collected minimizers
+[M::mm_idx_gen::0.085*1.89] sorted minimizers
+[M::main::0.086*1.87] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.090*1.83] mid_occ = 58
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.094*1.78] distinct minimizers: 112615 (96.46% are singletons); average occurrences: 1.191; average spacing: 9.393; total length: 1260333
+[M::worker_pipeline::0.096*1.76] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_06_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_06_v3_second.A.fa
+[M::main] Real time: 0.109 sec; CPU: 0.177 sec; Peak RSS: 0.013 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_06_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.053*1.01] collected minimizers
+[M::mm_idx_gen::0.083*1.92] sorted minimizers
+[M::main::0.084*1.91] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.087*1.86] mid_occ = 57
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.091*1.81] distinct minimizers: 111872 (97.33% are singletons); average occurrences: 1.165; average spacing: 9.436; total length: 1230026
+[M::worker_pipeline::0.093*1.79] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_07_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_07_v3_second.A.fa
+[M::main] Real time: 0.106 sec; CPU: 0.175 sec; Peak RSS: 0.013 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_07_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.056*1.03] collected minimizers
+[M::mm_idx_gen::0.086*1.89] sorted minimizers
+[M::main::0.086*1.88] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.090*1.84] mid_occ = 66
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.094*1.79] distinct minimizers: 117144 (97.25% are singletons); average occurrences: 1.182; average spacing: 9.380; total length: 1298687
+[M::worker_pipeline::0.096*1.77] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_08_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_08_v3_second.A.fa
+[M::main] Real time: 0.109 sec; CPU: 0.179 sec; Peak RSS: 0.013 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_08_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.054*1.03] collected minimizers
+[M::mm_idx_gen::0.082*1.91] sorted minimizers
+[M::main::0.083*1.90] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.088*1.84] mid_occ = 61
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.092*1.79] distinct minimizers: 123195 (97.44% are singletons); average occurrences: 1.195; average spacing: 9.296; total length: 1369055
+[M::worker_pipeline::0.094*1.77] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_09_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_09_v3_second.A.fa
+[M::main] Real time: 0.107 sec; CPU: 0.175 sec; Peak RSS: 0.014 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_09_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.060*1.02] collected minimizers
+[M::mm_idx_gen::0.092*1.90] sorted minimizers
+[M::main::0.093*1.89] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.098*1.83] mid_occ = 55
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.104*1.78] distinct minimizers: 138071 (97.05% are singletons); average occurrences: 1.192; average spacing: 9.423; total length: 1550819
+[M::worker_pipeline::0.106*1.76] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_10_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_10_v3_second.A.fa
+[M::main] Real time: 0.119 sec; CPU: 0.194 sec; Peak RSS: 0.015 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_10_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.071*0.98] collected minimizers
+[M::mm_idx_gen::0.104*1.78] sorted minimizers
+[M::main::0.105*1.77] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.112*1.72] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.118*1.67] distinct minimizers: 172758 (97.20% are singletons); average occurrences: 1.190; average spacing: 9.373; total length: 1926162
+[M::worker_pipeline::0.120*1.66] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_11_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_11_v3_second.A.fa
+[M::main] Real time: 0.134 sec; CPU: 0.209 sec; Peak RSS: 0.019 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_11_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.073*1.00] collected minimizers
+[M::mm_idx_gen::0.107*1.81] sorted minimizers
+[M::main::0.108*1.81] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.116*1.75] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.123*1.70] distinct minimizers: 186272 (97.38% are singletons); average occurrences: 1.194; average spacing: 9.316; total length: 2071910
+[M::worker_pipeline::0.126*1.68] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_12_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_12_v3_second.A.fa
+[M::main] Real time: 0.139 sec; CPU: 0.220 sec; Peak RSS: 0.020 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_12_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.088*0.98] collected minimizers
+[M::mm_idx_gen::0.124*1.73] sorted minimizers
+[M::main::0.124*1.72] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.133*1.67] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.140*1.63] distinct minimizers: 249485 (96.81% are singletons); average occurrences: 1.187; average spacing: 9.402; total length: 2785043
+[M::worker_pipeline::0.142*1.62] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_13_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_13_v3_second.A.fa
+[M::main] Real time: 0.157 sec; CPU: 0.240 sec; Peak RSS: 0.022 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_13_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.104*0.95] collected minimizers
+[M::mm_idx_gen::0.140*1.63] sorted minimizers
+[M::main::0.141*1.62] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.153*1.57] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.161*1.53] distinct minimizers: 289391 (97.19% are singletons); average occurrences: 1.188; average spacing: 9.389; total length: 3226795
+[M::worker_pipeline::0.163*1.52] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_14_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_14_v3_second.A.fa
+[M::main] Real time: 0.178 sec; CPU: 0.258 sec; Peak RSS: 0.023 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_14_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.006*1.39] collected minimizers
+[M::mm_idx_gen::0.011*2.06] sorted minimizers
+[M::main::0.011*1.97] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.012*1.85] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.014*1.72] distinct minimizers: 2930 (82.25% are singletons); average occurrences: 1.178; average spacing: 9.925; total length: 34250
+[M::worker_pipeline::0.016*1.57] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf3D7_API_v3_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf3D7_API_v3_second.A.fa
+[M::main] Real time: 0.022 sec; CPU: 0.028 sec; Peak RSS: 0.004 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf3D7_API_v3_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+[M::mm_idx_gen::0.005*1.63] collected minimizers
+[M::mm_idx_gen::0.008*2.37] sorted minimizers
+[M::main::0.009*2.23] loaded/built the index for 1 target sequence(s)
+[M::mm_mapopt_update::0.010*1.92] mid_occ = 50
+[M::mm_idx_stat] kmer size: 19; skip: 19; is_hpc: 0; #seq: 1
+[M::mm_idx_stat::0.011*1.77] distinct minimizers: 589 (100.00% are singletons); average occurrences: 1.000; average spacing: 10.131; total length: 5967
+[M::worker_pipeline::0.017*1.50] mapped 1 sequences
+[M::main] Version: 2.24-r1122
+[M::main] CMD: /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/minimap2 -x asm5 -t 4 test_with_ref_Pf_M76611_6054_firstvsPf_M76611_second.B.fa test_with_ref_Pf_M76611_6054_firstvsPf_M76611_second.A.fa
+[M::main] Real time: 0.022 sec; CPU: 0.026 sec; Peak RSS: 0.006 GB
+Warining: SVG module in Perl is missing, trying to loading the built-in [SVG.pm]...
+Use of uninitialized value $_ in scalar chomp at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Use of uninitialized value $_ in split at /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/NGenomeSyn-1.41/bin/NGenomeSyn line 1589.
+Loading SVG module done
+Error:	InPut Genome Link 1-2 Info test_with_ref_Pf_M76611_6054_firstvsPf_M76611_second.link file  Format wrong,pleas check it
+	ALL done, see the xxx.png . you can optimized drawing by [NGenomeSyn] software
+	     optimized: [Filter] and [Merge] small syn blocks to big syn block
+
+tar: ./NGenomeSyn_full_out.tar: file is the archive; not dumped
