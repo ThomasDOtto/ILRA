@@ -1,0 +1,19 @@
+### Excluded contigs based on length threshold of 5000: (ILRA.removesmalls.pl)
+
+### Excluded contigs that are contained in others: (MegaBLAST/ILRA.getOverlap.pl/ILRA.deleteContigs.pl)
+
+### New contigs merging overlapping contigs(ILRA.findoverlaps_ver3.pl):
+newseq1
+unitig_15_quiver 	567992 	579465 	unitig_36_quiver 	75003 	63522 
+
+### Contigs not covered: (ILRA.findoverlaps_ver3.pl)
+
+### Final sequences not mapped to the reference: (ABACAS2, these are contained into the bin and are listed here but not removed)
+
+### Final sequences mapped to the reference: (ABACAS2, these are reordered and merged into new contigs corresponding to the reference)
+# Pf3D7_01_v3:
+newseq1
+# Pf3D7_API_v3:
+unitig_16_quiver
+# Pf_M76611:
+unitig_18_quiver

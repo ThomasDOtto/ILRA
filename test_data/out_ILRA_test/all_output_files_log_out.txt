@@ -1,0 +1,1111 @@
+~/ILRA/test_data/out_ILRA_test:
+total 673K
+ 512 drwxr-xr-x 2 user bioinfo    5 Apr  5 10:42 1.Filtering
+ 512 drwxr-xr-x 2 user bioinfo   20 Apr  5 11:40 2.MegaBLAST
+ 512 drwxr-xr-x 4 user bioinfo   34 Apr  5 11:40 3.ABACAS2
+ 512 drwxr-xr-x 5 user bioinfo   16 Apr  5 10:48 4.iCORN2
+ 512 drwxr-xr-x 4 user bioinfo   15 Apr  5 11:40 5.Circlator
+ 512 drwxr-xr-x 8 user bioinfo   18 Apr  5 11:40 7.Stats
+ 512 drwxr-xr-x 2 user bioinfo   72 Apr  5 11:41 all_logs
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:41 all_output_files_log_out.txt
+ 512 drwxr-xr-x 2 user bioinfo    3 Apr  5 11:40 data
+1.0K -rw-r--r-- 1 user bioinfo  737 Apr  5 10:42 Excluded.contigs.fofn
+668K -rw-r--r-- 1 user bioinfo 668K Apr  5 10:49 test.ILRA.fasta
+
+~/ILRA/test_data/out_ILRA_test/1.Filtering:
+total 909K
+726K -rw-r--r-- 1 user bioinfo 726K Apr  5 10:42 01.assembly.fa
+ 512 -rw-r--r-- 1 user bioinfo  316 Apr  5 10:42 01.assembly.fa.nhr
+ 512 -rw-r--r-- 1 user bioinfo  196 Apr  5 10:42 01.assembly.fa.nin
+182K -rw-r--r-- 1 user bioinfo 182K Apr  5 10:42 01.assembly.fa.nsq
+ 512 -rw-r--r-- 1 user bioinfo  355 Apr  5 10:42 formatdb.log
+
+~/ILRA/test_data/out_ILRA_test/2.MegaBLAST:
+total 1.1M
+170K -rw-r--r-- 1 user bioinfo 170K Apr  5 10:42 02.assembly.fa.gz
+ 512 -rw-r--r-- 1 user bioinfo   32 Apr  5 10:42 02.ListContained.txt
+724K -rw-r--r-- 1 user bioinfo 724K Apr  5 10:42 03.assembly.fa
+ 512 -rw-r--r-- 1 user bioinfo  208 Apr  5 10:42 Blast.merge.blast.length
+ 512 -rw-r--r-- 1 user bioinfo  182 Apr  5 10:42 comp.self1.blast
+ 512 -rw-r--r-- 1 user bioinfo  208 Apr  5 10:42 comp.self1.blast.length
+ 512 -rw-r--r-- 1 user bioinfo   40 Apr  5 10:42 contained_OUT.fasta.gz
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:42 error.log
+ 10K -rw-r--r-- 1 user bioinfo 9.9K Apr  5 10:42 ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt
+ 512 -rw-r--r-- 1 user bioinfo  180 Apr  5 10:42 ILRA.findoverlaps_ver3.pl_log_out.txt
+2.0K -rw-r--r-- 1 user bioinfo 1.9K Apr  5 10:42 ILRA.runSMALT_ver2.sh_log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:42 List.Contained.fofn
+ 512 -rw-r--r-- 1 user bioinfo  415 Apr  5 10:42 log_OUT.txt
+1.0K -rw-r--r-- 1 user bioinfo  994 Apr  5 10:42 megablast_parallel_log_out_2.txt
+1.0K -rw-r--r-- 1 user bioinfo  812 Apr  5 10:42 megablast_parallel_log_out.txt
+179K -rw-r--r-- 1 user bioinfo 179K Apr  5 10:42 mergedseq_OUT.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo   41 Apr  5 10:42 notcovered_OUT.fasta.gz
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:42 out.58131.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:42 out.first.58131.txt
+ 512 -rw-r--r-- 1 user bioinfo   74 Apr  5 10:42 results_OUT.txt
+
+~/ILRA/test_data/out_ILRA_test/3.ABACAS2:
+total 1.2M
+727K -rw-r--r-- 1 user bioinfo 727K Apr  5 10:42 03b.assembly.fa
+ 512 -rw-r--r-- 1 user bioinfo  386 Apr  5 10:42 abacas2.doTilingGraph.pl_parallel_log_out_2.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 10:42 abacas2.doTilingGraph.pl_parallel_log_out.txt
+2.0K -rw-r--r-- 1 user bioinfo 1.7K Apr  5 10:42 abacas_log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  155 Apr  5 10:42 abacas_log_out_warnings_errors.txt
+ 512 drwxr-xr-x 2 user bioinfo    3 Apr  5 10:42 comp
+ 512 lrwxrwxrwx 1 user bioinfo   82 Apr  5 10:42 Contigs.58190 -> ~/ILRA/test_data/out_ILRA_test/2.MegaBLAST/03.assembly.fa
+1.5K -rw-r--r-- 1 user bioinfo 1.5K Apr  5 10:42 Contigs.58190.coords
+1.5K -rw-r--r-- 1 user bioinfo 1.3K Apr  5 10:42 Contigs.58190.coords.ordered
+ 45K -rw-r--r-- 1 user bioinfo  45K Apr  5 10:42 Contigs.58190.delta
+ 16K -rw-r--r-- 1 user bioinfo  16K Apr  5 10:42 Contigs.58190.delta.filter
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:42 error.log
+1.0K -rw-r--r-- 1 user bioinfo  697 Apr  5 10:42 formatdb.log
+ 512 -rw-r--r-- 1 user bioinfo  311 Apr  5 10:42 formatdb_parallel_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  116 Apr  5 10:42 formatdb_parallel_log_out.txt
+180K -rw-r--r-- 1 user bioinfo 180K Apr  5 10:42 Genome.abacas.fasta.gz
+1.0K -rw-r--r-- 1 user bioinfo  531 Apr  5 10:42 megablast_parallel_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  336 Apr  5 10:42 megablast_parallel_log_out.txt
+1.5K -rw-r--r-- 1 user bioinfo 1.1K Apr  5 10:42 Pf3D7_01_v3.coords
+ 512 -rw-r--r-- 1 user bioinfo   96 Apr  5 10:42 Pf3D7_API_v3.coords
+ 512 -rw-r--r-- 1 user bioinfo   90 Apr  5 10:42 Pf_M76611.coords
+ 512 lrwxrwxrwx 1 user bioinfo    9 Apr  5 10:42 REF.58190 -> Ref.58190
+ 512 drwxr-xr-x 2 user bioinfo   25 Apr  5 10:42 Reference
+ 512 -rw-r--r-- 1 user bioinfo   38 Apr  5 10:42 Res.abacasBin.fna.gz
+ 512 -rw-r--r-- 1 user bioinfo   11 Apr  5 10:42 Res.abacasBin.oneSeq.fna_
+ 512 -rw-r--r-- 1 user bioinfo  199 Apr  5 10:42 Res.Pf3D7_01_v3.contigs.gff
+150K -rw-r--r-- 1 user bioinfo 150K Apr  5 10:42 Res.Pf3D7_01_v3.fna.gz
+1.5K -rw-r--r-- 1 user bioinfo 1.2K Apr  5 10:42 Res.Pf3D7_01_v3.refCoverage.plot.gz
+ 512 -rw-r--r-- 1 user bioinfo  213 Apr  5 10:42 Res.Pf3D7_API_v3.contigs.gff
+ 13K -rw-r--r-- 1 user bioinfo  13K Apr  5 10:42 Res.Pf3D7_API_v3.fna.gz
+ 512 -rw-r--r-- 1 user bioinfo  139 Apr  5 10:42 Res.Pf3D7_API_v3.refCoverage.plot.gz
+ 512 -rw-r--r-- 1 user bioinfo  222 Apr  5 10:42 Res.Pf_M76611.contigs.gff
+4.5K -rw-r--r-- 1 user bioinfo 4.4K Apr  5 10:42 Res.Pf_M76611.fna.gz
+ 512 -rw-r--r-- 1 user bioinfo   81 Apr  5 10:42 Res.Pf_M76611.refCoverage.plot.gz
+
+~/ILRA/test_data/out_ILRA_test/3.ABACAS2/comp:
+total 108K
+ 94K -rw-r--r-- 1 user bioinfo  94K Apr  5 10:42 comp.Pf3D7_01_v3.blast
+ 12K -rw-r--r-- 1 user bioinfo  12K Apr  5 10:42 comp.Pf3D7_API_v3.blast
+2.0K -rw-r--r-- 1 user bioinfo 1.6K Apr  5 10:42 comp.Pf_M76611.blast
+
+~/ILRA/test_data/out_ILRA_test/3.ABACAS2/Reference:
+total 21M
+497K -rw-r--r-- 1 user bioinfo 497K Apr  5 10:42 Pf3D7_01_v3
+ 512 -rw-r--r-- 1 user bioinfo   74 Apr  5 10:42 Pf3D7_01_v3.nhr
+ 512 -rw-r--r-- 1 user bioinfo  104 Apr  5 10:42 Pf3D7_01_v3.nin
+123K -rw-r--r-- 1 user bioinfo 123K Apr  5 10:42 Pf3D7_01_v3.nsq
+808K -rw-r--r-- 1 user bioinfo 808K Apr  5 10:42 Pf3D7_02_v3
+947K -rw-r--r-- 1 user bioinfo 947K Apr  5 10:42 Pf3D7_03_v3
+954K -rw-r--r-- 1 user bioinfo 954K Apr  5 10:42 Pf3D7_04_v3
+1.3M -rw-r--r-- 1 user bioinfo 1.3M Apr  5 10:42 Pf3D7_05_v3
+1.3M -rw-r--r-- 1 user bioinfo 1.3M Apr  5 10:42 Pf3D7_06_v3
+1.2M -rw-r--r-- 1 user bioinfo 1.2M Apr  5 10:42 Pf3D7_07_v3
+1.3M -rw-r--r-- 1 user bioinfo 1.3M Apr  5 10:42 Pf3D7_08_v3
+1.4M -rw-r--r-- 1 user bioinfo 1.4M Apr  5 10:42 Pf3D7_09_v3
+1.6M -rw-r--r-- 1 user bioinfo 1.6M Apr  5 10:42 Pf3D7_10_v3
+1.9M -rw-r--r-- 1 user bioinfo 1.9M Apr  5 10:42 Pf3D7_11_v3
+2.1M -rw-r--r-- 1 user bioinfo 2.1M Apr  5 10:42 Pf3D7_12_v3
+2.8M -rw-r--r-- 1 user bioinfo 2.8M Apr  5 10:42 Pf3D7_13_v3
+3.2M -rw-r--r-- 1 user bioinfo 3.2M Apr  5 10:42 Pf3D7_14_v3
+ 35K -rw-r--r-- 1 user bioinfo  35K Apr  5 10:42 Pf3D7_API_v3
+ 512 -rw-r--r-- 1 user bioinfo   75 Apr  5 10:42 Pf3D7_API_v3.nhr
+ 512 -rw-r--r-- 1 user bioinfo  104 Apr  5 10:42 Pf3D7_API_v3.nin
+8.5K -rw-r--r-- 1 user bioinfo 8.4K Apr  5 10:42 Pf3D7_API_v3.nsq
+6.0K -rw-r--r-- 1 user bioinfo 6.0K Apr  5 10:42 Pf_M76611
+ 512 -rw-r--r-- 1 user bioinfo   72 Apr  5 10:42 Pf_M76611.nhr
+ 512 -rw-r--r-- 1 user bioinfo   96 Apr  5 10:42 Pf_M76611.nin
+1.5K -rw-r--r-- 1 user bioinfo 1.5K Apr  5 10:42 Pf_M76611.nsq
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2:
+total 2.9M
+ 512 lrwxrwxrwx 1 user bioinfo   24 Apr  5 10:48 04.assembly.fa -> ICORN2.03b.assembly.fa.4
+ 512 -rw-r--r-- 1 user bioinfo  108 Apr  5 10:48 04.assembly.fa.fai
+715K -rw-r--r-- 1 user bioinfo 715K Apr  5 10:42 ICORN2.03b.assembly.fa.1
+715K -rw-r--r-- 1 user bioinfo 715K Apr  5 10:44 ICORN2.03b.assembly.fa.2
+715K -rw-r--r-- 1 user bioinfo 715K Apr  5 10:46 ICORN2.03b.assembly.fa.3
+715K -rw-r--r-- 1 user bioinfo 715K Apr  5 10:48 ICORN2.03b.assembly.fa.4
+ 512 drwxr-xr-x 5 user bioinfo   16 Apr  5 10:48 ICORN2_1
+ 512 drwxr-xr-x 5 user bioinfo   16 Apr  5 10:48 ICORN2_2
+ 512 drwxr-xr-x 5 user bioinfo   16 Apr  5 10:48 ICORN2_3
+4.0K -rw-r--r-- 1 user bioinfo 3.6K Apr  5 10:47 icorn2.mapper_log_out.txt
+6.0K -rw-r--r-- 1 user bioinfo 5.8K Apr  5 10:48 icorn2.serial_bowtie2.sh_log_out.txt
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 10:48 log.1.out
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 10:48 log.2.out
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 10:48 log.3.out
+1.0K -rw-r--r-- 1 user bioinfo  586 Apr  5 10:42 processing_decompressing_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  434 Apr  5 10:42 processing_decompressing_log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_1:
+total 73K
+ 33K -rw-r--r-- 1 user bioinfo  33K Apr  5 10:42 bowtiebuild.log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  304 Apr  5 10:44 iter.1.General.stats
+ 512 -rw-r--r-- 1 user bioinfo   73 Apr  5 10:48 list_files_prev_cleaning.txt
+ 23K -rw-r--r-- 1 user bioinfo  23K Apr  5 10:43 MarkDuplicatesSpark_log.out.txt
+ 512 drwxr-xr-x 2 user bioinfo   11 Apr  5 11:40 Pf3D7_01_v3_splitter-part.fa.out
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 10:44 Pf3D7_01_v3_splitter-part.fa.snpcall.correction.log
+ 512 drwxr-xr-x 2 user bioinfo   10 Apr  5 11:40 Pf3D7_API_v3_splitter-part.fa.out
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 10:44 Pf3D7_API_v3_splitter-part.fa.snpcall.correction.log
+ 512 drwxr-xr-x 2 user bioinfo   10 Apr  5 11:40 Pf_M76611_splitter-part.fa.out
+2.0K -rw-r--r-- 1 user bioinfo 1.9K Apr  5 10:44 Pf_M76611_splitter-part.fa.snpcall.correction.log
+1.0K -rw-r--r-- 1 user bioinfo  951 Apr  5 10:44 processing_split_parts_correction_icorn2_log_out_2.txt
+1.0K -rw-r--r-- 1 user bioinfo  756 Apr  5 10:43 processing_split_parts_correction_icorn2_log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  889 Apr  5 10:43 processing_split_parts_createseqdictionary_log_out_2.txt
+4.5K -rw-r--r-- 1 user bioinfo 4.2K Apr  5 10:43 processing_split_parts_createseqdictionary_log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  326 Apr  5 10:43 processing_split_parts_faidx_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  131 Apr  5 10:43 processing_split_parts_faidx_log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_1/Pf3D7_01_v3_splitter-part.fa.out:
+total 660K
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:43 gatk.1.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 10:43 gatk.2.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 10:44 gatk.3.Pf3D7_01_v3_splitter-part.log_out.txt
+8.0K -rw-r--r-- 1 user bioinfo 7.8K Apr  5 10:43 gatk_variants.realign.Pf3D7_01_v3_splitter-part.intervals
+4.0K -rw-r--r-- 1 user bioinfo 4.0K Apr  5 10:44 gatk_variants.variants.Pf3D7_01_v3_splitter-part.vcf.gz
+ 512 -rw-r--r-- 1 user bioinfo  375 Apr  5 10:44 gatk_variants.variants.Pf3D7_01_v3_splitter-part.vcf.idx
+ 512 -rw-r--r-- 1 user bioinfo  141 Apr  5 10:44 Pf3D7_01_v3_splitter-part.fa.2.General.stats
+ 512 -rw-r--r-- 1 user bioinfo  480 Apr  5 10:44 Pf3D7_01_v3_splitter-part.fa.2.PerBase.stats
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 10:44 Pf3D7_01_v3_splitter-part.fa.2.Pf3D7_01_v3.gff
+635K -rw-r--r-- 1 user bioinfo 635K Apr  5 10:44 Pf3D7_01_v3_splitter-part.fa.2.tmp
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:44 snpopmati.log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_1/Pf3D7_API_v3_splitter-part.fa.out:
+total 64K
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:43 gatk.1.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 10:43 gatk.2.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 10:44 gatk.3.Pf3D7_API_v3_splitter-part.log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo   19 Apr  5 10:43 gatk_variants.realign.Pf3D7_API_v3_splitter-part.intervals
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 10:44 gatk_variants.variants.Pf3D7_API_v3_splitter-part.vcf.gz
+ 512 -rw-r--r-- 1 user bioinfo  320 Apr  5 10:44 gatk_variants.variants.Pf3D7_API_v3_splitter-part.vcf.idx
+ 512 -rw-r--r-- 1 user bioinfo  148 Apr  5 10:44 Pf3D7_API_v3_splitter-part.fa.2.General.stats
+ 512 -rw-r--r-- 1 user bioinfo  134 Apr  5 10:44 Pf3D7_API_v3_splitter-part.fa.2.PerBase.stats
+ 51K -rw-r--r-- 1 user bioinfo  51K Apr  5 10:44 Pf3D7_API_v3_splitter-part.fa.2.tmp
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:44 snpopmati.log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_1/Pf_M76611_splitter-part.fa.out:
+total 51K
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:43 gatk.1.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 10:43 gatk.2.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 10:44 gatk.3.Pf_M76611_splitter-part.log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo   32 Apr  5 10:43 gatk_variants.realign.Pf_M76611_splitter-part.intervals
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 10:44 gatk_variants.variants.Pf_M76611_splitter-part.vcf.gz
+ 512 -rw-r--r-- 1 user bioinfo  311 Apr  5 10:44 gatk_variants.variants.Pf_M76611_splitter-part.vcf.idx
+ 512 -rw-r--r-- 1 user bioinfo  127 Apr  5 10:44 Pf_M76611_splitter-part.fa.2.General.stats
+ 512 -rw-r--r-- 1 user bioinfo  113 Apr  5 10:44 Pf_M76611_splitter-part.fa.2.PerBase.stats
+ 37K -rw-r--r-- 1 user bioinfo  37K Apr  5 10:44 Pf_M76611_splitter-part.fa.2.tmp
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:44 snpopmati.log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_2:
+total 73K
+ 33K -rw-r--r-- 1 user bioinfo  33K Apr  5 10:44 bowtiebuild.log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  304 Apr  5 10:46 iter.2.General.stats
+ 512 -rw-r--r-- 1 user bioinfo   73 Apr  5 10:48 list_files_prev_cleaning.txt
+ 23K -rw-r--r-- 1 user bioinfo  23K Apr  5 10:45 MarkDuplicatesSpark_log.out.txt
+ 512 drwxr-xr-x 2 user bioinfo   10 Apr  5 11:40 Pf3D7_01_v3_splitter-part.fa.out
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 10:46 Pf3D7_01_v3_splitter-part.fa.snpcall.correction.log
+ 512 drwxr-xr-x 2 user bioinfo   10 Apr  5 11:40 Pf3D7_API_v3_splitter-part.fa.out
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 10:46 Pf3D7_API_v3_splitter-part.fa.snpcall.correction.log
+ 512 drwxr-xr-x 2 user bioinfo   10 Apr  5 11:40 Pf_M76611_splitter-part.fa.out
+2.0K -rw-r--r-- 1 user bioinfo 1.9K Apr  5 10:46 Pf_M76611_splitter-part.fa.snpcall.correction.log
+1.0K -rw-r--r-- 1 user bioinfo  951 Apr  5 10:46 processing_split_parts_correction_icorn2_log_out_2.txt
+1.0K -rw-r--r-- 1 user bioinfo  756 Apr  5 10:45 processing_split_parts_correction_icorn2_log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  889 Apr  5 10:45 processing_split_parts_createseqdictionary_log_out_2.txt
+4.5K -rw-r--r-- 1 user bioinfo 4.2K Apr  5 10:45 processing_split_parts_createseqdictionary_log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  326 Apr  5 10:45 processing_split_parts_faidx_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  131 Apr  5 10:45 processing_split_parts_faidx_log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_2/Pf3D7_01_v3_splitter-part.fa.out:
+total 657K
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:45 gatk.1.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 10:45 gatk.2.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 3.0K Apr  5 10:46 gatk.3.Pf3D7_01_v3_splitter-part.log_out.txt
+8.0K -rw-r--r-- 1 user bioinfo 7.7K Apr  5 10:45 gatk_variants.realign.Pf3D7_01_v3_splitter-part.intervals
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 10:46 gatk_variants.variants.Pf3D7_01_v3_splitter-part.vcf.gz
+ 512 -rw-r--r-- 1 user bioinfo  375 Apr  5 10:46 gatk_variants.variants.Pf3D7_01_v3_splitter-part.vcf.idx
+ 512 -rw-r--r-- 1 user bioinfo  141 Apr  5 10:46 Pf3D7_01_v3_splitter-part.fa.3.General.stats
+ 512 -rw-r--r-- 1 user bioinfo  127 Apr  5 10:46 Pf3D7_01_v3_splitter-part.fa.3.PerBase.stats
+635K -rw-r--r-- 1 user bioinfo 635K Apr  5 10:46 Pf3D7_01_v3_splitter-part.fa.3.tmp
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:46 snpopmati.log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_2/Pf3D7_API_v3_splitter-part.fa.out:
+total 64K
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:45 gatk.1.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 10:45 gatk.2.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 10:46 gatk.3.Pf3D7_API_v3_splitter-part.log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo   19 Apr  5 10:45 gatk_variants.realign.Pf3D7_API_v3_splitter-part.intervals
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 10:46 gatk_variants.variants.Pf3D7_API_v3_splitter-part.vcf.gz
+ 512 -rw-r--r-- 1 user bioinfo  320 Apr  5 10:46 gatk_variants.variants.Pf3D7_API_v3_splitter-part.vcf.idx
+ 512 -rw-r--r-- 1 user bioinfo  148 Apr  5 10:46 Pf3D7_API_v3_splitter-part.fa.3.General.stats
+ 512 -rw-r--r-- 1 user bioinfo  134 Apr  5 10:46 Pf3D7_API_v3_splitter-part.fa.3.PerBase.stats
+ 51K -rw-r--r-- 1 user bioinfo  51K Apr  5 10:46 Pf3D7_API_v3_splitter-part.fa.3.tmp
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:46 snpopmati.log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_2/Pf_M76611_splitter-part.fa.out:
+total 51K
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:45 gatk.1.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 10:45 gatk.2.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 3.0K Apr  5 10:46 gatk.3.Pf_M76611_splitter-part.log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo   32 Apr  5 10:45 gatk_variants.realign.Pf_M76611_splitter-part.intervals
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 10:46 gatk_variants.variants.Pf_M76611_splitter-part.vcf.gz
+ 512 -rw-r--r-- 1 user bioinfo  311 Apr  5 10:46 gatk_variants.variants.Pf_M76611_splitter-part.vcf.idx
+ 512 -rw-r--r-- 1 user bioinfo  127 Apr  5 10:46 Pf_M76611_splitter-part.fa.3.General.stats
+ 512 -rw-r--r-- 1 user bioinfo  113 Apr  5 10:46 Pf_M76611_splitter-part.fa.3.PerBase.stats
+ 37K -rw-r--r-- 1 user bioinfo  37K Apr  5 10:46 Pf_M76611_splitter-part.fa.3.tmp
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:46 snpopmati.log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3:
+total 73K
+ 33K -rw-r--r-- 1 user bioinfo  33K Apr  5 10:46 bowtiebuild.log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  304 Apr  5 10:48 iter.3.General.stats
+ 512 -rw-r--r-- 1 user bioinfo   73 Apr  5 10:48 list_files_prev_cleaning.txt
+ 23K -rw-r--r-- 1 user bioinfo  23K Apr  5 10:47 MarkDuplicatesSpark_log.out.txt
+ 512 drwxr-xr-x 2 user bioinfo   10 Apr  5 11:40 Pf3D7_01_v3_splitter-part.fa.out
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 10:48 Pf3D7_01_v3_splitter-part.fa.snpcall.correction.log
+ 512 drwxr-xr-x 2 user bioinfo   10 Apr  5 11:40 Pf3D7_API_v3_splitter-part.fa.out
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 10:48 Pf3D7_API_v3_splitter-part.fa.snpcall.correction.log
+ 512 drwxr-xr-x 2 user bioinfo   10 Apr  5 11:40 Pf_M76611_splitter-part.fa.out
+2.0K -rw-r--r-- 1 user bioinfo 1.9K Apr  5 10:48 Pf_M76611_splitter-part.fa.snpcall.correction.log
+1.0K -rw-r--r-- 1 user bioinfo  951 Apr  5 10:48 processing_split_parts_correction_icorn2_log_out_2.txt
+1.0K -rw-r--r-- 1 user bioinfo  756 Apr  5 10:47 processing_split_parts_correction_icorn2_log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  889 Apr  5 10:47 processing_split_parts_createseqdictionary_log_out_2.txt
+4.5K -rw-r--r-- 1 user bioinfo 4.2K Apr  5 10:47 processing_split_parts_createseqdictionary_log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  326 Apr  5 10:47 processing_split_parts_faidx_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  131 Apr  5 10:47 processing_split_parts_faidx_log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3/Pf3D7_01_v3_splitter-part.fa.out:
+total 657K
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:47 gatk.1.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 10:47 gatk.2.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 10:48 gatk.3.Pf3D7_01_v3_splitter-part.log_out.txt
+8.0K -rw-r--r-- 1 user bioinfo 7.7K Apr  5 10:47 gatk_variants.realign.Pf3D7_01_v3_splitter-part.intervals
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 10:48 gatk_variants.variants.Pf3D7_01_v3_splitter-part.vcf.gz
+ 512 -rw-r--r-- 1 user bioinfo  375 Apr  5 10:48 gatk_variants.variants.Pf3D7_01_v3_splitter-part.vcf.idx
+ 512 -rw-r--r-- 1 user bioinfo  141 Apr  5 10:48 Pf3D7_01_v3_splitter-part.fa.4.General.stats
+ 512 -rw-r--r-- 1 user bioinfo  127 Apr  5 10:48 Pf3D7_01_v3_splitter-part.fa.4.PerBase.stats
+635K -rw-r--r-- 1 user bioinfo 635K Apr  5 10:48 Pf3D7_01_v3_splitter-part.fa.4.tmp
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:48 snpopmati.log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3/Pf3D7_API_v3_splitter-part.fa.out:
+total 64K
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:47 gatk.1.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 10:47 gatk.2.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 10:48 gatk.3.Pf3D7_API_v3_splitter-part.log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo   19 Apr  5 10:47 gatk_variants.realign.Pf3D7_API_v3_splitter-part.intervals
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 10:48 gatk_variants.variants.Pf3D7_API_v3_splitter-part.vcf.gz
+ 512 -rw-r--r-- 1 user bioinfo  320 Apr  5 10:48 gatk_variants.variants.Pf3D7_API_v3_splitter-part.vcf.idx
+ 512 -rw-r--r-- 1 user bioinfo  148 Apr  5 10:48 Pf3D7_API_v3_splitter-part.fa.4.General.stats
+ 512 -rw-r--r-- 1 user bioinfo  134 Apr  5 10:48 Pf3D7_API_v3_splitter-part.fa.4.PerBase.stats
+ 51K -rw-r--r-- 1 user bioinfo  51K Apr  5 10:48 Pf3D7_API_v3_splitter-part.fa.4.tmp
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:48 snpopmati.log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3/Pf_M76611_splitter-part.fa.out:
+total 51K
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:47 gatk.1.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 10:47 gatk.2.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 10:48 gatk.3.Pf_M76611_splitter-part.log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo   32 Apr  5 10:47 gatk_variants.realign.Pf_M76611_splitter-part.intervals
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 10:48 gatk_variants.variants.Pf_M76611_splitter-part.vcf.gz
+ 512 -rw-r--r-- 1 user bioinfo  311 Apr  5 10:48 gatk_variants.variants.Pf_M76611_splitter-part.vcf.idx
+ 512 -rw-r--r-- 1 user bioinfo  127 Apr  5 10:48 Pf_M76611_splitter-part.fa.4.General.stats
+ 512 -rw-r--r-- 1 user bioinfo  113 Apr  5 10:48 Pf_M76611_splitter-part.fa.4.PerBase.stats
+ 37K -rw-r--r-- 1 user bioinfo  37K Apr  5 10:48 Pf_M76611_splitter-part.fa.4.tmp
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:48 snpopmati.log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator:
+total 1.6M
+668K -rw-r--r-- 1 user bioinfo 668K Apr  5 10:49 05.assembly.fa
+1.0K -rw-r--r-- 1 user bioinfo  809 Apr  5 10:49 circlator_log_out.txt
+ 80K -rw-r--r-- 1 user bioinfo  80K Apr  5 10:48 ForCirc.reads_2.fasta.gz
+ 80K -rw-r--r-- 1 user bioinfo  80K Apr  5 10:48 ForCirc.reads.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo   56 Apr  5 11:40 ForCirc.Ref_2.fasta.fai
+ 21K -rw-r--r-- 1 user bioinfo  21K Apr  5 10:48 ForCirc.Ref_2.fasta.gz
+ 21K -rw-r--r-- 1 user bioinfo  21K Apr  5 10:48 ForCirc.Ref.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo   23 Apr  5 10:49 List.circular_sequences.fofn
+712K -rw-r--r-- 1 user bioinfo 712K Apr  5 11:40 Mapped.corrected.04.sam.cram
+1.5K -rw-r--r-- 1 user bioinfo 1.3K Apr  5 10:48 mapping_corrected_reads_log_out.txt
+2.5K -rw-r--r-- 1 user bioinfo 2.3K Apr  5 10:48 meryl_count_log_out.txt
+ 512 drwxr-xr-x 2 user bioinfo  129 Apr  5 10:48 merylDB
+ 512 -rw-r--r-- 1 user bioinfo  179 Apr  5 10:48 meryl_print_log_out.txt
+ 512 drwxr-xr-x 3 user bioinfo   31 Apr  5 11:40 Out.Circ
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 10:48 repetitive_k15.txt
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/merylDB:
+total 2.9M
+341K -rw-r--r-- 1 user bioinfo 341K Apr  5 10:48 0x000000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x000000.merylIndex
+ 80K -rw-r--r-- 1 user bioinfo  80K Apr  5 10:48 0x000001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x000001.merylIndex
+241K -rw-r--r-- 1 user bioinfo 241K Apr  5 10:48 0x000010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x000010.merylIndex
+ 87K -rw-r--r-- 1 user bioinfo  87K Apr  5 10:48 0x000011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x000011.merylIndex
+ 97K -rw-r--r-- 1 user bioinfo  97K Apr  5 10:48 0x000100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x000100.merylIndex
+ 34K -rw-r--r-- 1 user bioinfo  34K Apr  5 10:48 0x000101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x000101.merylIndex
+ 50K -rw-r--r-- 1 user bioinfo  50K Apr  5 10:48 0x000110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x000110.merylIndex
+ 23K -rw-r--r-- 1 user bioinfo  23K Apr  5 10:48 0x000111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x000111.merylIndex
+267K -rw-r--r-- 1 user bioinfo 267K Apr  5 10:48 0x001000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x001000.merylIndex
+ 63K -rw-r--r-- 1 user bioinfo  63K Apr  5 10:48 0x001001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x001001.merylIndex
+188K -rw-r--r-- 1 user bioinfo 188K Apr  5 10:48 0x001010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x001010.merylIndex
+ 86K -rw-r--r-- 1 user bioinfo  86K Apr  5 10:48 0x001011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x001011.merylIndex
+ 64K -rw-r--r-- 1 user bioinfo  64K Apr  5 10:48 0x001100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x001100.merylIndex
+ 20K -rw-r--r-- 1 user bioinfo  20K Apr  5 10:48 0x001101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x001101.merylIndex
+ 39K -rw-r--r-- 1 user bioinfo  39K Apr  5 10:48 0x001110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x001110.merylIndex
+ 31K -rw-r--r-- 1 user bioinfo  31K Apr  5 10:48 0x001111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x001111.merylIndex
+ 62K -rw-r--r-- 1 user bioinfo  62K Apr  5 10:48 0x010000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x010000.merylIndex
+ 27K -rw-r--r-- 1 user bioinfo  27K Apr  5 10:48 0x010001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x010001.merylIndex
+ 68K -rw-r--r-- 1 user bioinfo  68K Apr  5 10:48 0x010010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x010010.merylIndex
+ 19K -rw-r--r-- 1 user bioinfo  19K Apr  5 10:48 0x010011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x010011.merylIndex
+ 28K -rw-r--r-- 1 user bioinfo  28K Apr  5 10:48 0x010100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x010100.merylIndex
+ 12K -rw-r--r-- 1 user bioinfo  12K Apr  5 10:48 0x010101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x010101.merylIndex
+ 25K -rw-r--r-- 1 user bioinfo  25K Apr  5 10:48 0x010110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x010110.merylIndex
+7.0K -rw-r--r-- 1 user bioinfo 6.8K Apr  5 10:48 0x010111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x010111.merylIndex
+ 38K -rw-r--r-- 1 user bioinfo  38K Apr  5 10:48 0x011000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x011000.merylIndex
+ 18K -rw-r--r-- 1 user bioinfo  18K Apr  5 10:48 0x011001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x011001.merylIndex
+ 50K -rw-r--r-- 1 user bioinfo  50K Apr  5 10:48 0x011010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x011010.merylIndex
+ 16K -rw-r--r-- 1 user bioinfo  16K Apr  5 10:48 0x011011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x011011.merylIndex
+ 15K -rw-r--r-- 1 user bioinfo  15K Apr  5 10:48 0x011100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x011100.merylIndex
+6.0K -rw-r--r-- 1 user bioinfo 5.7K Apr  5 10:48 0x011101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x011101.merylIndex
+ 14K -rw-r--r-- 1 user bioinfo  14K Apr  5 10:48 0x011110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x011110.merylIndex
+6.5K -rw-r--r-- 1 user bioinfo 6.2K Apr  5 10:48 0x011111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x011111.merylIndex
+130K -rw-r--r-- 1 user bioinfo 130K Apr  5 10:48 0x100000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x100000.merylIndex
+ 42K -rw-r--r-- 1 user bioinfo  42K Apr  5 10:48 0x100001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x100001.merylIndex
+140K -rw-r--r-- 1 user bioinfo 140K Apr  5 10:48 0x100010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x100010.merylIndex
+ 27K -rw-r--r-- 1 user bioinfo  27K Apr  5 10:48 0x100011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x100011.merylIndex
+ 37K -rw-r--r-- 1 user bioinfo  37K Apr  5 10:48 0x100100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x100100.merylIndex
+ 20K -rw-r--r-- 1 user bioinfo  20K Apr  5 10:48 0x100101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x100101.merylIndex
+ 32K -rw-r--r-- 1 user bioinfo  32K Apr  5 10:48 0x100110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x100110.merylIndex
+ 10K -rw-r--r-- 1 user bioinfo 9.7K Apr  5 10:48 0x100111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x100111.merylIndex
+ 73K -rw-r--r-- 1 user bioinfo  73K Apr  5 10:48 0x101000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x101000.merylIndex
+ 36K -rw-r--r-- 1 user bioinfo  36K Apr  5 10:48 0x101001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x101001.merylIndex
+ 88K -rw-r--r-- 1 user bioinfo  88K Apr  5 10:48 0x101010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x101010.merylIndex
+ 19K -rw-r--r-- 1 user bioinfo  19K Apr  5 10:48 0x101011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x101011.merylIndex
+ 18K -rw-r--r-- 1 user bioinfo  18K Apr  5 10:48 0x101100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x101100.merylIndex
+8.5K -rw-r--r-- 1 user bioinfo 8.5K Apr  5 10:48 0x101101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x101101.merylIndex
+ 18K -rw-r--r-- 1 user bioinfo  18K Apr  5 10:48 0x101110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x101110.merylIndex
+8.5K -rw-r--r-- 1 user bioinfo 8.1K Apr  5 10:48 0x101111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x101111.merylIndex
+ 14K -rw-r--r-- 1 user bioinfo  14K Apr  5 10:48 0x110000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x110000.merylIndex
+5.0K -rw-r--r-- 1 user bioinfo 4.6K Apr  5 10:48 0x110001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x110001.merylIndex
+9.0K -rw-r--r-- 1 user bioinfo 8.9K Apr  5 10:48 0x110010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x110010.merylIndex
+4.5K -rw-r--r-- 1 user bioinfo 4.1K Apr  5 10:48 0x110011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x110011.merylIndex
+4.5K -rw-r--r-- 1 user bioinfo 4.5K Apr  5 10:48 0x110100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x110100.merylIndex
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:48 0x110101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x110101.merylIndex
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 10:48 0x110110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x110110.merylIndex
+2.5K -rw-r--r-- 1 user bioinfo 2.3K Apr  5 10:48 0x110111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x110111.merylIndex
+6.5K -rw-r--r-- 1 user bioinfo 6.2K Apr  5 10:48 0x111000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x111000.merylIndex
+3.0K -rw-r--r-- 1 user bioinfo 3.0K Apr  5 10:48 0x111001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x111001.merylIndex
+5.0K -rw-r--r-- 1 user bioinfo 4.7K Apr  5 10:48 0x111010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x111010.merylIndex
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 10:48 0x111011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x111011.merylIndex
+2.5K -rw-r--r-- 1 user bioinfo 2.5K Apr  5 10:48 0x111100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x111100.merylIndex
+2.0K -rw-r--r-- 1 user bioinfo 1.8K Apr  5 10:48 0x111101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x111101.merylIndex
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 10:48 0x111110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x111110.merylIndex
+2.0K -rw-r--r-- 1 user bioinfo 1.7K Apr  5 10:48 0x111111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 10:48 0x111111.merylIndex
+2.5K -rw-r--r-- 1 user bioinfo 2.5K Apr  5 10:48 merylIndex
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ:
+total 255K
+1.5K -rw-r--r-- 1 user bioinfo 1.2K Apr  5 10:48 00.info.txt
+ 512 -rw-r--r-- 1 user bioinfo   56 Apr  5 10:48 00.input_assembly.fasta.fai
+ 21K -rw-r--r-- 1 user bioinfo  21K Apr  5 10:48 00.input_assembly.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo  216 Apr  5 10:48 01.mapreads.bam.bai
+ 21K -rw-r--r-- 1 user bioinfo  21K Apr  5 11:40 01.mapreads.bam.cram
+118K -rw-r--r-- 1 user bioinfo 118K Apr  5 10:48 02.bam2reads.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo  105 Apr  5 10:48 02.bam2reads.log
+ 512 drwx------ 7 user bioinfo   20 Apr  5 11:40 03.assemble
+ 512 lrwxrwxrwx 1 user bioinfo   28 Apr  5 10:49 04.merge.circularise.coords -> 04.merge.merge.iter.1.coords
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 10:49 04.merge.circularise_details.log
+ 512 -rw-r--r-- 1 user bioinfo  180 Apr  5 10:49 04.merge.circularise.log
+ 512 lrwxrwxrwx 1 user bioinfo   34 Apr  5 10:49 04.merge.circularise.start_act.sh -> 04.merge.merge.iter.1.start_act.sh
+ 12K -rw-r--r-- 1 user bioinfo  12K Apr  5 10:49 04.merge.fasta.gz
+2.0K -rw-r--r-- 1 user bioinfo 1.8K Apr  5 10:49 04.merge.merge.iter.1.coords
+1.5K -rw-r--r-- 1 user bioinfo 1.1K Apr  5 10:49 04.merge.merge.iter.1.crunch
+ 512 -rwxr-xr-x 1 user bioinfo  103 Apr  5 10:49 04.merge.merge.iter.1.start_act.sh
+1.0K -rw-r--r-- 1 user bioinfo 1021 Apr  5 10:49 04.merge.merge.iterations.log
+ 512 -rw-r--r-- 1 user bioinfo   23 Apr  5 10:49 05.clean.contigs_to_keep
+1.0K -rw-r--r-- 1 user bioinfo  611 Apr  5 10:49 05.clean.coords
+ 12K -rw-r--r-- 1 user bioinfo  12K Apr  5 10:49 05.clean.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo   59 Apr  5 10:49 05.clean.log
+ 12K -rw-r--r-- 1 user bioinfo  12K Apr  5 10:49 05.clean.remove_small.fa.gz
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:49 06.fixstart.ALL_FINISHED
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:49 06.fixstart.contigs_to_not_change
+1.0K -rw-r--r-- 1 user bioinfo  533 Apr  5 10:49 06.fixstart.detailed.log
+ 11K -rw-r--r-- 1 user bioinfo  11K Apr  5 10:49 06.fixstart.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo  156 Apr  5 10:49 06.fixstart.log
+ 12K -rw-r--r-- 1 user bioinfo  12K Apr  5 10:49 06.fixstart.prodigal.for_prodigal.fa.gz
+9.0K -rw-r--r-- 1 user bioinfo 9.0K Apr  5 10:49 06.fixstart.prodigal.prodigal.gff
+ 12K -rw-r--r-- 1 user bioinfo  12K Apr  5 10:49 06.fixstart.promer.contigs_with_ends.fa.gz
+ 512 -rw-r--r-- 1 user bioinfo  321 Apr  5 10:49 06.fixstart.promer.promer
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble:
+total 195K
+9.5K -rw-r--r-- 1 user bioinfo 9.2K Apr  5 10:49 assembly_graph_after_simplification.gfa.gz
+ 72K -rw-r--r-- 1 user bioinfo  72K Apr  5 10:49 assembly_graph.fastg
+9.5K -rw-r--r-- 1 user bioinfo 9.3K Apr  5 10:49 assembly_graph_with_scaffolds.gfa.gz
+ 10K -rw-r--r-- 1 user bioinfo 9.8K Apr  5 10:49 before_rr.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo  149 Apr  5 10:49 contigs.fasta.fai
+ 10K -rw-r--r-- 1 user bioinfo 9.6K Apr  5 10:49 contigs.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo  239 Apr  5 10:49 contigs.paths
+ 512 -rw-r--r-- 1 user bioinfo  137 Apr  5 10:49 dataset.info
+ 512 -rw-r--r-- 1 user bioinfo  161 Apr  5 10:49 input_dataset.yaml
+ 512 drwxr-xr-x 4 user bioinfo   11 Apr  5 11:40 K87
+ 512 drwxr-xr-x 2 user bioinfo   12 Apr  5 11:40 misc
+ 512 drwxr-xr-x 4 user bioinfo    2 Apr  5 10:49 mismatch_corrector
+2.0K -rw-r--r-- 1 user bioinfo 1.6K Apr  5 10:49 params.txt
+ 512 drwxr-xr-x 2 user bioinfo   11 Apr  5 10:49 pipeline_state
+5.5K -rw-r--r-- 1 user bioinfo 5.1K Apr  5 10:49 run_spades.sh
+7.0K -rw-r--r-- 1 user bioinfo 6.8K Apr  5 10:49 run_spades.yaml
+ 10K -rw-r--r-- 1 user bioinfo 9.7K Apr  5 10:49 scaffolds.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo  239 Apr  5 10:49 scaffolds.paths
+ 55K -rw-r--r-- 1 user bioinfo  55K Apr  5 10:49 spades.log
+   0 drwxr-xr-x 2 user bioinfo    0 Apr  5 10:49 tmp
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/K87:
+total 124K
+9.5K -rw-r--r-- 1 user bioinfo 9.2K Apr  5 10:49 assembly_graph_after_simplification.gfa.gz
+ 72K -rw-r--r-- 1 user bioinfo  72K Apr  5 10:49 assembly_graph.fastg
+9.5K -rw-r--r-- 1 user bioinfo 9.3K Apr  5 10:49 assembly_graph_with_scaffolds.gfa.gz
+ 10K -rw-r--r-- 1 user bioinfo 9.8K Apr  5 10:49 before_rr.fasta.gz
+ 512 drwxr-xr-x 2 user bioinfo   21 Apr  5 10:49 configs
+ 10K -rw-r--r-- 1 user bioinfo 9.7K Apr  5 10:49 final_contigs.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo  239 Apr  5 10:49 final_contigs.paths
+1.5K -rw-r--r-- 1 user bioinfo 1.5K Apr  5 10:49 final.lib_data
+   0 drwxr-xr-x 2 user bioinfo    0 Apr  5 10:49 path_extend
+ 10K -rw-r--r-- 1 user bioinfo 9.7K Apr  5 10:49 scaffolds.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo  239 Apr  5 10:49 scaffolds.paths
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/K87/configs:
+total 43K
+1.0K -rw-r--r-- 1 user bioinfo  564 Apr  5 10:49 careful_mda_mode.info
+1.0K -rw-r--r-- 1 user bioinfo  633 Apr  5 10:49 careful_mode.info
+5.0K -rw-r--r-- 1 user bioinfo 4.9K Apr  5 10:49 config.info
+1.0K -rw-r--r-- 1 user bioinfo  645 Apr  5 10:49 construction.info
+1.0K -rw-r--r-- 1 user bioinfo 1019 Apr  5 10:49 detail_info_printer.info
+1.5K -rw-r--r-- 1 user bioinfo 1.4K Apr  5 10:49 distance_estimation.info
+ 512 -rw-r--r-- 1 user bioinfo  110 Apr  5 10:49 hmm_mode.info
+ 512 -rw-r--r-- 1 user bioinfo   44 Apr  5 10:49 isolate_mode.info
+ 512 -rw-r--r-- 1 user bioinfo  126 Apr  5 10:49 large_genome_mode.info
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 10:49 mda_mode.info
+5.0K -rw-r--r-- 1 user bioinfo 4.8K Apr  5 10:49 meta_mode.info
+ 512 -rw-r--r-- 1 user bioinfo   45 Apr  5 10:49 metaplasmid_mode.info
+1.5K -rw-r--r-- 1 user bioinfo 1.1K Apr  5 10:49 metaviral_mode.info
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 10:49 moleculo_mode.info
+4.5K -rw-r--r-- 1 user bioinfo 4.3K Apr  5 10:49 pe_params.info
+1.0K -rw-r--r-- 1 user bioinfo  551 Apr  5 10:49 plasmid_mode.info
+5.0K -rw-r--r-- 1 user bioinfo 5.0K Apr  5 10:49 rna_mode.info
+1.0K -rw-r--r-- 1 user bioinfo  636 Apr  5 10:49 rnaviral_mode.info
+7.0K -rw-r--r-- 1 user bioinfo 6.9K Apr  5 10:49 simplification.info
+ 512 -rw-r--r-- 1 user bioinfo   43 Apr  5 10:49 toy.info
+ 512 -rw-r--r-- 1 user bioinfo  131 Apr  5 10:49 tsa.info
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/K87/path_extend:
+total 0
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/misc:
+total 144K
+ 512 -rw-r--r-- 1 user bioinfo   10 Apr  5 10:49 assembled_contigs.fasta.amb
+ 512 -rw-r--r-- 1 user bioinfo  174 Apr  5 10:49 assembled_contigs.fasta.ann
+ 35K -rw-r--r-- 1 user bioinfo  35K Apr  5 10:49 assembled_contigs.fasta.bwt
+ 10K -rw-r--r-- 1 user bioinfo 9.7K Apr  5 10:49 assembled_contigs.fasta.gz
+9.0K -rw-r--r-- 1 user bioinfo 8.6K Apr  5 10:49 assembled_contigs.fasta.pac
+ 18K -rw-r--r-- 1 user bioinfo  18K Apr  5 10:49 assembled_contigs.fasta.sa
+ 512 -rw-r--r-- 1 user bioinfo   10 Apr  5 10:49 assembled_scaffolds.fasta.amb
+ 512 -rw-r--r-- 1 user bioinfo  174 Apr  5 10:49 assembled_scaffolds.fasta.ann
+ 35K -rw-r--r-- 1 user bioinfo  35K Apr  5 10:49 assembled_scaffolds.fasta.bwt
+ 10K -rw-r--r-- 1 user bioinfo 9.7K Apr  5 10:49 assembled_scaffolds.fasta.gz
+9.0K -rw-r--r-- 1 user bioinfo 8.6K Apr  5 10:49 assembled_scaffolds.fasta.pac
+ 18K -rw-r--r-- 1 user bioinfo  18K Apr  5 10:49 assembled_scaffolds.fasta.sa
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/mismatch_corrector:
+total 1.0K
+512 drwxr-xr-x 3 user bioinfo 2 Apr  5 11:40 contigs
+512 drwxr-xr-x 3 user bioinfo 2 Apr  5 11:40 scaffolds
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/mismatch_corrector/contigs:
+total 11K
+512 drwxr-xr-x 2 user bioinfo    1 Apr  5 10:49 configs
+10K -rw-r--r-- 1 user bioinfo 9.7K Apr  5 10:49 corrected_contigs.fasta.gz
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/mismatch_corrector/contigs/configs:
+total 1.0K
+1.0K -rw-r--r-- 1 user bioinfo 612 Apr  5 10:49 corrector.info
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/mismatch_corrector/scaffolds:
+total 11K
+512 drwxr-xr-x 2 user bioinfo    1 Apr  5 10:49 configs
+10K -rw-r--r-- 1 user bioinfo 9.7K Apr  5 10:49 corrected_contigs.fasta.gz
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/mismatch_corrector/scaffolds/configs:
+total 1.0K
+1.0K -rw-r--r-- 1 user bioinfo 614 Apr  5 10:49 corrector.info
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/pipeline_state:
+total 0
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_0_before_start
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_10_terminate
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_1_as_start
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_2_k87
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_3_copy_files
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_4_as_finish
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_5_mc_start
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_6_mc_contigs
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_7_mc_scaffolds
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_8_mc_finish
+0 -rw-r--r-- 1 user bioinfo 0 Apr  5 10:49 stage_9_bs
+
+~/ILRA/test_data/out_ILRA_test/5.Circlator/Out.Circ/03.assemble/tmp:
+total 0
+
+~/ILRA/test_data/out_ILRA_test/7.Stats:
+total 2.1M
+ 512 -rw-r--r-- 1 user bioinfo  493 Apr  5 10:49 07.assembly_stats_original_correction_ILRA.txt
+ 512 -rw-r--r-- 1 user bioinfo  299 Apr  5 10:49 07.Contigs_GC_size.txt
+ 512 -rw-r--r-- 1 user bioinfo  306 Apr  5 10:49 07.fastq_info_depth_IlluminaReads_assembly.txt
+ 512 -rw-r--r-- 1 user bioinfo  304 Apr  5 10:49 07.TelomerContigs.txt
+6.5K -rw-r--r-- 1 user bioinfo 6.1K Apr  5 10:49 07.Telomeres_seq_1kb.txt
+ 512 -rw-r--r-- 1 user bioinfo  440 Apr  5 10:49 07.TelomeresSummary.txt
+ 512 drwxr-xr-x 2 user bioinfo    2 Apr  5 11:40 asm2stats_results
+8.5K -rw-r--r-- 1 user bioinfo 8.2K Apr  5 11:38 busco_log_out.txt
+ 512 drwxr-xr-x 3 user bioinfo    1 Apr  5 11:38 busco_results
+639K -rw-r--r-- 1 user bioinfo 639K Apr  5 10:49 Illumina_short_reads_Pf_test_subset_1_fastqc.html
+390K -rw-r--r-- 1 user bioinfo 390K Apr  5 10:49 Illumina_short_reads_Pf_test_subset_1_fastqc.zip
+645K -rw-r--r-- 1 user bioinfo 645K Apr  5 10:49 Illumina_short_reads_Pf_test_subset_2_fastqc.html
+402K -rw-r--r-- 1 user bioinfo 402K Apr  5 10:49 Illumina_short_reads_Pf_test_subset_2_fastqc.zip
+ 512 drwxr-xr-x 2 user bioinfo    5 Apr  5 11:40 NGenomeSyn
+ 512 drwxr-xr-x 3 user bioinfo   20 Apr  5 11:40 plotsr_results
+9.0K -rw-r--r-- 1 user bioinfo 8.9K Apr  5 11:33 quast.py_log_out.txt
+ 512 drwxr-xr-x 3 user bioinfo    2 Apr  5 10:50 quast_results
+ 512 drwxr-xr-x 3 user bioinfo    2 Apr  5 11:40 tapestry
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/asm2stats_results:
+total 318K
+ 78K -rw-r--r-- 1 user bioinfo  78K Apr  5 11:40 output.json
+240K -rw-r--r-- 1 user bioinfo 240K Apr  5 11:40 output.minmaxgc.json
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results:
+total 512
+512 drwxr-xr-x 4 user bioinfo 5 Apr  5 11:38 test
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test:
+total 5.0K
+ 512 drwxr-xr-x 3 user bioinfo    1 Apr  5 11:34 auto_lineage
+ 512 drwxr-xr-x 2 user bioinfo   11 Apr  5 11:38 logs
+ 512 lrwxrwxrwx 1 user bioinfo  115 Apr  5 11:38 run_eukaryota_odb10 -> ~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test/auto_lineage/run_eukaryota_odb10
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 11:38 short_summary.specific.eukaryota_odb10.test.json
+1.0K -rw-r--r-- 1 user bioinfo  868 Apr  5 11:38 short_summary.specific.eukaryota_odb10.test.txt
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test/auto_lineage:
+total 512
+512 drwxr-xr-x 6 user bioinfo 10 Apr  5 11:38 run_eukaryota_odb10
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test/auto_lineage/run_eukaryota_odb10:
+total 38K
+ 512 drwxr-xr-x 2 user bioinfo    3 Apr  5 11:38 busco_sequences
+6.0K -rw-r--r-- 1 user bioinfo 5.9K Apr  5 11:36 full_table.tsv
+ 24K -rw-r--r-- 1 user bioinfo  24K Apr  5 11:38 hmmer_output.tar.gz
+ 512 drwxr-xr-x 4 user bioinfo    6 Apr  5 11:36 metaeuk_output
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 11:36 missing_busco_list.tsv
+ 512 drwxr-xr-x 2 user bioinfo    5 Apr  5 11:40 placement_files
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 11:36 short_summary.json
+1.0K -rw-r--r-- 1 user bioinfo  868 Apr  5 11:36 short_summary.txt
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test/auto_lineage/run_eukaryota_odb10/busco_sequences:
+total 5.5K
+1.5K -rw-r--r-- 1 user bioinfo 1.1K Apr  5 11:38 fragmented_busco_sequences.tar.gz
+ 512 -rw-r--r-- 1 user bioinfo  311 Apr  5 11:38 multi_copy_busco_sequences.tar.gz
+3.5K -rw-r--r-- 1 user bioinfo 3.2K Apr  5 11:38 single_copy_busco_sequences.tar.gz
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test/auto_lineage/run_eukaryota_odb10/metaeuk_output:
+total 160M
+ 55K -rw-r--r-- 1 user bioinfo  55K Apr  5 11:36 combined_nucl_seqs.fas
+ 20K -rw-r--r-- 1 user bioinfo  20K Apr  5 11:36 combined_pred_proteins.fas
+ 512 drwxr-xr-x 2 user bioinfo    6 Apr  5 11:34 initial_results
+160M -rw-r--r-- 1 user bioinfo 160M Apr  5 11:35 refseq_db_rerun.faa
+ 512 drwxr-xr-x 2 user bioinfo    6 Apr  5 11:35 rerun_results
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test/auto_lineage/run_eukaryota_odb10/metaeuk_output/initial_results:
+total 104K
+ 30K -rw-r--r-- 1 user bioinfo  30K Apr  5 11:34 test.ILRA.fasta.codon.fas
+ 12K -rw-r--r-- 1 user bioinfo  12K Apr  5 11:34 test.ILRA.fasta.fas
+ 22K -rw-r--r-- 1 user bioinfo  22K Apr  5 11:34 test.ILRA.fasta.gff
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:34 test.ILRA.fasta.headersMap.tsv
+ 28K -rw-r--r-- 1 user bioinfo  28K Apr  5 11:34 test.ILRA.fasta.modified.codon.fas
+ 10K -rw-r--r-- 1 user bioinfo 9.9K Apr  5 11:34 test.ILRA.fasta.modified.fas
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test/auto_lineage/run_eukaryota_odb10/metaeuk_output/rerun_results:
+total 91K
+ 28K -rw-r--r-- 1 user bioinfo  28K Apr  5 11:35 test.ILRA.fasta.codon.fas
+ 11K -rw-r--r-- 1 user bioinfo  11K Apr  5 11:35 test.ILRA.fasta.fas
+ 14K -rw-r--r-- 1 user bioinfo  14K Apr  5 11:35 test.ILRA.fasta.gff
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 11:35 test.ILRA.fasta.headersMap.tsv
+ 27K -rw-r--r-- 1 user bioinfo  27K Apr  5 11:35 test.ILRA.fasta.modified.codon.fas
+9.5K -rw-r--r-- 1 user bioinfo 9.3K Apr  5 11:35 test.ILRA.fasta.modified.fas
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test/auto_lineage/run_eukaryota_odb10/placement_files:
+total 24M
+512 -rw-r--r-- 1 user bioinfo 345 Apr  5 11:36 marker_genes.fasta.gz
+12M -rw-r--r-- 1 user bioinfo 12M Apr  5 11:38 output_alignment.fasta.gz
+12M -rw-r--r-- 1 user bioinfo 12M Apr  5 11:38 output_alignment_masked.fasta.gz
+72K -rw-r--r-- 1 user bioinfo 72K Apr  5 11:38 output_placement.json
+40K -rw-r--r-- 1 user bioinfo 40K Apr  5 11:38 output_rename-json.py
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test/logs:
+total 375K
+ 512 -rw-r--r-- 1 user bioinfo   41 Apr  5 11:34 bbtools_err.log
+2.0K -rw-r--r-- 1 user bioinfo 1.6K Apr  5 11:34 bbtools_out.log
+301K -rw-r--r-- 1 user bioinfo 301K Apr  5 11:38 busco.log
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:36 hmmsearch_err.log
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 11:36 hmmsearch_out.log
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:34 metaeuk_run1_err.log
+ 25K -rw-r--r-- 1 user bioinfo  25K Apr  5 11:34 metaeuk_run1_out.log
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:35 metaeuk_run2_err.log
+ 25K -rw-r--r-- 1 user bioinfo  25K Apr  5 11:35 metaeuk_run2_out.log
+ 20K -rw-r--r-- 1 user bioinfo  20K Apr  5 11:38 sepp_err.log
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:36 sepp_out.log
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/NGenomeSyn:
+total 798K
+ 69K -rw-r--r-- 1 user bioinfo  69K Apr  5 11:40 GetTwoGenomeSyn.pl_log_out.txt
+660K -rw-r--r-- 1 user bioinfo 660K Apr  5 11:40 NGenomeSyn_full_out.tar
+ 17K -rw-r--r-- 1 user bioinfo  17K Apr  5 11:39 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_01_v3_second.png
+ 24K -rw-r--r-- 1 user bioinfo  24K Apr  5 11:39 test_with_ref_Pf3D7_01_v3_642993_firstvsPf3D7_08_v3_second.png
+ 29K -rw-r--r-- 1 user bioinfo  29K Apr  5 11:40 test_with_ref_Pf3D7_API_v3_34249_firstvsPf3D7_API_v3_second.png
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/plotsr_results:
+total 6.0M
+160K -rw-r--r-- 1 user bioinfo 160K Apr  5 10:49 assembly_ILRA.fasta.gz
+174K -rw-r--r-- 1 user bioinfo 174K Apr  5 11:38 assembly_ILRA_reduced_comp_ref.fasta.gz
+ 512 -rw-r--r-- 1 user bioinfo  130 Apr  5 11:38 contigs_pairs.txt
+ 512 -rw-r--r-- 1 user bioinfo  276 Apr  5 11:39 genomes.txt
+1.5K -rw-r--r-- 1 user bioinfo 1.2K Apr  5 11:38 indexing_ref_log_out.txt
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 11:38 meryl_count_log_out.txt
+ 512 drwxr-xr-x 2 user bioinfo  129 Apr  5 11:38 merylDB
+ 512 -rw-r--r-- 1 user bioinfo  179 Apr  5 11:38 meryl_print_log_out.txt
+ 15K -rw-r--r-- 1 user bioinfo  15K Apr  5 11:39 plotsr_assembly_reference_plot.pdf
+2.5K -rw-r--r-- 1 user bioinfo 2.1K Apr  5 11:39 plotsr_syri.log
+114K -rw-r--r-- 1 user bioinfo 114K Apr  5 11:39 plotsr_syri.out
+ 512 -rw-r--r-- 1 user bioinfo  466 Apr  5 11:39 plotsr_syri.summary
+ 29K -rw-r--r-- 1 user bioinfo  29K Apr  5 11:39 plotsr_syri.vcf.gz
+5.3M -rw-r--r-- 1 user bioinfo 5.3M Apr  4 21:45 ref.fa.gz
+1.0K -rw-r--r-- 1 user bioinfo  559 Apr  5 11:38 ref_reduced_comp_assembly.fasta.dict
+ 512 -rw-r--r-- 1 user bioinfo  106 Apr  5 11:38 ref_reduced_comp_assembly.fasta.fai
+128K -rw-r--r-- 1 user bioinfo 128K Apr  5 11:38 ref_reduced_comp_assembly.fasta.gz
+3.0K -rw-r--r-- 1 user bioinfo 2.7K Apr  5 11:38 repetitive_k19.txt
+1.0K -rw-r--r-- 1 user bioinfo  934 Apr  5 11:39 syri_log_out.txt
+1.5K -rw-r--r-- 1 user bioinfo 1.2K Apr  5 11:38 winnowmap_log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/plotsr_results/merylDB:
+total 3.8M
+502K -rw-r--r-- 1 user bioinfo 502K Apr  5 11:38 0x000000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x000000.merylIndex
+ 99K -rw-r--r-- 1 user bioinfo  99K Apr  5 11:38 0x000001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x000001.merylIndex
+333K -rw-r--r-- 1 user bioinfo 333K Apr  5 11:38 0x000010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x000010.merylIndex
+109K -rw-r--r-- 1 user bioinfo 109K Apr  5 11:38 0x000011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x000011.merylIndex
+124K -rw-r--r-- 1 user bioinfo 124K Apr  5 11:38 0x000100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x000100.merylIndex
+ 42K -rw-r--r-- 1 user bioinfo  42K Apr  5 11:38 0x000101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x000101.merylIndex
+ 62K -rw-r--r-- 1 user bioinfo  62K Apr  5 11:38 0x000110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x000110.merylIndex
+ 27K -rw-r--r-- 1 user bioinfo  27K Apr  5 11:38 0x000111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x000111.merylIndex
+401K -rw-r--r-- 1 user bioinfo 401K Apr  5 11:38 0x001000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x001000.merylIndex
+ 81K -rw-r--r-- 1 user bioinfo  81K Apr  5 11:38 0x001001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x001001.merylIndex
+259K -rw-r--r-- 1 user bioinfo 259K Apr  5 11:38 0x001010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x001010.merylIndex
+110K -rw-r--r-- 1 user bioinfo 110K Apr  5 11:38 0x001011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x001011.merylIndex
+ 77K -rw-r--r-- 1 user bioinfo  77K Apr  5 11:38 0x001100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x001100.merylIndex
+ 23K -rw-r--r-- 1 user bioinfo  23K Apr  5 11:38 0x001101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x001101.merylIndex
+ 52K -rw-r--r-- 1 user bioinfo  52K Apr  5 11:38 0x001110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x001110.merylIndex
+ 36K -rw-r--r-- 1 user bioinfo  36K Apr  5 11:38 0x001111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x001111.merylIndex
+ 75K -rw-r--r-- 1 user bioinfo  75K Apr  5 11:38 0x010000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x010000.merylIndex
+ 32K -rw-r--r-- 1 user bioinfo  32K Apr  5 11:38 0x010001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x010001.merylIndex
+ 92K -rw-r--r-- 1 user bioinfo  92K Apr  5 11:38 0x010010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x010010.merylIndex
+ 22K -rw-r--r-- 1 user bioinfo  22K Apr  5 11:38 0x010011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x010011.merylIndex
+ 33K -rw-r--r-- 1 user bioinfo  33K Apr  5 11:38 0x010100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x010100.merylIndex
+ 15K -rw-r--r-- 1 user bioinfo  15K Apr  5 11:38 0x010101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x010101.merylIndex
+ 32K -rw-r--r-- 1 user bioinfo  32K Apr  5 11:38 0x010110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x010110.merylIndex
+7.5K -rw-r--r-- 1 user bioinfo 7.5K Apr  5 11:38 0x010111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x010111.merylIndex
+ 44K -rw-r--r-- 1 user bioinfo  44K Apr  5 11:38 0x011000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x011000.merylIndex
+ 22K -rw-r--r-- 1 user bioinfo  22K Apr  5 11:38 0x011001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x011001.merylIndex
+ 65K -rw-r--r-- 1 user bioinfo  65K Apr  5 11:38 0x011010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x011010.merylIndex
+ 20K -rw-r--r-- 1 user bioinfo  20K Apr  5 11:38 0x011011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x011011.merylIndex
+ 17K -rw-r--r-- 1 user bioinfo  17K Apr  5 11:38 0x011100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x011100.merylIndex
+7.0K -rw-r--r-- 1 user bioinfo 6.6K Apr  5 11:38 0x011101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x011101.merylIndex
+ 18K -rw-r--r-- 1 user bioinfo  18K Apr  5 11:38 0x011110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x011110.merylIndex
+7.5K -rw-r--r-- 1 user bioinfo 7.1K Apr  5 11:38 0x011111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x011111.merylIndex
+169K -rw-r--r-- 1 user bioinfo 169K Apr  5 11:38 0x100000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x100000.merylIndex
+ 53K -rw-r--r-- 1 user bioinfo  53K Apr  5 11:38 0x100001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x100001.merylIndex
+202K -rw-r--r-- 1 user bioinfo 202K Apr  5 11:38 0x100010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x100010.merylIndex
+ 34K -rw-r--r-- 1 user bioinfo  34K Apr  5 11:38 0x100011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x100011.merylIndex
+ 41K -rw-r--r-- 1 user bioinfo  41K Apr  5 11:38 0x100100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x100100.merylIndex
+ 22K -rw-r--r-- 1 user bioinfo  22K Apr  5 11:38 0x100101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x100101.merylIndex
+ 37K -rw-r--r-- 1 user bioinfo  37K Apr  5 11:38 0x100110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x100110.merylIndex
+ 11K -rw-r--r-- 1 user bioinfo  11K Apr  5 11:38 0x100111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x100111.merylIndex
+ 98K -rw-r--r-- 1 user bioinfo  98K Apr  5 11:38 0x101000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x101000.merylIndex
+ 42K -rw-r--r-- 1 user bioinfo  42K Apr  5 11:38 0x101001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x101001.merylIndex
+110K -rw-r--r-- 1 user bioinfo 110K Apr  5 11:38 0x101010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x101010.merylIndex
+ 23K -rw-r--r-- 1 user bioinfo  23K Apr  5 11:38 0x101011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x101011.merylIndex
+ 20K -rw-r--r-- 1 user bioinfo  20K Apr  5 11:38 0x101100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x101100.merylIndex
+8.5K -rw-r--r-- 1 user bioinfo 8.5K Apr  5 11:38 0x101101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x101101.merylIndex
+ 21K -rw-r--r-- 1 user bioinfo  21K Apr  5 11:38 0x101110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x101110.merylIndex
+9.5K -rw-r--r-- 1 user bioinfo 9.1K Apr  5 11:38 0x101111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x101111.merylIndex
+ 17K -rw-r--r-- 1 user bioinfo  17K Apr  5 11:38 0x110000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x110000.merylIndex
+5.5K -rw-r--r-- 1 user bioinfo 5.2K Apr  5 11:38 0x110001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x110001.merylIndex
+ 12K -rw-r--r-- 1 user bioinfo  12K Apr  5 11:38 0x110010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x110010.merylIndex
+5.0K -rw-r--r-- 1 user bioinfo 5.0K Apr  5 11:38 0x110011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x110011.merylIndex
+5.0K -rw-r--r-- 1 user bioinfo 5.0K Apr  5 11:38 0x110100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x110100.merylIndex
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:38 0x110101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x110101.merylIndex
+4.0K -rw-r--r-- 1 user bioinfo 3.9K Apr  5 11:38 0x110110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x110110.merylIndex
+2.5K -rw-r--r-- 1 user bioinfo 2.4K Apr  5 11:38 0x110111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x110111.merylIndex
+8.0K -rw-r--r-- 1 user bioinfo 7.6K Apr  5 11:38 0x111000.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x111000.merylIndex
+3.5K -rw-r--r-- 1 user bioinfo 3.3K Apr  5 11:38 0x111001.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x111001.merylIndex
+5.5K -rw-r--r-- 1 user bioinfo 5.1K Apr  5 11:38 0x111010.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x111010.merylIndex
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 11:38 0x111011.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x111011.merylIndex
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 11:38 0x111100.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x111100.merylIndex
+2.0K -rw-r--r-- 1 user bioinfo 1.9K Apr  5 11:38 0x111101.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x111101.merylIndex
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 11:38 0x111110.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x111110.merylIndex
+2.0K -rw-r--r-- 1 user bioinfo 1.7K Apr  5 11:38 0x111111.merylData
+ 512 -rw-r--r-- 1 user bioinfo  384 Apr  5 11:38 0x111111.merylIndex
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 11:38 merylIndex
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/quast_results:
+total 1.0K
+512 lrwxrwxrwx 1 user bioinfo 27 Apr  5 10:50 latest -> results_2023_04_05_10_50_46
+512 drwxr-xr-x 8 user bioinfo 16 Apr  5 11:33 results_2023_04_05_10_50_46
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46:
+total 514K
+ 512 drwxr-xr-x 2 user bioinfo    3 Apr  5 11:32 aligned_stats
+ 512 drwxr-xr-x 2 user bioinfo    6 Apr  5 11:32 basic_stats
+ 512 drwxr-xr-x 3 user bioinfo   18 Apr  5 11:40 contigs_reports
+ 512 drwxr-xr-x 2 user bioinfo    5 Apr  5 11:33 genome_stats
+ 53K -rw-r--r-- 1 user bioinfo  53K Apr  5 11:33 icarus.html
+ 512 drwxr-xr-x 2 user bioinfo    2 Apr  5 11:33 icarus_viewers
+ 29K -rw-r--r-- 1 user bioinfo  29K Apr  5 11:33 quast.log
+ 512 drwxr-xr-x 2 user bioinfo   14 Apr  5 11:32 reads_stats
+369K -rw-r--r-- 1 user bioinfo 369K Apr  5 11:33 report.html
+ 46K -rw-r--r-- 1 user bioinfo  46K Apr  5 11:33 report.pdf
+3.0K -rw-r--r-- 1 user bioinfo 2.7K Apr  5 11:33 report.tex
+1.5K -rw-r--r-- 1 user bioinfo 1.4K Apr  5 11:33 report.tsv
+3.5K -rw-r--r-- 1 user bioinfo 3.3K Apr  5 11:33 report.txt
+2.5K -rw-r--r-- 1 user bioinfo 2.1K Apr  5 11:33 transposed_report.tex
+1.5K -rw-r--r-- 1 user bioinfo 1.4K Apr  5 11:33 transposed_report.tsv
+2.5K -rw-r--r-- 1 user bioinfo 2.5K Apr  5 11:33 transposed_report.txt
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/aligned_stats:
+total 40K
+15K -rw-r--r-- 1 user bioinfo 15K Apr  5 11:32 cumulative_plot.pdf
+12K -rw-r--r-- 1 user bioinfo 12K Apr  5 11:32 NAx_plot.pdf
+13K -rw-r--r-- 1 user bioinfo 13K Apr  5 11:32 NGAx_plot.pdf
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats:
+total 1.1M
+  15K -rw-r--r-- 1 user bioinfo   15K Apr  5 11:32 cumulative_plot.pdf
+  14K -rw-r--r-- 1 user bioinfo   14K Apr  5 11:32 GC_content_plot.pdf
+1018K -rw-r--r-- 1 user bioinfo 1018K Apr  5 11:32 gc.icarus.txt
+  12K -rw-r--r-- 1 user bioinfo   12K Apr  5 11:32 NGx_plot.pdf
+  12K -rw-r--r-- 1 user bioinfo   12K Apr  5 11:32 Nx_plot.pdf
+  12K -rw-r--r-- 1 user bioinfo   12K Apr  5 11:32 test_GC_content_plot.pdf
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports:
+total 219K
+1.5K -rw-r--r-- 1 user bioinfo 1.4K Apr  5 11:32 all_alignments_test.tsv
+1.0K -rw-r--r-- 1 user bioinfo  526 Apr  5 11:32 contigs_report_test.mis_contigs.info
+1.5K -rw-r--r-- 1 user bioinfo 1.1K Apr  5 11:32 contigs_report_test.stderr
+7.0K -rw-r--r-- 1 user bioinfo 6.6K Apr  5 11:32 contigs_report_test.stdout
+ 512 -rw-r--r-- 1 user bioinfo  201 Apr  5 11:32 contigs_report_test.unaligned.info
+ 512 drwxr-xr-x 2 user bioinfo    6 Apr  5 11:32 minimap_output
+ 14K -rw-r--r-- 1 user bioinfo  14K Apr  5 11:32 misassemblies_frcurve_plot.pdf
+ 11K -rw-r--r-- 1 user bioinfo  11K Apr  5 11:32 misassemblies_plot.pdf
+1.5K -rw-r--r-- 1 user bioinfo 1.3K Apr  5 11:32 misassemblies_report.tex
+1.0K -rw-r--r-- 1 user bioinfo  526 Apr  5 11:32 misassemblies_report.tsv
+1.0K -rw-r--r-- 1 user bioinfo  951 Apr  5 11:32 misassemblies_report.txt
+174K -rw-r--r-- 1 user bioinfo 174K Apr  5 11:32 test.mis_contigs.fa.gz
+1.0K -rw-r--r-- 1 user bioinfo 1015 Apr  5 11:32 transposed_report_misassemblies.tex
+1.0K -rw-r--r-- 1 user bioinfo  526 Apr  5 11:32 transposed_report_misassemblies.tsv
+1.5K -rw-r--r-- 1 user bioinfo 1.1K Apr  5 11:32 transposed_report_misassemblies.txt
+1.0K -rw-r--r-- 1 user bioinfo  575 Apr  5 11:32 unaligned_report.tex
+ 512 -rw-r--r-- 1 user bioinfo  141 Apr  5 11:32 unaligned_report.tsv
+ 512 -rw-r--r-- 1 user bioinfo  387 Apr  5 11:32 unaligned_report.txt
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/minimap_output:
+total 267K
+ 26K -rw-r--r-- 1 user bioinfo  26K Apr  5 11:32 test.coords
+ 23K -rw-r--r-- 1 user bioinfo  23K Apr  5 11:32 test.coords.filtered
+ 66K -rw-r--r-- 1 user bioinfo  66K Apr  5 11:32 test.coords_tmp
+ 512 -rw-r--r-- 1 user bioinfo  158 Apr  5 11:32 test.sf
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:32 test.unaligned
+152K -rw-r--r-- 1 user bioinfo 152K Apr  5 11:32 test.used_snps
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/genome_stats:
+total 141K
+ 13K -rw-r--r-- 1 user bioinfo  13K Apr  5 11:33 features_cumulative_plot.pdf
+ 14K -rw-r--r-- 1 user bioinfo  14K Apr  5 11:33 features_frcurve_plot.pdf
+2.5K -rw-r--r-- 1 user bioinfo 2.3K Apr  5 11:33 genome_info.txt
+ 512 -rw-r--r-- 1 user bioinfo  395 Apr  5 11:33 test_gaps.txt
+111K -rw-r--r-- 1 user bioinfo 111K Apr  5 11:33 test_genomic_features_any.txt
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/icarus_viewers:
+total 16M
+ 15M -rw-r--r-- 1 user bioinfo  15M Apr  5 11:33 alignment_viewer.html
+765K -rw-r--r-- 1 user bioinfo 765K Apr  5 11:33 contig_size_viewer.html
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats:
+total 20M
+206K -rw-r--r-- 1 user bioinfo 206K Apr  5 11:32 PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bed
+9.3M -rw-r--r-- 1 user bioinfo 9.3M Apr  5 10:51 PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.cov
+ 512 -rw-r--r-- 1 user bioinfo    3 Apr  5 10:51 PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.is.txt
+9.3M -rw-r--r-- 1 user bioinfo 9.3M Apr  5 10:51 PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.physical.cov
+2.0K -rw-r--r-- 1 user bioinfo 2.0K Apr  5 10:51 PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.sam.header
+ 512 -rw-r--r-- 1 user bioinfo  484 Apr  5 10:51 PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.stat
+1.5K -rw-r--r-- 1 user bioinfo 1.5K Apr  5 10:51 reads_report.tex
+1.0K -rw-r--r-- 1 user bioinfo  707 Apr  5 10:51 reads_report.tsv
+1.5K -rw-r--r-- 1 user bioinfo 1.2K Apr  5 10:51 reads_report.txt
+490K -rw-r--r-- 1 user bioinfo 490K Apr  5 11:32 reads_stats.err
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 10:50 reads_stats.log
+ 512 -rw-r--r-- 1 user bioinfo    3 Apr  5 10:51 test.is.txt
+1.5K -rw-r--r-- 1 user bioinfo 1.5K Apr  5 10:51 test.sam.header
+ 512 -rw-r--r-- 1 user bioinfo  487 Apr  5 10:51 test.stat
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/tapestry:
+total 4.0K
+ 512 drwxr-xr-x 2 user bioinfo    2 Apr  5 11:40 out
+3.5K -rw-r--r-- 1 user bioinfo 3.3K Apr  5 11:40 weave_log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/7.Stats/tapestry/out:
+total 2.0M
+ 512 -rw-r--r-- 1 user bioinfo  404 Apr  5 11:40 contig_details.tsv
+2.0M -rw-r--r-- 1 user bioinfo 2.0M Apr  5 11:40 out.tapestry_report.html
+
+~/ILRA/test_data/out_ILRA_test/all_logs:
+total 28M
+ 10K -rw-r--r-- 1 user bioinfo 9.9K Apr  5 11:40 2.MegaBLAST_ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt
+ 512 -rw-r--r-- 1 user bioinfo  180 Apr  5 11:40 2.MegaBLAST_ILRA.findoverlaps_ver3.pl_log_out.txt
+2.0K -rw-r--r-- 1 user bioinfo 1.9K Apr  5 11:40 2.MegaBLAST_ILRA.runSMALT_ver2.sh_log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  994 Apr  5 11:40 2.MegaBLAST_megablast_parallel_log_out_2.txt
+1.0K -rw-r--r-- 1 user bioinfo  812 Apr  5 11:40 2.MegaBLAST_megablast_parallel_log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 2.MegaBLAST_out.58131.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 2.MegaBLAST_out.first.58131.txt
+ 512 -rw-r--r-- 1 user bioinfo  386 Apr  5 11:40 3.ABACAS2_abacas2.doTilingGraph.pl_parallel_log_out_2.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 11:40 3.ABACAS2_abacas2.doTilingGraph.pl_parallel_log_out.txt
+2.0K -rw-r--r-- 1 user bioinfo 1.7K Apr  5 11:40 3.ABACAS2_abacas_log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  155 Apr  5 11:40 3.ABACAS2_abacas_log_out_warnings_errors.txt
+ 512 -rw-r--r-- 1 user bioinfo  311 Apr  5 11:40 3.ABACAS2_formatdb_parallel_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  116 Apr  5 11:40 3.ABACAS2_formatdb_parallel_log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  531 Apr  5 11:40 3.ABACAS2_megablast_parallel_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  336 Apr  5 11:40 3.ABACAS2_megablast_parallel_log_out.txt
+ 33K -rw-r--r-- 1 user bioinfo  33K Apr  5 11:40 4.iCORN2_ICORN2_1_bowtiebuild.log_out.txt
+ 23K -rw-r--r-- 1 user bioinfo  23K Apr  5 11:40 4.iCORN2_ICORN2_1_MarkDuplicatesSpark_log.out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:40 4.iCORN2_ICORN2_1_Pf3D7_01_v3_splitter-part.fa.out_gatk.1.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 11:40 4.iCORN2_ICORN2_1_Pf3D7_01_v3_splitter-part.fa.out_gatk.2.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 11:40 4.iCORN2_ICORN2_1_Pf3D7_01_v3_splitter-part.fa.out_gatk.3.Pf3D7_01_v3_splitter-part.log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 4.iCORN2_ICORN2_1_Pf3D7_01_v3_splitter-part.fa.out_snpopmati.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:40 4.iCORN2_ICORN2_1_Pf3D7_API_v3_splitter-part.fa.out_gatk.1.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 11:40 4.iCORN2_ICORN2_1_Pf3D7_API_v3_splitter-part.fa.out_gatk.2.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 11:40 4.iCORN2_ICORN2_1_Pf3D7_API_v3_splitter-part.fa.out_gatk.3.Pf3D7_API_v3_splitter-part.log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 4.iCORN2_ICORN2_1_Pf3D7_API_v3_splitter-part.fa.out_snpopmati.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:40 4.iCORN2_ICORN2_1_Pf_M76611_splitter-part.fa.out_gatk.1.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 11:40 4.iCORN2_ICORN2_1_Pf_M76611_splitter-part.fa.out_gatk.2.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 11:40 4.iCORN2_ICORN2_1_Pf_M76611_splitter-part.fa.out_gatk.3.Pf_M76611_splitter-part.log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 4.iCORN2_ICORN2_1_Pf_M76611_splitter-part.fa.out_snpopmati.log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  951 Apr  5 11:40 4.iCORN2_ICORN2_1_processing_split_parts_correction_icorn2_log_out_2.txt
+1.0K -rw-r--r-- 1 user bioinfo  756 Apr  5 11:40 4.iCORN2_ICORN2_1_processing_split_parts_correction_icorn2_log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  889 Apr  5 11:40 4.iCORN2_ICORN2_1_processing_split_parts_createseqdictionary_log_out_2.txt
+4.5K -rw-r--r-- 1 user bioinfo 4.2K Apr  5 11:40 4.iCORN2_ICORN2_1_processing_split_parts_createseqdictionary_log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  326 Apr  5 11:40 4.iCORN2_ICORN2_1_processing_split_parts_faidx_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  131 Apr  5 11:40 4.iCORN2_ICORN2_1_processing_split_parts_faidx_log_out.txt
+ 33K -rw-r--r-- 1 user bioinfo  33K Apr  5 11:40 4.iCORN2_ICORN2_2_bowtiebuild.log_out.txt
+ 23K -rw-r--r-- 1 user bioinfo  23K Apr  5 11:40 4.iCORN2_ICORN2_2_MarkDuplicatesSpark_log.out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:40 4.iCORN2_ICORN2_2_Pf3D7_01_v3_splitter-part.fa.out_gatk.1.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 11:40 4.iCORN2_ICORN2_2_Pf3D7_01_v3_splitter-part.fa.out_gatk.2.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 3.0K Apr  5 11:40 4.iCORN2_ICORN2_2_Pf3D7_01_v3_splitter-part.fa.out_gatk.3.Pf3D7_01_v3_splitter-part.log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 4.iCORN2_ICORN2_2_Pf3D7_01_v3_splitter-part.fa.out_snpopmati.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:40 4.iCORN2_ICORN2_2_Pf3D7_API_v3_splitter-part.fa.out_gatk.1.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 11:40 4.iCORN2_ICORN2_2_Pf3D7_API_v3_splitter-part.fa.out_gatk.2.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 11:40 4.iCORN2_ICORN2_2_Pf3D7_API_v3_splitter-part.fa.out_gatk.3.Pf3D7_API_v3_splitter-part.log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 4.iCORN2_ICORN2_2_Pf3D7_API_v3_splitter-part.fa.out_snpopmati.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:40 4.iCORN2_ICORN2_2_Pf_M76611_splitter-part.fa.out_gatk.1.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 11:40 4.iCORN2_ICORN2_2_Pf_M76611_splitter-part.fa.out_gatk.2.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 3.0K Apr  5 11:40 4.iCORN2_ICORN2_2_Pf_M76611_splitter-part.fa.out_gatk.3.Pf_M76611_splitter-part.log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 4.iCORN2_ICORN2_2_Pf_M76611_splitter-part.fa.out_snpopmati.log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  951 Apr  5 11:40 4.iCORN2_ICORN2_2_processing_split_parts_correction_icorn2_log_out_2.txt
+1.0K -rw-r--r-- 1 user bioinfo  756 Apr  5 11:40 4.iCORN2_ICORN2_2_processing_split_parts_correction_icorn2_log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  889 Apr  5 11:40 4.iCORN2_ICORN2_2_processing_split_parts_createseqdictionary_log_out_2.txt
+4.5K -rw-r--r-- 1 user bioinfo 4.2K Apr  5 11:40 4.iCORN2_ICORN2_2_processing_split_parts_createseqdictionary_log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  326 Apr  5 11:40 4.iCORN2_ICORN2_2_processing_split_parts_faidx_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  131 Apr  5 11:40 4.iCORN2_ICORN2_2_processing_split_parts_faidx_log_out.txt
+ 33K -rw-r--r-- 1 user bioinfo  33K Apr  5 11:40 4.iCORN2_ICORN2_3_bowtiebuild.log_out.txt
+ 23K -rw-r--r-- 1 user bioinfo  23K Apr  5 11:40 4.iCORN2_ICORN2_3_MarkDuplicatesSpark_log.out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:40 4.iCORN2_ICORN2_3_Pf3D7_01_v3_splitter-part.fa.out_gatk.1.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 11:40 4.iCORN2_ICORN2_3_Pf3D7_01_v3_splitter-part.fa.out_gatk.2.Pf3D7_01_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 11:40 4.iCORN2_ICORN2_3_Pf3D7_01_v3_splitter-part.fa.out_gatk.3.Pf3D7_01_v3_splitter-part.log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 4.iCORN2_ICORN2_3_Pf3D7_01_v3_splitter-part.fa.out_snpopmati.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:40 4.iCORN2_ICORN2_3_Pf3D7_API_v3_splitter-part.fa.out_gatk.1.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 11:40 4.iCORN2_ICORN2_3_Pf3D7_API_v3_splitter-part.fa.out_gatk.2.Pf3D7_API_v3_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 11:40 4.iCORN2_ICORN2_3_Pf3D7_API_v3_splitter-part.fa.out_gatk.3.Pf3D7_API_v3_splitter-part.log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 4.iCORN2_ICORN2_3_Pf3D7_API_v3_splitter-part.fa.out_snpopmati.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.9K Apr  5 11:40 4.iCORN2_ICORN2_3_Pf_M76611_splitter-part.fa.out_gatk.1.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.6K Apr  5 11:40 4.iCORN2_ICORN2_3_Pf_M76611_splitter-part.fa.out_gatk.2.Pf_M76611_splitter-part.log_out.txt
+3.0K -rw-r--r-- 1 user bioinfo 2.8K Apr  5 11:40 4.iCORN2_ICORN2_3_Pf_M76611_splitter-part.fa.out_gatk.3.Pf_M76611_splitter-part.log_out.txt
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:40 4.iCORN2_ICORN2_3_Pf_M76611_splitter-part.fa.out_snpopmati.log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  951 Apr  5 11:40 4.iCORN2_ICORN2_3_processing_split_parts_correction_icorn2_log_out_2.txt
+1.0K -rw-r--r-- 1 user bioinfo  756 Apr  5 11:40 4.iCORN2_ICORN2_3_processing_split_parts_correction_icorn2_log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  889 Apr  5 11:40 4.iCORN2_ICORN2_3_processing_split_parts_createseqdictionary_log_out_2.txt
+4.5K -rw-r--r-- 1 user bioinfo 4.2K Apr  5 11:40 4.iCORN2_ICORN2_3_processing_split_parts_createseqdictionary_log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  326 Apr  5 11:40 4.iCORN2_ICORN2_3_processing_split_parts_faidx_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  131 Apr  5 11:40 4.iCORN2_ICORN2_3_processing_split_parts_faidx_log_out.txt
+4.0K -rw-r--r-- 1 user bioinfo 3.6K Apr  5 11:40 4.iCORN2_icorn2.mapper_log_out.txt
+6.0K -rw-r--r-- 1 user bioinfo 5.8K Apr  5 11:40 4.iCORN2_icorn2.serial_bowtie2.sh_log_out.txt
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 11:40 4.iCORN2_log.1.out
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 11:40 4.iCORN2_log.2.out
+3.5K -rw-r--r-- 1 user bioinfo 3.5K Apr  5 11:40 4.iCORN2_log.3.out
+1.0K -rw-r--r-- 1 user bioinfo  586 Apr  5 11:40 4.iCORN2_processing_decompressing_log_out_2.txt
+ 512 -rw-r--r-- 1 user bioinfo  434 Apr  5 11:40 4.iCORN2_processing_decompressing_log_out.txt
+1.0K -rw-r--r-- 1 user bioinfo  809 Apr  5 11:40 5.Circlator_circlator_log_out.txt
+1.5K -rw-r--r-- 1 user bioinfo 1.3K Apr  5 11:40 5.Circlator_mapping_corrected_reads_log_out.txt
+2.5K -rw-r--r-- 1 user bioinfo 2.3K Apr  5 11:40 5.Circlator_meryl_count_log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  179 Apr  5 11:40 5.Circlator_meryl_print_log_out.txt
+ 78K -rw-r--r-- 1 user bioinfo  78K Apr  5 11:41 7.Stats_asm2stats_results_output.json
+240K -rw-r--r-- 1 user bioinfo 240K Apr  5 11:41 7.Stats_asm2stats_results_output.minmaxgc.json
+8.5K -rw-r--r-- 1 user bioinfo 8.2K Apr  5 11:40 7.Stats_busco_log_out.txt
+ 24K -rw-r--r-- 1 user bioinfo  24K Apr  5 11:40 7.Stats_busco_results_test_auto_lineage_run_eukaryota_odb10_hmmer_output.tar.gz
+ 12M -rw-r--r-- 1 user bioinfo  12M Apr  5 11:40 7.Stats_busco_results_test_auto_lineage_run_eukaryota_odb10_placement_files_output_alignment.fasta.gz
+ 12M -rw-r--r-- 1 user bioinfo  12M Apr  5 11:41 7.Stats_busco_results_test_auto_lineage_run_eukaryota_odb10_placement_files_output_alignment_masked.fasta.gz
+ 72K -rw-r--r-- 1 user bioinfo  72K Apr  5 11:41 7.Stats_busco_results_test_auto_lineage_run_eukaryota_odb10_placement_files_output_placement.json
+ 40K -rw-r--r-- 1 user bioinfo  40K Apr  5 11:41 7.Stats_busco_results_test_auto_lineage_run_eukaryota_odb10_placement_files_output_rename-json.py
+2.0K -rw-r--r-- 1 user bioinfo 1.6K Apr  5 11:41 7.Stats_busco_results_test_logs_bbtools_out.log
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 11:41 7.Stats_busco_results_test_logs_hmmsearch_out.log
+ 25K -rw-r--r-- 1 user bioinfo  25K Apr  5 11:41 7.Stats_busco_results_test_logs_metaeuk_run1_out.log
+ 25K -rw-r--r-- 1 user bioinfo  25K Apr  5 11:41 7.Stats_busco_results_test_logs_metaeuk_run2_out.log
+   0 -rw-r--r-- 1 user bioinfo    0 Apr  5 11:41 7.Stats_busco_results_test_logs_sepp_out.log
+ 69K -rw-r--r-- 1 user bioinfo  69K Apr  5 11:41 7.Stats_NGenomeSyn_GetTwoGenomeSyn.pl_log_out.txt
+660K -rw-r--r-- 1 user bioinfo 660K Apr  5 11:41 7.Stats_NGenomeSyn_NGenomeSyn_full_out.tar
+1.5K -rw-r--r-- 1 user bioinfo 1.2K Apr  5 11:40 7.Stats_plotsr_results_indexing_ref_log_out.txt
+2.5K -rw-r--r-- 1 user bioinfo 2.2K Apr  5 11:40 7.Stats_plotsr_results_meryl_count_log_out.txt
+ 512 -rw-r--r-- 1 user bioinfo  179 Apr  5 11:40 7.Stats_plotsr_results_meryl_print_log_out.txt
+114K -rw-r--r-- 1 user bioinfo 114K Apr  5 11:40 7.Stats_plotsr_results_plotsr_syri.out
+1.0K -rw-r--r-- 1 user bioinfo  934 Apr  5 11:40 7.Stats_plotsr_results_syri_log_out.txt
+1.5K -rw-r--r-- 1 user bioinfo 1.2K Apr  5 11:40 7.Stats_plotsr_results_winnowmap_log_out.txt
+9.0K -rw-r--r-- 1 user bioinfo 8.9K Apr  5 11:41 7.Stats_quast.py_log_out.txt
+7.0K -rw-r--r-- 1 user bioinfo 6.6K Apr  5 11:40 7.Stats_quast_results_results_2023_04_05_10_50_46_contigs_reports_contigs_report_test.stdout
+2.0M -rw-r--r-- 1 user bioinfo 2.0M Apr  5 11:40 7.Stats_tapestry_out_out.tapestry_report.html
+3.5K -rw-r--r-- 1 user bioinfo 3.3K Apr  5 11:40 7.Stats_tapestry_weave_log_out.txt
+
+~/ILRA/test_data/out_ILRA_test/data:
+total 171K
+170K -rw-r--r-- 1 user bioinfo 170K Apr  4 21:45 assembly_Pf_test.fasta.gz
+ 512 lrwxrwxrwx 1 user bioinfo   88 Apr  5 10:49 Illumina_short_reads_Pf_test_subset_1.fastq.gz -> ~/ILRA/test_data/Illumina_short_reads_Pf_test_subset_1.fastq.gz
+ 512 lrwxrwxrwx 1 user bioinfo   88 Apr  5 10:49 Illumina_short_reads_Pf_test_subset_2.fastq.gz -> ~/ILRA/test_data/Illumina_short_reads_Pf_test_subset_2.fastq.gz
