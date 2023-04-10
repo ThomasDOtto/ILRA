@@ -1352,6 +1352,7 @@ mkdir -p $dir/all_logs; cd $dir
 for f in $(find . -type f -name "*out*"); do
 	cp $f $dir/all_logs/$(echo $f | sed -e 's,/,_,g' -e 's,^._,,g')
 done
+rm $(find $dir -regex '.*\(.nhr$\|.nin$\\|.nsq$)$')
 
 echo -e "\n\n\n\n\n(List of output files)" > $dir/all_output_files_log_out.txt
 ls -Rslh $dir &> $dir/all_output_files_log_out.txt
