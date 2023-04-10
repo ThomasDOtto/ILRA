@@ -12,7 +12,7 @@ fi
 conda_envs_path=$(echo $conda_dir | sed 's,/bin$,/envs,g')
 
 #### Set PATH:
-echo -e "\nPlease run manually next and before ILRA execution:\nexport PATH=$conda_envs_path/ILRA_env/bin:$conda_dir:$(dirname $EXTERNAL_SOFTWARE_DIR):$(dirname $EXTERNAL_SOFTWARE_DIR)/bin:$EXTERNAL_SOFTWARE_DIR:$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$HOME/bin:$PATH\n\nexport PERL5LIB=$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$PERL5LIB\n\n"
+echo -e "\nPlease run manually next and before ILRA execution:\nexport PATH=$conda_envs_path/ILRA_env/bin:$conda_dir:$(dirname $EXTERNAL_SOFTWARE_DIR):$(dirname $EXTERNAL_SOFTWARE_DIR)/bin:$EXTERNAL_SOFTWARE_DIR:$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$HOME/bin:$PATH\n\nexport PERL5LIB=$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$PERL5LIB\n\nexport export GATK_LOCAL_JAR=$conda_envs_path/ILRA_env/share/gatk4-4.3.0.0-0/gatk-package-4.3.0.0-local.jar\n\n"
 echo -e "\n\n\nCheck out other environmental variables automatically set in ILRA.sh that may need to change...\n\n\n"
 echo -e "\n\nPlease behave and be mindful with any queueing system, the resources you are using, the versions of the software that are in the PATH and are being used... etc\n\n"
 
