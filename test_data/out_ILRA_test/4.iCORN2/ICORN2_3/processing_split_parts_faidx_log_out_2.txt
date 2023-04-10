@@ -1,0 +1,4 @@
+Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+1	:	2023-04-05 10:47:03	     0.042	0	0	0	0	samtools faidx Pf3D7_01_v3_splitter-part.fa
+2	:	2023-04-05 10:47:03	     0.039	0	0	0	0	samtools faidx Pf3D7_API_v3_splitter-part.fa
+3	:	2023-04-05 10:47:03	     0.036	0	0	0	0	samtools faidx Pf_M76611_splitter-part.fa

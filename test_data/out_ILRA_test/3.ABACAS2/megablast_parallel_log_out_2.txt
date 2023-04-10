@@ -1,0 +1,4 @@
+Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+3	:	2023-04-05 10:42:31	     0.068	0	0	0	0	megablast -F T -m 8 -e 1e-20 -d Reference/Pf_M76611 -i Res.Pf_M76611.fna -a 2 -o comp/comp.Pf_M76611.blast
+2	:	2023-04-05 10:42:31	     0.186	0	0	0	0	megablast -F T -m 8 -e 1e-20 -d Reference/Pf3D7_API_v3 -i Res.Pf3D7_API_v3.fna -a 2 -o comp/comp.Pf3D7_API_v3.blast
+1	:	2023-04-05 10:42:31	     1.119	0	0	0	0	megablast -F T -m 8 -e 1e-20 -d Reference/Pf3D7_01_v3 -i Res.Pf3D7_01_v3.fna -a 2 -o comp/comp.Pf3D7_01_v3.blast

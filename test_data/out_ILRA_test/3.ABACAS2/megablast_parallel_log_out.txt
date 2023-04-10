@@ -1,0 +1,3 @@
+megablast -F T -m 8 -e 1e-20 -d Reference/Pf3D7_01_v3 -i Res.Pf3D7_01_v3.fna -a 2 -o comp/comp.Pf3D7_01_v3.blast
+megablast -F T -m 8 -e 1e-20 -d Reference/Pf3D7_API_v3 -i Res.Pf3D7_API_v3.fna -a 2 -o comp/comp.Pf3D7_API_v3.blast
+megablast -F T -m 8 -e 1e-20 -d Reference/Pf_M76611 -i Res.Pf_M76611.fna -a 2 -o comp/comp.Pf_M76611.blast

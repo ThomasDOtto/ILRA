@@ -1,0 +1,15 @@
+[M::mm_idx_gen::0.003*2.94] reading downweighted kmers
+[M::mm_idx_gen::0.005*2.04] collected downweighted kmers, no. of kmers read=101
+[M::mm_idx_gen::0.006*1.87] saved the kmers in a bloom filter: hash functions=2 and size=14384 
+[M::mm_idx_gen::0.058*1.06] collected minimizers
+[M::mm_idx_gen::0.067*1.41] sorted minimizers
+[M::main::0.069*1.39] loaded/built the index for 3 target sequence(s)
+[M::main::0.069*1.38] running winnowmap in SV-aware mode
+[M::main::0.070*1.37] stage1-specific parameters minP:1000, incP:1.99, maxP:8000, sample:1000, min-qlen:10000, min-qcov:0.5, min-mapq:5, mid-occ:5000
+[M::main::0.070*1.36] stage2-specific parameters s2_bw:1000, s2_zdropinv:25
+[M::mm_idx_stat] kmer size: 15; skip: 50; is_hpc: 0; #seq: 3
+[M::mm_idx_stat::0.072*1.33] distinct minimizers: 22280 (87.67% are singletons); average occurrences: 1.302; average spacing: 25.213
+[M::worker_pipeline::5.609*6.84] mapped 1680 sequences
+[M::main] Version: 2.03, pthreads=4, omp_threads=3
+[M::main] CMD: winnowmap -W repetitive_k15.txt -ax map-pb -t 4 /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/04.assembly.fa /mnt/beegfs/user/bin/ILRA/test_data/corrected_reads_Pf_test_subset.fastq.gz
+[M::main] Real time: 5.661 sec; CPU: 38.394 sec; Peak RSS: 0.689 GB

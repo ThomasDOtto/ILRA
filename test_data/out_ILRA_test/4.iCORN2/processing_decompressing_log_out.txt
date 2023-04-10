@@ -1,0 +1,2 @@
+pigz -dfc -p 4 /mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset\_1.fastq.gz > /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset\_1.fastq
+pigz -dfc -p 4 /mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset\_2.fastq.gz > /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset\_2.fastq

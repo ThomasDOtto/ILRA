@@ -1,0 +1,36 @@
+3
+
+Parts of the sequence: 3
+
+Please manually tweak the number of blocks for parallel processing or the number of contigs/sequences splitted if running into memory issues (e.g. incomplete files, freezing...) or using below a lower max value than min value:
+
+Readjusting java memory options: -Xms5g -Xmx8g
+
+Picked up _JAVA_OPTIONS: -Xms5g -Xmx8g
+10:47:17.142 INFO  NativeLibraryLoader - Loading libgkl_compression.so from jar:file:/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/share/picard-2.27.5-0/picard.jar!/com/intel/gkl/native/libgkl_compression.so
+[Wed Apr 05 10:47:17 CEST 2023] ReorderSam --INPUT out.sorted.markdup.bam --OUTPUT Pf_M76611_splitter-part.fa.bam --SEQUENCE_DICTIONARY Pf_M76611_splitter-part.dict --ALLOW_INCOMPLETE_DICT_CONCORDANCE true --TMP_DIR ../tmp_dir --VERBOSITY WARNING --COMPRESSION_LEVEL 1 --CREATE_INDEX true --REFERENCE_SEQUENCE Pf_M76611_splitter-part.fa --ALLOW_CONTIG_LENGTH_DISCORDANCE false --QUIET false --VALIDATION_STRINGENCY STRICT --MAX_RECORDS_IN_RAM 500000 --CREATE_MD5_FILE false --GA4GH_CLIENT_SECRETS client_secrets.json --help false --version false --showHidden false --USE_JDK_DEFLATER false --USE_JDK_INFLATER false
+[Wed Apr 05 10:47:17 CEST 2023] Executing as user@nodo05 on Linux 3.10.0-1160.45.1.el7.x86_64 amd64; OpenJDK 64-Bit Server VM 11.0.1-internal+0-adhoc..src; Deflater: Intel; Inflater: Intel; Provider GCS is not available; Picard version: Version:2.27.5
+[Wed Apr 05 10:47:17 CEST 2023] picard.sam.ReorderSam done. Elapsed time: 0.02 minutes.
+Runtime.totalMemory()=5368709120
+
+Readjusting java memory options: -Xms5g -Xmx32g
+
+
+
+Correcting Pf_M76611_splitter-part.fa with iCORN2...
+
+
+
+Calling the SNP caller... Pf_M76611_splitter-part.fa
+
+
+SNP caller DONE... Pf_M76611_splitter-part.fa
+
+
+Calling icorn2.correct.sh... Pf_M76611_splitter-part.fa
+
+
+icorn2.correct.sh DONE... Pf_M76611_splitter-part.fa
+
+
+ITERATION 3 - FRAGMENT Pf_M76611_splitter-part.fa: DONE

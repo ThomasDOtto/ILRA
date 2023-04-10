@@ -1,0 +1,4 @@
+Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+3	:	2023-04-05 10:45:09	     6.012	0	0	0	0	java -XX:-UseParallelGC -XX:ParallelGCThreads=4 -jar /mnt/beegfs/user/bin/ILRA/external_software/iCORN2/picard.jar CreateSequenceDictionary -R Pf_M76611_splitter-part.fa -O Pf_M76611_splitter-part.dict -TMP_DIR ../tmp_dir
+2	:	2023-04-05 10:45:09	     6.029	0	0	0	0	java -XX:-UseParallelGC -XX:ParallelGCThreads=4 -jar /mnt/beegfs/user/bin/ILRA/external_software/iCORN2/picard.jar CreateSequenceDictionary -R Pf3D7_API_v3_splitter-part.fa -O Pf3D7_API_v3_splitter-part.dict -TMP_DIR ../tmp_dir
+1	:	2023-04-05 10:45:09	     6.072	0	0	0	0	java -XX:-UseParallelGC -XX:ParallelGCThreads=4 -jar /mnt/beegfs/user/bin/ILRA/external_software/iCORN2/picard.jar CreateSequenceDictionary -R Pf3D7_01_v3_splitter-part.fa -O Pf3D7_01_v3_splitter-part.dict -TMP_DIR ../tmp_dir

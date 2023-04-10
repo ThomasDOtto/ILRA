@@ -1,0 +1,3 @@
+samtools faidx Pf3D7_01_v3_splitter-part.fa
+samtools faidx Pf3D7_API_v3_splitter-part.fa
+samtools faidx Pf_M76611_splitter-part.fa

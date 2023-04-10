@@ -1,0 +1,126 @@
+
+
+
+#### ITERATION ++++ 1
+
+Current ICORN2_HOME directory is /mnt/beegfs/user/bin/ILRA/external_software/iCORN2
+
+Current cores: 4
+
+
+Calling Bowtie2...
+Time loading reference: 00:00:00
+Time loading forward index: 00:00:00
+Time loading mirror index: 00:00:00
+Multiseed full-index search: 00:00:06
+13785 reads; of these:
+  13785 (100.00%) were paired; of these:
+    10641 (77.19%) aligned concordantly 0 times
+    2115 (15.34%) aligned concordantly exactly 1 time
+    1029 (7.46%) aligned concordantly >1 times
+    ----
+    10641 pairs aligned concordantly 0 times; of these:
+      193 (1.81%) aligned discordantly 1 time
+    ----
+    10448 pairs aligned 0 times concordantly or discordantly; of these:
+      20896 mates make up the pairs; of these:
+        10600 (50.73%) aligned 0 times
+        8646 (41.38%) aligned exactly 1 time
+        1650 (7.90%) aligned >1 times
+61.55% overall alignment rate
+Time searching: 00:00:06
+Overall time: 00:00:06
+[bam_sort_core] merging from 0 files and 4 in-memory blocks...
+
+Bowtie2 DONE
+
+Calling MarkDuplicatesSpark (GATK)...
+
+The use of OpenJDK v8 is going to try and be forced, by adding to the PATH once... but custom paths may be required here...
+
+
+MarkDuplicates DONE
+
+
+
+#### ITERATION ++++ 2
+
+Current ICORN2_HOME directory is /mnt/beegfs/user/bin/ILRA/external_software/iCORN2
+
+Current cores: 4
+
+
+Calling Bowtie2...
+Time loading reference: 00:00:00
+Time loading forward index: 00:00:00
+Time loading mirror index: 00:00:00
+Multiseed full-index search: 00:00:06
+13785 reads; of these:
+  13785 (100.00%) were paired; of these:
+    10633 (77.13%) aligned concordantly 0 times
+    2123 (15.40%) aligned concordantly exactly 1 time
+    1029 (7.46%) aligned concordantly >1 times
+    ----
+    10633 pairs aligned concordantly 0 times; of these:
+      194 (1.82%) aligned discordantly 1 time
+    ----
+    10439 pairs aligned 0 times concordantly or discordantly; of these:
+      20878 mates make up the pairs; of these:
+        10592 (50.73%) aligned 0 times
+        8637 (41.37%) aligned exactly 1 time
+        1649 (7.90%) aligned >1 times
+61.58% overall alignment rate
+Time searching: 00:00:06
+Overall time: 00:00:06
+[bam_sort_core] merging from 0 files and 4 in-memory blocks...
+
+Bowtie2 DONE
+
+Calling MarkDuplicatesSpark (GATK)...
+
+The use of OpenJDK v8 is going to try and be forced, by adding to the PATH once... but custom paths may be required here...
+
+
+MarkDuplicates DONE
+
+
+
+#### ITERATION ++++ 3
+
+Current ICORN2_HOME directory is /mnt/beegfs/user/bin/ILRA/external_software/iCORN2
+
+Current cores: 4
+
+
+Calling Bowtie2...
+Time loading reference: 00:00:00
+Time loading forward index: 00:00:00
+Time loading mirror index: 00:00:00
+Multiseed full-index search: 00:00:06
+13785 reads; of these:
+  13785 (100.00%) were paired; of these:
+    10633 (77.13%) aligned concordantly 0 times
+    2123 (15.40%) aligned concordantly exactly 1 time
+    1029 (7.46%) aligned concordantly >1 times
+    ----
+    10633 pairs aligned concordantly 0 times; of these:
+      194 (1.82%) aligned discordantly 1 time
+    ----
+    10439 pairs aligned 0 times concordantly or discordantly; of these:
+      20878 mates make up the pairs; of these:
+        10592 (50.73%) aligned 0 times
+        8637 (41.37%) aligned exactly 1 time
+        1649 (7.90%) aligned >1 times
+61.58% overall alignment rate
+Time searching: 00:00:06
+Overall time: 00:00:06
+[bam_sort_core] merging from 0 files and 4 in-memory blocks...
+
+Bowtie2 DONE
+
+Calling MarkDuplicatesSpark (GATK)...
+
+The use of OpenJDK v8 is going to try and be forced, by adding to the PATH once... but custom paths may be required here...
+
+
+MarkDuplicates DONE

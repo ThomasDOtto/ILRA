@@ -1,0 +1,4 @@
+Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+3	:	2023-04-05 10:42:28	     0.391	0	434	0	0	abacas2.doTilingGraph.pl Pf_M76611.coords Contigs.58190 Res
+2	:	2023-04-05 10:42:28	     0.438	0	445	0	0	abacas2.doTilingGraph.pl Pf3D7_API_v3.coords Contigs.58190 Res
+1	:	2023-04-05 10:42:28	     1.115	0	929	0	0	abacas2.doTilingGraph.pl Pf3D7_01_v3.coords Contigs.58190 Res

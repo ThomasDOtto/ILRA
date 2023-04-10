@@ -1,0 +1,209 @@
+Using GATK jar /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/share/gatk4-4.3.0.0-0/gatk-package-4.3.0.0-local.jar
+Running:
+    java -Dsamjdk.use_async_io_read_samtools=false -Dsamjdk.use_async_io_write_samtools=true -Dsamjdk.use_async_io_write_tribble=false -Dsamjdk.compression_level=2 -jar /mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/share/gatk4-4.3.0.0-0/gatk-package-4.3.0.0-local.jar MarkDuplicatesSpark -I ICORN2_3/out.bam -O ICORN2_3/out.sorted.markdup.bam -VS SILENT -OBI true --create-output-bam-splitting-index false --tmp-dir tmp_dir --spark-master local[4]
+Picked up _JAVA_OPTIONS: -Xms10g -Xmx32g
+10:46:45.487 INFO  NativeLibraryLoader - Loading libgkl_compression.so from jar:file:/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/share/gatk4-4.3.0.0-0/gatk-package-4.3.0.0-local.jar!/com/intel/gkl/native/libgkl_compression.so
+10:46:45.981 INFO  MarkDuplicatesSpark - ------------------------------------------------------------
+10:46:45.982 INFO  MarkDuplicatesSpark - The Genome Analysis Toolkit (GATK) v4.3.0.0
+10:46:45.982 INFO  MarkDuplicatesSpark - For support and documentation go to https://software.broadinstitute.org/gatk/
+10:46:45.983 INFO  MarkDuplicatesSpark - Executing as user@nodo05 on Linux v3.10.0-1160.45.1.el7.x86_64 amd64
+10:46:45.984 INFO  MarkDuplicatesSpark - Java runtime: OpenJDK 64-Bit Server VM v1.8.0_302-b08
+10:46:45.984 INFO  MarkDuplicatesSpark - Start Date/Time: April 5, 2023 10:46:45 AM CEST
+10:46:45.984 INFO  MarkDuplicatesSpark - ------------------------------------------------------------
+10:46:45.984 INFO  MarkDuplicatesSpark - ------------------------------------------------------------
+10:46:45.986 INFO  MarkDuplicatesSpark - HTSJDK Version: 3.0.1
+10:46:45.986 INFO  MarkDuplicatesSpark - Picard Version: 2.27.5
+10:46:45.986 INFO  MarkDuplicatesSpark - Built for Spark Version: 2.4.5
+10:46:45.986 INFO  MarkDuplicatesSpark - HTSJDK Defaults.COMPRESSION_LEVEL : 2
+10:46:45.987 INFO  MarkDuplicatesSpark - HTSJDK Defaults.USE_ASYNC_IO_READ_FOR_SAMTOOLS : false
+10:46:45.987 INFO  MarkDuplicatesSpark - HTSJDK Defaults.USE_ASYNC_IO_WRITE_FOR_SAMTOOLS : true
+10:46:45.987 INFO  MarkDuplicatesSpark - HTSJDK Defaults.USE_ASYNC_IO_WRITE_FOR_TRIBBLE : false
+10:46:45.987 INFO  MarkDuplicatesSpark - Deflater: IntelDeflater
+10:46:45.987 INFO  MarkDuplicatesSpark - Inflater: IntelInflater
+10:46:45.987 INFO  MarkDuplicatesSpark - GCS max retries/reopens: 20
+10:46:45.987 INFO  MarkDuplicatesSpark - Requester pays: disabled
+10:46:45.987 INFO  MarkDuplicatesSpark - Initializing engine
+10:46:45.987 INFO  MarkDuplicatesSpark - Done initializing engine
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+23/04/05 10:46:46 INFO SparkContext: Running Spark version 2.4.5
+23/04/05 10:46:47 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+23/04/05 10:46:47 INFO SparkContext: Submitted application: MarkDuplicatesSpark
+23/04/05 10:46:47 INFO SecurityManager: Changing view acls to: user
+23/04/05 10:46:47 INFO SecurityManager: Changing modify acls to: user
+23/04/05 10:46:47 INFO SecurityManager: Changing view acls groups to: 
+23/04/05 10:46:47 INFO SecurityManager: Changing modify acls groups to: 
+23/04/05 10:46:47 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(user); groups with view permissions: Set(); users  with modify permissions: Set(user); groups with modify permissions: Set()
+23/04/05 10:46:48 INFO Utils: Successfully started service 'sparkDriver' on port 40245.
+23/04/05 10:46:48 INFO SparkEnv: Registering MapOutputTracker
+23/04/05 10:46:48 INFO SparkEnv: Registering BlockManagerMaster
+23/04/05 10:46:48 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+23/04/05 10:46:48 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+23/04/05 10:46:48 INFO DiskBlockManager: Created local directory at /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/tmp_dir/blockmgr-556d7219-f198-4003-a649-74fe25ed86ef
+23/04/05 10:46:48 INFO MemoryStore: MemoryStore started with capacity 16.9 GB
+23/04/05 10:46:48 INFO SparkEnv: Registering OutputCommitCoordinator
+23/04/05 10:46:49 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+23/04/05 10:46:49 INFO SparkUI: Bound SparkUI to 0.0.0.0, and started at http://nodo05:4040
+23/04/05 10:46:49 INFO Executor: Starting executor ID driver on host localhost
+23/04/05 10:46:49 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 38141.
+23/04/05 10:46:49 INFO NettyBlockTransferService: Server created on nodo05:38141
+23/04/05 10:46:49 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+23/04/05 10:46:49 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, nodo05, 38141, None)
+23/04/05 10:46:49 INFO BlockManagerMasterEndpoint: Registering block manager nodo05:38141 with 16.9 GB RAM, BlockManagerId(driver, nodo05, 38141, None)
+23/04/05 10:46:49 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, nodo05, 38141, None)
+23/04/05 10:46:49 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, nodo05, 38141, None)
+10:46:50.291 INFO  MarkDuplicatesSpark - Spark verbosity set to INFO (see --spark-verbosity argument)
+23/04/05 10:46:50 INFO GoogleHadoopFileSystemBase: GHFS version: 1.9.4-hadoop3
+23/04/05 10:46:51 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 390.9 KB, free 16.9 GB)
+23/04/05 10:46:53 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 35.4 KB, free 16.9 GB)
+23/04/05 10:46:53 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on nodo05:38141 (size: 35.4 KB, free: 16.9 GB)
+23/04/05 10:46:53 INFO SparkContext: Created broadcast 0 from newAPIHadoopFile at PathSplitSource.java:96
+23/04/05 10:46:55 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 390.9 KB, free 16.9 GB)
+23/04/05 10:46:55 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 35.4 KB, free 16.9 GB)
+23/04/05 10:46:55 INFO BlockManagerInfo: Added broadcast_1_piece0 in memory on nodo05:38141 (size: 35.4 KB, free: 16.9 GB)
+23/04/05 10:46:55 INFO SparkContext: Created broadcast 1 from newAPIHadoopFile at PathSplitSource.java:96
+23/04/05 10:46:56 INFO FileInputFormat: Total input files to process : 1
+23/04/05 10:46:56 INFO SparkContext: Starting job: collect at SparkUtils.java:205
+23/04/05 10:46:56 INFO DAGScheduler: Got job 0 (collect at SparkUtils.java:205) with 1 output partitions
+23/04/05 10:46:56 INFO DAGScheduler: Final stage: ResultStage 0 (collect at SparkUtils.java:205)
+23/04/05 10:46:56 INFO DAGScheduler: Parents of final stage: List()
+23/04/05 10:46:56 INFO DAGScheduler: Missing parents: List()
+23/04/05 10:46:56 INFO DAGScheduler: Submitting ResultStage 0 (MapPartitionsRDD[12] at mapPartitions at SparkUtils.java:188), which has no missing parents
+23/04/05 10:46:56 INFO MemoryStore: Block broadcast_2 stored as values in memory (estimated size 249.3 KB, free 16.9 GB)
+23/04/05 10:46:56 INFO MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 109.9 KB, free 16.9 GB)
+23/04/05 10:46:56 INFO BlockManagerInfo: Added broadcast_2_piece0 in memory on nodo05:38141 (size: 109.9 KB, free: 16.9 GB)
+23/04/05 10:46:56 INFO SparkContext: Created broadcast 2 from broadcast at DAGScheduler.scala:1163
+23/04/05 10:46:56 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 0 (MapPartitionsRDD[12] at mapPartitions at SparkUtils.java:188) (first 15 tasks are for partitions Vector(0))
+23/04/05 10:46:56 INFO TaskSchedulerImpl: Adding task set 0.0 with 1 tasks
+23/04/05 10:46:56 INFO TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0, localhost, executor driver, partition 0, PROCESS_LOCAL, 7988 bytes)
+23/04/05 10:46:56 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+23/04/05 10:46:56 INFO NewHadoopRDD: Input split: file:/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3/out.bam:0+3962646
+23/04/05 10:46:56 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 2078 bytes result sent to driver
+23/04/05 10:46:56 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 502 ms on localhost (executor driver) (1/1)
+23/04/05 10:46:56 INFO TaskSchedulerImpl: Removed TaskSet 0.0, whose tasks have all completed, from pool 
+23/04/05 10:46:56 INFO DAGScheduler: ResultStage 0 (collect at SparkUtils.java:205) finished in 0.688 s
+23/04/05 10:46:57 INFO DAGScheduler: Job 0 finished: collect at SparkUtils.java:205, took 0.821188 s
+23/04/05 10:46:57 INFO MemoryStore: Block broadcast_3 stored as values in memory (estimated size 392.0 B, free 16.9 GB)
+23/04/05 10:46:57 INFO MemoryStore: Block broadcast_3_piece0 stored as bytes in memory (estimated size 116.0 B, free 16.9 GB)
+23/04/05 10:46:57 INFO BlockManagerInfo: Added broadcast_3_piece0 in memory on nodo05:38141 (size: 116.0 B, free: 16.9 GB)
+23/04/05 10:46:57 INFO SparkContext: Created broadcast 3 from broadcast at MarkDuplicatesSparkUtils.java:126
+23/04/05 10:46:57 INFO MemoryStore: Block broadcast_4 stored as values in memory (estimated size 224.0 B, free 16.9 GB)
+23/04/05 10:46:57 INFO MemoryStore: Block broadcast_4_piece0 stored as bytes in memory (estimated size 28.0 B, free 16.9 GB)
+23/04/05 10:46:57 INFO BlockManagerInfo: Added broadcast_4_piece0 in memory on nodo05:38141 (size: 28.0 B, free: 16.9 GB)
+23/04/05 10:46:57 INFO SparkContext: Created broadcast 4 from broadcast at MarkDuplicatesSparkUtils.java:127
+23/04/05 10:46:57 INFO MemoryStore: Block broadcast_5 stored as values in memory (estimated size 9.8 KB, free 16.9 GB)
+23/04/05 10:46:57 INFO MemoryStore: Block broadcast_5_piece0 stored as bytes in memory (estimated size 679.0 B, free 16.9 GB)
+23/04/05 10:46:57 INFO BlockManagerInfo: Added broadcast_5_piece0 in memory on nodo05:38141 (size: 679.0 B, free: 16.9 GB)
+23/04/05 10:46:57 INFO SparkContext: Created broadcast 5 from broadcast at ReadsSparkSink.java:146
+23/04/05 10:46:57 WARN HtsjdkReadsRddStorage: Unrecognized write option: DISABLE
+23/04/05 10:46:57 INFO MemoryStore: Block broadcast_6 stored as values in memory (estimated size 9.9 KB, free 16.9 GB)
+23/04/05 10:46:57 INFO MemoryStore: Block broadcast_6_piece0 stored as bytes in memory (estimated size 679.0 B, free 16.9 GB)
+23/04/05 10:46:57 INFO BlockManagerInfo: Added broadcast_6_piece0 in memory on nodo05:38141 (size: 679.0 B, free: 16.9 GB)
+23/04/05 10:46:57 INFO SparkContext: Created broadcast 6 from broadcast at BamSink.java:76
+23/04/05 10:46:57 INFO FileOutputCommitter: File Output Committer Algorithm version is 2
+23/04/05 10:46:57 INFO FileOutputCommitter: FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
+23/04/05 10:46:57 INFO SparkContext: Starting job: runJob at SparkHadoopWriter.scala:78
+23/04/05 10:46:57 INFO DAGScheduler: Registering RDD 22 (flatMapToPair at MarkDuplicatesSparkUtils.java:130) as input to shuffle 2
+23/04/05 10:46:57 INFO DAGScheduler: Registering RDD 26 (mapToPair at MarkDuplicatesSpark.java:217) as input to shuffle 1
+23/04/05 10:46:57 INFO DAGScheduler: Registering RDD 31 (mapToPair at SparkUtils.java:161) as input to shuffle 0
+23/04/05 10:46:57 INFO DAGScheduler: Got job 1 (runJob at SparkHadoopWriter.scala:78) with 1 output partitions
+23/04/05 10:46:57 INFO DAGScheduler: Final stage: ResultStage 4 (runJob at SparkHadoopWriter.scala:78)
+23/04/05 10:46:57 INFO DAGScheduler: Parents of final stage: List(ShuffleMapStage 3)
+23/04/05 10:46:57 INFO DAGScheduler: Missing parents: List(ShuffleMapStage 3)
+23/04/05 10:46:57 INFO DAGScheduler: Submitting ShuffleMapStage 1 (MapPartitionsRDD[22] at flatMapToPair at MarkDuplicatesSparkUtils.java:130), which has no missing parents
+23/04/05 10:46:57 INFO MemoryStore: Block broadcast_7 stored as values in memory (estimated size 261.8 KB, free 16.9 GB)
+23/04/05 10:46:57 INFO MemoryStore: Block broadcast_7_piece0 stored as bytes in memory (estimated size 116.4 KB, free 16.9 GB)
+23/04/05 10:46:57 INFO BlockManagerInfo: Added broadcast_7_piece0 in memory on nodo05:38141 (size: 116.4 KB, free: 16.9 GB)
+23/04/05 10:46:57 INFO SparkContext: Created broadcast 7 from broadcast at DAGScheduler.scala:1163
+23/04/05 10:46:57 INFO DAGScheduler: Submitting 1 missing tasks from ShuffleMapStage 1 (MapPartitionsRDD[22] at flatMapToPair at MarkDuplicatesSparkUtils.java:130) (first 15 tasks are for partitions Vector(0))
+23/04/05 10:46:57 INFO TaskSchedulerImpl: Adding task set 1.0 with 1 tasks
+23/04/05 10:46:57 INFO TaskSetManager: Starting task 0.0 in stage 1.0 (TID 1, localhost, executor driver, partition 0, PROCESS_LOCAL, 8436 bytes)
+23/04/05 10:46:57 INFO Executor: Running task 0.0 in stage 1.0 (TID 1)
+23/04/05 10:46:57 INFO NewHadoopRDD: Input split: file:/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3/out.bam:0+3962646
+10:46:58.075 WARN  IntelInflater - Zero Bytes Written : 0
+23/04/05 10:46:58 INFO Executor: Finished task 0.0 in stage 1.0 (TID 1). 906 bytes result sent to driver
+23/04/05 10:46:58 INFO TaskSetManager: Finished task 0.0 in stage 1.0 (TID 1) in 439 ms on localhost (executor driver) (1/1)
+23/04/05 10:46:58 INFO TaskSchedulerImpl: Removed TaskSet 1.0, whose tasks have all completed, from pool 
+23/04/05 10:46:58 INFO DAGScheduler: ShuffleMapStage 1 (flatMapToPair at MarkDuplicatesSparkUtils.java:130) finished in 0.504 s
+23/04/05 10:46:58 INFO DAGScheduler: looking for newly runnable stages
+23/04/05 10:46:58 INFO DAGScheduler: running: Set()
+23/04/05 10:46:58 INFO DAGScheduler: waiting: Set(ShuffleMapStage 2, ShuffleMapStage 3, ResultStage 4)
+23/04/05 10:46:58 INFO DAGScheduler: failed: Set()
+23/04/05 10:46:58 INFO DAGScheduler: Submitting ShuffleMapStage 2 (MapPartitionsRDD[26] at mapToPair at MarkDuplicatesSpark.java:217), which has no missing parents
+23/04/05 10:46:58 INFO MemoryStore: Block broadcast_8 stored as values in memory (estimated size 264.5 KB, free 16.9 GB)
+23/04/05 10:46:58 INFO MemoryStore: Block broadcast_8_piece0 stored as bytes in memory (estimated size 117.6 KB, free 16.9 GB)
+23/04/05 10:46:58 INFO BlockManagerInfo: Added broadcast_8_piece0 in memory on nodo05:38141 (size: 117.6 KB, free: 16.9 GB)
+23/04/05 10:46:58 INFO SparkContext: Created broadcast 8 from broadcast at DAGScheduler.scala:1163
+23/04/05 10:46:58 INFO DAGScheduler: Submitting 1 missing tasks from ShuffleMapStage 2 (MapPartitionsRDD[26] at mapToPair at MarkDuplicatesSpark.java:217) (first 15 tasks are for partitions Vector(0))
+23/04/05 10:46:58 INFO TaskSchedulerImpl: Adding task set 2.0 with 1 tasks
+23/04/05 10:46:58 INFO TaskSetManager: Starting task 0.0 in stage 2.0 (TID 2, localhost, executor driver, partition 0, ANY, 7651 bytes)
+23/04/05 10:46:58 INFO Executor: Running task 0.0 in stage 2.0 (TID 2)
+23/04/05 10:46:58 INFO ShuffleBlockFetcherIterator: Getting 1 non-empty blocks including 1 local blocks and 0 remote blocks
+23/04/05 10:46:58 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 13 ms
+23/04/05 10:47:00 INFO Executor: Finished task 0.0 in stage 2.0 (TID 2). 1293 bytes result sent to driver
+23/04/05 10:47:00 INFO TaskSetManager: Finished task 0.0 in stage 2.0 (TID 2) in 2478 ms on localhost (executor driver) (1/1)
+23/04/05 10:47:00 INFO TaskSchedulerImpl: Removed TaskSet 2.0, whose tasks have all completed, from pool 
+23/04/05 10:47:00 INFO DAGScheduler: ShuffleMapStage 2 (mapToPair at MarkDuplicatesSpark.java:217) finished in 2.546 s
+23/04/05 10:47:00 INFO DAGScheduler: looking for newly runnable stages
+23/04/05 10:47:00 INFO DAGScheduler: running: Set()
+23/04/05 10:47:00 INFO DAGScheduler: waiting: Set(ShuffleMapStage 3, ResultStage 4)
+23/04/05 10:47:00 INFO DAGScheduler: failed: Set()
+23/04/05 10:47:00 INFO DAGScheduler: Submitting ShuffleMapStage 3 (MapPartitionsRDD[31] at mapToPair at SparkUtils.java:161), which has no missing parents
+23/04/05 10:47:00 INFO MemoryStore: Block broadcast_9 stored as values in memory (estimated size 259.1 KB, free 16.9 GB)
+23/04/05 10:47:00 INFO MemoryStore: Block broadcast_9_piece0 stored as bytes in memory (estimated size 115.3 KB, free 16.9 GB)
+23/04/05 10:47:00 INFO BlockManagerInfo: Added broadcast_9_piece0 in memory on nodo05:38141 (size: 115.3 KB, free: 16.9 GB)
+23/04/05 10:47:00 INFO SparkContext: Created broadcast 9 from broadcast at DAGScheduler.scala:1163
+23/04/05 10:47:00 INFO DAGScheduler: Submitting 1 missing tasks from ShuffleMapStage 3 (MapPartitionsRDD[31] at mapToPair at SparkUtils.java:161) (first 15 tasks are for partitions Vector(0))
+23/04/05 10:47:00 INFO TaskSchedulerImpl: Adding task set 3.0 with 1 tasks
+23/04/05 10:47:00 INFO TaskSetManager: Starting task 0.0 in stage 3.0 (TID 3, localhost, executor driver, partition 0, ANY, 8543 bytes)
+23/04/05 10:47:00 INFO Executor: Running task 0.0 in stage 3.0 (TID 3)
+23/04/05 10:47:00 INFO NewHadoopRDD: Input split: file:/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3/out.bam:0+3962646
+23/04/05 10:47:00 INFO ShuffleBlockFetcherIterator: Getting 1 non-empty blocks including 1 local blocks and 0 remote blocks
+23/04/05 10:47:00 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+10:47:01.733 WARN  IntelInflater - Zero Bytes Written : 0
+23/04/05 10:47:01 INFO Executor: Finished task 0.0 in stage 3.0 (TID 3). 1207 bytes result sent to driver
+23/04/05 10:47:01 INFO TaskSetManager: Finished task 0.0 in stage 3.0 (TID 3) in 996 ms on localhost (executor driver) (1/1)
+23/04/05 10:47:01 INFO TaskSchedulerImpl: Removed TaskSet 3.0, whose tasks have all completed, from pool 
+23/04/05 10:47:01 INFO DAGScheduler: ShuffleMapStage 3 (mapToPair at SparkUtils.java:161) finished in 1.059 s
+23/04/05 10:47:01 INFO DAGScheduler: looking for newly runnable stages
+23/04/05 10:47:01 INFO DAGScheduler: running: Set()
+23/04/05 10:47:01 INFO DAGScheduler: waiting: Set(ResultStage 4)
+23/04/05 10:47:01 INFO DAGScheduler: failed: Set()
+23/04/05 10:47:01 INFO DAGScheduler: Submitting ResultStage 4 (MapPartitionsRDD[36] at mapToPair at BamSink.java:91), which has no missing parents
+23/04/05 10:47:01 INFO MemoryStore: Block broadcast_10 stored as values in memory (estimated size 92.2 KB, free 16.9 GB)
+23/04/05 10:47:01 INFO MemoryStore: Block broadcast_10_piece0 stored as bytes in memory (estimated size 42.0 KB, free 16.9 GB)
+23/04/05 10:47:01 INFO BlockManagerInfo: Added broadcast_10_piece0 in memory on nodo05:38141 (size: 42.0 KB, free: 16.9 GB)
+23/04/05 10:47:01 INFO SparkContext: Created broadcast 10 from broadcast at DAGScheduler.scala:1163
+23/04/05 10:47:01 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 4 (MapPartitionsRDD[36] at mapToPair at BamSink.java:91) (first 15 tasks are for partitions Vector(0))
+23/04/05 10:47:01 INFO TaskSchedulerImpl: Adding task set 4.0 with 1 tasks
+23/04/05 10:47:01 INFO TaskSetManager: Starting task 0.0 in stage 4.0 (TID 4, localhost, executor driver, partition 0, ANY, 7662 bytes)
+23/04/05 10:47:01 INFO Executor: Running task 0.0 in stage 4.0 (TID 4)
+23/04/05 10:47:01 INFO ShuffleBlockFetcherIterator: Getting 1 non-empty blocks including 1 local blocks and 0 remote blocks
+23/04/05 10:47:01 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+23/04/05 10:47:01 INFO FileOutputCommitter: File Output Committer Algorithm version is 2
+23/04/05 10:47:01 INFO FileOutputCommitter: FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
+23/04/05 10:47:01 INFO FileOutputCommitter: File Output Committer Algorithm version is 2
+23/04/05 10:47:01 INFO FileOutputCommitter: FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
+23/04/05 10:47:02 INFO FileOutputCommitter: Saved output of task 'attempt_20230405104657_0036_r_000000_0' to file:/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3/out.sorted.markdup.bam.parts
+23/04/05 10:47:02 INFO SparkHadoopMapRedUtil: attempt_20230405104657_0036_r_000000_0: Committed
+23/04/05 10:47:02 INFO Executor: Finished task 0.0 in stage 4.0 (TID 4). 1192 bytes result sent to driver
+23/04/05 10:47:02 INFO TaskSetManager: Finished task 0.0 in stage 4.0 (TID 4) in 333 ms on localhost (executor driver) (1/1)
+23/04/05 10:47:02 INFO TaskSchedulerImpl: Removed TaskSet 4.0, whose tasks have all completed, from pool 
+23/04/05 10:47:02 INFO DAGScheduler: ResultStage 4 (runJob at SparkHadoopWriter.scala:78) finished in 0.368 s
+23/04/05 10:47:02 INFO DAGScheduler: Job 1 finished: runJob at SparkHadoopWriter.scala:78, took 4.540242 s
+23/04/05 10:47:02 INFO SparkHadoopWriter: Job job_20230405104657_0036 committed.
+23/04/05 10:47:02 INFO HadoopFileSystemWrapper: Concatenating 3 parts to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3/out.sorted.markdup.bam
+23/04/05 10:47:02 INFO HadoopFileSystemWrapper: Concatenating to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3/out.sorted.markdup.bam done
+23/04/05 10:47:02 INFO IndexFileMerger: Merging .bai files in temp directory ICORN2_3/out.sorted.markdup.bam.parts/ to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/ICORN2_3/out.sorted.markdup.bam.bai
+23/04/05 10:47:02 INFO IndexFileMerger: Done merging .bai files
+23/04/05 10:47:02 INFO SparkUI: Stopped Spark web UI at http://nodo05:4040
+23/04/05 10:47:02 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+23/04/05 10:47:02 INFO MemoryStore: MemoryStore cleared
+23/04/05 10:47:02 INFO BlockManager: BlockManager stopped
+23/04/05 10:47:02 INFO BlockManagerMaster: BlockManagerMaster stopped
+23/04/05 10:47:02 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+23/04/05 10:47:02 INFO SparkContext: Successfully stopped SparkContext
+10:47:02.471 INFO  MarkDuplicatesSpark - Shutting down engine
+[April 5, 2023 10:47:02 AM CEST] org.broadinstitute.hellbender.tools.spark.transforms.markduplicates.MarkDuplicatesSpark done. Elapsed time: 0.28 minutes.
+Runtime.totalMemory()=14860419072
+23/04/05 10:47:02 INFO ShutdownHookManager: Shutdown hook called
+23/04/05 10:47:02 INFO ShutdownHookManager: Deleting directory /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/tmp_dir/spark-c652fab6-a4c3-4744-9601-3d1effaab6d1

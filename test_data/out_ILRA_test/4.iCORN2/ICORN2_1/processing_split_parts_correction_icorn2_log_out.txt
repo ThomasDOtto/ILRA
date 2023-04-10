@@ -1,0 +1,3 @@
+icorn2.snpcall.correction.sh Pf3D7_01_v3_splitter-part.fa 1 /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset 500 Pf3D7_01_v3_splitter-part.fa.2 1 &> Pf3D7_01_v3_splitter-part.fa.snpcall.correction.log
+icorn2.snpcall.correction.sh Pf3D7_API_v3_splitter-part.fa 1 /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset 500 Pf3D7_API_v3_splitter-part.fa.2 1 &> Pf3D7_API_v3_splitter-part.fa.snpcall.correction.log
+icorn2.snpcall.correction.sh Pf_M76611_splitter-part.fa 1 /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset 500 Pf_M76611_splitter-part.fa.2 1 &> Pf_M76611_splitter-part.fa.snpcall.correction.log

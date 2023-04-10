@@ -1,0 +1,1 @@
+Use of uninitialized value $result in print at /mnt/beegfs/user/bin/ILRA/external_software/ABACAS2/Assembly.deleteContigs.pl line 38, <F> line 9194.

@@ -1,0 +1,66 @@
+abacas2.doTilingGraph.pl Pf3D7_01_v3.coords Contigs.58190 Res
+abacas2.doTilingGraph.pl Pf3D7_API_v3.coords Contigs.58190 Res
+abacas2.doTilingGraph.pl Pf_M76611.coords Contigs.58190 Res
+2>> 1 >unitig_18_quiver - Countstrand -5967 -1 5967 
+Pf_M76611 unitig_18_quiver 1 - 5967
+Fill unitig_18_quiver from 1 to 5967
+1>> 1 >unitig_18_quiver - Countstrand -5967 -1 5967 
+Print PostionGraph
+Work on Pf_M76611
+Found contig unitig_18_quiver on pos 1 STRAND  -1
+Building Overlap unitig_18_quiver 
+Position 5968
+Gap found: use 37470 of 37470. unitig_18_quiver 1 37469
+37571
+Statistics:
+Amount of gaps Pf_M76611: 0
+Used contigs: 0
+
+Use of uninitialized value in numeric lt (<) at /mnt/beegfs/user/bin/ILRA/external_software/ABACAS2/TilingGraph.pm line 702.
+Use of uninitialized value $gapSizeCount in numeric gt (>) at /mnt/beegfs/user/bin/ILRA/external_software/ABACAS2/TilingGraph.pm line 841.
+2>> 1 >unitig_16_quiver - Countstrand 34250 1 34250 
+Pf3D7_API_v3 unitig_16_quiver 1 - 34250
+Fill unitig_16_quiver from 1 to 34250
+1>> 1 >unitig_16_quiver - Countstrand 34250 1 34250 
+Print PostionGraph
+Work on Pf3D7_API_v3
+Found contig unitig_16_quiver on pos 1 STRAND  1
+Building Overlap unitig_16_quiver 
+Position 34251
+Gap found: use 50980 of 50980. unitig_16_quiver 1 50979
+51081
+Statistics:
+Amount of gaps Pf3D7_API_v3: 0
+Used contigs: 0
+
+Use of uninitialized value in numeric lt (<) at /mnt/beegfs/user/bin/ILRA/external_software/ABACAS2/TilingGraph.pm line 702.
+Use of uninitialized value $gapSizeCount in numeric gt (>) at /mnt/beegfs/user/bin/ILRA/external_software/ABACAS2/TilingGraph.pm line 841.
+2>> 1 >newseq1 - Countstrand 50482 1 50482 
+2>> 2 >newseq1 - Countstrand 97703 1 47221 
+2>> 3 >newseq1 - Countstrand 139456 1 41753 
+2>> 4 >newseq1 - Countstrand 175435 1 35979 
+2>> 5 >newseq1 - Countstrand 209251 1 33816 
+2>> 6 >newseq1 - Countstrand 241765 1 32514 
+2>> 7 >newseq1 - Countstrand 269244 1 27479 
+2>> 8 >newseq1 - Countstrand 289441 1 20197 
+2>> 9 >newseq1 - Countstrand 305670 1 16229 
+2>> 10 >newseq1 - Countstrand 320502 1 14832 
+2>> 11 >newseq1 - Countstrand 332810 1 12308 
+2>> 12 >newseq1 - Countstrand 344589 1 11779 
+2>> 13 >newseq1 - Countstrand 346000 1 1411 
+Pf3D7_01_v3 newseq1 1 - 477341
+Fill newseq1 from 1 to 477341
+1>> 13 >newseq1 - Countstrand 346000 1 1411 
+Print PostionGraph
+Work on Pf3D7_01_v3
+Found contig newseq1 on pos 1 STRAND  1
+Building Overlap newseq1 
+Position 477342
+Gap found: use 642987 of 642987. newseq1 1 642986
+643088
+Statistics:
+Amount of gaps Pf3D7_01_v3: 0
+Used contigs: 0
+
+Use of uninitialized value in numeric lt (<) at /mnt/beegfs/user/bin/ILRA/external_software/ABACAS2/TilingGraph.pm line 702.
+Use of uninitialized value $gapSizeCount in numeric gt (>) at /mnt/beegfs/user/bin/ILRA/external_software/ABACAS2/TilingGraph.pm line 841.

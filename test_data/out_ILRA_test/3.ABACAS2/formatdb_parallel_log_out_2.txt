@@ -1,0 +1,4 @@
+Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+3	:	2023-04-05 10:42:31	     0.037	0	0	0	0	formatdb -p F -i Reference/Pf_M76611
+2	:	2023-04-05 10:42:31	     0.051	0	0	0	0	formatdb -p F -i Reference/Pf3D7_API_v3
+1	:	2023-04-05 10:42:31	     0.074	0	0	0	0	formatdb -p F -i Reference/Pf3D7_01_v3

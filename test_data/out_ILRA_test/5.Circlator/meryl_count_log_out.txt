@@ -1,0 +1,64 @@
+
+Found 1 command tree.
+
+Counting 714 (estimated) thousand canonical 15-mers from 1 input file:
+    sequence-file: /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/04.assembly.fa
+
+
+SIMPLE MODE
+-----------
+
+  15-mers
+    -> 1073741824 entries for counts up to 65535.
+    -> 16 Gbits memory used
+
+  731483 input bases
+    -> expected max count of 2925, needing 0 extra bits.
+    -> no memory used
+
+  2048 MB memory needed
+
+
+COMPLEX MODE
+------------
+
+prefix     # of   struct   kmers/    segs/      min     data    total
+  bits   prefix   memory   prefix   prefix   memory   memory   memory
+------  -------  -------  -------  -------  -------  -------  -------
+     1     2  P  9056  B   178 kM   162  S  8192  B  1296 kB  1304 kB
+     2     4  P    15 kB    89 kM    79  S    16 kB  1264 kB  1279 kB
+     3     8  P    27 kB    44 kM    38  S    32 kB  1216 kB  1243 kB
+     4    16  P    52 kB    22 kM    19  S    64 kB  1216 kB  1268 kB
+     5    32  P   103 kB    11 kM     9  S   128 kB  1152 kB  1255 kB
+     6    64  P   204 kB  5715  M     5  S   256 kB  1280 kB  1484 kB
+     7   128  P   407 kB  2858  M     3  S   512 kB  1536 kB  1943 kB
+     8   256  P   810 kB  1429  M     1  S  1024 kB  1024 kB  1834 kB
+     9   512  P  1620 kB   715  M     1  S  2048 kB  2048 kB  3668 kB
+    10  1024  P  3240 kB   358  M     1  S  4096 kB  4096 kB  7336 kB  Best Value!
+    11  2048  P  6480 kB   179  M     1  S  8192 kB  8192 kB    14 MB
+    12  4096  P    12 MB    90  M     1  S    16 MB    16 MB    28 MB
+    13  8192  P    25 MB    45  M     1  S    32 MB    32 MB    57 MB
+    14    16 kP    50 MB    23  M     1  S    64 MB    64 MB   114 MB
+    15    32 kP   101 MB    12  M     1  S   128 MB   128 MB   229 MB
+
+
+FINAL CONFIGURATION
+-------------------
+
+Estimated to require 7336 kB memory out of 251 GB allowed.
+Estimated to require 2 batches.
+
+Configured complex mode for 0.007 GB memory per batch, and up to 2 batches.
+
+Start counting with THREADED method.
+Used 0.263 GB / 251.338 GB to store       731401 kmers; need 0.002 GB to sort        36929 kmers
+
+Input complete.  Writing results to 'merylDB', using 4 threads.
+finishIteration()--
+
+Finished counting.
+
+Cleaning up.
+
+Bye.
+mem=0 RSS=275504 elapsed=0:00.71 cpu.sys=0.08 .user=0.37

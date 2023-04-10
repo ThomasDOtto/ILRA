@@ -1,0 +1,39 @@
+Calling icorn2.Correct.pl
+perl /mnt/beegfs/user/bin/ILRA/external_software/iCORN2/icorn2.Correct.pl Pf3D7_01_v3_splitter-part.fa gatk_variants.variants.Pf3D7_01_v3_splitter-part.fa.vcf ..//mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset 500 Pf3D7_01_v3_splitter-part.fa.4
+Reading all chromosomes from ../Pf3D7_01_v3_splitter-part.fa ... read 1 chromosomes.
+Indexing 1 chromosomes ... sorting ... done.
+Setting read length to 250
+Reading solexa pair data from /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset_1.fastq ... scanned 13785 solexa reads, 83 (0.60%) matched , 83 total matches, 0 skipped.
+Reading all chromosomes from Pf3D7_01_v3_splitter-part.fa.4.tmp ... read 1 chromosomes.
+Indexing 1 chromosomes ... sorting ... done.
+Setting read length to 250
+Reading solexa pair data from /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset_1.fastq ... scanned 13785 solexa reads, 83 (0.60%) matched , 83 total matches, 0 skipped.
+OPen ../Pf3D7_01_v3_splitter-part.fa.ref.fa 
+OPen ../Pf3D7_01_v3_splitter-part.fa.qry.fa 
+
+Calling icorn2.Correct.pl
+perl /mnt/beegfs/user/bin/ILRA/external_software/iCORN2/icorn2.Correct.pl Pf3D7_API_v3_splitter-part.fa gatk_variants.variants.Pf3D7_API_v3_splitter-part.fa.vcf ..//mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset 500 Pf3D7_API_v3_splitter-part.fa.4
+Reading all chromosomes from ../Pf3D7_API_v3_splitter-part.fa ... read 1 chromosomes.
+Indexing 1 chromosomes ... sorting ... done.
+Setting read length to 250
+Reading solexa pair data from /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset_1.fastq ... scanned 13785 solexa reads, 22 (0.16%) matched , 22 total matches, 0 skipped.
+Reading all chromosomes from Pf3D7_API_v3_splitter-part.fa.4.tmp ... read 1 chromosomes.
+Indexing 1 chromosomes ... sorting ... done.
+Setting read length to 250
+Reading solexa pair data from /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset_1.fastq ... scanned 13785 solexa reads, 22 (0.16%) matched , 22 total matches, 0 skipped.
+OPen ../Pf3D7_API_v3_splitter-part.fa.ref.fa 
+OPen ../Pf3D7_API_v3_splitter-part.fa.qry.fa 
+
+Calling icorn2.Correct.pl
+perl /mnt/beegfs/user/bin/ILRA/external_software/iCORN2/icorn2.Correct.pl Pf_M76611_splitter-part.fa gatk_variants.variants.Pf_M76611_splitter-part.fa.vcf ..//mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset 500 Pf_M76611_splitter-part.fa.4
+Reading all chromosomes from ../Pf_M76611_splitter-part.fa ... read 1 chromosomes.
+Indexing 1 chromosomes ... sorting ... done.
+Setting read length to 250
+Reading solexa pair data from /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset_1.fastq ... scanned 13785 solexa reads, 16 (0.12%) matched , 56 total matches, 0 skipped.
+Reading all chromosomes from Pf_M76611_splitter-part.fa.4.tmp ... read 1 chromosomes.
+Indexing 1 chromosomes ... sorting ... done.
+Setting read length to 250
+Reading solexa pair data from /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/4.iCORN2/Illumina_short_reads_Pf_test_subset_1.fastq ... scanned 13785 solexa reads, 16 (0.12%) matched , 56 total matches, 0 skipped.
+OPen ../Pf_M76611_splitter-part.fa.ref.fa 
+OPen ../Pf_M76611_splitter-part.fa.qry.fa 
+

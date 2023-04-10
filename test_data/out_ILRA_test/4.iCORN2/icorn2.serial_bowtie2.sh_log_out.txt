@@ -1,0 +1,132 @@
+We are automatically setting ICORN2_HOME to:
+/mnt/beegfs/user/bin/ILRA/external_software/iCORN2
+Current cores: 4 cores
+
+
+
+
+#### ITERATION ++++ 1
+
+Calling the mapper...
+
+
+Mapper DONE
+
+
+Separating the sequences and analyzing them with parallel...
+
+Make sure not to use the java 1.7 that's required by iCORN2's GenomeAnalysisTK.jar, but a more recent one, for example the 1.8 that GATK requires...
+mv: 'Pf3D7_01_v3_splitter-part.fa' and 'Pf3D7_01_v3_splitter-part.fa' are the same file
+mv: 'Pf3D7_API_v3_splitter-part.fa' and 'Pf3D7_API_v3_splitter-part.fa' are the same file
+mv: 'Pf_M76611_splitter-part.fa' and 'Pf_M76611_splitter-part.fa' are the same file
+
+Please note iCORN2 is likely going to fail if any of the sequences being processed is larger than or around 60Mb... The program detected that the following files and sequences are above the threshold: (and will try to handle these accordingly by further dividing the individual sequences)
+None
+
+Final checking if there are still files and sequences above the size threshold...
+None
+
+So, Pilon is going to be used for the following files instead of iCORN2: (the final output sequences would be corrected, but the iCORN2 statistics would be incomplete because not accouting for the Pilon-corrected sequences)
+None
+
+Cores to be used simultaneously to process each split sequence: 1
+
+Processing simultaneously splitted sequences in blocks of at most 3 elements, please change the variable 'blocks_size (-b)' or 'parts_icorn2_split' (-P) in the ILRA.sh main script if required, for example because less cores available or running into memory issues, freezing, incomplete files...
+
+Please be aware that temp files adding up to hundreds of GBs can be created during the parallel execution of iCORN2...
+
+Current corrections:
+#iter	perfect1	perfect1%	perfect2	perfect2%	SNP	INS	DEL	HETERO	Rej.SNP	Rej.INS	Rej.DEL
+1	16	0.12	16	0.12	7	5	2	0	0	0	0
+
+Iteration 1 DONE
+Elapsed time (secs): 115
+Elapsed time (hours): .03
+
+
+
+#### ITERATION ++++ 2
+
+Calling the mapper...
+
+
+Mapper DONE
+
+
+Separating the sequences and analyzing them with parallel...
+
+Make sure not to use the java 1.7 that's required by iCORN2's GenomeAnalysisTK.jar, but a more recent one, for example the 1.8 that GATK requires...
+mv: 'Pf3D7_01_v3_splitter-part.fa' and 'Pf3D7_01_v3_splitter-part.fa' are the same file
+mv: 'Pf3D7_API_v3_splitter-part.fa' and 'Pf3D7_API_v3_splitter-part.fa' are the same file
+mv: 'Pf_M76611_splitter-part.fa' and 'Pf_M76611_splitter-part.fa' are the same file
+
+Please note iCORN2 is likely going to fail if any of the sequences being processed is larger than or around 60Mb... The program detected that the following files and sequences are above the threshold: (and will try to handle these accordingly by further dividing the individual sequences)
+None
+
+Final checking if there are still files and sequences above the size threshold...
+None
+
+So, Pilon is going to be used for the following files instead of iCORN2: (the final output sequences would be corrected, but the iCORN2 statistics would be incomplete because not accouting for the Pilon-corrected sequences)
+None
+
+Cores to be used simultaneously to process each split sequence: 1
+
+Processing simultaneously splitted sequences in blocks of at most 3 elements, please change the variable 'blocks_size (-b)' or 'parts_icorn2_split' (-P) in the ILRA.sh main script if required, for example because less cores available or running into memory issues, freezing, incomplete files...
+
+Please be aware that temp files adding up to hundreds of GBs can be created during the parallel execution of iCORN2...
+
+Current corrections:
+#iter	perfect1	perfect1%	perfect2	perfect2%	SNP	INS	DEL	HETERO	Rej.SNP	Rej.INS	Rej.DEL
+1	16	0.12	16	0.12	7	5	2	0	0	0	0
+2	16	0.12	16	0.12	0	0	0	0	0	0	0
+
+Iteration 2 DONE
+Elapsed time (secs): 116
+Elapsed time (hours): .03
+
+
+
+#### ITERATION ++++ 3
+
+Calling the mapper...
+
+
+Mapper DONE
+
+
+Separating the sequences and analyzing them with parallel...
+
+Make sure not to use the java 1.7 that's required by iCORN2's GenomeAnalysisTK.jar, but a more recent one, for example the 1.8 that GATK requires...
+mv: 'Pf3D7_01_v3_splitter-part.fa' and 'Pf3D7_01_v3_splitter-part.fa' are the same file
+mv: 'Pf3D7_API_v3_splitter-part.fa' and 'Pf3D7_API_v3_splitter-part.fa' are the same file
+mv: 'Pf_M76611_splitter-part.fa' and 'Pf_M76611_splitter-part.fa' are the same file
+
+Please note iCORN2 is likely going to fail if any of the sequences being processed is larger than or around 60Mb... The program detected that the following files and sequences are above the threshold: (and will try to handle these accordingly by further dividing the individual sequences)
+None
+
+Final checking if there are still files and sequences above the size threshold...
+None
+
+So, Pilon is going to be used for the following files instead of iCORN2: (the final output sequences would be corrected, but the iCORN2 statistics would be incomplete because not accouting for the Pilon-corrected sequences)
+None
+
+Cores to be used simultaneously to process each split sequence: 1
+
+Processing simultaneously splitted sequences in blocks of at most 3 elements, please change the variable 'blocks_size (-b)' or 'parts_icorn2_split' (-P) in the ILRA.sh main script if required, for example because less cores available or running into memory issues, freezing, incomplete files...
+
+Please be aware that temp files adding up to hundreds of GBs can be created during the parallel execution of iCORN2...
+
+Current corrections:
+#iter	perfect1	perfect1%	perfect2	perfect2%	SNP	INS	DEL	HETERO	Rej.SNP	Rej.INS	Rej.DEL
+1	16	0.12	16	0.12	7	5	2	0	0	0	0
+2	16	0.12	16	0.12	0	0	0	0	0	0	0
+3	16	0.12	16	0.12	0	0	0	0	0	0	0
+
+Iteration 3 DONE
+Elapsed time (secs): 117
+Elapsed time (hours): .03
+
+
+
+To look in into a correction, open the file ending with .1, .2, .3... in artemis and load the gff file onto it...
+mem=0 RSS=1647908 elapsed=5:48.71 cpu.sys=96.08 .user=703.64

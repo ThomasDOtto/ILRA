@@ -1,0 +1,6 @@
+WARNING: SPAdes version 3.15.5 is being used. It will work, but better results are usually obtained from Circlator using SPAdes version 3.7.1. Although 3.7.1 is not the latest version, we recommend it for Circlator.
+WARNING: SPAdes version 3.15.5 is being used. It will work, but better results are usually obtained from Circlator using SPAdes version 3.7.1. Although 3.7.1 is not the latest version, we recommend it for Circlator.
+WARNING: SPAdes version 3.15.5 is being used. It will work, but better results are usually obtained from Circlator using SPAdes version 3.7.1. Although 3.7.1 is not the latest version, we recommend it for Circlator.
+WARNING: Didn't find canu in path. Looked for:canu
+WARNING: Didn't find canu in path. Looked for:canu
+mem=0 RSS=400708 elapsed=1:05.92 cpu.sys=13.96 .user=86.59

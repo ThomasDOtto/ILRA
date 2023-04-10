@@ -1,0 +1,3 @@
+formatdb -p F -i Reference/Pf3D7_01_v3
+formatdb -p F -i Reference/Pf3D7_API_v3
+formatdb -p F -i Reference/Pf_M76611
