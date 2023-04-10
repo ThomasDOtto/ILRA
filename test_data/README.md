@@ -89,6 +89,7 @@ Please go through the output file 'out_ILRA_test_log.txt' and the folder 'out_IL
    - meryl_count_log_out.txt
    - meryl_print_log_out.txt
    - repetitive_k15.txt
+6. Decontamination - Skipped
 7. Stats
    - 07.Contigs_GC_size.txt - The log files and results of multiple scripts to evaluate the ILRA-corrected sequences, particularly the telomere regions, and the sequencing reads used
    - 07.TelomerContigs.txt
