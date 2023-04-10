@@ -1269,7 +1269,7 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" syri -c plotsr_fix.sam -r ref_reduced_comp_assembly.fasta -q assembly_ILRA_reduced_comp_ref.fasta -F B --nc $cores --seed 1 --dir . --prefix plotsr_ &> syri_log_out.txt # syri fails if there are M in the bam cigar string, hence the reformat above
 		echo -e "#file\tname\ttags\n$PWD/ref_reduced_comp_assembly.fasta\treference\tlw:1.5\n$PWD/assembly_ILRA_reduced_comp_ref.fasta\tassembly\tlw:1.5" > genomes.txt
 		plotsr --sr plotsr_syri.out --genomes genomes.txt -o plotsr_assembly_reference_plot.pdf
-		rm -rf $(ls | egrep -v ".pdf$|.out$|.fasta$|.txt$") # Cleaning
+		rm -rf $(ls | egrep -v ".pdf$|.out$|.fasta$|.txt$") $dir/7.Stats/plotsr_results/merylDB # Cleaning
 	fi
 
 	# Visualization of syntenic relationships on multiple contigs (NGenomeSyn):
