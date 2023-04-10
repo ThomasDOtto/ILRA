@@ -15,12 +15,27 @@ This was a run in the default 'light mode'. Once several external databases are 
 Please go through the output file 'out_ILRA_test_log.txt' and the folder 'out_ILRA_test' to get the details on the pipeline processing steps and the final output. Here, we provide the following overview:
 
 0. Root directory
-   - Excluded.contigs.fofn
-   Information on the contigs that have been merged or discarded during execution
-   - all_output_files_log_out.txt
-   List of all the files contained in the directories and subfolders
-   - test.ILRA.fasta
-   ILRA-corrected sequences
+   - Excluded.contigs.fofn - Information on the contigs that have been merged or discarded during execution
+   - all_output_files_log_out.txt - List of all the files contained in the directories and subfolders
+   - test.ILRA.fasta - ILRA-corrected sequences
 1. Filtering
-   - First nested list item
+   - 01.assembly.fa - sequences corrected after step 1
+   - formatdb.log - Log of the indexing for BLAST
+2. MegaBLAST
+   - 02.assembly.fa.gz
+   - 03.assembly.fa
+   - mergedseq_OUT.fasta.gz
+   - notcovered_OUT.fasta.gz
+   - contained_OUT.fasta.gz - Sequences pre- and post-correction in this step, and the contigs identified to be contained in other, not covered by short reads, or merged
+   - List.Contained.fofn
+   - 02.ListContained.txt 
+   - comp.self1.blast.length - List of contigs identified to be contained in others and information on the BLAST performed
+   - ILRA.findoverlaps_ver3.pl_log_out.txt
+   - ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt
+   - ILRA.runSMALT_ver2.sh_log_out.txt
+   - megablast_parallel_log_out.txt 
+   - megablast_parallel_log_out_2.txt
+   - results_OUT.txt 
+   - log_OUT.txt - Various logs containing the output of the execution of multiple software and scripts in this step
+
      - Second nested list item
