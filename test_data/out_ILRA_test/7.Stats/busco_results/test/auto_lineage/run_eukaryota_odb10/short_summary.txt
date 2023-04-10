@@ -1,0 +1,30 @@
+# BUSCO version is: 5.4.6 
+# The lineage dataset is: eukaryota_odb10 (Creation date: 2020-09-10, number of genomes: 70, number of BUSCOs: 255)
+# Summarized benchmarking in BUSCO notation for file /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/test.ILRA.fasta
+# BUSCO was run in mode: euk_genome_met
+# Gene predictor used: metaeuk
+
+	***** Results: *****
+
+	C:1.6%[S:1.6%,D:0.0%],F:0.4%,M:98.0%,n:255	   
+	4	Complete BUSCOs (C)			   
+	4	Complete and single-copy BUSCOs (S)	   
+	0	Complete and duplicated BUSCOs (D)	   
+	1	Fragmented BUSCOs (F)			   
+	250	Missing BUSCOs (M)			   
+	255	Total BUSCO groups searched		   
+
+Assembly Statistics:
+	3	Number of scaffolds
+	3	Number of contigs
+	683296	Total length
+	0.000%	Percent gaps
+	642 KB	Scaffold N50
+	642 KB	Contigs N50
+
+
+Dependencies and versions:
+	hmmsearch: 3.3
+	bbtools: 39.01
+	metaeuk: 6.a5d39d9
+	busco: 5.4.6
