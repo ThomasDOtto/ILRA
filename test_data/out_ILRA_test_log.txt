@@ -1,0 +1,279 @@
+
+  _____                                                         _            __   _                         _____                _                                   _     _ _
+ |_   _|                                                       | |          / _| | |                       |  __ \              | |     /\                          | |   | (_)
+   | |  _ __ ___  _ __  _ __ _____   _____ _ __ ___   ___ _ __ | |_    ___ | |_  | |     ___  _ __   __ _  | |__) |___  __ _  __| |    /  \   ___ ___  ___ _ __ ___ | |__ | |_  ___  ___
+   | | | '_ ` _ \| '_ \| '__/ _ \ \ / / _ \ '_ ` _ \ / _ \ '_ \| __|  / _ \|  _| | |    / _ \| '_ \ / _` | |  _  // _ \/ _` |/ _` |   / /\ \ / __/ __|/ _ \ '_ ` _ \| '_ \| | |/ _ \/ __|
+  _| |_| | | | | | |_) | | | (_) \ V /  __/ | | | | |  __/ | | | |_  | (_) | |   | |___| (_) | | | | (_| | | | \ \  __/ (_| | (_| |  / ____ \\__ \__ \  __/ | | | | | |_) | | |  __/\__ \
+ |_____|_| |_| |_| .__/|_|  \___/ \_/ \___|_| |_| |_|\___|_| |_|\__|  \___/|_|   |______\___/|_| |_|\__, | |_|  \_\___|\__,_|\__,_| /_/    \_\___/___/\___|_| |_| |_|_.__/|_|_|\___||___/
+                 | |                                                                                 __/ |
+                 |_|                                                                                |___/
+                                                     .----------------.  .----------------.  .----------------.  .----------------.
+                                                    | .--------------. || .--------------. || .--------------. || .--------------. |
+                                                    | |     _____    | || |   _____      | || |  _______     | || |      __      | |
+                                                    | |    |_   _|   | || |  |_   _|     | || | |_   __ \    | || |     /  \     | |
+                                                    | |      | |     | || |    | |       | || |   | |__) |   | || |    / /\ \    | |
+                                                    | |      | |     | || |    | |   _   | || |   |  __ /    | || |   / ____ \   | |
+                                                    | |     _| |_    | || |   _| |__/ |  | || |  _| |  \ \_  | || | _/ /    \ \_ | |
+                                                    | |    |_____|   | || |  |________|  | || | |____| |___| | || ||____|  |____|| |
+                                                    | |              | || |              | || |              | || |              | |
+                                                    | '--------------' || '--------------' || '--------------' || '--------------' |
+                                                     '----------------'  '----------------'  '----------------'  '----------------'
+JLRuiz & Thomas D. Otto. 2022
+
+
+
+
+Current time: Wed Apr  5 10:42:04 CEST 2023
+
+Check help with parameter '-h' or read the GitHub README for full example usage
+In case you want to test ILRA with a smaller subset of example reads, check the subfolder /path/to/ILRA/test_data and the 'Quick Start' in the GitHub README
+
+I'm now quickly checking and showing the arguments that are going to be used in the ILRA run...
+
+Assuming the assembly is in the current pathway... If errors please provide absolute pathways as arguments
+Assuming corrected reads are in the current pathway...
+If errors, please provide absolute pathways as arguments
+Not sure where Illumina reads are... Assuming they are in the current pathway... If errors please provide absolute pathways as arguments
+Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz...
+Not sure where reference is... Assuming it is in the current pathway... If errors please provide absolute pathways as arguments
+Not sure where gff file is... Assuming it is in the current pathway... If errors please provide absolute pathways as arguments
+LIGHT MODE activated, steps for decontamination and preparation for online databases steps will be skipped ...
+You are using iCORN2 for the correction via Illumina short reads. If you want to use pilon, please provide the argument '-p yes'...
+You are requesting the last step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc
+
+Final arguments used:
+Number of iCORN2 iterations: 3
+Seqs to circularize: MT|M76611
+Seqs to circularize: API
+Length threshold to discard contigs (bp): 5000
+Insert size range Illumina short reads (bp): 800
+NCBI taxon id: 5820
+Execution mode is light. Databases are/should be located in the folder /mnt/beegfs/pepeluisrr/bin/ILRA/databases
+Long reads sequencing technology: PacBio
+If Oxford Nanopore were used, please provide the argument 'ont'
+assembly=/mnt/beegfs/pepeluisrr/bin/ILRA/test_data/assembly_Pf_test.fasta
+dir=/mnt/beegfs/pepeluisrr/bin/ILRA/test_data/out_ILRA_test
+correctedReads=/mnt/beegfs/pepeluisrr/bin/ILRA/test_data/corrected_reads_Pf_test_subset.fastq.gz
+name=test
+reference=/mnt/beegfs/pepeluisrr/bin/ILRA/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta
+illuminaReads=/mnt/beegfs/pepeluisrr/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset
+cores=4
+cores_SMALT=4
+cores_iCORN2=4
+seqs_circl_1=MT|M76611
+seqs_circl_2=API
+number_iterations_icorn=3
+contigs_threshold_size=5000
+InsertsizeRange=800
+The telomere sequences used are:
+Left:	 CCCTAAACCCTAAACCCTAAA
+Right:	 TTTAGGGTTTAGGGTTTAGGG
+The block size for parallel processing is: 4
+
+PATH with paths to all tools must be properly set: export PATH=...:$PATH either in the bashrc or bash_profile files in HOME directory, activating a conda environment... etc
+
+Please be aware that many scripts (bash, perl...) within the ILRA folder are used, and you may need to manually change the interpreter in the corresponding shebang (first line #!) statements so everything works in your system. Many software and dependencies are also required and are being automatically checked at the beginning of each step execution. You can resume a step for which you did not have the software ready with -d argument. The pipeline will exit if any required software is not found in the variable PATH of your system, which you likely need to change accordingly... You may also need to make scripts executable (chmod), to make source, export... etc, so that the PATH variable and others are available for all scripts
+If the pipeline keeps running, congrats! All the required software is available
+
+
+STEP 1: Size filtering starting...
+Current date/time: Wed Apr  5 10:42:04 CEST 2023
+
+Before this step:
+stats for /mnt/beegfs/pepeluisrr/bin/ILRA/test_data/assembly_Pf_test.fasta
+sum = 742920, n = 4, ave = 185730.00, largest = 579465
+
+After this step:
+stats for 01.assembly.fa
+sum = 742920, n = 4, ave = 185730.00, largest = 579465
+
+STEP 1: DONE
+Current date/time: Wed Apr  5 10:42:04 CEST 2023
+STEP 1 time (secs): 0
+STEP 1 time (hours): 0
+
+
+STEP 2: MegaBLAST starting...
+Current date/time: Wed Apr  5 10:42:04 CEST 2023
+
+
+Processing in the MegaBLAST simultaneously the individual contigs in blocks of at most 4 elements, please manually change the variable 'blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...
+
+
+
+STEP 2a: Delete contained contigs starting...
+Current date/time: Wed Apr  5 10:42:06 CEST 2023
+
+Filtering the MegaBLAST output for hits > 2Kb and >99% identity. Please change manually within the pipeline (section 2a) these parameters if needed
+
+
+STEP 2b: Find overlaps starting...
+Current date/time: Wed Apr  5 10:42:06 CEST 2023
+
+SMALT parameters are: k-mer size=20, step-size=3, insert size range=800. Please check SMALT help and change manually within the pipeline (section 2b) these parameters if needed
+Check out the log of ILRA.runSMALT_ver2.sh in the file ILRA.runSMALT_ver2.sh_log_out.txt
+
+Check out the log of ILRA.findoverlaps_ver3.pl in the files log_OUT.txt, results_OUT.txt, ILRA.findoverlaps_ver3.pl_log_out.txt, and ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt
+
+Removing overlapping contigs based on Illumina short reads...
+
+
+After this step:
+stats for 02.assembly.fa
+sum = 742920, n = 4, ave = 185730.00, largest = 579465
+stats for 03.assembly.fa
+sum = 731437, n = 3, ave = 243812.33, largest = 642987
+
+STEP 2: DONE
+Current date/time: Wed Apr  5 10:42:22 CEST 2023
+STEP 2 time (secs): 18
+STEP 2 time (hours): 0
+
+
+STEP 3: ABACAS2 starting...
+Current date/time: Wed Apr  5 10:42:22 CEST 2023
+
+ABACAS2 parameters are:
+ABA_CHECK_OVERLAP=0
+ABA_COMPARISON=nucmer
+Min_Alignment_Length=1000
+Identity_Cutoff=98
+Blast=1
+split_parts=10
+Please check ABACAS2 help and change manually within the pipeline (section 3) these parameters if needed
+
+Check out the log of abacas2.nonparallel.sh in the files abacas_log_out.txt and abacas_log_out_warnings_errors.txt
+
+After this step:
+stats for 03b.assembly.fa
+sum = 731437, n = 3, ave = 243812.33, largest = 642987
+
+STEP 3: DONE
+Current date/time: Wed Apr  5 10:42:33 CEST 2023
+STEP 3 time (secs): 11
+STEP 3 time (hours): 0
+
+
+STEP 4: iCORN2 starting...
+Current date/time: Wed Apr  5 10:42:33 CEST 2023
+
+The iCORN2 fragment size used is iCORN2_fragmentSize=500. Please check iCORN2 help and change manually within the pipeline (section 4) if needed
+Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt
+
+A preview of the correction by iCORN2 is:
+#iter	perfect1	perfect1%	perfect2	perfect2%	SNP	INS	DEL	HETERO	Rej.SNP	Rej.INS	Rej.DEL
+1	16	0.12	16	0.12	7	5	2	0	0	0	0
+2	16	0.12	16	0.12	0	0	0	0	0	0	0
+3	16	0.12	16	0.12	0	0	0	0	0	0	0
+### Total SNP: 
+7
+### Total INS: 
+5
+### Total DEL: 
+2
+### Total HETERO: 
+0
+
+After this step:
+stats for 04.assembly.fa
+sum = 731443, n = 3, ave = 243814.33, largest = 642993
+
+STEP 4: DONE
+Current date/time: Wed Apr  5 10:48:23 CEST 2023
+STEP 4 time (secs): 350
+STEP 4 time (hours): .09
+
+
+STEP 5: Circlator starting...
+Current date/time: Wed Apr  5 10:48:23 CEST 2023
+
+Check out the log of the mapping of the corrected reads and circlator in the files mapping_corrected_reads_log_out.txt and circlator_log_out.txt
+
+After this step:
+stats for 05.assembly.fa
+sum = 683296, n = 3, ave = 227765.33, largest = 642993
+
+STEP 5: DONE
+Current date/time: Wed Apr  5 10:49:36 CEST 2023
+STEP 5 time (secs): 73
+STEP 5 time (hours): .02
+
+STEP 6 for decontamination is skipped. Light mode activated
+Current date/time: Wed Apr  5 10:49:36 CEST 2023
+
+
+
+
+STEP 7 starting: Renaming, gathering stats and evaluation, cleaning up files...
+Current date/time: Wed Apr  5 10:49:36 CEST 2023
+This is the final ILRA step and it may take long, but the assembly has already been corrected and won't change more. You can use already the final corrected assembly /mnt/beegfs/pepeluisrr/bin/ILRA/test_data/out_ILRA_test/test.ILRA.fasta
+
+A preview of the final corrections by ILRA is: (full details in the file 07.assembly_stats_original_correction_ILRA.txt)
+Original:
+stats for /mnt/beegfs/pepeluisrr/bin/ILRA/test_data/assembly_Pf_test.fasta
+sum = 742920, n = 4, ave = 185730.00, largest = 579465
+N50 = 579465, n = 1
+Corrected:
+stats for ../test.ILRA.fasta
+sum = 683296, n = 3, ave = 227765.33, largest = 642993
+N50 = 642993, n = 1
+
+Check out the output of the telomeres analyses in the file 07.TelomersSummary.txt
+
+A preview of the overall GC content is: (full details in the file 07.Contigs_GC_size.txt)
+SeqName: test
+	Contig: 3
+	Size: 683296
+	GC%: 20.27
+
+Check out the sequencing depth and other stats in the file 07.fastq_info_depth_IlluminaReads_assembly.txt
+Picked up _JAVA_OPTIONS: -Xms10g -Xmx32g
+
+Running QUAST...
+Please be aware that for providing reference genes, a GFF file with gene or operon as feature type field, or a bed file (sequence name, start position, end position, gene ID) are accepted
+Please be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not, to use the '--eukaryote' argument in quast.py. If your species is prokaryotic QUAST would also work. In other cases, you may need to manually run quast.py with the argument '--fungus' for fungi or the arguments '--large' and '--memory-efficient' for large genomes. If the taxon ID is not known or present in the NCBI taxonomy databases, this step will be skipped...
+Current NCBI taxon ID: 5820
+Check out the file quast.py_log_out.txt and the QUAST report within the folder 7.Stats/quast_results
+
+Running BUSCO...
+Please be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not to use the automatic lineage selection in BUSCO. This may not work and you would need to run manually BUSCO with the final corrected assembly, providing as the argument '--lineage_dataset' the BUSCO dataset closest to your species in 'https://busco-data.ezlab.org/v4/data/lineages/', which would be automatically downloaded. If the taxon ID is not known or present in the NCBI taxonomy databases, the automatic mode will be executed
+Current NCBI taxon ID: 5820 [genus] Plasmodium
+Check out the file busco_log_out.txt and the BUSCO reports within the folder 7.Stats/busco_results
+Running BUSCO for eukaryotes in the mode '--auto-lineage-euk'
+	|Results from dataset eukaryota_odb10             |
+	|C:1.6%[S:1.6%,D:0.0%],F:0.4%,M:98.0%,n:255       |
+	|4	Complete BUSCOs (C)                       |
+	|4	Complete and single-copy BUSCOs (S)       |
+	|0	Complete and duplicated BUSCOs (D)        |
+	|1	Fragmented BUSCOs (F)                     |
+	|250	Missing BUSCOs (M)                        |
+	|255	Total BUSCO groups searched               |
+
+Running plotsr...
+Picked up _JAVA_OPTIONS: -Xms10g -Xmx32g
+Plotsr - WARNING - Plot plotsr_assembly_reference_plot.pdf generated.
+Finished
+
+STEP 7 time (secs): 3062
+STEP 7 time (hours): .85
+
+
+STEP 7: DONE
+Current date/time: Wed Apr  5 11:40:38 CEST 2023
+
+Converting and compressing final files...
+
+Main alignment files have been converted to cram for long-term storage. If needed, for converting compressed .cram files back to .bam apply the command: samtools view -@ 4 -T filename.fasta -b -o output.bam input.cram (check out samtools view statements within ILRA.sh to get the fasta file used)
+
+ILRA IS DONE
+Current date/time: Wed Apr  5 11:41:00 CEST 2023
+
+Original assembly file: /mnt/beegfs/pepeluisrr/bin/ILRA/test_data/assembly_Pf_test.fasta
+Final corrected assembly file: /mnt/beegfs/pepeluisrr/bin/ILRA/test_data/out_ILRA_test/test.ILRA.fasta
+Excluded contigs file: /mnt/beegfs/pepeluisrr/bin/ILRA/test_data/out_ILRA_test/Excluded.contigs.fofn
+To assess the running please look for the expected output and log files within the step folders, particularly '*log_out*' files
+
+Cores: 4
+Final runtime (hours): 0
+(3536 secs, check out time for each step after the statements 'STEP X: DONE' or in the logs the output of GNU's time)
+mem=0 RSS=39947304 elapsed=58:56.34 cpu.sys=529.86 .user=34749.55
