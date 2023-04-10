@@ -1,0 +1,8 @@
+0
+$VAR1 = {
+          '1' => {
+                   'unitig_15_quiver' => 1,
+                   'unitig_36_quiver' => 1
+                 }
+        };
+unitig_15_quiver 	567992 	579465

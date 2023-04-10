@@ -1,0 +1,5 @@
+megablast -W 40 -F F -a 2 -m 8 -e 1e-80 -d /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/1.Filtering/01.assembly.fa -i unitig_18_quiver.fa -o comp.self1.unitig_18_quiver.fa.blast
+megablast -W 40 -F F -a 2 -m 8 -e 1e-80 -d /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/1.Filtering/01.assembly.fa -i unitig_16_quiver.fa -o comp.self1.unitig_16_quiver.fa.blast
+megablast -W 40 -F F -a 2 -m 8 -e 1e-80 -d /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/1.Filtering/01.assembly.fa -i unitig_36_quiver.fa -o comp.self1.unitig_36_quiver.fa.blast
+megablast -W 40 -F F -a 2 -m 8 -e 1e-80 -d /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/1.Filtering/01.assembly.fa -i unitig_15_quiver.fa -o comp.self1.unitig_15_quiver.fa.blast
+mem=0 RSS=77740 elapsed=0:01.34 cpu.sys=0.19 .user=1.35

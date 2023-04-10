@@ -1,0 +1,16 @@
+Contained before checking coverage: 0
+Contained after checking coverage: 0
+Blast results after filtering out contained and not covered sequences
+results: 2
+
+First filtering step: search for overlap alignments
+results: 1
+
+Second filtering step: evaluate the coverage
+results: 1
+
+Third filtering step: get best alignments when there are more than one for one sequence 
+alignments: 1
+sequences: 2
+merged sequences: 1
+

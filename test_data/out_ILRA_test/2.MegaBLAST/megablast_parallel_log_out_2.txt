@@ -1,0 +1,5 @@
+Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+2	:	2023-04-05 10:42:05	     0.085	0	0	0	0	megablast -W 40 -F F -a 2 -m 8 -e 1e-80 -d /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/1.Filtering/01.assembly.fa -i unitig_16_quiver.fa -o comp.self1.unitig_16_quiver.fa.blast
+1	:	2023-04-05 10:42:05	     0.148	0	0	0	0	megablast -W 40 -F F -a 2 -m 8 -e 1e-80 -d /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/1.Filtering/01.assembly.fa -i unitig_18_quiver.fa -o comp.self1.unitig_18_quiver.fa.blast
+3	:	2023-04-05 10:42:05	     0.178	0	0	0	0	megablast -W 40 -F F -a 2 -m 8 -e 1e-80 -d /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/1.Filtering/01.assembly.fa -i unitig_36_quiver.fa -o comp.self1.unitig_36_quiver.fa.blast
+4	:	2023-04-05 10:42:05	     0.805	0	0	0	0	megablast -W 40 -F F -a 2 -m 8 -e 1e-80 -d /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/1.Filtering/01.assembly.fa -i unitig_15_quiver.fa -o comp.self1.unitig_15_quiver.fa.blast

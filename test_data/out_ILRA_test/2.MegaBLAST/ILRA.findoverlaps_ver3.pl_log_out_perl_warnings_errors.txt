@@ -1,0 +1,78 @@
+"my" variable $ref_overlaps masks earlier declaration in same scope at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 64.
+"my" variable $number masks earlier declaration in same scope at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 65.
+"my" variable $ref_overlaps masks earlier declaration in same scope at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 68.
+Possible precedence problem on bitwise & operator at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 193.
+Possible precedence problem on bitwise & operator at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 194.
+Possible precedence problem on bitwise & operator at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 194.
+"my" variable $number masks earlier declaration in same scope at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 212.
+Unquoted string "blast" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 237.
+Unquoted string "blast" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 276.
+"my" variable $max masks earlier declaration in same scope at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 631.
+"my" variable $maxkey masks earlier declaration in same scope at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 632.
+"my" variable @merging masks earlier declaration in same scope at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 655.
+"my" variable @nomerging masks earlier declaration in same scope at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 657.
+Unquoted string "fasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 725.
+Unquoted string "newfasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 726.
+Unquoted string "containedfasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 727.
+Unquoted string "notcoveredfasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 728.
+Unquoted string "containedfasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 754.
+Unquoted string "notcoveredfasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 756.
+Unquoted string "newfasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 758.
+Unquoted string "fasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 761.
+Unquoted string "results" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 777.
+Unquoted string "results" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 795.
+Unquoted string "results" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 820.
+Unquoted string "results" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 850.
+Unquoted string "results" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 851.
+Scalar value @both[0] better written as $both[0] at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 845.
+Unquoted string "newfasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 1078.
+Unquoted string "newfasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 1083.
+Unquoted string "newfasta" may clash with future reserved word at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 1089.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov2 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $cov1 in addition (+) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 473.
+Use of uninitialized value $counts{"left"} in numeric le (<=) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 550.
+Use of uninitialized value $counts{"left"} in numeric le (<=) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 550.
+Use of uninitialized value in string eq at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 841.
+Use of uninitialized value in numeric eq (==) at /mnt/beegfs/user/bin/ILRA/bin/ILRA.findoverlaps_ver3.pl line 870.
