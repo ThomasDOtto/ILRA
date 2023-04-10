@@ -1,0 +1,95 @@
+2023-04-05 11:33:50 INFO:	***** Start a BUSCO v5.4.6 analysis, current time: 04/05/2023 11:33:50 *****
+2023-04-05 11:33:50 INFO:	Configuring BUSCO with local environment
+2023-04-05 11:33:50 INFO:	Mode is genome
+2023-04-05 11:33:50 INFO:	Downloading information on latest versions of BUSCO data...
+2023-04-05 11:33:52 INFO:	Input file is /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/test.ILRA.fasta
+2023-04-05 11:33:52 INFO:	No lineage specified. Running lineage auto selector.
+
+2023-04-05 11:33:52 INFO:	***** Starting Auto Select Lineage *****
+	This process runs BUSCO on the generic lineage datasets for the domains archaea, bacteria and eukaryota. Once the optimal domain is selected, BUSCO automatically attempts to find the most appropriate BUSCO dataset to use based on phylogenetic placement.
+	--auto-lineage-euk and --auto-lineage-prok are also available if you know your input assembly is, or is not, an eukaryote. See the user guide for more information.
+	A reminder: Busco evaluations are valid when an appropriate dataset is used, i.e., the dataset belongs to the lineage of the species to test. Because of overlapping markers/spurious matches among domains, busco matches in another domain do not necessarily mean that your genome/proteome contains sequences from this domain. However, a high busco score in multiple domains might help you identify possible contaminations.
+2023-04-05 11:33:52 INFO:	Downloading file 'https://busco-data.ezlab.org/v5/data/lineages/eukaryota_odb10.2020-09-10.tar.gz'
+2023-04-05 11:34:14 INFO:	Decompressing file '/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/downloads/lineages/eukaryota_odb10.tar.gz'
+2023-04-05 11:34:20 INFO:	Running BUSCO using lineage dataset eukaryota_odb10 (eukaryota, 2020-09-10)
+2023-04-05 11:34:20 INFO:	Running 1 job(s) on bbtools, starting at 04/05/2023 11:34:20
+2023-04-05 11:34:24 INFO:	[bbtools]	1 of 1 task(s) completed
+2023-04-05 11:34:27 INFO:	Running 1 job(s) on metaeuk, starting at 04/05/2023 11:34:27
+2023-04-05 11:34:57 INFO:	[metaeuk]	1 of 1 task(s) completed
+2023-04-05 11:34:59 INFO:	***** Run HMMER on gene sequences *****
+2023-04-05 11:34:59 INFO:	Running 255 job(s) on hmmsearch, starting at 04/05/2023 11:34:59
+2023-04-05 11:35:02 INFO:	[hmmsearch]	26 of 255 task(s) completed
+2023-04-05 11:35:02 INFO:	[hmmsearch]	51 of 255 task(s) completed
+2023-04-05 11:35:02 INFO:	[hmmsearch]	77 of 255 task(s) completed
+2023-04-05 11:35:03 INFO:	[hmmsearch]	102 of 255 task(s) completed
+2023-04-05 11:35:03 INFO:	[hmmsearch]	128 of 255 task(s) completed
+2023-04-05 11:35:03 INFO:	[hmmsearch]	153 of 255 task(s) completed
+2023-04-05 11:35:03 INFO:	[hmmsearch]	179 of 255 task(s) completed
+2023-04-05 11:35:04 INFO:	[hmmsearch]	204 of 255 task(s) completed
+2023-04-05 11:35:04 INFO:	[hmmsearch]	230 of 255 task(s) completed
+2023-04-05 11:35:04 INFO:	[hmmsearch]	255 of 255 task(s) completed
+2023-04-05 11:35:07 INFO:	Validating exons and removing overlapping matches
+2023-04-05 11:35:09 INFO:	0 candidate overlapping regions found
+2023-04-05 11:35:09 INFO:	13 exons in total
+2023-04-05 11:35:09 INFO:	Results:	C:1.6%[S:1.6%,D:0.0%],F:0.4%,M:98.0%,n:255	   
+
+2023-04-05 11:35:09 INFO:	Extracting missing and fragmented buscos from the file refseq_db.faa...
+2023-04-05 11:35:20 INFO:	Running 1 job(s) on metaeuk, starting at 04/05/2023 11:35:20
+2023-04-05 11:35:55 INFO:	[metaeuk]	1 of 1 task(s) completed
+2023-04-05 11:35:57 INFO:	***** Run HMMER on gene sequences *****
+2023-04-05 11:35:57 INFO:	Running 251 job(s) on hmmsearch, starting at 04/05/2023 11:35:57
+2023-04-05 11:35:59 INFO:	[hmmsearch]	26 of 251 task(s) completed
+2023-04-05 11:36:00 INFO:	[hmmsearch]	51 of 251 task(s) completed
+2023-04-05 11:36:00 INFO:	[hmmsearch]	76 of 251 task(s) completed
+2023-04-05 11:36:00 INFO:	[hmmsearch]	101 of 251 task(s) completed
+2023-04-05 11:36:00 INFO:	[hmmsearch]	126 of 251 task(s) completed
+2023-04-05 11:36:01 INFO:	[hmmsearch]	151 of 251 task(s) completed
+2023-04-05 11:36:01 INFO:	[hmmsearch]	176 of 251 task(s) completed
+2023-04-05 11:36:01 INFO:	[hmmsearch]	201 of 251 task(s) completed
+2023-04-05 11:36:01 INFO:	[hmmsearch]	226 of 251 task(s) completed
+2023-04-05 11:36:02 INFO:	[hmmsearch]	251 of 251 task(s) completed
+2023-04-05 11:36:05 INFO:	Validating exons and removing overlapping matches
+2023-04-05 11:36:07 INFO:	0 candidate overlapping regions found
+2023-04-05 11:36:07 INFO:	12 exons in total
+2023-04-05 11:36:07 INFO:	Results:	C:1.6%[S:1.6%,D:0.0%],F:0.4%,M:98.0%,n:255	   
+
+2023-04-05 11:36:07 INFO:	eukaryota_odb10 selected
+
+2023-04-05 11:36:07 INFO:	***** Searching tree for chosen lineage to find best taxonomic match *****
+
+2023-04-05 11:36:09 INFO:	Extract markers...
+2023-04-05 11:36:09 INFO:	Downloading file 'https://busco-data.ezlab.org/v5/data/placement_files/list_of_reference_markers.eukaryota_odb10.2019-12-16.txt.tar.gz'
+2023-04-05 11:36:09 INFO:	Decompressing file '/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/downloads/placement_files/list_of_reference_markers.eukaryota_odb10.2019-12-16.txt.tar.gz'
+2023-04-05 11:36:09 INFO:	Downloading file 'https://busco-data.ezlab.org/v5/data/placement_files/tree.eukaryota_odb10.2019-12-16.nwk.tar.gz'
+2023-04-05 11:36:10 INFO:	Decompressing file '/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/downloads/placement_files/tree.eukaryota_odb10.2019-12-16.nwk.tar.gz'
+2023-04-05 11:36:10 INFO:	Downloading file 'https://busco-data.ezlab.org/v5/data/placement_files/tree_metadata.eukaryota_odb10.2019-12-16.txt.tar.gz'
+2023-04-05 11:36:11 INFO:	Decompressing file '/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/downloads/placement_files/tree_metadata.eukaryota_odb10.2019-12-16.txt.tar.gz'
+2023-04-05 11:36:11 INFO:	Downloading file 'https://busco-data.ezlab.org/v5/data/placement_files/supermatrix.aln.eukaryota_odb10.2019-12-16.faa.tar.gz'
+2023-04-05 11:36:15 INFO:	Decompressing file '/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/downloads/placement_files/supermatrix.aln.eukaryota_odb10.2019-12-16.faa.tar.gz'
+2023-04-05 11:36:15 INFO:	Downloading file 'https://busco-data.ezlab.org/v5/data/placement_files/mapping_taxids-busco_dataset_name.eukaryota_odb10.2019-12-16.txt.tar.gz'
+2023-04-05 11:36:16 INFO:	Decompressing file '/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/downloads/placement_files/mapping_taxids-busco_dataset_name.eukaryota_odb10.2019-12-16.txt.tar.gz'
+2023-04-05 11:36:16 INFO:	Downloading file 'https://busco-data.ezlab.org/v5/data/placement_files/mapping_taxid-lineage.eukaryota_odb10.2019-12-16.txt.tar.gz'
+2023-04-05 11:36:17 INFO:	Decompressing file '/mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/downloads/placement_files/mapping_taxid-lineage.eukaryota_odb10.2019-12-16.txt.tar.gz'
+2023-04-05 11:36:17 INFO:	Place the markers on the reference tree...
+2023-04-05 11:36:17 INFO:	Running 1 job(s) on sepp, starting at 04/05/2023 11:36:17
+2023-04-05 11:38:05 INFO:	[sepp]	1 of 1 task(s) completed
+2023-04-05 11:38:05 INFO:	Not enough markers were placed on the tree (1). Root lineage eukaryota is kept
+2023-04-05 11:38:06 INFO:	
+
+	--------------------------------------------------
+	|Results from dataset eukaryota_odb10             |
+	--------------------------------------------------
+	|C:1.6%[S:1.6%,D:0.0%],F:0.4%,M:98.0%,n:255       |
+	|4	Complete BUSCOs (C)                       |
+	|4	Complete and single-copy BUSCOs (S)       |
+	|0	Complete and duplicated BUSCOs (D)        |
+	|1	Fragmented BUSCOs (F)                     |
+	|250	Missing BUSCOs (M)                        |
+	|255	Total BUSCO groups searched               |
+	--------------------------------------------------
+2023-04-05 11:38:06 INFO:	BUSCO analysis done. Total running time: 254 seconds
+2023-04-05 11:38:06 INFO:	Results written in /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/busco_results/test
+2023-04-05 11:38:06 INFO:	For assistance with interpreting the results, please consult the userguide: https://busco.ezlab.org/busco_userguide.html
+
+2023-04-05 11:38:06 INFO:	Visit this page https://gitlab.com/ezlab/busco#how-to-cite-busco to see how to cite BUSCO
+mem=0 RSS=2034072 elapsed=4:19.30 cpu.sys=126.05 .user=641.64

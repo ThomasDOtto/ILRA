@@ -1,0 +1,10 @@
+# Amount of telomere repeats left: 1
+# Amount of telomere repeats right: 0
+# Amount of telomere repeats: 1
+# Amount of telomere repeats at contigs with repeats at both ends: 1
+
+# Amount of contigs with telomere repeats left: 1
+# Amount of contigs with telomere repeats right: 0
+# Amount of contigs/potential chromosomes with telomere repeats at both ends: 0
+
+# Contigs/potential chromosomes with telomere repeats at both ends: (Length, bp)

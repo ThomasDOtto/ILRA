@@ -1,0 +1,20 @@
+stats for /mnt/beegfs/user/bin/ILRA/test_data/assembly_Pf_test.fasta
+sum = 742920, n = 4, ave = 185730.00, largest = 579465
+N50 = 579465, n = 1
+N60 = 579465, n = 1
+N70 = 579465, n = 1
+N80 = 75005, n = 2
+N90 = 50980, n = 3
+N100 = 37470, n = 4
+N_count = 0
+Gaps = 0
+stats for ../test.ILRA.fasta
+sum = 683296, n = 3, ave = 227765.33, largest = 642993
+N50 = 642993, n = 1
+N60 = 642993, n = 1
+N70 = 642993, n = 1
+N80 = 642993, n = 1
+N90 = 642993, n = 1
+N100 = 6054, n = 3
+N_count = 0
+Gaps = 0

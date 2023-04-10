@@ -1,0 +1,138 @@
+/mnt/beegfs/user/bin/miniconda3/envs/ILRA_env/bin/quast.py ../test.ILRA.fasta -r /mnt/beegfs/user/bin/ILRA/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -g /mnt/beegfs/user/bin/ILRA/test_data/PlasmoDB-50_Pfalciparum3D7.gff --threads 4 --labels test --pe1 /mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset_1.fastq.gz --pe2 /mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset_2.fastq.gz --pacbio /mnt/beegfs/user/bin/ILRA/test_data/corrected_reads_Pf_test_subset.fastq.gz --eukaryote
+
+Version: 5.2.0
+
+System information:
+  OS: Linux-3.10.0-1160.45.1.el7.x86_64-x86_64-with-glibc2.17 (linux_64)
+  Python version: 3.10.9
+  CPUs number: 64
+
+Started: 2023-04-05 10:50:46
+
+Logging to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast.log
+
+CWD: /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats
+Main parameters: 
+  MODE: default, threads: 4, eukaryotic: true, min contig length: 500, min alignment length: 65, \
+  min alignment IDY: 95.0, ambiguity: one, min local misassembly length: 200, min extensive misassembly length: 1000
+
+Reference:
+  /mnt/beegfs/user/bin/ILRA/test_data/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta ==> PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326
+
+Contigs:
+  Pre-processing...
+  ../test.ILRA.fasta ==> test
+
+2023-04-05 10:50:48
+Running Reads analyzer...
+  Logging to files /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.log and /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_stats.err...
+  Pre-processing reads...
+  Running BWA...
+  Pre-processing reads...
+  Running BWA for reference...
+  Done.
+  Sorting SAM-file...
+  Analysis is finished.
+  Done.
+  Sorting SAM-file for reference...
+  Analysis for reference is finished.
+  Creating total report...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/reads_report.txt, reads_report.tsv, and reads_report.tex
+  Calculating reads coverage...
+  Calculating physical coverage...
+  Looking for trivial deletions (long zero-covered fragments)...
+  Trivial deletions: 3374 found
+    Saving to: /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/trivial_deletions.bed
+  Searching structural variations with GRIDSS...
+    Saving to: /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/temp_output/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326_structural_variations.bed
+  Structural variations are in /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.bed
+  Coverage distribution along the reference genome is in /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/reads_stats/PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.cov
+Done.
+
+2023-04-05 11:32:33
+Running Basic statistics processor...
+  Reference genome:
+    PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta, length = 21282515, num fragments = 16, GC % = 18.70
+  Contig files: 
+    test
+  Calculating N50 and L50...
+    test, N50 = 642993, L50 = 1, auN = 606837.5, Total length = 683296, GC % = 20.27, # N's per 100 kbp =  0.00
+  Drawing Nx plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats/Nx_plot.pdf
+  Drawing NGx plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats/NGx_plot.pdf
+  Drawing cumulative plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats/cumulative_plot.pdf
+  Drawing GC content plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats/GC_content_plot.pdf
+  Drawing test GC content plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/basic_stats/test_GC_content_plot.pdf
+Done.
+
+2023-04-05 11:32:45
+Running Contig analyzer...
+  test
+  Logging to files /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/contigs_report_test.stdout and contigs_report_test.stderr...
+  Aligning contigs to the reference
+  Analysis is finished.
+  Creating total report...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/misassemblies_report.txt, misassemblies_report.tsv, and misassemblies_report.tex
+  Transposed version of total report...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/transposed_report_misassemblies.txt, transposed_report_misassemblies.tsv, and transposed_report_misassemblies.tex
+  Creating total report...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/unaligned_report.txt, unaligned_report.tsv, and unaligned_report.tex
+  Drawing misassemblies by types plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/misassemblies_plot.pdf
+  Drawing misassemblies FRCurve plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/contigs_reports/misassemblies_frcurve_plot.pdf
+Done.
+
+2023-04-05 11:32:52
+Running NA-NGA calculation...
+  test, Largest alignment = 477214, NA50 = 477214, LA50 = 1
+  Drawing cumulative plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/aligned_stats/cumulative_plot.pdf
+  Drawing NAx plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/aligned_stats/NAx_plot.pdf
+  Drawing NGAx plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/aligned_stats/NGAx_plot.pdf
+Done.
+
+2023-04-05 11:32:59
+Running Genome analyzer...
+  NOTICE: No file with operons were provided. Use the -O option if you want to specify it.
+  Loaded 40658 genomic features of type "ANY"
+  test
+  Analysis is finished.
+  Drawing genomic features cumulative plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/genome_stats/features_cumulative_plot.pdf
+  Drawing genomic features FRCurve plot...
+    saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/genome_stats/features_frcurve_plot.pdf
+  Skipping drawing # complete genomic features histogram... (less than 2 columns histogram makes no sense)
+  Skipping drawing Genome fraction, % histogram... (less than 2 columns histogram makes no sense)
+Done.
+
+NOTICE: Genes are not predicted by default. Use --gene-finding or --glimmer option to enable it.
+
+2023-04-05 11:33:08
+Creating large visual summaries...
+This may take a while: press Ctrl-C to skip this step..
+  1 of 2: Creating PDF with all tables and plots...
+  2 of 2: Creating Icarus viewers...
+Done
+
+2023-04-05 11:33:47
+RESULTS:
+  Text versions of total report are saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/report.txt, report.tsv, and report.tex
+  Text versions of transposed total report are saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/transposed_report.txt, transposed_report.tsv, and transposed_report.tex
+  HTML version (interactive tables and plots) is saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/report.html
+  PDF version (tables and plots) is saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/report.pdf
+  Icarus (contig browser) is saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/icarus.html
+  Log is saved to /mnt/beegfs/user/bin/ILRA/test_data/out_ILRA_test/7.Stats/quast_results/results_2023_04_05_10_50_46/quast.log
+
+Finished: 2023-04-05 11:33:47
+Elapsed time: 0:43:01.423380
+NOTICEs: 2; WARNINGs: 0; non-fatal ERRORs: 0
+
+Thank you for using QUAST!
+mem=0 RSS=39947304 elapsed=43:02.64 cpu.sys=252.36 .user=33018.08

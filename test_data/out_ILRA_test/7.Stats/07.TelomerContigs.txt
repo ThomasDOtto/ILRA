@@ -1,0 +1,4 @@
+### Sequences with the left telomere sequence CCCTAAACCCTAAACCCTAAA: (within a 1Kb end region, extracted in 07.Telomeres_seq_1kb.txt)
+>test_with_ref_Pf3D7_01_v3_642993
+
+### Sequences with the right telomere sequence TTTAGGGTTTAGGGTTTAGGG: (within a 1Kb end region, extracted in 07.Telomeres_seq_1kb.txt)

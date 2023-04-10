@@ -1,0 +1,14 @@
+sample_name: ../test.ILRA.fasta
+
+read_name_1: /mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset_1.fastq.gz
+
+read_name_2: /mnt/beegfs/user/bin/ILRA/test_data/Illumina_short_reads_Pf_test_subset_2.fastq.gz
+
+read_length: 250
+
+reads: 13785
+
+genome_size: 683296
+
+coverage: 10
+

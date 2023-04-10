@@ -1,0 +1,18 @@
+SeqName: test
+	Contig: 3
+	Size: 683296
+	GC%: 20.27
+
+Individual contigs:
+SeqName: 
+	Contig: test_with_ref_Pf3D7_01_v3_642993
+	Size: 642993
+	GC%: 20.49
+SeqName: 
+	Contig: test_with_ref_Pf3D7_API_v3_34249
+	Size: 34249
+	GC%: 14.21
+SeqName: 
+	Contig: test_with_ref_Pf_M76611_6054
+	Size: 6054
+	GC%: 31.47
