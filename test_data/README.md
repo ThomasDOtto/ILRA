@@ -14,11 +14,12 @@ This was a run in the default 'light mode'. Once several external databases are 
 
 Please go through the output file 'out_ILRA_test_log.txt' and the folder 'out_ILRA_test' to get the details on the pipeline processing steps and the final output. Here, we provide the following overview:
 
-0. Excluded.contigs.fofn
+0. Root directory
+   - Excluded.contigs.fofn
    Information on the contigs that have been merged or discarded during execution
-0. all_output_files_log_out.txt
+   - all_output_files_log_out.txt
    List of all the files contained in the directories and subfolders
-0. test.ILRA.fasta
+   - test.ILRA.fasta
    ILRA-corrected sequences
 1. Filtering
    - First nested list item
