@@ -51,6 +51,7 @@ for argument in $options; do
 		-A | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
 		-B | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
 		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
+		-Q | -BUSCO database for quality assessment # The name of the BUSCO database to be used in the quality assessment step. Automatic lineage selected by default if user does not input one of the datasets in 'busco --list-datasets' here (e.g. bacteria_odb10)
 		-M | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 200g=200GB used)
 		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)" && exit 1;;
@@ -86,6 +87,7 @@ for argument in $options; do
 		-P*) parts_icorn2_split=${arguments[index]} ;;
 		-A*) abacas2_split=${arguments[index]} ;;
 		-q*) quality_step=${arguments[index]} ;;
+		-Q*) quality_step_busco_db=${arguments[index]} ;;
 	esac
 done
 export name; export telomere_seq_1; export telomere_seq_2
@@ -1235,15 +1237,21 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 	echo -e "Please be aware that ILRA is automatically checking if the provided NCBI taxon ID is eukaryotic or not to use the automatic lineage selection in BUSCO. This may not work and you would need to run manually BUSCO with the final corrected assembly, providing as the argument '--lineage_dataset' the BUSCO dataset closest to your species in 'https://busco-data.ezlab.org/v4/data/lineages/', which would be automatically downloaded. If the taxon ID is not known or present in the NCBI taxonomy databases, the automatic mode will be executed"
 	echo -e "Current NCBI taxon ID: $taxon_name"
 	echo -e "Check out the file busco_log_out.txt and the BUSCO reports within the folder 7.Stats/busco_results"
-	if [ "$top_level"=="E" ]; then
-		echo -e "Running BUSCO for eukaryotes in the mode '--auto-lineage-euk'"
-		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
-	elif [ "$top_level"=="P" ]; then
-		echo -e "Running BUSCO for prokaryotes in the mode '--auto-lineage-prok'"
-		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+	if [ ! -z "$quality_step_busco_db" ]; then
+		echo -e "Current BUSCO db: $quality_step_busco_db"
+		echo -e "Running BUSCO with --lineage_dataset $quality_step_busco_db"
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --lineage_dataset $quality_step_busco_db --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	else
-		echo -e "Running BUSCO in the automatic mode, '--auto-lineage'"
-		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		if [ "$top_level"=="E" ]; then
+			echo -e "Running BUSCO for eukaryotes in the mode '--auto-lineage-euk'"
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		elif [ "$top_level"=="P" ]; then
+			echo -e "Running BUSCO for prokaryotes in the mode '--auto-lineage-prok'"
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		else
+			echo -e "Running BUSCO in the automatic mode, '--auto-lineage'"
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		fi
 	fi
 	rm -rf $dir/7.Stats/busco_results/downloads
 	cat $(find . -name busco.log) | grep "|" | grep -v "#"
