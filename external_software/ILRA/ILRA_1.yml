@@ -67,7 +67,7 @@ dependencies:
   - harfbuzz=6.0.0=h8e241bc_0
   - hmmer=3.3.2=h87f3376_2
   - htsbox=r315=h7132678_2
-  - htslib=1.16=h6bc39ce_0
+  - htslib=1.17=h6bc39ce_0
   - icu=70.1=h27087fc_0
   - idna=3.4=pyhd8ed1ab_0
   - jpeg=9e=h0b41bf4_3
@@ -200,7 +200,7 @@ dependencies:
   - ruamel.yaml=0.17.21=py311hd4cff14_2
   - ruamel.yaml.clib=0.2.7=py311h2582759_1
   - samblaster=0.1.20=h9f5acd7_2
-  - samtools=1.16.1=h6899075_1
+  - samtools=1.17=h00cdaf9_0
   - sed=4.8=he412f7d_0
   - seqkit=2.3.1=h9ee0642_0
   - seqtk=r82=0
