@@ -60,6 +60,7 @@ mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_1.yml
 mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_2.yml
 mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_3.yml
 mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_4.yml
+$conda_envs_path/ILRA_env_busco/bin/Rscript -e 'BiocManager::install("cogeqc")' # A package not in conda as of yet
 rm -rf $(find $(which conda | sed 's,/bin/conda,,g') -type d -name pkgs) # Remove temp files
 
 export PATH=$conda_envs_path/ILRA_env/bin/:$PATH
@@ -72,6 +73,8 @@ sed -i "s,'nucmer': '3.1','nucmer': '0.0',g" $(find $conda_envs_path/ILRA_env -n
 sed -i 's,collections.Hashable,collections.abc.Hashable,g' $(find $conda_envs_path/ILRA_env -name constructor.py | grep spades | grep pyyaml3)
 ## Fix busco so it can be used from the main environment (but it uses the python version in the subenvironment)
 sed -i "s,/usr/bin/env python3,$conda_envs_path/ILRA_env_busco/bin/python3,g" $conda_envs_path/ILRA_env_busco/bin/busco
+## Fix the ILRA script to perform busco plots, so it works with the approppriate R version:
+sed -i "s,/usr/bin/env Rscript,$conda_envs_path/ILRA_env_busco/bin/Rscript,g" $(dirname $EXTERNAL_SOFTWARE_DIR)/bin/busco_cogeqc_plots.R
 ## Fix and improve kraken2 2.1.2 within conda (i.e. fix download for database building and improve masking with parallel):
 # https://github.com/DerrickWood/kraken2/issues/518, you just have to manually replace 'ftp' by 'https' in the line 46 of the file 'rsync_from_ncbi.pl'
 echo -e "\n\n\nI'm fixing some issues with kraken2...(see the content and comments within the script)\n\n\n"
