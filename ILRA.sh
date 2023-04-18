@@ -1241,19 +1241,24 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 		echo -e "Current BUSCO db: $quality_step_busco_db"
 		echo -e "Running BUSCO with --lineage_dataset $quality_step_busco_db"
 		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --lineage_dataset $quality_step_busco_db --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i $assembly -o $(echo $(basename $assembly) | sed 's,.fa.*,,g')"_preILRA" -m genome -f -c $cores --lineage_dataset $quality_step_busco_db --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 	else
 		if [ "$top_level"=="E" ]; then
 			echo -e "Running BUSCO for eukaryotes in the mode '--auto-lineage-euk'"
 			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i $assembly -o $(echo $(basename $assembly) | sed 's,.fa.*,,g')"_preILRA" -m genome -f -c $cores --auto-lineage-euk --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 		elif [ "$top_level"=="P" ]; then
 			echo -e "Running BUSCO for prokaryotes in the mode '--auto-lineage-prok'"
 			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i $assembly -o $(echo $(basename $assembly) | sed 's,.fa.*,,g')"_preILRA" -m genome -f -c $cores --auto-lineage-prok --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 		else
 			echo -e "Running BUSCO in the automatic mode, '--auto-lineage'"
 			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i ../$name.ILRA.fasta -o $name -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" busco -i $assembly -o $(echo $(basename $assembly) | sed 's,.fa.*,,g')"_preILRA" -m genome -f -c $cores --auto-lineage --tar --out_path $dir/7.Stats/busco_results --download_path $dir/7.Stats/busco_results/downloads &> busco_log_out.txt
 		fi
 	fi
 	rm -rf $dir/7.Stats/busco_results/downloads
+	busco_cogeqc_plots.R $dir/7.Stats/busco_results
 	cat $(find . -name busco.log) | grep "|" | grep -v "#"
 
 	# Visualisation of synteny and structural rearrangements against reference (plotsr):
