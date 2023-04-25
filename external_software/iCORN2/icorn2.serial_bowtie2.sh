@@ -297,13 +297,29 @@ for ((i=$start;$i<=$end;i++)); do
 # Collecting results:
 		echo "Current corrections:"; perl $ICORN2_HOME/icorn2.collectResults.pl .
 	else
-		echo -e "\nSome sequences were corrected with Pilon instead of snp-o-matic, global summary of the corrections have not been provided, please check manually...\n"
+		echo -e "\nSome sequences were corrected with Pilon instead of snp-o-matic, global summary of the corrections are:"
+		for f in $(find $PWD/ICORN2_$i -name "*General.stats" | grep -v iter); do awk '/SNP|INS|DEL|HETERO|Rej.DEL|Rej.INS|Rej.SNP/ {category=$1; next} {sum[category]+=$2} END {for (i in sum) {print i, sum[i]}}' $f; done | awk '{sum[$1] += $2} END {for (i in sum) print "Corrected SNP-o-matic - " i, sum[i]}' | sort -k6
+		input=$(find $PWD/ICORN2_$i -name "*_pilon_log_out.txt" | xargs egrep "Corrected" | sed 's,.*:,,g')
+		snps=$(echo "$input" | awk '{snps+=$2} END{print snps}' FS='[ ;]+' RS='\n')
+		ambiguous_bases=$(echo "$input" | awk '{amb+=$4} END{print amb}' FS='[ ;]+' RS='\n')
+		small_insertions=$(echo "$input" | awk '{ins+=$8} END{print ins}' FS='[ ;]+' RS='\n')
+		small_deletions=$(echo "$input" | awk '{del+=$14} END{print del}' FS='[ ;]+' RS='\n')
+		echo -e "Corrected Pilon - SNPs: $snps\nCorrected Pilon - Ambiguous bases: $ambiguous_bases\nCorrected Pilon - Small insertions: $small_insertions\nCorrected Pilon - Small deletions: $small_deletions\n"
 	fi
 	time2=`date +%s`
 	echo -e "\nIteration $i DONE"
 	echo -e "Elapsed time (secs): $((time2-time1))"; echo -e "Elapsed time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 	rm -rf tmp_dir/*
 done
+echo -e "\nDONE. Global submmary of corrections:"
+for f in $(find $PWD -name "*General.stats" | grep -v iter); do awk '/SNP|INS|DEL|HETERO|Rej.DEL|Rej.INS|Rej.SNP/ {category=$1; next} {sum[category]+=$2} END {for (i in sum) {print i, sum[i]}}' $f; done | awk '{sum[$1] += $2} END {for (i in sum) print "Corrected SNP-o-matic - " i, sum[i]}' | sort -k6
+input=$(find $PWD -name "*_pilon_log_out.txt" | xargs egrep "Corrected" | sed 's,.*:,,g')
+snps=$(echo "$input" | awk '{snps+=$2} END{print snps}' FS='[ ;]+' RS='\n')
+ambiguous_bases=$(echo "$input" | awk '{amb+=$4} END{print amb}' FS='[ ;]+' RS='\n')
+small_insertions=$(echo "$input" | awk '{ins+=$8} END{print ins}' FS='[ ;]+' RS='\n')
+small_deletions=$(echo "$input" | awk '{del+=$14} END{print del}' FS='[ ;]+' RS='\n')
+echo -e "Corrected Pilon - SNPs: $snps\nCorrected Pilon - Ambiguous bases: $ambiguous_bases\nCorrected Pilon - Small insertions: $small_insertions\nCorrected Pilon - Small deletions: $small_deletions\n"
+		
 rm "$readRoot_uncompressed"_1.fastq "$readRoot_uncompressed"_2.fastq; rm -rf tmp_dir
 
 echo -e "\n\n\nTo look in into a correction, open the file ending with .1, .2, .3... in artemis and load the gff file onto it..."
