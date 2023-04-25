@@ -609,7 +609,7 @@ if [[ $debug == "all" || $debug == "step4" || $debug == "step4i" ]]; then
 			for i in $(find $dir -type d -name "ICORN2_*"); do cd $i && tar cf out_all.tar *.out && rm -rf *.out; done; cd $dir/4.iCORN2 # Cleaning
 			if [ "$(find . -name "larger_contigs2.txt" | wc -l)" -gt 0 ]; then
 				echo -e "\nPlease note iCORN2 is likely going to fail if any of the sequences being processed is larger than or around 60Mb... The program tried to handle this and divide the input sequences accordingly but failed...\n"
-				echo -e "\n\nThe size of at least one individual contig or chromosome within the input sequence is ~60Mb... iCORN2 used Pilon to correct some sequences. If allowed to continue, there would be segmentation errors later on in SNP-o-matic... Please double check iCORN2 log\n\n"
+				echo -e "\n\nThe size of at least one individual contig or chromosome within the input sequence is ~60Mb... iCORN2 used Pilon to correct some sequences. If allowed to continue, there would be segmentation errors later on in SNP-o-matic\n\n"
 			fi
 	# Cleaned assembly:
 			ln -sf ICORN2.03b.assembly.fa.[$(expr $number_iterations_icorn + 1)] 04.assembly.fa
@@ -623,15 +623,16 @@ if [[ $debug == "all" || $debug == "step4" || $debug == "step4i" ]]; then
 				echo -e "\nA preview of the correction by iCORN2 is:"
 				cat ../7.Stats/07.iCORN2.final_corrections.results.txt
 			else
-				echo -e "\nSome sequences were corrected with Pilon instead of snp-o-matic, global summary of the corrections have not been provided, please check manually...\n"
+				echo -e "\nSome sequences were corrected by iCORN2 with Pilon instead of SNP-o-matic, please check manually if required, but global summary of the corrections is:"
+				egrep "^Corrected SNP-o-matic|^Corrected Pilon" icorn2.serial_bowtie2.sh_log_out.txt
 			fi
+			# Cleaning:
 			for ((i=1;$i<=$number_iterations_icorn;i++)); do
 				sed -s -e $'$a\\\n' $(ls | egrep .$i.o$) > log.$i.out
 				rm -rf $(ls | egrep .$i.o$) tmp_dir
 				cd $dir/4.iCORN2/ICORN2_$i; ls -l &> list_files_prev_cleaning.txt; rm *.bam *.bai *.fa *.fai *.dict 
 				cd $dir/4.iCORN2/
-			done
-			# Cleaning:
+			done			
 		else
 	# Bypass if Illumina reads not provided
 			echo -e "Illumina reads NOT PROVIDED and iCORN2 is not executed. STEP 4 for correction using short reads is skipped\n"
