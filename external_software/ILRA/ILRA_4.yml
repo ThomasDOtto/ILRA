@@ -11,8 +11,8 @@ dependencies:
   - brotlipy=0.7.0=py38h0a891b7_1005
   - bzip2=1.0.8=h7f98852_4
   - c-ares=1.18.1=h7f98852_0
-  - ca-certificates=2023.01.10=h06a4308_0
-  - certifi=2022.12.7=py38h06a4308_0
+  - ca-certificates=2023.5.7=hbcca054_0
+  - certifi=2023.5.7=pyhd8ed1ab_0
   - cffi=1.15.1=py38h4a40e3a_3
   - charset-normalizer=2.1.1=pyhd8ed1ab_0
   - coin-or-cbc=2.10.8=h3786ebc_0
@@ -54,7 +54,7 @@ dependencies:
   - mpfr=4.2.0=hb012696_0
   - ncurses=6.4=h6a678d5_0
   - numpy=1.24.2=py38h10c12cc_0
-  - openssl=1.1.1t=h7f8727e_0
+  - openssl=1.1.1u=hd590300_0
   - packaging=23.0=pyhd8ed1ab_0
   - pandas=1.5.3=py38hdc8b05c_0
   - pip=23.0.1=py38h06a4308_0
@@ -80,6 +80,7 @@ dependencies:
   - sqlite=3.41.1=h5eee18b_0
   - suitesparse=5.10.1=h9e50725_1
   - syri=1.6.3=py38h8ded8fe_0
+  - time=1.8=h516909a_0
   - tbb=2021.8.0=hf52228f_0
   - texttable=1.6.7=pyhd8ed1ab_0
   - tk=8.6.12=h1ccaba5_0
