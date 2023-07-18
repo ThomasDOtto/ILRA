@@ -9,6 +9,7 @@ elif [[ $debug == "all" || $debug == "step2" ]]; then
 	type parallel >/dev/null 2>&1 || { echo >&2 "I require GNU's parallel but it's not installed or available in the PATH. Aborting..."; exit 1; }
 	type samtools >/dev/null 2>&1 || { echo >&2 "I require samtools but it's not installed or available in the PATH. Aborting..."; exit 1; }
 	type smalt >/dev/null 2>&1 || { echo >&2 "I require smalt but it's not installed or available in the PATH. Aborting..."; exit 1; }
+ 	type time >/dev/null 2>&1 || { echo >&2 "I require time but it's not installed or available in the PATH. Aborting..."; exit 1; }
 elif [[ $debug == "all" || $debug == "step3" ]]; then
 	type abacas2.nonparallel.sh >/dev/null 2>&1 || { echo >&2 "I require ABACAS2 and its dependencies but something is not installed or available in the PATH. Aborting..."; exit 1; }
 	type fastaq >/dev/null 2>&1 || { echo >&2 "I require Fastaq but it's not installed or available in the PATH. Aborting..."; exit 1; }
