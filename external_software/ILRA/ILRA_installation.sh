@@ -106,6 +106,7 @@ ln -sf $conda_envs_path/ILRA_env_busco/bin/weave weave
 ln -sf $conda_envs_path/ILRA_env_quast/bin/quast.py quast.py
 ln -sf $conda_envs_path/ILRA_env_quast/bin/convert convert
 ln -sf $conda_envs_path/ILRA_env_syri/bin/syri syri
+ln -sf $conda_envs_path/ILRA_env_syri/bin/time time
 ## Required to make previous versions of busco work:
 # $EXTERNAL_SOFTWARE_DIR/Miniconda3/envs/ILRA_env/envs/busco/bin/pip install numpy==1.17.3
 # Small manual fix to the shebang in BUSCO so it uses the appropriate python and numpy versions
