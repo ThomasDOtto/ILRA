@@ -185,7 +185,7 @@ fi
 if [ -f $illuminaReads\_1.fastq.gz ]; then
 	echo "Good, ILRA is detecting the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz..."
 else
-	if [ $perform_correction == "yes" ]; then
+	if [ "$perform_correction" == "yes" ]; then
 		echo -e "PLEASE be aware of the naming required for the Illumina reads: _1.fastq.gz and _2.fastq.gz"
 		echo -e "ILRA is not detecting the Illumina reads files as you provided them. If you want to use Illumina reads for polishing, please check naming, paths and that the files do exist. Otherwise rerun the pipeline with the argument "-C no" if you don't want to use Illumina reads or perform correction. ILRA will skip some steps accordingly..."
 		exit 1
