@@ -15,7 +15,7 @@ This should work systems-wide if you already have miniconda3 installed, and also
 
 If not executing the 'light' mode that skips the decontamination step in ILRA (by default, or argument '-m light'), many databases will be required and must be also installed. ILRA is going to try and do it automatically, and instructions are going to be provided after a first execution.
 
-After installation and prior execution, please manually export the PATH required after executing:
+After installation and prior any execution, please make sure that you have not activated any other environment, and manually export the PATH required by executing:
 ```
 source ILRA/external_software/ILRA/path_to_source
 ```
