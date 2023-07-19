@@ -1,6 +1,6 @@
 ## Quick start / Minimal example
 ```
-source ILRA/external_software/ILRA/path_to_source # To get the PATH that must be exported if you have followed the conda-based solution for installation
+source ILRA/external_software/ILRA/path_to_source # To get the PATH that must be exported if you have followed the conda-based solution for installation, please make sure that no other conda environment is activated beforehand
 cd ILRA/test_data
 # 'Light' mode skipping decontamination:
 ILRA.sh -a assembly_Pf_test.fasta -o out_ILRA_test -c corrected_reads_Pf_test_subset.fastq.gz -n test -r PlasmoDB-47_Pfalciparum3D7_Genome_core_PMID_29862326.fasta -I Illumina_short_reads_Pf_test_subset -t 4 -g PlasmoDB-50_Pfalciparum3D7.gff -L pb -M 32g 2>&1 | tee -a out_ILRA_test_log.txt
