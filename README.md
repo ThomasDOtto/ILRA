@@ -11,7 +11,7 @@ git clone https://github.com/ThomasDOtto/ILRA
 cd ILRA/external_software/ILRA/
 bash ILRA_installation.sh 2>&1 | tee ILRA_installation.sh.log # Check log to ensure successful installation of dependencies
 ```
-This should work systems-wide if you already have miniconda3 installed, and also install miniconda3 in the same directory if not available. The versions of the tools installed by conda are frozen ('.yml' files), so please do not install other versions to avoid conflicts. You may need to manually change installed versions or please open an [issue](https://github.com/ThomasDOtto/ILRA/issues) for any installation-related aspect. The full instalation above, including 'git clone' of the repository, took ~40 minutes.
+This should work systems-wide if you already have miniconda3 installed, and also install miniconda3 in the same directory if not available. Please make sure that your PATH is as clean as possible and that you have not activated other conda environment before installation (i.e. you are in the 'base' environment or without that conda feature activated). The versions of the tools installed by conda are frozen ('.yml' files), so please do not install other versions to avoid conflicts. You may need to manually change installed versions or please open an [issue](https://github.com/ThomasDOtto/ILRA/issues) for any installation-related aspect. The full instalation above, including 'git clone' of the repository, took ~40 minutes.
 
 If not executing the 'light' mode that skips the decontamination step in ILRA (by default, or argument '-m light'), many databases will be required and must be also installed. ILRA is going to try and do it automatically, and instructions are going to be provided after a first execution.
 
