@@ -126,7 +126,7 @@ cd jvarkit && ./gradlew -q samfixcigar && mv dist/samfixcigar.jar ../samfixcigar
 
 #### Install bbtools:
 echo -e "\n\n\nI'm installing bbtools...\n\n\n"
-wget https://downloads.sourceforge.net/project/bbmap/BBMap_39.01.tar.gz; tar -xzf BBMap_39.01.tar.gz && rm BBMap_39.01.tar.gz
+wget -q https://downloads.sourceforge.net/project/bbmap/BBMap_39.01.tar.gz; tar -xzf BBMap_39.01.tar.gz && rm BBMap_39.01.tar.gz
 ln -sf $(find bbmap/ -name "*.sh") .
 
 #### Install assembly-stats graphical:
@@ -167,23 +167,22 @@ ln -sf $(which picard) picard
 ## Getting the outdated java version required for iCORN2:
 echo -e "I'm installing iCORN2...Getting JAVA v1.7 required by iCORN2's SNP caller"
 wget -q http://mirrors.eflycloud.com/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz && tar -xzf jdk-7u80-linux-x64.tar.gz && rm jdk-7u80-linux-x64.tar.gz
-cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin && chmod 775 *
 #$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin/java -version
 if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin/java ]]; then
   echo "Download/Installation of java failed, please check manually the script and logs..."
   exit 1
 fi
+cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin && chmod 775 *
 ## Getting the outdated java version required for GATK
 echo -e "I'm installing iCORN2...Getting JAVA v1.8 required by GATK v4. This one must be in the PATH when executing iCORN2"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
 wget -q https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz && tar -xzf OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz && rm OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz
-cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin && chmod 775 *
 #$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java -version
 if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java ]]; then
   echo "Download/Installation of java failed, please check manually the script and logs..."
   exit 1
 fi
-
+cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin && chmod 775 *
 
 echo -e "\n\n\nALL DONE. You must make sure that the directory $conda_envs_path/ILRA_env/bin/ is in the PATH before ILRA execution\n\n\n"
 
