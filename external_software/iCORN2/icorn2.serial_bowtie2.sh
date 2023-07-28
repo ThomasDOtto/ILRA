@@ -97,7 +97,12 @@ for ((i=$start;$i<=$end;i++)); do
 	echo -e "\nCalling the mapper...\n"
 	echo -e "\n\n\n#### ITERATION ++++ $i" &>> icorn2.mapper_log_out.txt	
 	$ICORN2_HOME/icorn2.mapper.sh ICORN2.$refRoot.$i 13 3 $readRoot_uncompressed ICORN2_$i 1200 $cores &>> icorn2.mapper_log_out.txt
-	echo -e "\nMapper DONE\n"
+	if [ "$return_markdup" != "0" ] ; then
+		echo -e "\nSorry, icorn2.mapper.sh failed... Please check logs and try again\n"
+		exit 1;
+	else
+ 		echo -e "\nMapper DONE\n"
+   	fi
 ### Call SNP caller and correction in splitted sequences:
 	cd ICORN2_$i
 	ln -sf ../ICORN2.$refRoot.$i ref.fa
