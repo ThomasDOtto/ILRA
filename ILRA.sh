@@ -45,14 +45,14 @@ for argument in $options; do
 		-D | -databases # Folder for storing the databases for the decontamination step (by default, 'databases' under ILRA main folder)
 		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('yes' / 'no' by default)
 		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
-		-b | -block_size # Block size for parallel processing (by default, 10)
+		-b | -block_size # Block size for parallel processing (by default, 5)
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
 		-A | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
 		-B | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
 		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
 		-Q | -BUSCO database for quality assessment # The name of the BUSCO database to be used in the quality assessment step. Automatic lineage selected by default if user does not input one of the datasets in 'busco --list-datasets' here (e.g. bacteria_odb10)
-		-M | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 200g=200GB used)
+		-M | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 240g=240GB used)
 		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)" && exit 1;;
 		-a*) assembly=${arguments[index]} ;;
@@ -108,10 +108,10 @@ if [ -z "$cores" ]; then
 fi
 
 if [ -z "$java_memory" ]; then
-	java_memory=200g
+	java_memory=240g
 	echo "Number of threads: "$cores
 fi
-export _JAVA_OPTIONS="-Xms10g -Xmx$java_memory"
+export _JAVA_OPTIONS="-Xms5g -Xmx$java_memory"
 
 if [ -z "$low_mem" ]; then
 	low_mem="no"
@@ -162,7 +162,7 @@ elif [ $contigs_illumina_filter == "no" ]; then
 fi
 
 if [ -z "$blocks_size" ]; then
-	blocks_size=10
+	blocks_size=5
 fi
 
 if [ -z "$abacas2_split" ]; then
