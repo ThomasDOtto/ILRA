@@ -49,8 +49,9 @@ if [ $low_mem_mode == "yes" ]; then
 elif [ $low_mem_mode == "no" ]; then
 	$ICORN2_HOME/gatk MarkDuplicatesSpark -I $resultname/out.bam -O $resultname/out.sorted.markdup.bam -VS SILENT -OBI true --create-output-bam-splitting-index false --tmp-dir tmp_dir --spark-master local[$cores] &> $resultname/MarkDuplicatesSpark_log.out.txt
 fi
-return=$?
-if [ "$return" != "0" ] ; then
+return_markdup=$?
+export return_markdup
+if [ "$return_markdup" != "0" ] ; then
 	echo -e "\nSorry, MarkDuplicatesSpark failed... Maybe due to excessive memory required? (consider using less cores, setting up Xmx in _JAVA_OPTIONS variable?). Maybe due to excessive open files (see ulimit -a)?. Maybe due to incorrect JAVA version (OpenJDK v8 is strictly required by GATK, and has to be in the PATH, double check the PATH)? Please check the log MarkDuplicatesSpark_log.out.txt to find more information...\n"
 	exit 1;
 else
