@@ -20,7 +20,7 @@ for argument in $options; do
 	index=`expr $index + 1`
 # Gather the parameters
 	case $argument in
-		-h*) echo "ILRA v1.1.0. usage: ILRA.sh [options]
+		-h*) echo "ILRA v1.2.0. usage: ILRA.sh [options]
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format, can be gzipped)
 		-f | -filter_contig_size # Size threshold to filter the contigs (bp)
@@ -456,7 +456,7 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/1.Filtering; cd $dir/1.Filtering; rm -rf *
 	echo -e "### Excluded contigs based on length threshold of $contigs_threshold_size: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
-	ILRA.removesmalls.pl $contigs_threshold_size $assembly | sed 's/|/_/g' | ILRA.fasta2singleLine.pl - | awk -F ' ' '{ if ($0 ~ /^>/) { print $1;} else { print $0}}' | sed '/[[:punct:]]*/{s/[^[:alnum:][:space:]>_]/_/g}' > 01.assembly.fa
+	ILRA.fasta2singleLine.pl $assembly | ILRA.removesmalls.pl $contigs_threshold_size - | sed 's/|/_/g' | ILRA.fasta2singleLine.pl - | awk -F ' ' '{ if ($0 ~ /^>/) { print $1;} else { print $0}}' | sed '/[[:punct:]]*/{s/[^[:alnum:][:space:]>_]/_/g}' > 01.assembly.fa
 	formatdb -p F -i $dir/1.Filtering/01.assembly.fa
 	echo "Before this step:"; assembly-stats $assembly | head -n 2
 	echo -e "\nAfter this step:"; assembly-stats 01.assembly.fa | head -n 2
