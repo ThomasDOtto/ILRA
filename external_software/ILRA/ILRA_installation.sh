@@ -120,8 +120,9 @@ ln -sf $conda_envs_path/ILRA_env_syri/bin/time time
 # cd $(dirname $(find $EXTERNAL_SOFTWARE_DIR -name reads_analyzer.py | grep /envs/quast/)) && rm reads_analyzer.py && wget "https://raw.githubusercontent.com/ablab/quast/master/quast_libs/reads_analyzer.py"
 
 #### Install jvarkit:
-echo -e "\n\n\nI'm installing jvarkit...\n\n\n"
-git clone -q "https://github.com/lindenb/jvarkit.git"; JAVA_HOME=$conda_envs_path/ILRA_env
+echo -e "\n\n\nI'm installing jvarkit v2021.10.13 to match java in ILRA_env...\n\n\n"
+wget -q https://github.com/lindenb/jvarkit/archive/refs/tags/2021.10.13.tar.gz; tar xzf 2021.10.13.tar.gz; rm 2021.10.13.tar.gz; mv jvarkit-2021.10.13/ jvarkit
+JAVA_HOME=$conda_envs_path/ILRA_env
 cd jvarkit && ./gradlew -q samfixcigar && mv dist/samfixcigar.jar ../samfixcigar.jar
 
 #### Install bbtools:
