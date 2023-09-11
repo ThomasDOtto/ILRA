@@ -458,7 +458,8 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	echo -e "### Excluded contigs based on length threshold of $contigs_threshold_size: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	ILRA.fasta2singleLine.pl $assembly | ILRA.removesmalls.pl $contigs_threshold_size - | sed 's/|/_/g' | ILRA.fasta2singleLine.pl - | awk -F ' ' '{ if ($0 ~ /^>/) { print $1;} else { print $0}}' | sed '/[[:punct:]]*/{s/[^[:alnum:][:space:]>_]/_/g}' > 01.assembly.fa
 	formatdb -p F -i $dir/1.Filtering/01.assembly.fa
-	echo "Before this step:"; assembly-stats $assembly | head -n 2
+	echo -e "\nPlease check the file 'Contigs_length_stats.txt' to assess if the chosen length threshold is the most appropriate\n"
+ 	echo "Before this step:"; assembly-stats $assembly | head -n 2
 	echo -e "\nAfter this step:"; assembly-stats 01.assembly.fa | head -n 2
 	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)"
 	time2=`date +%s`; echo -e "STEP 1 time (secs): $((time2-time1))"; echo -e "STEP 1 time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
@@ -1277,7 +1278,7 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" meryl count k=19 threads=$cores output merylDB assembly_ILRA_reduced_comp_ref.fasta &> meryl_count_log_out.txt
 		meryl print greater-than distinct=0.9998 merylDB > repetitive_k19.txt 2> meryl_print_log_out.txt
 		winnowmap -W repetitive_k19.txt -ax asm5 -t $cores ref_reduced_comp_assembly.fasta assembly_ILRA_reduced_comp_ref.fasta 2> winnowmap_log_out.txt | samtools view -@ $cores -h -F 260 -F 2048 -o plotsr.sam
-		javarkit_samfixcigar=$(for path in $(echo ${PATH//:/ } | cut -d" " -f1,2,3,4,5); do find $path -name samfixcigar.jar; done | head -1) # Look for the jar file in the first 5 folders in $PATH
+		javarkit_samfixcigar=$(for path in $(echo ${PATH//:/ } | cut -d" " -f1,2,3,4,5); do find $path -name samfixcigar.jar; done | head -1) # Look for the jar file in the first 5 folders in $PATH (which if installed with conda will capture ILRA_env/bin)
 		$(dirname $javarkit_samfixcigar)/java -jar $javarkit_samfixcigar -o plotsr_fix.sam -R ref_reduced_comp_assembly.fasta plotsr.sam # Updated java version and the precise pathway to the jar are required
 		# Get structural rearrangements (syri) and plotsr
 		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" syri -c plotsr_fix.sam -r ref_reduced_comp_assembly.fasta -q assembly_ILRA_reduced_comp_ref.fasta -F B --nc $cores --seed 1 --dir . --prefix plotsr_ &> syri_log_out.txt # syri fails if there are M in the bam cigar string, hence the reformat above
