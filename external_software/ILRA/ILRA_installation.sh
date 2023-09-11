@@ -77,7 +77,7 @@ sed -i "s,/usr/bin/env python3,$conda_envs_path/ILRA_env_busco/bin/python3,g" $c
 sed -i "s,/usr/bin/env Rscript,$conda_envs_path/ILRA_env_busco/bin/Rscript,g" $(dirname $EXTERNAL_SOFTWARE_DIR)/bin/busco_cogeqc_plots.R
 ## Fix and improve kraken2 2.1.2 within conda (i.e. fix download for database building and improve masking with parallel):
 # https://github.com/DerrickWood/kraken2/issues/518, you just have to manually replace 'ftp' by 'https' in the line 46 of the file 'rsync_from_ncbi.pl'
-echo -e "\n\n\nI'm fixing some issues with kraken2...(see the content and comments within the script)\n\n\n"
+echo -e "\n\n\nI'm fixing some issues with kraken2 v2.1.2... (i.e. fixing database download and improving database masking... please see the content and comments within the installation wrapper script)\n\n\n"
 sed -i 's,#^ftp:,#^https:,g' $conda_envs_path/ILRA_env/libexec/rsync_from_ncbi.pl
 # database building is very slow, I incorporate this suggestion to paralelize, improving with multithreading and pipepart: https://github.com/DerrickWood/kraken2/pull/39
 cd $conda_envs_path/ILRA_env/libexec/
