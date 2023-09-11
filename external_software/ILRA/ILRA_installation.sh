@@ -24,17 +24,17 @@ cd $EXTERNAL_SOFTWARE_DIR/iCORN2 && chmod 775 *
 
 #### Download and install Miniconda if required:
 export conda_install=""
-type conda >/dev/null 2>&1 || { echo >&2 "Conda is required to be installed... and is not being found in the PATH. Conda installation within ILRA folder (external_software/miniconda3) is going to happen in 30 seconds. Please kill the process and correct the PATH if not necessary, otherwise let the installation continue..."; export conda_install="yes"; }
-secs=$((1 * 30))
-while [ $secs -gt 0 ]; do
-   echo -ne "$secs\033[0K\r"
-   sleep 1
-   : $((secs--))
-done
+type conda >/dev/null 2>&1 || { echo >&2 "Conda is required to be installed... and the 'conda' executable is not being found in the PATH. Conda installation within ILRA folder (external_software/miniconda3) is going to happen in 30 seconds. Please kill the process and correct the PATH if not necessary, otherwise let the installation continue..."; export conda_install="yes"; }
 
 if [ "$conda_install" == "yes" ]; then
 	echo -e "\n\n\nI'm downloading and installing an updated copy of Miniconda3 in the folder external_software/miniconda3 to create ILRA environments\n\n\n"
 	echo -e "\nIf for some reason an outdated python or conda is required in your system, please kill this process and and go to https://repo.anaconda.com/miniconda/ to download and install manually the corresponding Linux installer\n"
+	secs=$((1 * 30))
+	while [ $secs -gt 0 ]; do
+	   echo -ne "$secs\033[0K\r"
+	   sleep 1
+	   : $((secs--))
+	done
 	echo -e "\nProceeding with conda installation\n"
 	cd $EXTERNAL_SOFTWARE_DIR && wget -q "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	mkdir -p miniconda3 && bash Miniconda3-latest-Linux-x86_64.sh -b -f -s -p $EXTERNAL_SOFTWARE_DIR/miniconda3 && rm Miniconda3-latest-Linux-x86_64.sh
@@ -54,7 +54,7 @@ echo -e "\n\nInstalling dependencies through conda...\n\n"
 echo -e "\n\n\nI'm downloading and installing several packages through conda in $conda_dir...\n\n\n"
 echo -e "First mamba replacing conda to reduce time, and then populating the environments based on the .yml files (keep in mind, this is frozen versions of the software)..."
 echo -e "The pathway to conda environments is $conda_envs_path...\n"
-
+export PATH=$(dirname $conda_exec):$PATH
 conda install -y -q -c conda-forge mamba
 mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_1.yml
 mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_2.yml
