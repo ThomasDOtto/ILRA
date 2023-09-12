@@ -390,6 +390,7 @@ if [[ $mode == "blast" || $mode == "taxon" || $mode == "both" ]]; then
 		echo -e "for f in *.tgz; do tar -xvzf \$f; done && rm *.tgz \$(ls | grep log)"
 		echo "awk '{ print "'"TAXID""\t"$1"\t"$2 }'"' seqid2taxid.map > prelim_map_1.txt && rm seqid2taxid.map"
 		echo -e "# To build the kraken2 database:"
+  		echo -e "cd $databases"
 		echo -e "kraken2-build --build --threads \$cores --db standard_eupathdb_46_kraken2_db #### This would take around 5 hours and require around 75GB of RAM. If you included nt database, around 24 hours and 500GB of RAM. For the larger database including nt, you may need to include the flag --fast-build to avoid stalling or too much time building"
 		echo -e "kraken2-inspect --db standard_eupathdb_46_kraken2_db --threads \$cores > standard_eupathdb_46_kraken2_db_k2_inspect.txt"
 		echo -e "kraken2-build --clean --threads \$cores --db standard_eupathdb_46_kraken2_db #### This would remove the downloaded sequences and keep only the kraken2 database. This must be done to save space, but first double check the included sequences and the output of kraken2 inspect. If you execute this command and then you want to make any change to the database, you would have to download everything again"
