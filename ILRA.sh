@@ -46,10 +46,11 @@ for argument in $options; do
 		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('yes' / 'no' by default)
 		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
 		-b | -block_size # Block size for parallel processing (by default, 5)
+  		-B | -blast_block_size # Block size for parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change)
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
 		-A | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
-		-B | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
+		-Ab | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
 		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
 		-Q | -BUSCO database for quality assessment # The name of the BUSCO database to be used in the quality assessment step. Automatic lineage selected by default if user does not input one of the datasets in 'busco --list-datasets' here (e.g. bacteria_odb10)
 		-M | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 240g=240GB used)
@@ -82,7 +83,8 @@ for argument in $options; do
 		-K*) kraken2_fast=${arguments[index]} ;;
 		-k*) kraken2_databases=${arguments[index]} ;;
 		-b*) blocks_size=${arguments[index]} ;;
-		-B*) abacas2_blast=${arguments[index]} ;;
+		-Ab*) abacas2_blast=${arguments[index]} ;;
+  		-B*) blast_blocks_size=${arguments[index]} ;;
 		-p*) pilon=${arguments[index]} ;;
 		-P*) parts_icorn2_split=${arguments[index]} ;;
 		-A*) abacas2_split=${arguments[index]} ;;
@@ -167,6 +169,9 @@ fi
 
 if [ -z "$abacas2_split" ]; then
 	abacas2_split=$blocks_size
+fi
+if [ -z "$blast_blocks_size" ]; then
+	blast_blocks_size=$blocks_size
 fi
 if [ -z "$abacas2_blast" ]; then
 	abacas2_blast=1
@@ -467,11 +472,11 @@ if [[ $debug == "all" || $debug == "step2a" ]]; then
 	time1=`date +%s`
 	echo -e "\n\nSTEP 2: MegaBLAST starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/2.MegaBLAST; cd $dir/2.MegaBLAST; rm -rf *
-	if [ $cores -ge $blocks_size ]; then
-		echo -e "\nProcessing in the MegaBLAST simultaneously the individual contigs in blocks of at most $blocks_size elements, please manually change the variable 'blocks_size' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n"
+	if [ $cores -ge $blast_blocks_size ]; then
+		echo -e "\nProcessing in the MegaBLAST simultaneously the individual contigs in blocks of at most $blast_blocks_size elements, please manually change the variable '-B' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n"
 		cat $dir/1.Filtering/01.assembly.fa | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
 		arr=($(ls -lS | sort -k 5 -n | awk '{print $9}' | awk 'NF' | egrep .fa$))
-		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog megablast_parallel_log_out_2.txt -j $blocks_size megablast -W 40 -F F -a $((cores / blocks_size *2)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog megablast_parallel_log_out_2.txt -j $blast_blocks_size megablast -W 40 -F F -a $((cores / blast_blocks_size *2)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2.txt > tmp && mv tmp megablast_parallel_log_out_2.txt
 		# Control if failed due to any reason (likely too much RAM...)
 		if [ "$(awk '{ print $9 }' megablast_parallel_log_out_2.txt | grep -c "9")" -gt 0 ]; then
