@@ -58,7 +58,7 @@ usage: ILRA.sh [options]
 		-i | -iterations_iCORN2 # Number of iterations to perform in iCORN2
 		-r | -reference # Reference file (full pathway, FASTA format)
 		-g | -gff_file # Reference annotation file (full pathway, GFF format)
-		-c | -corrected_reads # Corrected long reads for circulatization of the contigs containing the strings by -s and -S (FASTQ format, can be gzipped)
+		-c | -corrected_reads # Corrected long reads for circulatization of the contigs containing the strings by -s and -S (FASTQ or fasta format, can be gzipped)
 		-s | -seq_circularize_1 # Regex pattern to find in the contig names and circularize
 		-S | -Seq_circularize_2 # Regex pattern to find in the contig names and circularize
 		-L | -Long_reads_technology # Technology of long reads sequencing (pb/ont)
@@ -70,15 +70,24 @@ usage: ILRA.sh [options]
 		-t | -threads # Number of cores to use in multithreaded steps
 		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run ('step1', 'step2a', 'step2b', 'step3', 'step4', 'step4i', 'step5', 'step6', or 'step7')
 		-D | -databases # Folder for storing the databases for the decontamination step (by default, 'databases' under ILRA main folder)
-		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('yes' /'no' by default)
+		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('yes' / 'no' by default)
 		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
-		-b | -block_size # Block size for parallel processing (by default, 10)
+		-b | -block_size # Block size for parallel processing (by default, 5)
+  		-B | -blast_block_size # Block size for parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change)
+    		-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
+      		-Oi | -overlap_identity # Threshold in the percentage of identity to consider a contig contained into other (by default, 99)
+		-Of | -overlap_fraction # Threshold in the fraction (percentage) of a contig contained into other to consider overlapping (by default, 90)
+		-Ml | -megablast_length # Threshold in the length of megaBLAST alignment to consider a contig contained into other (by default, 500 bp)
+      		-Mi | -megablast_identity # Threshold in the percentage of identity in megablast to consider a potential contig contained into other (by default, 98)
+     		-Mc | -merging_coverage_threshold # Threshold in the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.5)
+       		-Md | -merging_coverage_deviation # Positive deviation to sum to the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.1)
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
-		-A | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
-		-B | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
+		-As | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
+		-Ab | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
 		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
-		-M | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 200g=200GB used)
+		-Q | -BUSCO database for quality assessment # The name of the BUSCO database to be used in the quality assessment step. Automatic lineage selected by default if user does not input one of the datasets in 'busco --list-datasets' here (e.g. bacteria_odb10)
+		-Mj | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 240g=240GB used)
 		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)
 ```
