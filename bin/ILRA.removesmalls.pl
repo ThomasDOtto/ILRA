@@ -78,7 +78,11 @@ Q1 <- quantile(data$Value, 0.25); Q3 <- quantile(data$Value, 0.75); data$Value_K
 p <- ggplot(data, aes(x = "", y = Value_Kbp)) + geom_violin(fill = "lightblue") + geom_boxplot(width = 0.1, fill = "white", color = "black") +
 annotate("text", x = 0.2, y = Q1/1000, label = paste("Q1: ", round(Q1, 2), " bp"), hjust=0) + annotate("text", x = 0.2, y = Q3/1000, label = paste("Q3: ", round(Q3, 2), " bp"), hjust=0) +
 theme_classic() + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
-pdf("Contig_length_distribution.pdf");print(p);dev.off()'|;
+pdf("Contig_length_distribution.pdf");print(p);dev.off()
+p2 <- ggplot(data, aes(x = "", y = log2(Value_Kbp))) + geom_violin(fill = "lightblue") + geom_boxplot(width = 0.1, fill = "white", color = "black") +
+annotate("text", x = 0.2, y = Q1/1000, label = paste("Q1: ", round(Q1, 2), " bp"), hjust=0) + annotate("text", x = 0.2, y = Q3/1000, label = paste("Q3: ", round(Q3, 2), " bp"), hjust=0) +
+theme_classic() + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
+pdf("Contig_length_distribution_log2.pdf");print(p2);dev.off()'|;
 print $message;
 close $fh3;
 
