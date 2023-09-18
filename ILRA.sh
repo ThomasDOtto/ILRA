@@ -47,13 +47,20 @@ for argument in $options; do
 		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
 		-b | -block_size # Block size for parallel processing (by default, 5)
   		-B | -blast_block_size # Block size for parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change)
+    		-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
+      		-Oi | -overlap_identity # Threshold in the percentage of identity to consider a contig contained into other (by default, 99)
+		-Of | -overlap_fraction # Threshold in the fraction (percentage) of a contig contained into other to consider overlapping (by default, 90)
+		-Ml | -megablast_length # Threshold in the length of megaBLAST alignment to consider a contig contained into other (by default, 500 bp)
+      		-Mi | -megablast_identity # Threshold in the percentage of identity in megablast to consider a potential contig contained into other (by default, 98)
+     		-Mc | -merging_coverage_threshold # Threshold in the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.5)
+       		-Md | -merging_coverage_deviation # Positive deviation to sum to the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.1)
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
-		-A | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
+		-As | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
 		-Ab | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
 		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
 		-Q | -BUSCO database for quality assessment # The name of the BUSCO database to be used in the quality assessment step. Automatic lineage selected by default if user does not input one of the datasets in 'busco --list-datasets' here (e.g. bacteria_odb10)
-		-M | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 240g=240GB used)
+		-Mj | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 240g=240GB used)
 		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)" && exit 1;;
 		-a*) assembly=${arguments[index]} ;;
@@ -76,7 +83,14 @@ for argument in $options; do
 		-E*) telomere_seq_2=${arguments[index]} ;;
 		-L*) seq_technology=${arguments[index]} ;;
 		-m*) mode=${arguments[index]} ;;
-		-M*) java_memory=${arguments[index]} ;;
+		-Mj*) java_memory=${arguments[index]} ;;
+      		-Ol*) | overlap_length=${arguments[index]} ;;
+      		-Oi*) | overlap_identity=${arguments[index]} ;;
+		-Of*) | overlap_fraction=${arguments[index]} ;;
+		-Ml*) | megablast_length=${arguments[index]} ;;
+      		-Mi*) | megablast_identity=${arguments[index]} ;;
+     		-Mc*) | merging_coverage_threshold=${arguments[index]} ;;
+       		-Md*) | merging_coverage_deviation=${arguments[index]} ;;
 		-l*) low_mem=${arguments[index]} ;;
 		-d*) debug=${arguments[index]} ;;
 		-D*) databases=${arguments[index]} ;;
@@ -87,7 +101,7 @@ for argument in $options; do
   		-B*) blast_blocks_size=${arguments[index]} ;;
 		-p*) pilon=${arguments[index]} ;;
 		-P*) parts_icorn2_split=${arguments[index]} ;;
-		-A*) abacas2_split=${arguments[index]} ;;
+		-As*) abacas2_split=${arguments[index]} ;;
 		-q*) quality_step=${arguments[index]} ;;
 		-Q*) quality_step_busco_db=${arguments[index]} ;;
 	esac
@@ -330,6 +344,28 @@ if [[ $blocks_size -gt $(grep -c ">" $assembly) ]]; then
 	blocks_size=$(grep -c ">" $assembly)
 fi
 
+if [ -z "$overlap_length" ]; then
+	overlap_length=2000
+fi
+if [ -z "$overlap_identity" ]; then
+	overlap_identity=99
+fi
+if [ -z "$overlap_fraction" ]; then
+	overlap_fraction=90
+fi
+if [ -z "$megablast_length" ]; then
+	megablast_length=500
+fi
+if [ -z "$megablast_identity" ]; then
+	megablast_identity=98
+fi
+if [ -z "$merging_coverage_threshold" ]; then
+	merging_coverage_threshold=0.5
+fi
+if [ -z "$merging_coverage_deviation" ]; then
+	merging_coverage_deviation=0.1
+fi
+
 echo -e "assembly="$assembly
 echo -e "dir="$dir
 if [[ $correctedReads == /* ]]; then
@@ -487,23 +523,23 @@ if [[ $debug == "all" || $debug == "step2a" ]]; then
 			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog megablast_parallel_log_out_2_2.txt -j 3 megablast -W 40 -F F -a $cores_split -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out2.txt
 			awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2_2.txt > tmp && mv tmp megablast_parallel_log_out_2_2.txt
 		fi
-		cat *.fa.blast | awk '$3>98 && $4>500 && $1 != $2' > comp.self1.blast; rm *.fa *.fa.blast
+		cat *.fa.blast | awk -v megablast_identity="$megablast_identity" -v megablast_length="$megablast_length" '$3>megablast_identity && $4>megablast_length && $1 != $2' > comp.self1.blast; rm *.fa *.fa.blast
 	else
-		megablast -W 40 -F F -a $cores -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i $dir/1.Filtering/01.assembly.fa | awk '$3>98 && $4>500 && $1 != $2' > comp.self1.blast
+		megablast -W 40 -F F -a $cores -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i $dir/1.Filtering/01.assembly.fa | awk -v megablast_identity="$megablast_identity" -v megablast_length="$megablast_length" '$3>megablast_identity && $4>megablast_length && $1 != $2' > comp.self1.blast
 	fi
 	ILRA.addLengthBlast.pl $dir/1.Filtering/01.assembly.fa $dir/1.Filtering/01.assembly.fa comp.self1.blast &> /dev/null
 
 	#### 2a. Delete contained contigs
 	# We want the query to be always the smaller one
 	echo -e "\n\nSTEP 2a: Delete contained contigs starting..."; echo -e "Current date/time: $(date)\n"
-	awk '$3>99 && $4>500 && $13 < $14' comp.self1.blast.length | ILRA.getOverlap.pl > 02.ListContained.txt
-	cat 02.ListContained.txt | awk '$4>90' | cut -f 1 > List.Contained.fofn
+	awk -v overlap_identity="$overlap_identity" -v megablast_length="$megablast_length" '$3>overlap_identity && $4>megablast_length && $13 < $14' comp.self1.blast.length | ILRA.getOverlap.pl > 02.ListContained.txt
+	cat 02.ListContained.txt | awk -v overlap_fraction="$overlap_fraction" '$4>overlap_fraction' | cut -f 1 > List.Contained.fofn
 	echo -e "\n### Excluded contigs that are contained in others: (MegaBLAST/ILRA.getOverlap.pl/ILRA.deleteContigs.pl)" >> ../Excluded.contigs.fofn
 	cat List.Contained.fofn >> ../Excluded.contigs.fofn
-	# Now delete the contigs from the MegaBLAST first output, also filter for just hits > 2kb > 99%
-	echo "Filtering the MegaBLAST output for hits > 2Kb and >99% identity. Please change manually within the pipeline (section 2a) these parameters if needed"
+	# Now delete the contigs from the MegaBLAST first output, also filter for just hits > Xkb > XX%
+	echo "Filtering the MegaBLAST output for hits > $overlap_length pb and >$overlap_identity% identity. Please change the parameters if needed"
 	ILRA.deleteContigs.pl List.Contained.fofn $dir/1.Filtering/01.assembly.fa 02.assembly.fa
-	cat comp.self1.blast.length | awk '$3> 99 && $4 > 2000' | ILRA.deleteEntryinBlast.pl List.Contained.fofn > Blast.merge.blast.length
+	cat comp.self1.blast.length | awk -v overlap_identity="$overlap_identity" -v overlap_length="$overlap_length" '$3> overlap_identity && $4 > overlap_length' | ILRA.deleteEntryinBlast.pl List.Contained.fofn > Blast.merge.blast.length
 debug="all"
 fi
 if [[ $debug == "all" || $debug == "step2b" ]]; then
@@ -516,7 +552,7 @@ if [[ $debug == "all" || $debug == "step2b" ]]; then
 		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" ILRA.runSMALT_ver2.sh 02.assembly.fa 20 3 $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz first $InsertsizeRange $cores &> ILRA.runSMALT_ver2.sh_log_out.txt
 		echo -e "Check out the log of ILRA.runSMALT_ver2.sh in the file ILRA.runSMALT_ver2.sh_log_out.txt"
 	# Find overlaps
-		ILRA.findoverlaps_ver3.pl Blast.merge.blast.length first.bam 02.assembly.fa OUT 1> ILRA.findoverlaps_ver3.pl_log_out.txt 2> ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt
+		ILRA.findoverlaps_ver3.pl Blast.merge.blast.length first.bam 02.assembly.fa OUT $merging_coverage_threshold $merging_coverage_deviation 1> ILRA.findoverlaps_ver3.pl_log_out.txt 2> ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt
 		echo -e "\nCheck out the log of ILRA.findoverlaps_ver3.pl in the files log_OUT.txt, results_OUT.txt, ILRA.findoverlaps_ver3.pl_log_out.txt, and ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt"
 	# Save the contigs
 		echo -e "\n### New contigs merging overlapping contigs(ILRA.findoverlaps_ver3.pl):" >> ../Excluded.contigs.fofn
