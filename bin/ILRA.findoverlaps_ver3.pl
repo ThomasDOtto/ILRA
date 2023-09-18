@@ -14,6 +14,7 @@
 ### 4. contained_output.fasta: fasta file with contained sequences
 ### 5. notcovered_output.fasta: fasta file with sequences that have no coverage
 #################################################
+# JLR 2023: Updates to avoid using just the first million bases for coverage computation (and rather the whole genome) and update to customize coverage threshold at overlaps
 
 use strict;
 use warnings;
@@ -25,10 +26,11 @@ my $blastfile = shift;
 my $bamfile  = shift;
 my $fastafile = shift;
 my $out = shift;
-
+my $cov_threshold = shift;
+my $cov_threshold_dev = shift;
 
 if (! defined($out)){
-    print "usage: findoverlaps_ver3.pl <blastoutput> <bamfile> <fastafile> <output_name> \n";
+    print "usage: findoverlaps_ver3.pl <blastoutput> <bamfile> <fastafile> <output_name> <coverage_threshold> <covarege_threshold_deviation>\n";
     exit;
 }
 
@@ -61,7 +63,7 @@ print LOG "Blast results after filtering out contained and not covered sequences
 
 
 my $ref_overlaps = findOverlaps($ref_blast);
-my $ref_overlaps = evaluateOverlaps($ref_overlaps, $ref_coverage);
+my $ref_overlaps = evaluateOverlaps($ref_overlaps, $ref_coverage, $cov_threshold, $cov_threshold_dev);
 my $number = keys %$ref_overlaps;
 print LOG "Second filtering step: evaluate the coverage\nresults: $number\n\n";
 
@@ -96,9 +98,9 @@ sub notCovered{
     my $counter = 1;
     LOOP: foreach my $key1 (keys %$coverage){          #loop over sequences
       foreach my $key2 (keys %{$$coverage{$key1}}){  #loop over position
-	  if ($counter > 1000000){                   #only use first million bases for calculation
-	      last LOOP;
-	  }
+	  #if ($counter > 1000000){                   #only use first million bases for calculation
+	  #    last LOOP;
+	  #} # This is commented for ensuring reproducibility, especially for larger genes. TDO suggestion for further improvement: To use larger contigs, as they might be more stable. Something like 20% of the size of the genome (target) for the calculation
 	  $sum += $$coverage{$key1}{$key2};
 	  $counter++;
       }
@@ -207,7 +209,7 @@ sub getcontained{
     print LOG "Contained before checking coverage: $number\n";
 
     ###check if coverage is lower than at the rest of the genome
-    evaluateOverlaps($align, $coverage);
+    evaluateOverlaps($align, $coverage,$cov_threshold, $cov_threshold_dev);
 
     my $number = keys %$align;
     print LOG "Contained after checking coverage: $number\n";
@@ -421,6 +423,8 @@ sub loadCoverage{
 
 
 sub evaluateOverlaps{
+	my ($overlaps, $coverage, $target_ratio, $allowed_deviation) = @_;
+	
 	my $overlaps = shift;
 	my $coverage = shift;
 
@@ -479,9 +483,11 @@ sub evaluateOverlaps{
 		###if not: remove alignment
 		my $frac = $mean_overlap / $mean;
 
-		my $x = 0.1; #allowed deviation from 0.5
-#		unless (0.5 - $x <= $frac && $frac <= 0.5 + $x){
-		unless ($frac <= 0.5 + $x){
+		# my $x = 0.1; #allowed deviation from 0.5
+		# unless (0.5 - $x <= $frac && $frac <= 0.5 + $x){
+		# unless ($frac <= 0.5 + $x){
+		my $x = $allowed_deviation; #allowed deviation from target_ratio
+		unless ($frac <= $target_ratio + $x){
 		    delete ($$overlaps{$key})
 		}
 
