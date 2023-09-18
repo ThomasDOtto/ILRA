@@ -20,7 +20,7 @@ for argument in $options; do
 	index=`expr $index + 1`
 # Gather the parameters
 	case $argument in
-		-h*) echo "ILRA v1.2.0. usage: ILRA.sh [options]
+		-h*) echo "ILRA v1.3.0. usage: ILRA.sh [options]
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format, can be gzipped)
 		-f | -filter_contig_size # Size threshold to filter the contigs (bp)
