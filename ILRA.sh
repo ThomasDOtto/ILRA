@@ -20,7 +20,7 @@ for argument in $options; do
 	index=`expr $index + 1`
 # Gather the parameters
 	case $argument in
-		-h*) echo "ILRA v1.3.0. usage: ILRA.sh [options]
+		-h*) echo "ILRA v1.4.0. usage: ILRA.sh [options]
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format, can be gzipped)
 		-f | -filter_contig_size # Size threshold to filter the contigs (bp)
@@ -47,13 +47,13 @@ for argument in $options; do
 		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
 		-b | -block_size # Block size for parallel processing (by default, 5)
   		-B | -blast_block_size # Block size for parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change)
-    		-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
-      		-Oi | -overlap_identity # Threshold in the percentage of identity to consider a contig contained into other (by default, 99)
+    	-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
+      	-Oi | -overlap_identity # Threshold in the percentage of identity to consider a contig contained into other (by default, 99)
 		-Of | -overlap_fraction # Threshold in the fraction (percentage) of a contig contained into other to consider overlapping (by default, 90)
 		-Ml | -megablast_length # Threshold in the length of megaBLAST alignment to consider a contig contained into other (by default, 500 bp)
-      		-Mi | -megablast_identity # Threshold in the percentage of identity in megablast to consider a potential contig contained into other (by default, 98)
-     		-Mc | -merging_coverage_threshold # Threshold in the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.5)
-       		-Md | -merging_coverage_deviation # Positive deviation to sum to the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.1)
+      	-Mi | -megablast_identity # Threshold in the percentage of identity in megablast to consider a potential contig contained into other (by default, 98)
+     	-Mc | -merging_coverage_threshold # Threshold in the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.5)
+       	-Md | -merging_coverage_deviation # Positive deviation to sum to the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.1)
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
 		-As | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
@@ -84,13 +84,13 @@ for argument in $options; do
 		-L*) seq_technology=${arguments[index]} ;;
 		-m*) mode=${arguments[index]} ;;
 		-Mj*) java_memory=${arguments[index]} ;;
-      		-Ol*) overlap_length=${arguments[index]} ;;
-      		-Oi*) overlap_identity=${arguments[index]} ;;
+      	-Ol*) overlap_length=${arguments[index]} ;;
+      	-Oi*) overlap_identity=${arguments[index]} ;;
 		-Of*) overlap_fraction=${arguments[index]} ;;
 		-Ml*) megablast_length=${arguments[index]} ;;
-      		-Mi*) megablast_identity=${arguments[index]} ;;
-     		-Mc*) merging_coverage_threshold=${arguments[index]} ;;
-       		-Md*) merging_coverage_deviation=${arguments[index]} ;;
+      	-Mi*) megablast_identity=${arguments[index]} ;;
+     	-Mc*) merging_coverage_threshold=${arguments[index]} ;;
+       	-Md*) merging_coverage_deviation=${arguments[index]} ;;
 		-l*) low_mem=${arguments[index]} ;;
 		-d*) debug=${arguments[index]} ;;
 		-D*) databases=${arguments[index]} ;;
@@ -488,10 +488,12 @@ if [[ $debug == "all" || $debug == "step1" ]]; then
 	time1=`date +%s`
 	echo -e "\n\nSTEP 1: Size filtering starting..."; echo -e "Current date/time: $(date)\n"
 	mkdir -p $dir/1.Filtering; cd $dir/1.Filtering; rm -rf *
-	echo -e "### Excluded contigs based on length threshold of $contigs_threshold_size: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
+	echo -e "### Excluded contigs and length based on length threshold of $contigs_threshold_size: (ILRA.removesmalls.pl)" > ../Excluded.contigs.fofn
 	ILRA.fasta2singleLine.pl $assembly | ILRA.removesmalls.pl $contigs_threshold_size - | sed 's/|/_/g' | ILRA.fasta2singleLine.pl - | awk -F ' ' '{ if ($0 ~ /^>/) { print $1;} else { print $0}}' | sed '/[[:punct:]]*/{s/[^[:alnum:][:space:]>_]/_/g}' > 01.assembly.fa
+	short_contigs=$(grep -v "###" ../Excluded.contigs.fofn | cut -f1 | tr '\n' '|'); ILRA.removesmalls.R $PWD/01.assembly.fa $assembly $short_contigs $cores
 	formatdb -p F -i $dir/1.Filtering/01.assembly.fa
-	echo -e "\nPlease check the file 'Contigs_length_stats.txt' to assess if the chosen length threshold is the most appropriate\n"
+	echo -e "\nPlease check the file 'Contigs_length_stats.txt' and the provided plots to assess whether the chosen length threshold is the most appropriate\n"
+	echo -e "\nThe sequence of the $(echo $short_contigs | sed 's,|$,,g' | tr '|' '\n' | wc -l) discarded contigs aligned to the filtered assembly with: $(grep 'overall alignment rate' Contigs_length_stats.txt)"
  	echo "Before this step:"; assembly-stats $assembly | head -n 2
 	echo -e "\nAfter this step:"; assembly-stats 01.assembly.fa | head -n 2
 	echo -e "\nSTEP 1: DONE"; echo -e "Current date/time: $(date)"
