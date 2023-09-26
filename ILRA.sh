@@ -46,14 +46,14 @@ for argument in $options; do
 		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('yes' / 'no' by default)
 		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
 		-b | -block_size # Block size for parallel processing (by default, 5)
-  		-B | -blast_block_size # Block size for parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change)
-    	-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
-      	-Oi | -overlap_identity # Threshold in the percentage of identity to consider a contig contained into other (by default, 99)
+		-B | -blast_block_size # Block size for parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change)
+		-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
+		-Oi | -overlap_identity # Threshold in the percentage of identity to consider a contig contained into other (by default, 99)
 		-Of | -overlap_fraction # Threshold in the fraction (percentage) of a contig contained into other to consider overlapping (by default, 90)
 		-Ml | -megablast_length # Threshold in the length of megaBLAST alignment to consider a contig contained into other (by default, 500 bp)
-      	-Mi | -megablast_identity # Threshold in the percentage of identity in megablast to consider a potential contig contained into other (by default, 98)
-     	-Mc | -merging_coverage_threshold # Threshold in the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.5)
-       	-Md | -merging_coverage_deviation # Positive deviation to sum to the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.1)
+		-Mi | -megablast_identity # Threshold in the percentage of identity in megablast to consider a potential contig contained into other (by default, 98)
+		-Mc | -merging_coverage_threshold # Threshold in the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.5)
+		-Md | -merging_coverage_deviation # Positive deviation to sum to the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.1)
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
 		-As | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
@@ -84,13 +84,13 @@ for argument in $options; do
 		-L*) seq_technology=${arguments[index]} ;;
 		-m*) mode=${arguments[index]} ;;
 		-Mj*) java_memory=${arguments[index]} ;;
-      	-Ol*) overlap_length=${arguments[index]} ;;
-      	-Oi*) overlap_identity=${arguments[index]} ;;
+		-Ol*) overlap_length=${arguments[index]} ;;
+		-Oi*) overlap_identity=${arguments[index]} ;;
 		-Of*) overlap_fraction=${arguments[index]} ;;
 		-Ml*) megablast_length=${arguments[index]} ;;
-      	-Mi*) megablast_identity=${arguments[index]} ;;
-     	-Mc*) merging_coverage_threshold=${arguments[index]} ;;
-       	-Md*) merging_coverage_deviation=${arguments[index]} ;;
+		-Mi*) megablast_identity=${arguments[index]} ;;
+		-Mc*) merging_coverage_threshold=${arguments[index]} ;;
+		-Md*) merging_coverage_deviation=${arguments[index]} ;;
 		-l*) low_mem=${arguments[index]} ;;
 		-d*) debug=${arguments[index]} ;;
 		-D*) databases=${arguments[index]} ;;
@@ -98,7 +98,7 @@ for argument in $options; do
 		-k*) kraken2_databases=${arguments[index]} ;;
 		-b*) blocks_size=${arguments[index]} ;;
 		-Ab*) abacas2_blast=${arguments[index]} ;;
-  		-B*) blast_blocks_size=${arguments[index]} ;;
+		-B*) blast_blocks_size=${arguments[index]} ;;
 		-p*) pilon=${arguments[index]} ;;
 		-P*) parts_icorn2_split=${arguments[index]} ;;
 		-As*) abacas2_split=${arguments[index]} ;;
