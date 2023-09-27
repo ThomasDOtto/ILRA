@@ -27,7 +27,7 @@ for argument in $options; do
 		-F | -Do you have even Illumina reads coverage? If yes contigs in the long reads assembly not covered by Illumina short reads by a certain threshold will be filtered out ('no' /'yes' by default)
 		-I | -Illumina_reads # Root name of the paired-end Illumina reads (FASTQ format, must be gzipped and name root_1.fastq.gz and root_2.fastq.gz prior execution)
 		-C | -Correction_Illumina_reads # Whether illumina reads are provided and all steps of correction should be performed ('no' /'yes' by default)
-		-R | -Range_insert_size # Insert size range of the Illumina reads to use in mapping by SMALT (bp)
+		-R | -Range_insert_size # Insert size range (bp) of the Illumina reads to use in mapping steps (by default, 800)
 		-i | -iterations_iCORN2 # Number of iterations to perform in iCORN2
 		-r | -reference # Reference file (full pathway, FASTA format)
 		-g | -gff_file # Reference annotation file (full pathway, GFF format)
