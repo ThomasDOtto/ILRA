@@ -20,49 +20,48 @@ for argument in $options; do
 	index=`expr $index + 1`
 # Gather the parameters
 	case $argument in
-		-h*) echo "ILRA v1.4.0. usage: ILRA.sh [options]
+		-h*) echo "ILRA v1.4.1. usage: ILRA.sh [options]
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format, can be gzipped)
-		-f | -filter_contig_size # Size threshold to filter the contigs (bp)
-		-F | -Do you have even Illumina reads coverage? If yes contigs in the long reads assembly not covered by Illumina short reads by a certain threshold will be filtered out ('no' /'yes' by default)
+		-f | -filter_contig_size # Size threshold (bp) to filter the contigs (by default, 5000)
 		-I | -Illumina_reads # Root name of the paired-end Illumina reads (FASTQ format, must be gzipped and name root_1.fastq.gz and root_2.fastq.gz prior execution)
 		-C | -Correction_Illumina_reads # Whether illumina reads are provided and all steps of correction should be performed ('no' /'yes' by default)
+		-c | -corrected_reads # Corrected long reads for circularization of the contigs containing the strings by -s and -S (FASTQ or fasta format, can be gzipped, and Circlator is going to be skipped if not provided)
 		-R | -Range_insert_size # Insert size range (bp) of the Illumina reads to use in mapping steps (by default, 800)
 		-i | -iterations_polishing # Number of iterations to perform in polishing by iCORN2 or Pilon (by default, 3)
-		-r | -reference # Reference file (full pathway, FASTA format)
-		-g | -gff_file # Reference annotation file (full pathway, GFF format)
-		-c | -corrected_reads # Corrected long reads for circularization of the contigs containing the strings by -s and -S (FASTQ or fasta format, can be gzipped)
-		-s | -seq_circularize_1 # Regex pattern to find in the contig names and circularize
-		-S | -Seq_circularize_2 # Regex pattern to find in the contig names and circularize
-		-L | -Long_reads_technology # Technology of long reads sequencing (pb/ont)
-		-T | -Taxon_ID # NCBI taxon ID or a scientific name
-		-e | -ending_telomere_seq_1 # Telomere-associated sequence to search in the first strand
-		-E | -Ending_telomere_seq_2 # Telomere-associated sequence to search in the second strand
+		-r | -reference # Reference file (full pathway, FASTA format, if not provided ABACAS2 and some quality control steps are going to be skipped)
+		-g | -gff_file # Reference annotation file (full pathway, GFF format, if not provided some quality control steps are going to be skipped)		
+		-s | -seq_circularize # Regex pattern to find in the contig names and circularize (by default 'MT|M76611|API')
+		-L | -Long_reads_technology # Technology of long reads sequencing ('ont' or 'pb', by default)
+		-T | -Taxon_ID # NCBI taxon ID or a scientific name (Plasmodium by default, 5820)
+		-t | -threads # Number of cores to use in multithreaded steps (by default, 40)
+		-e | -ending_telomere_seq_1 # Telomere-associated sequence to search in the first strand (by default, 'CCCTAAACCCTAAACCCTAAA')
+		-E | -Ending_telomere_seq_2 # Telomere-associated sequence to search in the second strand (by default, 'TTTAGGGTTTAGGGTTTAGGG')
 		-o | -output # Output folder (absolute pathway)
-		-n | -name # Base name of the output file
-		-t | -threads # Number of cores to use in multithreaded steps
-		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run ('step1', 'step2a', 'step2b', 'step3', 'step4', 'step4i', 'step5', 'step6', or 'step7')
-		-D | -databases # Folder for storing the databases for the decontamination step (by default, 'databases' under ILRA main folder)
+		-n | -name # Base name of the output file		
+		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run ('step1', 'step2a', 'step2b', 'step3', 'step4', 'step4i', 'step5', 'step6', 'step7' or 'all' to execute everything, by default)
+		-D | -databases # Folder for storing the databases for the decontamination step (by default, the 'databases' folder under ILRA main folder)
 		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('yes' / 'no' by default)
 		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
 		-b | -block_size # Block size for parallel processing (by default, 5)
-		-B | -blast_block_size # Block size for parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change)
+		-B | -blast_block_size # Block size for parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change since megaBLAST can be less computationally expensive)
+		-As | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
+		-Ab | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
 		-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
 		-Oi | -overlap_identity # Threshold in the percentage of identity to consider a contig contained into other (by default, 99)
 		-Of | -overlap_fraction # Threshold in the fraction (percentage) of a contig contained into other to consider overlapping (by default, 90)
 		-Ml | -megablast_length # Threshold in the length of megaBLAST alignment to consider a contig contained into other (by default, 500 bp)
 		-Mi | -megablast_identity # Threshold in the percentage of identity in megablast to consider a potential contig contained into other (by default, 98)
+		-F | -filter_using_Illumina # Do you have even Illumina reads coverage? If yes contigs in the long reads assembly not covered by Illumina short reads by a certain threshold specified in other parameters will be filtered out ('no' /'yes' by default)		
 		-Mc | -merging_coverage_threshold # Threshold in the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.5)
 		-Md | -merging_coverage_deviation # Positive deviation to sum to the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.1)
 		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
 		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
-		-As | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
-		-Ab | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
-		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
+		-q | -quality_assesment # Whether to execute the final step 7, which may be slow, for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... ('no'/'yes' by default)
 		-Q | -BUSCO database for quality assessment # The name of the BUSCO database to be used in the quality assessment step. Automatic lineage selected by default if user does not input one of the datasets in 'busco --list-datasets' here (e.g. bacteria_odb10)
 		-Mj | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 240g=240GB used)
 		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
-		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)" && exit 1;;
+		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (this is the default option)" && exit 1;;
 		-a*) assembly=${arguments[index]} ;;
 		-o*) dir=${arguments[index]} ;;
 		-c*) correctedReads=${arguments[index]} ;;
@@ -70,8 +69,7 @@ for argument in $options; do
 		-r*) reference=${arguments[index]} ;;
 		-I*) illuminaReads=${arguments[index]} ;;
 		-C*) perform_correction=${arguments[index]} ;;
-		-s*) seqs_circl_1=${arguments[index]} ;;
-		-S*) seqs_circl_2=${arguments[index]} ;;
+		-s*) seqs_circl=${arguments[index]} ;;
 		-i*) number_iterations_icorn=${arguments[index]} ;;
 		-t*) cores=${arguments[index]} ;;
 		-f*) contigs_threshold_size=${arguments[index]} ;;
@@ -114,8 +112,15 @@ echo -e "In case you want to test ILRA with a smaller subset of example reads, c
 
 ##### Checking Arguments / Variables:
 echo -e "\nI'm now quickly checking and showing the arguments that are going to be used in the ILRA run...\n"
-if [[ -d "$dir/2.MegaBLAST" ]]; then
-	echo -e "PLEASE keep in mind the output directory already exists, so this is potentially a rerunning. ILRA is going to clean the existing folders and rerun. If you want to run ILRA only from a particular step, please use the argument '-d '...\n"
+if [[ -d "$dir/1.Filtering" ]]; then
+	echo -e "PLEASE keep in mind the output directory already exists (found the folder '$dir/1.Filtering', so this is potentially a rerunning. ILRA is going to clean the existing folders for each step and rerun. If you want to run ILRA only from a particular step, please use the argument '-d '...\n"
+ 	echo -e "If the process is not aborted, ILRA is proceeding in..."
+	secs=$((1 * 30))
+	while [ $secs -gt 0 ]; do
+	   echo -ne "$secs\033[0K\r"
+	   sleep 1
+	   : $((secs--))
+	done
 fi
 
 if [ -z "$cores" ]; then
@@ -272,14 +277,9 @@ if [ -z "$number_iterations_icorn" ]; then
 	echo "Number of iCORN2 iterations: "$number_iterations_icorn
 fi
 
-if [ -z "$seqs_circl_1" ]; then
-	seqs_circl_1="MT|M76611"
-	echo "Seqs to circularize: "$seqs_circl_1
-fi
-
-if [ -z "$seqs_circl_2" ]; then
-	seqs_circl_2="API"
-	echo "Seqs to circularize: "$seqs_circl_2
+if [ -z "$seqs_circl" ]; then
+	seqs_circl="MT|M76611|API"
+	echo "Seqs to circularize: "$seqs_circl
 fi
 
 if [ -z "$contigs_threshold_size" ]; then
@@ -319,7 +319,7 @@ elif [ $seq_technology == "ont" ]; then
 else
 	long_reads_technology="pacbio"
 	echo "Using by default long reads sequencing technology: PacBio"
-	echo "If this needs to be change please provide 'pb' or 'ont' as the last argument"
+	echo "If this needs to be change please provide 'ont' as the last argument"
 fi
 
 if [ -z "$telomere_seq_1" ]; then
@@ -377,8 +377,7 @@ echo -e "illuminaReads="$illuminaReads
 echo -e "cores="$cores
 echo -e "cores_SMALT="$cores
 echo -e "cores_iCORN2="$cores
-echo -e "seqs_circl_1="$seqs_circl_1
-echo -e "seqs_circl_2="$seqs_circl_2
+echo -e "seqs_circl="$seqs_circl
 echo -e "number_iterations_icorn="$number_iterations_icorn
 echo -e "contigs_threshold_size="$contigs_threshold_size
 echo -e "InsertsizeRange="$InsertsizeRange
@@ -719,7 +718,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 	if [ ! -z "$correctedReads" ]; then
 		echo -e "\n\nSTEP 5: Circlator starting..."; echo -e "Current date/time: $(date)\n"
 		mkdir -p $dir/5.Circlator; cd $dir/5.Circlator; rm -rf *
-		if grep -q -E "$seqs_circl_1|$seqs_circl_2" $(find $dir -name "04.assembly.fa"); then
+		if grep -q -E "$seqs_circl" $(find $dir -name "04.assembly.fa"); then
 	# Map the corrected reads (minimap2 can be used and it's faster, but meryl+winnowmap is currently recommended to map long reads against repetitive sequences)
 			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" meryl count k=15 threads=$cores output merylDB $(find $dir -name "04.assembly.fa") &> meryl_count_log_out.txt
 			meryl print greater-than distinct=0.9998 merylDB > repetitive_k15.txt 2> meryl_print_log_out.txt
@@ -733,7 +732,7 @@ if [[ $debug == "all" || $debug == "step5" ]]; then
 				winnowmap -W repetitive_k15.txt -ax map-ont -t $cores $(find $dir -name "04.assembly.fa") $correctedReads 2>> mapping_corrected_reads_log_out.txt | samtools view -@ $cores -h -F 260 -F 2048 -o Mapped.corrected.04.sam
 			fi
 	# Circlator:
-			seq_ids=$(awk '{print $3}' Mapped.corrected.04.sam | grep -E "$seqs_circl_1|$seqs_circl_2" | tail -n +2 | sort | uniq)
+			seq_ids=$(awk '{print $3}' Mapped.corrected.04.sam | grep -E "$seqs_circl" | tail -n +2 | sort | uniq)
 			for i in $seq_ids; do
 				cat Mapped.corrected.04.sam | grep $i | awk '{ print ">"$1"\n"$10 }' >> ForCirc.reads.fasta
 			done
