@@ -44,7 +44,8 @@ for argument in $options; do
 		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('yes' / 'no' by default)
 		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
 		-b | -block_size # Block size for parallel processing (by default, 5)
-		-B | -blast_block_size # Block size for parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change since megaBLAST can be less computationally expensive)
+		-Bi | -blast_block_size # Block size for the initial parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change since megaBLAST can be less computationally expensive)
+		-Bl | -blast_block_size_large # Block size for parallel processing in the first megaBLAST step for the larger contigs whose processing failed due to RAM requirements (by default 2, 1 would mean sequential processing of the large contigs and should not fail)
 		-As | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
 		-Ab | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
 		-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
@@ -96,7 +97,8 @@ for argument in $options; do
 		-k*) kraken2_databases=${arguments[index]} ;;
 		-b*) blocks_size=${arguments[index]} ;;
 		-Ab*) abacas2_blast=${arguments[index]} ;;
-		-B*) blast_blocks_size=${arguments[index]} ;;
+		-Bi*) blast_blocks_size=${arguments[index]} ;;
+		-Bl*) blast_blocks_size_large=${arguments[index]} ;;
 		-p*) pilon=${arguments[index]} ;;
 		-P*) parts_icorn2_split=${arguments[index]} ;;
 		-As*) abacas2_split=${arguments[index]} ;;
@@ -191,6 +193,9 @@ if [ -z "$abacas2_split" ]; then
 fi
 if [ -z "$blast_blocks_size" ]; then
 	blast_blocks_size=$blocks_size
+fi
+if [ -z "$blast_blocks_size_large" ]; then
+	blast_blocks_size_large=2
 fi
 if [ -z "$abacas2_blast" ]; then
 	abacas2_blast=1
@@ -520,8 +525,8 @@ if [[ $debug == "all" || $debug == "step2a" ]]; then
 			echo -e "\nRunning the megablast of the following samples again giving more resources:"
 			echo $(awk '$9 == 9 {print}' megablast_parallel_log_out_2.txt | awk '{ print $24 }')
 			arr=($(awk '$9 == 9 {print}' megablast_parallel_log_out_2.txt | awk '{ print $24 }')); length_arr=${#arr[@]}; export length_arr
-			cores_split=$((cores / 3))
-			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog megablast_parallel_log_out_2_2.txt -j 3 megablast -W 40 -F F -a $cores_split -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out2.txt
+			cores_split=$((cores / blast_blocks_size_large))
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog megablast_parallel_log_out_2_2.txt -j $blast_blocks_size_large megablast -W 40 -F F -a $cores_split -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out2.txt
 			awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2_2.txt > tmp && mv tmp megablast_parallel_log_out_2_2.txt
 		fi
 		if [ "$(awk '{ print $9 }' megablast_parallel_log_out_2_2.txt | grep -c "9")" -gt 0 ]; then
