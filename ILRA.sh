@@ -20,7 +20,7 @@ for argument in $options; do
 	index=`expr $index + 1`
 # Gather the parameters
 	case $argument in
-		-h*) echo "ILRA v1.4.1. usage: ILRA.sh [options]
+		-h*) echo "ILRA v1.4.2. usage: ILRA.sh [options]
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format, can be gzipped)
 		-f | -filter_contig_size # Size threshold (bp) to filter the contigs (by default, 5000)
@@ -512,7 +512,7 @@ if [[ $debug == "all" || $debug == "step2a" ]]; then
 	if [ $cores -ge $blast_blocks_size ]; then
 		echo -e "\nProcessing in the MegaBLAST simultaneously the individual contigs in blocks of at most $blast_blocks_size elements, please manually change the variable '-B' in the ILRA.sh main script if required, for example because less cores available or running into memory issues...\n"
 		cat $dir/1.Filtering/01.assembly.fa | awk '{ if (substr($0, 1, 1)==">") {filename=(substr($0,2) ".fa")} print $0 > filename }'
-		arr=($(ls -lS | sort -k 5 -n | awk '{print $9}' | awk 'NF' | egrep .fa$))
+		arr=($(ls -lS | sort -k 5 -n | awk '{print $9}' | awk 'NF' | egrep .fa$ | tac))
 		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog megablast_parallel_log_out_2.txt -j $blast_blocks_size megablast -W 40 -F F -a $((cores / blast_blocks_size *2)) -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2.txt > tmp && mv tmp megablast_parallel_log_out_2.txt
 		# Control if failed due to any reason (likely too much RAM...)
@@ -523,6 +523,10 @@ if [[ $debug == "all" || $debug == "step2a" ]]; then
 			cores_split=$((cores / 3))
 			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog megablast_parallel_log_out_2_2.txt -j 3 megablast -W 40 -F F -a $cores_split -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i {} -o comp.self1.{}.blast ::: ${arr[@]} &> megablast_parallel_log_out2.txt
 			awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' megablast_parallel_log_out_2_2.txt > tmp && mv tmp megablast_parallel_log_out_2_2.txt
+		fi
+		if [ "$(awk '{ print $9 }' megablast_parallel_log_out_2_2.txt | grep -c "9")" -gt 0 ]; then
+			echo -e "\nThe MegaBLAST execution failed for some of the contigs, likely due to excessive RAM usage, please double check manually the log megablast_parallel_log_out_2_2.txt or look for support. Exiting for now...\n"
+			exit 1
 		fi
 		cat *.fa.blast | awk -v megablast_identity="$megablast_identity" -v megablast_length="$megablast_length" '$3>megablast_identity && $4>megablast_length && $1 != $2' > comp.self1.blast; rm *.fa *.fa.blast
 	else
