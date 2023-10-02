@@ -50,46 +50,46 @@ ILRA.sh -h
 usage: ILRA.sh [options]
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format, can be gzipped)
-		-f | -filter_contig_size # Size threshold to filter the contigs (bp)
-		-F | -Do you have even Illumina reads coverage? If yes contigs in the long reads assembly not covered by Illumina short reads by a certain threshold will be filtered out ('no' /'yes' by default)
+		-f | -filter_contig_size # Size threshold (bp) to filter the contigs (by default, 5000)
 		-I | -Illumina_reads # Root name of the paired-end Illumina reads (FASTQ format, must be gzipped and name root_1.fastq.gz and root_2.fastq.gz prior execution)
 		-C | -Correction_Illumina_reads # Whether illumina reads are provided and all steps of correction should be performed ('no' /'yes' by default)
-		-R | -Range_insert_size # Insert size range of the Illumina reads to use in mapping by SMALT (bp)
-		-i | -iterations_iCORN2 # Number of iterations to perform in iCORN2
-		-r | -reference # Reference file (full pathway, FASTA format)
-		-g | -gff_file # Reference annotation file (full pathway, GFF format)
-		-c | -corrected_reads # Corrected long reads for circulatization of the contigs containing the strings by -s and -S (FASTQ or fasta format, can be gzipped)
-		-s | -seq_circularize_1 # Regex pattern to find in the contig names and circularize
-		-S | -Seq_circularize_2 # Regex pattern to find in the contig names and circularize
-		-L | -Long_reads_technology # Technology of long reads sequencing (pb/ont)
-		-T | -Taxon_ID # NCBI taxon ID or a scientific name
-		-e | -ending_telomere_seq_1 # Telomere-associated sequence to search in the first strand
-		-E | -Ending_telomere_seq_2 # Telomere-associated sequence to search in the second strand
+		-c | -corrected_reads # Corrected long reads for circularization of the contigs containing the strings by -s and -S (FASTQ or fasta format, can be gzipped, and Circlator is going to be skipped if not provided)
+		-R | -Range_insert_size # Insert size range (bp) of the Illumina reads to use in mapping steps (by default, 800)
+		-i | -iterations_polishing # Number of iterations to perform in polishing by iCORN2 or Pilon (by default, 3)
+		-r | -reference # Reference file (full pathway, FASTA format, if not provided ABACAS2 and some quality control steps are going to be skipped)
+		-g | -gff_file # Reference annotation file (full pathway, GFF format, if not provided some quality control steps are going to be skipped)		
+		-s | -seq_circularize # Regex pattern to find in the contig names and circularize (by default 'MT|M76611|API')
+		-L | -Long_reads_technology # Technology of long reads sequencing ('ont' or 'pb', by default)
+		-T | -Taxon_ID # NCBI taxon ID or a scientific name (Plasmodium by default, 5820)
+		-t | -threads # Number of cores to use in multithreaded steps (by default, 40)
+		-e | -ending_telomere_seq_1 # Telomere-associated sequence to search in the first strand (by default, 'CCCTAAACCCTAAACCCTAAA')
+		-E | -Ending_telomere_seq_2 # Telomere-associated sequence to search in the second strand (by default, 'TTTAGGGTTTAGGGTTTAGGG')
 		-o | -output # Output folder (absolute pathway)
-		-n | -name # Base name of the output file
-		-t | -threads # Number of cores to use in multithreaded steps
-		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run ('step1', 'step2a', 'step2b', 'step3', 'step4', 'step4i', 'step5', 'step6', or 'step7')
-		-D | -databases # Folder for storing the databases for the decontamination step (by default, 'databases' under ILRA main folder)
+		-n | -name # Base name of the output file		
+		-d | -debug_step # For debug, step to remove the content of the corresponding folder and resume a failed run ('step1', 'step2a', 'step2b', 'step3', 'step4', 'step4i', 'step5', 'step6', 'step7' or 'all' to execute everything, by default)
+		-D | -databases # Folder for storing the databases for the decontamination step (by default, the 'databases' folder under ILRA main folder)
 		-K | -Kraken2_fast_mode # Kraken2 fast mode, consisting on copying the Kraken2 database to /dev/shm (RAM) so execution is faster ('yes' / 'no' by default)
 		-k | -Kraken2_databases # Folder within the folder databases (-D) containing the database used by Kraken2 (by default, 'standard_eupathdb_48_kraken2_db')
 		-b | -block_size # Block size for parallel processing (by default, 5)
-  		-B | -blast_block_size # Block size for parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change)
-    		-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
-      		-Oi | -overlap_identity # Threshold in the percentage of identity to consider a contig contained into other (by default, 99)
-		-Of | -overlap_fraction # Threshold in the fraction (percentage) of a contig contained into other to consider overlapping (by default, 90)
-		-Ml | -megablast_length # Threshold in the length of megaBLAST alignment to consider a contig contained into other (by default, 500 bp)
-      		-Mi | -megablast_identity # Threshold in the percentage of identity in megablast to consider a potential contig contained into other (by default, 98)
-     		-Mc | -merging_coverage_threshold # Threshold in the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.5)
-       		-Md | -merging_coverage_deviation # Positive deviation to sum to the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.1)
-		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
-		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
+		-Bi | -blast_block_size # Block size for the initial parallel processing in the first megaBLAST step (by default the argument -b, block_size, but may be necessary to change since megaBLAST can be less computationally expensive)
+		-Bl | -blast_block_size_large # Block size for parallel processing in the first megaBLAST step for the larger contigs whose processing failed due to RAM requirements (by default 2, 1 would mean sequential processing of the large contigs and should not fail)
 		-As | -abacas2_split # Number of parts to split and process in parallel in ABACAS2 (by default the argument -b, block_size, but may be necessary to decrease due to memory issues)
 		-Ab | -abacas2_blast # Whether to do blast within ABACAS2 to compare with the reference and display in ACT (1 by default, which means blasting, or 0)
-		-q | -quality_assesment # Whether to execute a final step for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... etc ('no'/'yes' by default)
+		-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
+		-Oi | -overlap_identity # Threshold in the percentage of identity to consider a contig contained into other (by default, 99)
+		-Of | -overlap_fraction # Threshold in the fraction (percentage) of a contig contained into other to consider overlapping (by default, 90)
+		-Ml | -megablast_length # Threshold in the length of megaBLAST alignment to consider a contig contained into other (by default, 500 bp)
+		-Mi | -megablast_identity # Threshold in the percentage of identity in megablast to consider a potential contig contained into other (by default, 98)
+		-F | -filter_using_Illumina # Do you have even Illumina reads coverage? If yes contigs in the long reads assembly not covered by Illumina short reads by a certain threshold specified in other parameters will be filtered out ('no' /'yes' by default)		
+		-Mc | -merging_coverage_threshold # Threshold in the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.5)
+		-Md | -merging_coverage_deviation # Positive deviation to sum to the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.1)
+		-p | -pilon # Whether to use pilon instead of iCORN2 ('yes'/'no' by default)
+		-P | -parts_icorn2_split # Number of parts to split the input sequences of iCORN2 before processing them (0 by default, which means no splitting)
+		-q | -quality_assesment # Whether to execute the final step 7, which may be slow, for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... ('no'/'yes' by default)
 		-Q | -BUSCO database for quality assessment # The name of the BUSCO database to be used in the quality assessment step. Automatic lineage selected by default if user does not input one of the datasets in 'busco --list-datasets' here (e.g. bacteria_odb10)
 		-Mj | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 240g=240GB used)
 		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
-		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (default)
+		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (this is the default option)
 ```
 
 ## Comments
