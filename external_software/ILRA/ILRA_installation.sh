@@ -56,14 +56,20 @@ echo -e "First mamba replacing conda to reduce time, and then populating the env
 echo -e "The pathway to conda environments is $conda_envs_path...\n"
 export PATH=$(dirname $conda_exec):$PATH
 conda install -y -q -c conda-forge mamba
-mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_1.yml
-mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_2.yml
-mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_3.yml
-mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_4.yml
+echo -e "\n\nInstalling ILRA_env...\n\n"
+mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_1.yml && echo -e "\n\nDONE...\n\n"
+echo -e "\n\nInstalling ILRA_env...\n\n"
+mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_2.yml && echo -e "\n\nDONE...\n\n"
+echo -e "\n\nInstalling ILRA_env...\n\n"
+mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_3.yml && echo -e "\n\nDONE...\n\n"
+echo -e "\n\nInstalling ILRA_env...\n\n"
+mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_4.yml && echo -e "\n\nDONE...\n\n"
+echo -e "\n\nInstalling bioconductor cogeqc and blobtoolkit...\n\n"
 $conda_envs_path/ILRA_env_busco/bin/Rscript -e 'BiocManager::install("cogeqc")' # A package not in conda as of yet
 rm -rf $(find $(which conda | sed 's,/bin/conda,,g') -type d -name pkgs) # Remove temp files
-
 export PATH=$conda_envs_path/ILRA_env/bin/:$PATH
+pip -q install "blobtoolkit[full]
+echo -e "\n\nDONE...\n\n"
 
 #### Manual fixes
 echo -e "\n\n\nManually fixing some dependencies and soft linking so only one conda environment has to be activated / only one directory has to be included in the PATH...\n\n\n"
