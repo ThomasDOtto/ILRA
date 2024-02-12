@@ -68,7 +68,7 @@ echo -e "\n\nInstalling bioconductor cogeqc and blobtoolkit...\n\n"
 $conda_envs_path/ILRA_env_busco/bin/Rscript -e 'BiocManager::install("cogeqc")' # A package not in conda as of yet
 rm -rf $(find $(which conda | sed 's,/bin/conda,,g') -type d -name pkgs) # Remove temp files
 export PATH=$conda_envs_path/ILRA_env/bin/:$PATH
-pip -q install "blobtoolkit[full]
+pip -q install "blobtoolkit[full]"
 echo -e "\n\nDONE...\n\n"
 
 #### Manual fixes
