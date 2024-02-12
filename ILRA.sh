@@ -1352,10 +1352,14 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 	mkdir -p $dir/7.Stats/asm2stats_results; cd $dir/7.Stats/asm2stats_results
 	asm2stats.pl ../../$name.ILRA.fasta > output.json
 	asm2stats.minmaxgc.pl ../../$name.ILRA.fasta > output.minmaxgc.json
+	# https://github.com/blobtoolkit/blobtoolkit/wiki/Snail-plot#command-line
+ 	mkdir -p $dir/7.Stats/blobdir_results; cd $dir/7.Stats/blobdir_results
+  	blobtools create --fasta $(ls -d ../../* | egrep .fasta$) --busco $(find ../busco_results/ -name "full_table.tsv" | grep -v auto_lineage) $PWD &> blobtools.log
+   	blobtools view --plot --view snail $PWD
 
 	# Visualization of telomeres and corrected reads coverage (tapestry)
 	if [ ! -z "$correctedReads" ]; then
-		mkdir -p $dir/7.Stats/tapestry; cd $dir/7.Stats/tapestry/
+		mkdir -p $dir/7.Stats/tapestry_results; cd $dir/7.Stats/tapestry_results/
 		if [[ $correctedReads == *.fasta.gz || $correctedReads == *.fa.gz ]]; then
 			pigz -p $cores -dc $correctedReads | seqtk seq -F '#' - | pigz -c -p $cores --fast > $(basename $correctedReads).fq.gz
 			weave -a ../../$name.ILRA.fasta -r $(basename $correctedReads).fq.gz -t TTAGGG CTTATT $telomere_seq_1 $telomere_seq_2 -o out -c $cores &> weave_log_out.txt
