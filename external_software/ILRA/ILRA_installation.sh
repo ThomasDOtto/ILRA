@@ -127,9 +127,9 @@ ln -sf $conda_envs_path/ILRA_env_syri/bin/time time
 
 #### Install jvarkit:
 echo -e "\n\n\nI'm installing jvarkit v2021.10.13 to match java in ILRA_env...\n\n\n"
-wget -q https://github.com/lindenb/jvarkit/archive/refs/tags/2021.10.13.tar.gz; tar xzf 2021.10.13.tar.gz; rm 2021.10.13.tar.gz; mv jvarkit-2021.10.13/ jvarkit
+git clone https://github.com/lindenb/jvarkit.git && cd jvarkit && git checkout 2021.10.13
 JAVA_HOME=$conda_envs_path/ILRA_env
-cd jvarkit && ./gradlew -q samfixcigar && mv dist/samfixcigar.jar ../samfixcigar.jar
+./gradlew -q samfixcigar && mv dist/samfixcigar.jar ../samfixcigar.jar
 
 #### Install bbtools:
 echo -e "\n\n\nI'm installing bbtools...\n\n\n"
