@@ -58,11 +58,11 @@ export PATH=$(dirname $conda_exec):$PATH
 conda install -y -q -c conda-forge mamba
 echo -e "\n\nInstalling ILRA_env...\n\n"
 mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_1.yml && echo -e "\n\nDONE...\n\n"
-echo -e "\n\nInstalling ILRA_env...\n\n"
+echo -e "\n\nInstalling ILRA_env_busco...\n\n"
 mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_2.yml && echo -e "\n\nDONE...\n\n"
-echo -e "\n\nInstalling ILRA_env...\n\n"
+echo -e "\n\nInstalling ILRA_env_quast...\n\n"
 mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_3.yml && echo -e "\n\nDONE...\n\n"
-echo -e "\n\nInstalling ILRA_env...\n\n"
+echo -e "\n\nInstalling ILRA_env_syri...\n\n"
 mamba env create -q --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_4.yml && echo -e "\n\nDONE...\n\n"
 echo -e "\n\nInstalling bioconductor cogeqc and blobtoolkit...\n\n"
 $conda_envs_path/ILRA_env_busco/bin/Rscript -e 'BiocManager::install("cogeqc")' # A package not in conda as of yet
