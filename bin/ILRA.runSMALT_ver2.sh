@@ -24,6 +24,7 @@ fastqR=$5
 resultname=$6
 insertSize=$7
 threads=$8
+bam_compress_level=$9 # From 0 (equivalent to -u) to 9 (best)
 tmp=$$
 
 if [ -z "$genome" ] || [ -z "$kmer" ] || [ -z "$stepsize" ] || [ -z "$fastqF" ] || [ -z "$insertSize" ] ; then
@@ -35,9 +36,9 @@ fi
 ### Executing smalt...
 smalt index -k $kmer -s $stepsize Genome.index.$tmp $genome > out.$tmp.txt
 if [ "$fastqR" = "0" ] ; then
-	smalt map -n $threads -f samsoft Genome.index.$tmp $fastqF | samtools view -@ $threads -f 0x2 -u - | samtools sort -@ $threads -u -m 2G --write-index -o $resultname.bam##idx##$resultname.bam.bai - >> out.$tmp.txt
+	smalt map -n $threads -f samsoft Genome.index.$tmp $fastqF | samtools view -@ $threads -f 0x2 -u - | samtools sort -@ $threads -l $bam_compress_level -m 2G --write-index -o $resultname.bam##idx##$resultname.bam.bai - >> out.$tmp.txt
 else
-	smalt map -n $threads -f samsoft -i $insertSize Genome.index.$tmp $fastqF $fastqR | samtools view -@ $threads -f 0x2 -u - | samtools sort -@ $threads -u -m 2G --write-index -o $resultname.bam##idx##$resultname.bam.bai - >> out.$resultname.$tmp.txt
+	smalt map -n $threads -f samsoft -i $insertSize Genome.index.$tmp $fastqF $fastqR | samtools view -@ $threads -f 0x2 -u - | samtools sort -@ $threads -l $bam_compress_level -m 2G --write-index -o $resultname.bam##idx##$resultname.bam.bai - >> out.$resultname.$tmp.txt
 	smaltOK=$?
 	if [ $smaltOK -ne 0 ] ; then
 		echo "Problems with SMALT: $smaltOK"
