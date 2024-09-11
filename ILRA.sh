@@ -559,7 +559,7 @@ if [[ $debug == "all" || $debug == "step2b" ]]; then
 	cd $dir/2.MegaBLAST
 	if [ -f $illuminaReads\_1.fastq.gz ]; then
 		echo -e "SMALT parameters are: k-mer size=20, step-size=3, insert size range="$InsertsizeRange". Please check SMALT help and change manually within the pipeline (section 2b) these parameters if needed"
-		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" ILRA.runSMALT_ver2.sh 02.assembly.fa 20 3 $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz first $InsertsizeRange $cores &> ILRA.runSMALT_ver2.sh_log_out.txt
+		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" ILRA.runSMALT_ver2.sh 02.assembly.fa 20 3 $illuminaReads\_1.fastq.gz $illuminaReads\_2.fastq.gz first $InsertsizeRange $cores 9 &> ILRA.runSMALT_ver2.sh_log_out.txt
 		echo -e "Check out the log of ILRA.runSMALT_ver2.sh in the file ILRA.runSMALT_ver2.sh_log_out.txt"
 	# Find overlaps
 		ILRA.findoverlaps_ver3.pl Blast.merge.blast.length first.bam 02.assembly.fa OUT $merging_coverage_threshold $merging_coverage_deviation 1> ILRA.findoverlaps_ver3.pl_log_out.txt 2> ILRA.findoverlaps_ver3.pl_log_out_perl_warnings_errors.txt
