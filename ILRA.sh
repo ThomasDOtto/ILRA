@@ -61,7 +61,8 @@ for argument in $options; do
 		-q | -quality_assesment # Whether to execute the final step 7, which may be slow, for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... ('no'/'yes' by default)
 		-Q | -BUSCO database for quality assessment # The name of the BUSCO database to be used in the quality assessment step. Automatic lineage selected by default if user does not input one of the datasets in 'busco --list-datasets' here (e.g. bacteria_odb10)
 		-Mj | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 240g=240GB used)
-		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
+		-lm | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
+		-ls | -low_space # Activate low space mode for iCORN2 and some steps (e.g., uncompressing fastq reads) are processed in /dev/shm ('yes'/'no' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (this is the default option)" && exit 1;;
 		-a*) assembly=${arguments[index]} ;;
 		-o*) dir=${arguments[index]} ;;
@@ -90,7 +91,8 @@ for argument in $options; do
 		-Mi*) megablast_identity=${arguments[index]} ;;
 		-Mc*) merging_coverage_threshold=${arguments[index]} ;;
 		-Md*) merging_coverage_deviation=${arguments[index]} ;;
-		-l*) low_mem=${arguments[index]} ;;
+		-lm*) low_mem=${arguments[index]} ;;
+  		-ls*) low_spa=${arguments[index]} ;;
 		-d*) debug=${arguments[index]} ;;
 		-D*) databases=${arguments[index]} ;;
 		-K*) kraken2_fast=${arguments[index]} ;;
@@ -138,6 +140,10 @@ export _JAVA_OPTIONS="-Xms5g -Xmx$java_memory"
 
 if [ -z "$low_mem" ]; then
 	low_mem="no"
+fi
+
+if [ -z "$low_spa" ]; then
+	low_spa="no"
 fi
 
 if [ -z "$parts_icorn2_split" ]; then
@@ -649,7 +655,7 @@ if [[ $debug == "all" || $debug == "step4" || $debug == "step4i" ]]; then
 			iCORN2_fragmentSize=500
 			echo "The iCORN2 fragment size used is iCORN2_fragmentSize=$iCORN2_fragmentSize. Please check iCORN2 help and change manually within the pipeline (section 4) if needed"
 			echo -e "Check out the log of icorn2.serial_bowtie2.sh in the files icorn2.serial_bowtie2.sh_log_out.txt and ../7.Stats/07.iCORN2.final_corrections.results.txt"
-			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn $blocks_size $cores $java_memory $parts_icorn2_split $low_mem &> icorn2.serial_bowtie2.sh_log_out.txt
+			\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" icorn2.serial_bowtie2.sh $illuminaReads $iCORN2_fragmentSize $dir/3.ABACAS2/03b.assembly.fa 1 $number_iterations_icorn $blocks_size $cores $java_memory $parts_icorn2_split $low_mem $low_spa &> icorn2.serial_bowtie2.sh_log_out.txt
 			for i in $(find $dir -type d -name "ICORN2_*"); do cd $i && tar cf out_all.tar *.out && rm -rf *.out; done; cd $dir/4.iCORN2 # Cleaning
 			if [ "$(find . -name "larger_contigs2.txt" | wc -l)" -gt 0 ]; then
 				echo -e "\nPlease note iCORN2 is likely going to fail if any of the sequences being processed is larger than or around 60Mb... The program tried to handle this and divide the input sequences accordingly but failed...\n"
