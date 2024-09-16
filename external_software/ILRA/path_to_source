@@ -1,20 +1,12 @@
 #### Get the directory of the script:
 export EXTERNAL_SOFTWARE_DIR=$(dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ))
-echo -e "\n"
-type conda >/dev/null 2>&1 || { echo >&2 "Conda is required to be installed... and is not being found in the PATH. I'm assuming conda has been installed within external_software/miniconda3 folder and adding to the path. Otherwise, please double check manually or install conda or add to PATH beforehand..."; export conda_within_ILRA="yes"; }
-
-if [ "$conda_within_ILRA" == "yes" ]; then
-	conda_dir=$EXTERNAL_SOFTWARE_DIR/miniconda3/bin
-else	
-	conda_dir=$(conda env list | grep ILRA_env | sed 's,.* /,/,g' | xargs dirname | sort | uniq | sed 's,envs,bin,g')
-fi
-
-conda_envs_path=$(echo $conda_dir | sed 's,/bin$,/envs,g')
+echo -e "\nPlease make sure of having conda in PATH before running this so the export commands below are correct\n"
 
 #### Set PATH:
+conda_envs_path=$EXTERNAL_SOFTWARE_DIR/ILRA
 echo -e "\n\n\nCheck out other environmental variables automatically set in ILRA.sh that may need to change...\n\n\n"
 echo -e "\n\nPlease behave and be mindful with any queueing system, the resources you are using, the versions of the software that are in the PATH and are being used... etc\n\n"
-echo -e "\nPlease run manually the following before execution of 'ILRA.sh':\nexport PATH=$conda_envs_path/ILRA_env_busco/bin:$conda_envs_path/ILRA_env/bin:$conda_dir:$(dirname $EXTERNAL_SOFTWARE_DIR):$(dirname $EXTERNAL_SOFTWARE_DIR)/bin:$EXTERNAL_SOFTWARE_DIR:$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$HOME/bin:$PATH\n\nexport PERL5LIB=$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2\n\nexport GATK_LOCAL_JAR=$conda_envs_path/ILRA_env/share/gatk4-4.3.0.0-0/gatk-package-4.3.0.0-local.jar\n\n"
+echo -e "\nPlease run manually the following before execution of 'ILRA.sh':\nexport PATH=$conda_envs_path/ILRA_env_busco/bin:$conda_envs_path/ILRA_env/bin:$(conda env list | grep -v "#" | head -1 | sed 's,.* ,,g')/bin:$(dirname $EXTERNAL_SOFTWARE_DIR):$(dirname $EXTERNAL_SOFTWARE_DIR)/bin:$EXTERNAL_SOFTWARE_DIR:$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2:$HOME/bin:$PATH\n\nexport PERL5LIB=$EXTERNAL_SOFTWARE_DIR/ABACAS2:$EXTERNAL_SOFTWARE_DIR/iCORN2\n\nexport GATK_LOCAL_JAR=$conda_envs_path/ILRA_env/share/gatk4-4.3.0.0-0/gatk-package-4.3.0.0-local.jar\n\n"
 
 
 
