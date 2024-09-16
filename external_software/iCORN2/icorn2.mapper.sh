@@ -30,10 +30,10 @@ samtools faidx $genome; mkdir -p $resultname
 echo -e "\nCalling Bowtie2..."
 if [ $low_mem_mode == "yes" ]; then
 	bowtie2-build --threads $((cores / 2)) $genome $genome &> $resultname/bowtiebuild.log_out.txt
-	bowtie2 -t -x $genome -p $((cores / 2)) -X $insertSize --very-sensitive -N 1 -L 31 --rdg 5,2 -1 "$readRoot"_1.fastq -2 "$readRoot"_2.fastq | awk -va=$readRoot '{if ($1~/^@/) {print} else {print $0"\tRG:Z:"a}}' | samtools view -@ $((cores / 2)) -f 0x2 -u -t $genome.fai - | samtools reheader -c 'sed "$ a\@RG\tID:$readRoot\tSM:1"' - | samtools sort -@ $((cores / 2)) -n -u -m 2G -o $resultname/out.bam -
+	bowtie2 -t -x $genome -p $((cores / 2)) -X $insertSize --very-sensitive -N 1 -L 31 --rdg 5,2 -1 "$readRoot"_1.fastq -2 "$readRoot"_2.fastq | awk -va=$readRoot '{if ($1~/^@/) {print} else {print $0"\tRG:Z:"a}}' | samtools view -@ $((cores / 2)) -f 0x2 -u -t $genome.fai - | samtools reheader -c 'sed "$ a\@RG\tID:$readRoot\tSM:1"' - | samtools sort -@ $((cores / 2)) -n -l 9 -m 2G -o $resultname/out.bam -
 elif [ $low_mem_mode == "no" ]; then
 	bowtie2-build --threads $cores $genome $genome &> $resultname/bowtiebuild.log_out.txt
-	bowtie2 -t -x $genome -p $cores -X $insertSize --very-sensitive -N 1 -L 31 --rdg 5,2 -1 "$readRoot"_1.fastq -2 "$readRoot"_2.fastq | awk -va=$readRoot '{if ($1~/^@/) {print} else {print $0"\tRG:Z:"a}}' | samtools view -@ $cores -f 0x2 -u -t $genome.fai - | samtools reheader -c 'sed "$ a\@RG\tID:$readRoot\tSM:1"' - | samtools sort -@ $cores -n -u -m 2G -o $resultname/out.bam -
+	bowtie2 -t -x $genome -p $cores -X $insertSize --very-sensitive -N 1 -L 31 --rdg 5,2 -1 "$readRoot"_1.fastq -2 "$readRoot"_2.fastq | awk -va=$readRoot '{if ($1~/^@/) {print} else {print $0"\tRG:Z:"a}}' | samtools view -@ $cores -f 0x2 -u -t $genome.fai - | samtools reheader -c 'sed "$ a\@RG\tID:$readRoot\tSM:1"' - | samtools sort -@ $cores -n -l 9 -m 2G -o $resultname/out.bam -
 fi
 rm $genome.* # Remove the bowtie2 index
 echo -e "\nBowtie2 DONE"
