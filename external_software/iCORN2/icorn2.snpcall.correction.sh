@@ -33,7 +33,7 @@ fi
 echo -e "\nPlease manually tweak the number of blocks for parallel processing or the number of contigs/sequences splitted if running into memory issues (e.g. incomplete files, freezing...) or using below a lower max value than min value:"
 echo -e "\nReadjusting java memory options: -Xms5g -Xmx$java_memory_reorder_sam\n"
 export _JAVA_OPTIONS="-Xms5g -Xmx$java_memory_reorder_sam"
-java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -Djava.io.tmpdir=../tmp_dir -jar $ICORN2_HOME/picard.jar ReorderSam -INPUT out.sorted.markdup.bam -OUTPUT $genome.bam -SEQUENCE_DICTIONARY ${genome%.*}.dict -REFERENCE_SEQUENCE $genome -S true -VERBOSITY WARNING -COMPRESSION_LEVEL 1 -CREATE_INDEX true -TMP_DIR ../tmp_dir
+java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -Djava.io.tmpdir=../tmp_dir -jar $ICORN2_HOME/picard.jar ReorderSam -INPUT out.sorted.markdup.bam -OUTPUT $genome.bam -SEQUENCE_DICTIONARY ${genome%.*}.dict -REFERENCE_SEQUENCE $genome -S true -VERBOSITY WARNING -COMPRESSION_LEVEL 9 -CREATE_INDEX true -TMP_DIR ../tmp_dir
 echo -e "\nReadjusting java memory options: -Xms5g -Xmx$java_memory\n"
 export _JAVA_OPTIONS="-Xms5g -Xmx$java_memory"
 
