@@ -284,7 +284,7 @@ for ((i=$start;$i<=$end;i++)); do
 # Executing sequentially each subset of the sequences
 		echo -e "Cores to be used to sequentially process each split sequence: $((cores / 2))"
 		for part in $(find . -name "*.fa" -exec basename {} \; | grep -v ref.fa); do
-			java -XX:-UseParallelGC -XX:ParallelGCThreads=$((cores / 2)) -Djava.io.tmpdir=../tmp_dir -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=1 CREATE_INDEX=true TMP_DIR=../tmp_dir
+			java -XX:-UseParallelGC -XX:ParallelGCThreads=$((cores / 2)) -Djava.io.tmpdir=../tmp_dir -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=9 CREATE_INDEX=true TMP_DIR=../tmp_dir
 			icorn2.snpcall.correction.sh $part $part.bam $((cores / 2)) $readRoot_uncompressed $fragmentSize $part.$(($i+1)) $i
 		done
 	fi
