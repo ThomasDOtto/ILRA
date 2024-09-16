@@ -13,6 +13,7 @@ cores=$7
 java_memory=$8; export java_memory # export to be used also in other scripts
 seq_parts=$9 # iCORN2 may be too slow if there are hundreds or thousands of contigs in the sequences to correct, because by default it divides the sequences and process the contigs in parallel and ReorderSam maps and gets the bam file for each one of them. When a number is provided in this parameter, iCORN2 divides the sequences in "seq_parts" parts, and then it process them in parallel
 low_mem_mode=${10}
+low_spa_mode=${11}
 export _JAVA_OPTIONS="-Xms10g -Xmx$java_memory"
 
 echo -e "We are automatically setting ICORN2_HOME to:"
@@ -43,6 +44,10 @@ echo -e "Current cores: $cores cores\n"
 
 if [ -z "$low_mem_mode" ] ; then
 	low_mem_mode="no"
+fi
+
+if [ -z "$low_spa_mode" ] ; then
+	low_spa_mode="no"
 fi
 
 if [ -z "$java_memory" ]; then
@@ -79,11 +84,15 @@ fi
 ### Decompressing the Illumina short reads...
 # This may be time-consuming, but unfortunately it is mandatory, since SNP-o-matic in the iCORN2's correction step does not allow gzipped .fastq
 # Since it's supossed to only use a core, decompression of both sets of pairs can be done simultaneously...
-if [ "$(find $PWD -name "*.fastq" | wc -l)" -eq 0 ]; then
+if [ $low_spa_mode == "no" ]; then
 	parallel --verbose --joblog processing_decompressing_log_out_2.txt -j 2 "pigz -dfc -p $cores $readRoot\_{}.fastq.gz > $PWD/"${readRoot##*/}"\_{}.fastq" ::: {1..2} &> processing_decompressing_log_out.txt
-	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_decompressing_log_out_2.txt > tmp && mv tmp processing_decompressing_log_out_2.txt	
+	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_decompressing_log_out_2.txt > tmp && mv tmp processing_decompressing_log_out_2.txt
+	readRoot_uncompressed=$PWD/"${readRoot##*/}"
+else
+	parallel --verbose --joblog processing_decompressing_log_out_2.txt -j 2 "pigz -dfc -p $cores $readRoot\_{}.fastq.gz > /dev/shm/"${readRoot##*/}"\_{}.fastq" ::: {1..2} &> processing_decompressing_log_out.txt
+	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_decompressing_log_out_2.txt > tmp && mv tmp processing_decompressing_log_out_2.txt
+	readRoot_uncompressed=/dev/shm/"${readRoot##*/}"
 fi
-readRoot_uncompressed=$PWD/"${readRoot##*/}"
 
 ### Executing iCORN2...
 for ((i=$start;$i<=$end;i++)); do
