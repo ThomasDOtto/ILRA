@@ -87,12 +87,12 @@ fi
 if [ $low_spa_mode == "no" ]; then
 	parallel --verbose --joblog processing_decompressing_log_out_2.txt -j 2 "pigz -dfc -p $cores $readRoot\_{}.fastq.gz > $PWD/"${readRoot##*/}"\_{}.fastq" ::: {1..2} &> processing_decompressing_log_out.txt
 	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_decompressing_log_out_2.txt > tmp && mv tmp processing_decompressing_log_out_2.txt
-	readRoot_uncompressed=$PWD/"${readRoot##*/}"
 else
 	parallel --verbose --joblog processing_decompressing_log_out_2.txt -j 2 "pigz -dfc -p $cores $readRoot\_{}.fastq.gz > /dev/shm/"${readRoot##*/}"\_{}.fastq" ::: {1..2} &> processing_decompressing_log_out.txt
 	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_decompressing_log_out_2.txt > tmp && mv tmp processing_decompressing_log_out_2.txt
-	readRoot_uncompressed=/dev/shm/"${readRoot##*/}"
+	ln -sf /dev/shm/"${readRoot##*/}*" .
 fi
+readRoot_uncompressed=$PWD/"${readRoot##*/}"
 
 ### Executing iCORN2...
 for ((i=$start;$i<=$end;i++)); do
@@ -335,5 +335,8 @@ small_deletions=$(echo "$input" | awk '{del+=$14} END{print del}' FS='[ ;]+' RS=
 echo -e "Corrected Pilon - SNPs: $snps\nCorrected Pilon - Ambiguous bases: $ambiguous_bases\nCorrected Pilon - Small insertions: $small_insertions\nCorrected Pilon - Small deletions: $small_deletions\n"
 		
 rm "$readRoot_uncompressed"_1.fastq "$readRoot_uncompressed"_2.fastq; rm -rf tmp_dir
+if [ $low_spa_mode == "yes" ]; then
+	rm /dev/shm/"${readRoot##*/}*"
+fi
 
 echo -e "\n\n\nTo look in into a correction, open the file ending with .1, .2, .3... in artemis and load the gff file onto it..."
