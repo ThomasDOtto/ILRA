@@ -48,9 +48,8 @@ fi
 
 #### Install packages via conda:
 echo -e "\n\nInstalling dependencies through conda...\n\n"
-echo -e "\n\n\nI'm downloading and installing several packages through conda in $conda_dir...\n\n\n"
 echo -e "First mamba replacing conda to reduce time, and then populating the environments based on the .yml files (keep in mind, this is frozen versions of the software)..."
-echo -e "The pathway to conda environments is $conda_envs_path...\n"
+echo -e "The pathway to conda environments is $EXTERNAL_SOFTWARE_DIR/ILRA/...\n"
 export PATH=$(conda env list | grep -v "#" | head -1 | sed 's,.* ,,g')/bin:$PATH
 conda install -y -q -c conda-forge mamba
 echo -e "\n\nInstalling ILRA_env...\n\n"
