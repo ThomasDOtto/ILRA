@@ -20,7 +20,7 @@ for argument in $options; do
 	index=`expr $index + 1`
 # Gather the parameters
 	case $argument in
-		-h*) echo "ILRA v1.4.2. usage: ILRA.sh [options]
+		-h*) echo "ILRA v1.5.3. usage: ILRA.sh [options]
 		-h | -help # Type this to get help
 		-a | -assembly # Name of the long reads assembly to correct (FASTA format, can be gzipped)
 		-f | -filter_contig_size # Size threshold (bp) to filter the contigs (by default, 5000)
@@ -62,7 +62,7 @@ for argument in $options; do
 		-Q | -BUSCO database for quality assessment # The name of the BUSCO database to be used in the quality assessment step. Automatic lineage selected by default if user does not input one of the datasets in 'busco --list-datasets' here (e.g. bacteria_odb10)
 		-Mj | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 240g=240GB used)
 		-lm | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
-		-ls | -low_space # Activate low space mode for iCORN2 and some steps (e.g., uncompressing fastq reads) are processed in /dev/shm ('yes'/'no' by default)
+		-ls | -low_space # Activate low space mode for iCORN2 and some steps (e.g., uncompressing fastq reads, iterative mapping, MarkDuplicatesSpark, etc) are processed in /dev/shm and occupy RAM ('yes'/'no' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (this is the default option)" && exit 1;;
 		-a*) assembly=${arguments[index]} ;;
 		-o*) dir=${arguments[index]} ;;
