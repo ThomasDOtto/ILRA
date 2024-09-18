@@ -88,7 +88,8 @@ usage: ILRA.sh [options]
 		-q | -quality_assesment # Whether to execute the final step 7, which may be slow, for assessing the quality of the corrected assembly, gathering sequences, analyzing telomeres... ('no'/'yes' by default)
 		-Q | -BUSCO database for quality assessment # The name of the BUSCO database to be used in the quality assessment step. Automatic lineage selected by default if user does not input one of the datasets in 'busco --list-datasets' here (e.g. bacteria_odb10)
 		-Mj | -java_memory # Max Java memory (heap space) to be used ('XXg', by default 240g=240GB used)
-		-l | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
+		-lm | -low_memory # Activate low memory mode for iCORN2 ('yes'/'no' by default)
+		-ls | -low_space # Activate low space mode for iCORN2 and some steps (e.g., uncompressing fastq reads, iterative mapping, MarkDuplicatesSpark, etc) are processed in /dev/shm and occupy RAM ('yes'/'no' by default)
 		-m | -mode # Add 'taxon' to execute decontamination based on taxonomic classification by kraken2, add 'blast' to execute decontamination based on BLAST against databases as requested by the DDBJ/ENA/Genbank submission, add 'both' to execute both approaches, and add 'light' to execute ILRA in light mode and skip these steps (this is the default option)
 ```
 
