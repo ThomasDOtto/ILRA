@@ -72,14 +72,20 @@ if [ $cores_split -eq 0 ]; then
 fi
 
 export low_mem_mode
-mkdir -p tmp_dir; export TMPDIR=$PWD/tmp_dir # make local temporal dir to store gatk and picard, amongst other temps...
+export low_spa_mode
+
+if [ $low_spa_mode == "no" ]; then
+	tmp_dir=$PWD/tmp_dir
+else
+	tmp_dir=/dev/shm/tmp_dir
+fi
+mkdir -p $tmp_dir; export TMPDIR=$tmp_dir # make local temporal dir to store gatk and picard, amongst other temps...
 
 ### Setting up the reference sequences...
 refRoot=$(echo $referenceORG | perl -nle '@ar=split(/\//); print $ar[($ar[scalar(@ar)]-1)]') # For getting a copy of the reference in the folder, without | in the name and single line:
 if [ ! -f "ICORN2.$refRoot.$start" ]; then
 	cat $referenceORG | perl -e 'while(<STDIN>) {if (/>(\S+)/){ chomp; s/\|/_/g; s/\./_/g; print "$_\n";} else {print}}' | awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' > ICORN2.$refRoot.$start
 fi
-
 
 ### Decompressing the Illumina short reads...
 # This may be time-consuming, but unfortunately it is mandatory, since SNP-o-matic in the iCORN2's correction step does not allow gzipped .fastq
@@ -116,7 +122,7 @@ for ((i=$start;$i<=$end;i++)); do
 	cd ICORN2_$i
 	ln -sf ../ICORN2.$refRoot.$i ref.fa
 # Separating the sequences and subsetting the alignment (with updated java, make sure not to use the java 1.7 that's required by iCORN2's GenomeAnalysisTK.jar, but a more recent one, for example the 1.8 that GATK requires))
-	echo -e "\nSeparating the sequences and analyzing them with parallel...\n"
+	echo -e "\nSeparating the sequences and analyzing them in parallel...\n"
 	echo "Make sure not to use the java 1.7 that's required by iCORN2's GenomeAnalysisTK.jar, but a more recent one, for example the 1.8 that GATK requires..."
 	# Separating the sequences and creating and array
 	# iCORN2 may be too slow if there are hundreds or thousands of contigs in the sequences to correct, because by default it divides the sequences and process the contigs in parallel and ReorderSam maps and gets the bam file for each one of them.
@@ -200,7 +206,7 @@ for ((i=$start;$i<=$end;i++)); do
 	#	eval $(grep "block=" processing_split_parts_faidx_log_out.txt | tail -1)
 	#done
 
-	parallel --verbose --joblog processing_split_parts_createseqdictionary_log_out_2.txt -j $cores java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary -R {}.fa -O {}.dict -TMP_DIR ../tmp_dir ::: $(echo ${arr[@]} | sed 's,.fa,,g') &> processing_split_parts_createseqdictionary_log_out.txt
+	parallel --verbose --joblog processing_split_parts_createseqdictionary_log_out_2.txt -j $cores java -XX:-UseParallelGC -XX:ParallelGCThreads=$cores -jar $ICORN2_HOME/picard.jar CreateSequenceDictionary -R {}.fa -O {}.dict -TMP_DIR $TMPDIR ::: $(echo ${arr[@]} | sed 's,.fa,,g') &> processing_split_parts_createseqdictionary_log_out.txt
 	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_split_parts_createseqdictionary_log_out_2.txt > tmp && mv tmp processing_split_parts_createseqdictionary_log_out_2.txt
 	# Manual parallelization if GNU's parallel is not available...
 	#count1=1; block=0
@@ -293,7 +299,7 @@ for ((i=$start;$i<=$end;i++)); do
 # Executing sequentially each subset of the sequences
 		echo -e "Cores to be used to sequentially process each split sequence: $((cores / 2))"
 		for part in $(find . -name "*.fa" -exec basename {} \; | grep -v ref.fa); do
-			java -XX:-UseParallelGC -XX:ParallelGCThreads=$((cores / 2)) -Djava.io.tmpdir=../tmp_dir -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=9 CREATE_INDEX=true TMP_DIR=../tmp_dir
+			java -XX:-UseParallelGC -XX:ParallelGCThreads=$((cores / 2)) -Djava.io.tmpdir=$TMPDIR -jar $ICORN2_HOME/picard.jar ReorderSam INPUT=out.sorted.markdup.bam OUTPUT=$part.bam SEQUENCE_DICTIONARY=${part%.*}.dict REFERENCE_SEQUENCE=$part S=true VERBOSITY=WARNING COMPRESSION_LEVEL=9 CREATE_INDEX=true TMP_DIR=$TMPDIR
 			icorn2.snpcall.correction.sh $part $part.bam $((cores / 2)) $readRoot_uncompressed $fragmentSize $part.$(($i+1)) $i
 		done
 	fi
@@ -323,7 +329,7 @@ for ((i=$start;$i<=$end;i++)); do
 	time2=`date +%s`
 	echo -e "\nIteration $i DONE"
 	echo -e "Elapsed time (secs): $((time2-time1))"; echo -e "Elapsed time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
-	rm -rf tmp_dir/*
+	rm -rf $TMPDIR/*
 done
 echo -e "\nDONE. Global submmary of corrections:"
 for f in $(find $PWD -name "*General.stats" | grep -v iter); do awk '/SNP|INS|DEL|HETERO|Rej.DEL|Rej.INS|Rej.SNP/ {category=$1; next} {sum[category]+=$2} END {for (i in sum) {print i, sum[i]}}' $f; done | awk '{sum[$1] += $2} END {for (i in sum) print "Corrected SNP-o-matic - " i, sum[i]}' | sort -k6
@@ -334,7 +340,7 @@ small_insertions=$(echo "$input" | awk '{ins+=$8} END{print ins}' FS='[ ;]+' RS=
 small_deletions=$(echo "$input" | awk '{del+=$14} END{print del}' FS='[ ;]+' RS='\n')
 echo -e "Corrected Pilon - SNPs: $snps\nCorrected Pilon - Ambiguous bases: $ambiguous_bases\nCorrected Pilon - Small insertions: $small_insertions\nCorrected Pilon - Small deletions: $small_deletions\n"
 		
-rm "$readRoot_uncompressed"_1.fastq "$readRoot_uncompressed"_2.fastq; rm -rf tmp_dir
+rm "$readRoot_uncompressed"_1.fastq "$readRoot_uncompressed"_2.fastq; rm -rf $TMPDIR/*
 if [ $low_spa_mode == "yes" ]; then
 	rm /dev/shm/"${readRoot##*/}*"
 fi
