@@ -31,7 +31,7 @@ else
 fi
 
 samtools faidx $genome 
-mkdir -p $output_folder/$resultname
+mkdir -p $output_folder/$resultname; mkdir -p $resultname
 
 ### Executing bowtie2...
 echo -e "\nCalling Bowtie2..."
