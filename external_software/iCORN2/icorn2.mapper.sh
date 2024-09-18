@@ -62,5 +62,5 @@ if [ "$return_markdup" != "0" ] ; then
 	echo -e "\nSorry, MarkDuplicatesSpark failed... Maybe due to excessive memory required? (consider using less cores, setting up Xmx in _JAVA_OPTIONS variable?). Maybe due to excessive open files (see ulimit -a)?. Maybe due to incorrect JAVA version (OpenJDK v8 is strictly required by GATK, and has to be in the PATH, double check the PATH)? Please check the log MarkDuplicatesSpark_log.out.txt to find more information...\n"
 	exit 1;
 else
-	rm $output_folder/$resultname/out.bam; echo -e "\nMarkDuplicates DONE"
+	rm $output_folder/$resultname/out.bam; rm -rf $TMPDIR/*; echo -e "\nMarkDuplicates DONE"
 fi
