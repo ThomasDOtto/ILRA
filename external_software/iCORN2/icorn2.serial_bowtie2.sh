@@ -96,7 +96,7 @@ if [ $low_spa_mode == "no" ]; then
 else
 	parallel --verbose --joblog processing_decompressing_log_out_2.txt -j 2 "pigz -dfc -p $cores $readRoot\_{}.fastq.gz > /dev/shm/"${readRoot##*/}"\_{}.fastq" ::: {1..2} &> processing_decompressing_log_out.txt
 	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_decompressing_log_out_2.txt > tmp && mv tmp processing_decompressing_log_out_2.txt
-	ln -sf /dev/shm/"${readRoot##*/}*" .
+	ln -sf /dev/shm/"${readRoot##*/}"* .
 fi
 readRoot_uncompressed=$PWD/"${readRoot##*/}"
 
