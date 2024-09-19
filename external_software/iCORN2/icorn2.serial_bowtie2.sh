@@ -232,6 +232,7 @@ for ((i=$start;$i<=$end;i++)); do
  	rm -rf $TMPDIR/*
 	if [ $low_spa_mode == "yes" ]; then
 		rm -rf /dev/shm/ICORN2_$i
+		rm (find . -name "*.dict")
 	fi 	
 done
 echo -e "\nDONE. Global submmary of corrections:"
