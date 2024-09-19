@@ -231,8 +231,7 @@ for ((i=$start;$i<=$end;i++)); do
 	
  	rm -rf $TMPDIR/*
 	if [ $low_spa_mode == "yes" ]; then
-		rm $(find ICORN2_$i -name "*.bam")
-  		rm -rf /dev/shm/ICORN2_$i
+		rm -rf /dev/shm/ICORN2_$i
 	fi 	
 done
 echo -e "\nDONE. Global submmary of corrections:"
