@@ -170,7 +170,19 @@ for ((i=$start;$i<=$end;i++)); do
 	fi
 	
 	arr=($(ls -lS | awk '{print $9}' | awk 'NF' | grep -v ref.fa | grep "splitter-part")); length_arr=${#arr[@]}; export length_arr
-		
+
+# Decompressing the Illumina short reads...
+# This may be time- and space-consuming, but unfortunately it is mandatory, since SNP-o-matic in the iCORN2's correction step does not allow gzipped .fastq (WIP in the future I'll fork and update the findknownspns software)
+	if [ $low_spa_mode == "no" ]; then
+	        parallel --verbose --joblog processing_decompressing_log_out_2.txt -j 2 "pigz -dfc -p $cores $readRoot\_{}.fastq.gz > $PWD/"${readRoot##*/}"\_{}.fastq" ::: {1..2} &> processing_decompressing_log_out.txt
+	        awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_decompressing_log_out_2.txt > tmp && mv tmp processing_decompressing_log_out_2.txt
+		readRoot=$PWD/"${readRoot##*/}"
+	else
+	        parallel --verbose --joblog processing_decompressing_log_out_2.txt -j 2 "pigz -dfc -p $cores $readRoot\_{}.fastq.gz > /dev/shm/"${readRoot##*/}"\_{}.fastq" ::: {1..2} &> processing_decompressing_log_out.txt
+	        awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_decompressing_log_out_2.txt > tmp && mv tmp processing_decompressing_log_out_2.txt
+	        readRoot=/dev/shm/"${readRoot##*/}"	
+	fi	
+
 # Parallel processing of the sequences...
 	parallel --verbose --joblog processing_split_parts_faidx_log_out_2.txt -j $cores samtools faidx {} ::: ${arr[@]} &> processing_split_parts_faidx_log_out.txt
 	awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' processing_split_parts_faidx_log_out_2.txt > tmp && mv tmp processing_split_parts_faidx_log_out_2.txt
@@ -230,6 +242,7 @@ for ((i=$start;$i<=$end;i++)); do
 	echo -e "Elapsed time (secs): $((time2-time1))"; echo -e "Elapsed time (hours): $(echo "scale=2; $((time2-time1))/3600" | bc -l)"
 	
  	rm -rf $TMPDIR/*
+	rm $readRoot*
 	if [ $low_spa_mode == "yes" ]; then
 		rm -rf /dev/shm/ICORN2_$i
 		rm (find . -name "*.dict")
