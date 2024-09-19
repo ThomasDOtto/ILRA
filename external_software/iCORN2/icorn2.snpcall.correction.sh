@@ -11,7 +11,7 @@ outname=$5
 iternum=$6
 
 if [ $low_spa_mode == "yes" ]; then
-	output_folder=/dev/shm
+	output_folder=/dev/shm/ICORN2_$iternum
 else
 	output_folder=$PWD
 fi
