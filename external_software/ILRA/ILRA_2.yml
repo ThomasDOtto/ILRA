@@ -27,7 +27,7 @@ dependencies:
   - bioconductor-xvector=0.38.0=r42hc0cfd56_0
   - bioconductor-zlibbioc=1.44.0=r42hc0cfd56_0
   - biopython=1.79=py37h540881e_2
-  - blast=2.13.0=hf3cf87c_0
+  - blast
   - boost-cpp=1.74.0=h75c5d50_8
   - bowtie2=2.5.1=py37hb24965f_0
   - busco=5.4.6=pyhdfd78af_0
