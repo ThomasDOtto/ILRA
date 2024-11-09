@@ -9,7 +9,7 @@ dependencies:
   - alsa-lib=1.2.8=h166bdaf_0
   - atk-1.0=2.38.0=hd4edc92_1
   - bedtools=2.30.0=h468198e_3
-  - blast=2.13.0=hf3cf87c_0
+  - blast
   - brotli=1.0.9=h166bdaf_8
   - brotli-bin=1.0.9=h166bdaf_8
   - bwa=0.7.17=h7132678_9
