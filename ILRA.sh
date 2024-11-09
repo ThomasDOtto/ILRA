@@ -894,6 +894,9 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			seq_mit=$(awk '/largest/,0' mito_sequences.out | awk 'NR!=1' | sort -n -k4 -r | head -n 1 | cut -f 1)
 			echo -e "\n#Contig chosen to be labelled as mitochondrion based on % identity (> 98.6%) and the largest alignments:" $seq_mit >> mito_sequences.out
 		fi
+		if [ "$(grep -c "Not a valid version" blast_mito_log_out.txt)" -gt 0 ]; then
+			echo -e "\nDOUBLE CHECK WHICH VERSIONS OF BLAST AND DATABASES ARE YOU USING, IT SEEMS THERE'S SOME MISMATCH AND SOMETHING FAILED, CHECK blast_mito_log_out.txt\n"
+  		fi
 	# 4. A database of ribosomal RNA genes
 		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" parallel --verbose --joblog blast_rrna_log_out_2.txt -j $blocks_size blastn -query {} -db $databases/rrna -task megablast -template_length 18 -template_type coding -window_size 120 -word_size 12 -xdrop_gap 20 -no_greedy -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -dust yes -evalue 1E-9 -gapextend 2 -gapopen 4 -penalty -4 -perc_identity 95 -reward 3 -soft_masking true -outfmt 7 -num_threads $((cores / blocks_size)) -out {}.rrna_genbank.out ::: ${arr[@]} &> blast_rrna_log_out.txt
 		awk -F"\t" 'NR==1; NR > 1{OFS="\t"; $3=strftime("%Y-%m-%d %H:%M:%S", $3); print $0}' blast_rrna_log_out_2.txt > tmp && mv tmp blast_rrna_log_out_2.txt
