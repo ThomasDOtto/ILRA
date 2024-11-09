@@ -51,8 +51,6 @@ for argument in $options; do
 		-Ol | -overlap_length # Threshold in the length of overlap to consider a contig contained into other (by default, 2000 bp)
 		-Oi | -overlap_identity # Threshold in the percentage of identity to consider a contig contained into other (by default, 99)
 		-Of | -overlap_fraction # Threshold in the fraction (percentage) of a contig contained into other to consider overlapping (by default, 90)
-		-Ml | -megablast_length # Threshold in the length of megaBLAST alignment to consider a contig contained into other (by default, 500 bp)
-		-Mi | -megablast_identity # Threshold in the percentage of identity in megablast to consider a potential contig contained into other (by default, 98)
 		-F | -filter_using_Illumina # Do you have even Illumina reads coverage? If yes contigs in the long reads assembly not covered by Illumina short reads by a certain threshold specified in other parameters will be filtered out ('no' /'yes' by default)		
 		-Mc | -merging_coverage_threshold # Threshold in the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.5)
 		-Md | -merging_coverage_deviation # Positive deviation to sum to the fraction of mean genome coverage (percentage) of Illumina short reads at an overlap between contigs to consider their merging (by default, 0.1)
@@ -87,8 +85,6 @@ for argument in $options; do
 		-Ol*) overlap_length=${arguments[index]} ;;
 		-Oi*) overlap_identity=${arguments[index]} ;;
 		-Of*) overlap_fraction=${arguments[index]} ;;
-		-Ml*) megablast_length=${arguments[index]} ;;
-		-Mi*) megablast_identity=${arguments[index]} ;;
 		-Mc*) merging_coverage_threshold=${arguments[index]} ;;
 		-Md*) merging_coverage_deviation=${arguments[index]} ;;
 		-lm*) low_mem=${arguments[index]} ;;
@@ -364,12 +360,6 @@ fi
 if [ -z "$overlap_fraction" ]; then
 	overlap_fraction=90
 fi
-if [ -z "$megablast_length" ]; then
-	megablast_length=500
-fi
-if [ -z "$megablast_identity" ]; then
-	megablast_identity=98
-fi
 if [ -z "$merging_coverage_threshold" ]; then
 	merging_coverage_threshold=0.5
 fi
@@ -539,16 +529,16 @@ if [[ $debug == "all" || $debug == "step2a" ]]; then
 			echo -e "\nThe MegaBLAST execution failed for some of the contigs, likely due to excessive RAM usage, please double check manually the log megablast_parallel_log_out_2_2.txt or look for support. Exiting for now...\n"
 			exit 1
 		fi
-		cat *.fa.blast | awk -v megablast_identity="$megablast_identity" -v megablast_length="$megablast_length" '$3>megablast_identity && $4>megablast_length && $1 != $2' > comp.self1.blast; rm *.fa *.fa.blast
+		cat *.fa.blast | awk -v overlap_identity="$overlap_identity" -v overlap_length="$overlap_length" '$3>overlap_identity && $4>overlap_length && $1 != $2' > comp.self1.blast; rm *.fa *.fa.blast
 	else
-		megablast -W 40 -F F -a $cores -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i $dir/1.Filtering/01.assembly.fa | awk -v megablast_identity="$megablast_identity" -v megablast_length="$megablast_length" '$3>megablast_identity && $4>megablast_length && $1 != $2' > comp.self1.blast
+		megablast -W 40 -F F -a $cores -m 8 -e 1e-80 -d $dir/1.Filtering/01.assembly.fa -i $dir/1.Filtering/01.assembly.fa | awk -v overlap_identity="$overlap_identity" -v overlap_length="$overlap_length" '$3>overlap_identity && $4>overlap_length && $1 != $2' > comp.self1.blast
 	fi
 	ILRA.addLengthBlast.pl $dir/1.Filtering/01.assembly.fa $dir/1.Filtering/01.assembly.fa comp.self1.blast &> /dev/null
 
 	#### 2a. Delete contained contigs
 	# We want the query to be always the smaller one
 	echo -e "\n\nSTEP 2a: Delete contained contigs starting..."; echo -e "Current date/time: $(date)\n"
-	awk -v overlap_identity="$overlap_identity" -v megablast_length="$megablast_length" '$3>overlap_identity && $4>megablast_length && $13 < $14' comp.self1.blast.length | ILRA.getOverlap.pl > 02.ListContained.txt
+	awk -v overlap_identity="$overlap_identity" -v overlap_length="$overlap_length" '$3>overlap_identity && $4>overlap_length && $13 < $14' comp.self1.blast.length | ILRA.getOverlap.pl > 02.ListContained.txt
 	cat 02.ListContained.txt | awk -v overlap_fraction="$overlap_fraction" '$4>overlap_fraction' | cut -f 1 > List.Contained.fofn
 	echo -e "\n### Excluded contigs that are contained in others: (MegaBLAST/ILRA.getOverlap.pl/ILRA.deleteContigs.pl)" >> ../Excluded.contigs.fofn
 	cat List.Contained.fofn >> ../Excluded.contigs.fofn
