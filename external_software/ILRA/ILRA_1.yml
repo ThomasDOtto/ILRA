@@ -14,8 +14,8 @@ dependencies:
   - bedtools=2.30.0=h468198e_3
   - binutils_impl_linux-64=2.40=hf600244_0
   - biopython=1.80=py311hd4cff14_0
-  - blast=2.13.0=hf3cf87c_0
-  - blast-legacy=2.2.26=h9ee0642_3
+  - blast
+  - blast-legacy
   - brotli=1.0.9=h166bdaf_8
   - brotli-bin=1.0.9=h166bdaf_8
   - brotlipy=0.7.0=py311hd4cff14_1005
