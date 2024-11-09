@@ -894,7 +894,7 @@ if [[ $debug == "all" || $debug == "step6" ]]; then
 			seq_mit=$(awk '/largest/,0' mito_sequences.out | awk 'NR!=1' | sort -n -k4 -r | head -n 1 | cut -f 1)
 			echo -e "\n#Contig chosen to be labelled as mitochondrion based on % identity (> 98.6%) and the largest alignments:" $seq_mit >> mito_sequences.out
 		fi
-		if [ "$(grep -c "Not a valid version" blast_mito_log_out.txt)" -gt 0 ]; then
+		if [ "$(grep -c 'Not a valid version' blast_mito_log_out.txt)" -gt 0 ]; then
 			echo -e "\nDOUBLE CHECK WHICH VERSIONS OF BLAST AND DATABASES ARE YOU USING, IT SEEMS THERE'S SOME MISMATCH AND SOMETHING FAILED, CHECK blast_mito_log_out.txt\n"
   		fi
 	# 4. A database of ribosomal RNA genes
