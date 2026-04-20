@@ -43,7 +43,7 @@ dependencies:
   - lerc=4.0.0
   - matplotlib-base=3.6.3
   - minimap2=2.24
-  - munkres=1.0.7
+  - munkres
   - ncurses=6.3
   - numpy=1.24.2
   - openjdk=17.0.3
@@ -54,49 +54,49 @@ dependencies:
   - pcre=8.45
   - pcre2=10.40
   - perl=5.32.1
-  - perl-archive-tar=2.40
-  - perl-b-cow=0.007
-  - perl-carp=1.38
-  - perl-clone=0.46
-  - perl-common-sense=3.75
-  - perl-compress-raw-bzip2=2.201
-  - perl-compress-raw-zlib=2.105
-  - perl-config-general=2.65
-  - perl-digest-perl-md5=1.9
-  - perl-encode=3.19
-  - perl-exporter=5.72
-  - perl-exporter-tiny=1.002002
-  - perl-extutils-makemaker=7.66
-  - perl-font-ttf=1.06
-  - perl-gd=2.76
-  - perl-io-compress=2.201
-  - perl-io-string=1.08
-  - perl-io-zlib=1.14
-  - perl-json=4.10
-  - perl-json-xs=2.34
-  - perl-list-moreutils=0.430
-  - perl-list-moreutils-xs=0.430
-  - perl-math-bezier=0.01
-  - perl-math-round=0.07
-  - perl-math-vecstat=0.08
-  - perl-module-implementation=0.09
-  - perl-module-runtime=0.016
-  - perl-number-format=1.75
-  - perl-params-validate=1.31
-  - perl-parent=0.236
-  - perl-pathtools=3.75
-  - perl-readonly=2.05
-  - perl-regexp-common=2017060201
-  - perl-scalar-list-utils=1.62
-  - perl-set-intspan=1.19
-  - perl-statistics-basic=1.6611
-  - perl-svg=2.87
-  - perl-test-fatal=0.016
-  - perl-text-format=0.62
-  - perl-time-hires=1.9764
-  - perl-try-tiny=0.31
-  - perl-types-serialiser=1.01
-  - perl-xml-parser=2.44_01
+  - perl-archive-tar
+  - perl-b-cow
+  - perl-carp
+  - perl-clone
+  - perl-common-sense
+  - perl-compress-raw-bzip2
+  - perl-compress-raw-zlib
+  - perl-config-general
+  - perl-digest-perl-md5
+  - perl-encode
+  - perl-exporter
+  - perl-exporter-tiny
+  - perl-extutils-makemaker
+  - perl-font-ttf
+  - perl-gd
+  - perl-io-compress
+  - perl-io-string
+  - perl-io-zlib
+  - perl-json
+  - perl-json-xs
+  - perl-list-moreutils
+  - perl-list-moreutils-xs
+  - perl-math-bezier
+  - perl-math-round
+  - perl-math-vecstat
+  - perl-module-implementation
+  - perl-module-runtime
+  - perl-number-format
+  - perl-params-validate
+  - perl-parent
+  - perl-pathtools
+  - perl-readonly
+  - perl-regexp-common
+  - perl-scalar-list-utils
+  - perl-set-intspan
+  - perl-statistics-basic
+  - perl-svg
+  - perl-test-fatal
+  - perl-text-format
+  - perl-time-hires
+  - perl-try-tiny
+  - perl-types-serialiser
+  - perl-xml-parser
   - pillow=9.4.0
   - pip=23.0
   - pixman=0.40.0

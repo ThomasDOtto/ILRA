@@ -63,7 +63,7 @@ dependencies:
   - meryl=1.3
   - minimap2=2.24
   - mummer4=4.0.0rc1
-  - munkres=1.0.7
+  - munkres
   - ncurses=6.3
   - numpy=1.24.2
   - openjdk=11.0.1
@@ -78,28 +78,28 @@ dependencies:
   - pcre=8.45
   - pcre2=10.40
   - perl=5.32.1
-  - perl-archive-tar=2.40
-  - perl-carp=1.38
-  - perl-common-sense=3.75
-  - perl-compress-raw-bzip2=2.201
-  - perl-compress-raw-zlib=2.105
-  - perl-constant=1.33
-  - perl-encode=3.19
-  - perl-exporter=5.72
-  - perl-exporter-tiny=1.002002
-  - perl-extutils-makemaker=7.66
-  - perl-file-util=4.201720
-  - perl-io-compress=2.201
-  - perl-io-zlib=1.14
-  - perl-json=4.10
-  - perl-json-xs=2.34
-  - perl-lib=0.63
-  - perl-list-moreutils=0.430
-  - perl-list-moreutils-xs=0.430
-  - perl-parent=0.236
-  - perl-pathtools=3.75
-  - perl-scalar-list-utils=1.62
-  - perl-types-serialiser=1.01
+  - perl-archive-tar
+  - perl-carp
+  - perl-common-sense
+  - perl-compress-raw-bzip2
+  - perl-compress-raw-zlib
+  - perl-constant
+  - perl-encode
+  - perl-exporter
+  - perl-exporter-tiny
+  - perl-extutils-makemaker
+  - perl-file-util
+  - perl-io-compress
+  - perl-io-zlib
+  - perl-json
+  - perl-json-xs
+  - perl-lib
+  - perl-list-moreutils
+  - perl-list-moreutils-xs
+  - perl-parent
+  - perl-pathtools
+  - perl-scalar-list-utils
+  - perl-types-serialiser
   - picard=2.27.5
   - pigz=2.6
   - pillow=9.2.0
