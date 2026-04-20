@@ -104,9 +104,10 @@ sed -i "s,/usr/bin/env Rscript,$EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env_busco/bin/Rs
 ## Fix and improve kraken2 2.1.2 within conda (i.e. fix download for database building and improve masking with parallel):
 # https://github.com/DerrickWood/kraken2/issues/518, you just have to manually replace 'ftp' by 'https' in the line 46 of the file 'rsync_from_ncbi.pl'
 echo -e "\n\n\nI'm fixing some issues with kraken2 v2.1.2... (i.e. fixing database download and improving database masking... please see the content and comments within the installation wrapper script)\n\n\n"
-sed -i 's,#^ftp:,#^https:,g' $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env/libexec/rsync_from_ncbi.pl
+K2_CONDA_PATH=$(find "/home/jlruiz/ILRA_tmp/ILRA/external_software/ILRA" -name "rsync_from_ncbi.pl" | xargs dirname)
+cd $K2_CONDA_PATH
+sed -i 's,#^ftp:,#^https:,g' rsync_from_ncbi.pl
 # database building is very slow, I incorporate this suggestion to paralelize, improving with multithreading and pipepart: https://github.com/DerrickWood/kraken2/pull/39
-cd $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env/libexec/
 set +H
 echo -e "#!/bin/bash\n" > temp
 echo "function mask_data_chunk () { MASKER=\$1; awk -v RS=\">\" -v FS=\"\n\" -v ORS=\"\" ' { if (\$2) print \">\"\$0 } ' | \$MASKER -in - -outfmt fasta | sed -e '/^>/!s/[a-z]/x/g' }; export -f mask_data_chunk" | cat - mask_low_complexity.sh |  sed 's,#!/bin/bash,,g' >> temp
