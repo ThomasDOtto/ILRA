@@ -8,8 +8,7 @@ ILRA is based on several standard tools and novel scripts. We suggest two altern
 1) The fastest option is to use the folder 'external_software', which contain some of the required software, a script to install dependencies (mainly through miniconda and downloading binaries), and a suggestion of the PATH to be set. To install and setup everything required to run ILRA, please execute:
 ```
 git clone https://github.com/ThomasDOtto/ILRA
-cd ILRA/external_software/ILRA/
-bash ILRA_installation.sh 2>&1 | tee ILRA_installation.sh.log # Check log to ensure successful installation of dependencies
+bash ILRA/external_software/ILRA/ILRA_installation.sh 2>&1 | tee ILRA/external_software/ILRA/ILRA_installation.sh.log # Check log to ensure successful installation of dependencies
 ```
 This should work systems-wide if you already have miniconda3 installed, and also install miniconda3 in the same directory if not available. Please make sure that your PATH is as clean as possible and that you have not activated other conda environment before installation (i.e. you are in the 'base' environment or without that conda feature activated). The versions of the tools installed by conda are frozen ('.yml' files), so please do not install other versions to avoid conflicts. You may need to manually change installed versions or please open an [issue](https://github.com/ThomasDOtto/ILRA/issues) for any installation-related aspect. The full instalation above, including 'git clone' of the repository, took ~40 minutes.
 
