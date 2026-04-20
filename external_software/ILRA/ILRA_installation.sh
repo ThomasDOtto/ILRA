@@ -151,9 +151,14 @@ ln -sf $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env_syri/bin/time time
 #### 6. Install more software:
 ## Install jvarkit:
 echo -e "\n\n\nI'm installing jvarkit v2021.10.13 to match java in ILRA_env...\n\n\n"
+cd /tmp
+rm -rf jvarkit
 git clone https://github.com/lindenb/jvarkit.git && cd jvarkit && git checkout 2021.10.13
-export JAVA_HOME=$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08 && export PATH=$JAVA_HOME/bin:$PATH
-./gradlew -q samfixcigar && mv dist/samfixcigar.jar ../samfixcigar.jar && cd $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env/bin/ && rm -rf jvarkit
+export JAVA_HOME=/scratch/jlruiz/build/ILRA/external_software/iCORN2/jdk8u302-b08
+export PATH=$JAVA_HOME/bin:$PATH
+./gradlew -q samfixcigar
+cp dist/samfixcigar.jar /scratch/jlruiz/build/ILRA/external_software/samfixcigar.jar
+cd /tmp && rm -rf jvarkit
 
 ## Install bbtools:
 echo -e "\n\n\nI'm installing bbtools...\n\n\n"
