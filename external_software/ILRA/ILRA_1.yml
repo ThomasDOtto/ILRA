@@ -3,6 +3,7 @@ dependencies:
   - alsa-lib=1.1.5
   - assembly-stats=1.0.1
   - bambamc=0.0.50
+  - bc=1.07.1
   - bedtools=2.30.0
   - biopython=1.80
   - blast
