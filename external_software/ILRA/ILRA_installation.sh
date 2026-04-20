@@ -149,17 +149,6 @@ ln -sf $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env_syri/bin/time time
 
 
 #### 6. Install more software:
-## Install jvarkit:
-echo -e "\n\n\nI'm installing jvarkit v2021.10.13 to match java in ILRA_env...\n\n\n"
-cd /tmp
-rm -rf jvarkit
-git clone https://github.com/lindenb/jvarkit.git && cd jvarkit && git checkout 2021.10.13
-export JAVA_HOME=/scratch/jlruiz/build/ILRA/external_software/iCORN2/jdk8u302-b08
-export PATH=$JAVA_HOME/bin:$PATH
-./gradlew -q samfixcigar
-cp dist/samfixcigar.jar /scratch/jlruiz/build/ILRA/external_software/samfixcigar.jar
-cd /tmp && rm -rf jvarkit
-
 ## Install bbtools:
 echo -e "\n\n\nI'm installing bbtools...\n\n\n"
 wget -q --tries=2 https://downloads.sourceforge.net/project/bbmap/BBMap_39.01.tar.gz; tar -xzf BBMap_39.01.tar.gz && rm BBMap_39.01.tar.gz
@@ -213,6 +202,15 @@ if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java ]]; then
   exit 1
 fi
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin && chmod 775 *
+
+## Install jvarkit:
+echo -e "\n\n\nI'm installing jvarkit v2021.10.13 to match java in ILRA_env...\n\n\n"
+git clone https://github.com/lindenb/jvarkit.git && cd jvarkit && git checkout 2021.10.13
+export JAVA_HOME=$EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08
+export PATH=$JAVA_HOME/bin:$PATH
+./gradlew -q samfixcigar
+cp dist/samfixcigar.jar $EXTERNAL_SOFTWARE_DIR/samfixcigar.jar
+rm -rf jvarkit
 
 echo -e "\n\n\nALL DONE. You must make sure that the directory $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env/bin/ is in the PATH before ILRA execution\n\n\n" && date
 
