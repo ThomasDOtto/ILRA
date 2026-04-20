@@ -15,6 +15,7 @@ dependencies:
   - bwakit=0.7.17.dev1
   - bwidget=1.9.14
   - bzip2=1.0.8
+  - canu=1.4
   - cairo=1.16.0
   - cffi=1.15.1
   - charset-normalizer=2.1.1

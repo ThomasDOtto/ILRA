@@ -32,7 +32,7 @@ else
 
     # Create directory and download installer without changing working directories
     mkdir -p "$EXTERNAL_SOFTWARE_DIR"
-    wget -qO Miniconda3-latest-Linux-x86_64.sh "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+    wget -qO --tries=2 Miniconda3-latest-Linux-x86_64.sh "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
     bash Miniconda3-latest-Linux-x86_64.sh -b -f -s -p "$EXTERNAL_SOFTWARE_DIR/miniconda3"
     rm Miniconda3-latest-Linux-x86_64.sh
 
@@ -157,19 +157,19 @@ JAVA_HOME=$EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env
 
 ## Install bbtools:
 echo -e "\n\n\nI'm installing bbtools...\n\n\n"
-wget -q https://downloads.sourceforge.net/project/bbmap/BBMap_39.01.tar.gz; tar -xzf BBMap_39.01.tar.gz && rm BBMap_39.01.tar.gz
+wget -q --tries=2 https://downloads.sourceforge.net/project/bbmap/BBMap_39.01.tar.gz; tar -xzf BBMap_39.01.tar.gz && rm BBMap_39.01.tar.gz
 ln -sf $(find bbmap/ -name "*.sh") .
 
 ## Install assembly-stats graphical:
 echo -e "\n\n\nI'm installing assembly-stats graphical...\n\n\n"
-wget -q https://github.com/rjchallis/assembly-stats/archive/refs/tags/17.02.tar.gz && tar -xzf 17.02.tar.gz && rm 17.02.tar.gz
+wget -q --tries=2 https://github.com/rjchallis/assembly-stats/archive/refs/tags/17.02.tar.gz && tar -xzf 17.02.tar.gz && rm 17.02.tar.gz
 ln -sf assembly-stats-17.02/pl/asm2stats.* .
 chmod 775 asm2stats.*
 sed -i 's,/usr/bin/perl -w,/usr/bin/env perl,g' asm2stats.*
 
 ## Install NGenomeSyn:
 echo -e "\n\n\nI'm installing NGenomeSyn...\n\n\n"
-wget -q https://github.com/hewm2008/NGenomeSyn/archive/v1.41.tar.gz && tar -xzf v1.41.tar.gz && rm v1.41.tar.gz
+wget -q --tries=2 https://github.com/hewm2008/NGenomeSyn/archive/v1.41.tar.gz && tar -xzf v1.41.tar.gz && rm v1.41.tar.gz
 chmod -R 775 NGenomeSyn-1.41/bin/*
 ln -sf NGenomeSyn-1.41/bin/GetTwoGenomeSyn.pl .; ln -sf NGenomeSyn-1.41/bin/NGenomeSyn .
 sed -i 's,/usr/bin/perl -w,/usr/bin/env perl,g' GetTwoGenomeSyn.pl
@@ -193,7 +193,7 @@ ln -sf $(find $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env -name picard.jar | head -1) p
 ln -sf $(which picard) picard
 ## Getting the outdated java version required for iCORN2:
 echo -e "I'm installing iCORN2...Getting JAVA v1.7 required by iCORN2's SNP caller"
-wget -q https://repo.huaweicloud.com/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz && tar -xzf jdk-7u80-linux-x64.tar.gz && rm jdk-7u80-linux-x64.tar.gz
+wget -q --tries=2 https://repo.huaweicloud.com/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz && tar -xzf jdk-7u80-linux-x64.tar.gz && rm jdk-7u80-linux-x64.tar.gz
 if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin/java ]]; then
   echo "Download/Installation of java failed, please check manually the script and logs..."
   exit 1
@@ -202,7 +202,7 @@ cd $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk1.7.0_80/bin && chmod 775 *
 ## Getting the outdated java version required for GATK
 echo -e "I'm installing iCORN2...Getting JAVA v1.8 required by GATK v4. This one must be in the PATH when executing iCORN2"
 cd $EXTERNAL_SOFTWARE_DIR/iCORN2
-wget -q https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz && tar -xzf OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz && rm OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz
+wget -q --tries=2 https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz && tar -xzf OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz && rm OpenJDK8U-jdk_x64_linux_hotspot_8u302b08.tar.gz
 if [[ ! -f $EXTERNAL_SOFTWARE_DIR/iCORN2/jdk8u302-b08/bin/java ]]; then
   echo "Download/Installation of java failed, please check manually the script and logs..."
   exit 1

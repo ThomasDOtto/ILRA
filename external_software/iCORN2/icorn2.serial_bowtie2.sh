@@ -88,7 +88,9 @@ if [ ! -f "ICORN2.$refRoot.$start" ]; then
 fi
 
 ### Executing iCORN2...
+readRootOriginal=$readRoot
 for ((i=$start;$i<=$end;i++)); do
+	readRoot=$readRootOriginal
 	echo -e "\n\n\n#### ITERATION ++++ $i"
 	if [ -f "ICORN2.$refRoot.$(($i+1))" ]; then 
 		echo "Skipping iteration $i, which apparently was already done"
@@ -99,6 +101,7 @@ for ((i=$start;$i<=$end;i++)); do
 	echo -e "\nCalling the mapper...\n"
 	echo -e "\n\n\n#### ITERATION ++++ $i" &>> icorn2.mapper_log_out.txt	
 	$ICORN2_HOME/icorn2.mapper.sh ICORN2.$refRoot.$i 13 3 $readRoot ICORN2_$i 1200 $cores &>> icorn2.mapper_log_out.txt
+	return_markdup=$?
 	if [ "$return_markdup" != "0" ] ; then
 		echo -e "\nSorry, icorn2.mapper.sh failed... Please check logs and try again\n"
 		exit 1;

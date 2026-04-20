@@ -7,6 +7,7 @@ cores <- args[4]
 
 path <- dirname(new_assembly)
 contigs_short <- unlist(strsplit(contigs_short,"|",fixed=T))
+contigs_short <- contigs_short[trimws(contigs_short) != ""]
 
 if(system.file(package="ggplot2")==""){print("Installing ggplot2...");install.packages("ggplot2",repos="https://cloud.r-project.org")}
 setwd(path); suppressMessages(library(ggplot2,quiet = T,warn.conflicts = F))
@@ -38,12 +39,16 @@ pdf("Contig_length_distribution_log2_after_filtering.pdf");print(p2);invisible(d
 
 
 print("Aligning the discarded sequences to the filtered assembly to assess redundancy...")
-# Index the filtered assembly:
-system(paste0('cd ',path,' && bowtie2-build --threads ',cores,' ',new_assembly,' tmp &> tmp.log && echo "Bowtie2 alignment of the discarded contigs back to the filtered assembly:" &>> Contigs_length_stats.txt'))
-# Make the previous assembly single line, extract the discarded contigs, concatenate in a single line, create a multifasta with 75 bp chunks
-system(paste0('cd ',path,' && awk \'/^>/{if(NR>1) printf("\\n"); printf("%s\\t",$0);next;} {printf("%s",$0);} END {printf("\\n");}\' ',prev_assembly,' | tr "\\t" "\\n" | egrep -A1 $(echo ',paste(contigs_short,collapse=" "),' | tr " " "|") | egrep -v "^-" | grep -v ">" | tr -d "\\n" | fold -w 75 | awk \'{print ">chunk_" NR "\\n" $0}\' > tmp.fasta'))
-# Align the discarded sequences (75 bp chunks) to the assembly, remove everything afterwards but the file Contigs_length_stats.txt will contain the alignment ratio:
-system(paste0('cd ',path,' && bowtie2 -f -t -x tmp -p ',cores,' --very-sensitive -U tmp.fasta -S tmp.sam &>> Contigs_length_stats.txt && rm tmp*'))
+if (length(contigs_short) > 0) {
+  # Index the filtered assembly:
+  system(paste0('cd ',path,' && bowtie2-build --threads ',cores,' ',new_assembly,' tmp > tmp.log 2>&1 && echo "Bowtie2 alignment of the discarded contigs back to the filtered assembly:" >> Contigs_length_stats.txt'))
+  # Make the previous assembly single line, extract the discarded contigs, concatenate in a single line, create a multifasta with 75 bp chunks
+  system(paste0('cd ',path,' && awk \'/^>/{if(NR>1) printf("\\n"); printf("%s\\t",$0);next;} {printf("%s",$0);} END {printf("\\n");}\' ',prev_assembly,' | tr "\\t" "\\n" | egrep -A1 $(echo \'',paste(contigs_short,collapse=" "), '\' | tr " " "|") | egrep -v "^-" | grep -v ">" | tr -d "\\n" | fold -w 75 | awk \'{print ">chunk_" NR "\\n" $0}\' > tmp.fasta'))
+  # Align the discarded sequences (75 bp chunks) to the assembly, remove everything afterwards but the file Contigs_length_stats.txt will contain the alignment ratio:
+  system(paste0('cd ',path,' && bowtie2 -f -t -x tmp -p ',cores,' --very-sensitive -U tmp.fasta -S tmp.sam >> Contigs_length_stats.txt 2>&1 && rm tmp*'))
+} else {
+  print("No contigs were discarded. Skipping alignment.")
+}
 
   
 

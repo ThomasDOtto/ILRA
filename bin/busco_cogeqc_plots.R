@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+#!/scratch/jlruiz/build/ILRA/external_software/ILRA/ILRA_env_busco/bin/Rscript
 args = commandArgs(trailingOnly=TRUE)
 path <- args[1]
 
