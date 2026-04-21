@@ -212,6 +212,6 @@ export PATH=$JAVA_HOME/bin:$PATH
 cp dist/samfixcigar.jar $EXTERNAL_SOFTWARE_DIR/samfixcigar.jar
 rm -rf jvarkit
 
-echo -e "\n\n\nALL DONE. You must make sure that the directory $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env/bin/ is in the PATH before ILRA execution\n\n\n" && date
+echo -e "\n\n\nALL DONE. Please make sure to handle properly PATH environments, see $EXTERNAL_SOFTWARE_DIR/ILRA/path_to_source before ILRA execution\n\n\n" && date
 
 
