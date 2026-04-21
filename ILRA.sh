@@ -617,13 +617,19 @@ if [[ $debug == "all" || $debug == "step3" ]]; then
 	# Save the contigs
 		# echo -e "\n### Overlapping contigs_2 (ABACAS2)" >> ../Excluded.contigs.fofn # Uncomment if ABA_CHECK_OVERLAP=1
 		# zcat *.overlap_report.gz >> ../Excluded.contigs.fofn # Uncomment if ABA_CHECK_OVERLAP=1
-		echo -e "\n### Final sequences not mapped to the reference: (ABACAS2, these are contained into the bin and are listed here but not removed)" >> ../Excluded.contigs.fofn
+		echo -e "\n### Contigs NOT mapped to the reference (excluded from the assembly going forward but saved in Res.abacasBin.fna for review):" >> ../Excluded.contigs.fofn
 		if [ -f Res.abacasBin.fna ]; then
 			grep ">" Res.abacasBin.fna >> ../Excluded.contigs.fofn
+			n_bin=$(grep -c ">" Res.abacasBin.fna)
+			n_mapped=$(grep -c ">" Genome.abacas.fasta 2>/dev/null || echo 0)
+			echo -e "\n*** WARNING: ABACAS2 placed $n_mapped contig(s) on the reference but $n_bin contig(s) could NOT be mapped and are EXCLUDED from the assembly going forward."
+			echo -e "    The excluded contigs are saved in $dir/3.ABACAS2/Res.abacasBin.fna and listed in Excluded.contigs.fofn for review."
+			echo -e "    Excluded contigs stats:"; assembly-stats Res.abacasBin.fna | head -n 2
 		else
 			echo "(No bin file produced by ABACAS2 - all contigs mapped to the reference)" >> ../Excluded.contigs.fofn
+			echo -e "\nAll contigs were successfully mapped to the reference by ABACAS2."
 		fi
-		echo -e "\n### Final sequences mapped to the reference: (ABACAS2, these are reordered and merged into new contigs corresponding to the reference)" >> ../Excluded.contigs.fofn
+		echo -e "\n### Contigs mapped to the reference (reordered and merged into pseudochromosomes by ABACAS2):" >> ../Excluded.contigs.fofn
 		for i in $(ls | grep .contigs.gff); do
 			echo "# "$(echo $i | sed 's/^[^.]*.\([^.]*\)..*/\1/')":" >> ../Excluded.contigs.fofn
 			cat $i | grep contig | awk '{ print $9 }' | sed 's/^[^"]*"\([^"]*\)".*/\1/' | sed 's/.*=//' >> ../Excluded.contigs.fofn
