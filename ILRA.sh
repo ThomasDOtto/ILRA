@@ -1336,7 +1336,9 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 		meryl print greater-than distinct=0.9998 merylDB > repetitive_k19.txt 2> meryl_print_log_out.txt
 		winnowmap -W repetitive_k19.txt -ax asm5 -t $cores ref_reduced_comp_assembly.fasta assembly_ILRA_reduced_comp_ref.fasta 2> winnowmap_log_out.txt | samtools view -@ $cores -h -F 260 -F 2048 -o plotsr.sam
 		javarkit_samfixcigar=$(for path in $(echo ${PATH//:/ } | cut -d" " -f1,2,3,4,5); do find $path -name samfixcigar.jar; done | head -1) # Look for the jar file in the first 5 folders in $PATH (which if installed with conda will capture ILRA_env/bin)
-		$(dirname $javarkit_samfixcigar)/java -jar $javarkit_samfixcigar -o plotsr_fix.sam -R ref_reduced_comp_assembly.fasta plotsr.sam # Updated java version and the precise pathway to the jar are required
+		javarkit_java=$(dirname $(dirname $(dirname $javarkit_samfixcigar)))/java # Navigate up from jvarkit/dist/ to the JDK bin/ containing java
+		if [ ! -f "$javarkit_java" ]; then javarkit_java=java; fi # Fallback to PATH java if the JDK structure differs
+		$javarkit_java -jar $javarkit_samfixcigar -o plotsr_fix.sam -R ref_reduced_comp_assembly.fasta plotsr.sam
 		# Get structural rearrangements (syri) and plotsr
 		\time -f "mem=%K RSS=%M elapsed=%E cpu.sys=%S .user=%U" syri -c plotsr_fix.sam -r ref_reduced_comp_assembly.fasta -q assembly_ILRA_reduced_comp_ref.fasta -F B --nc $cores --seed 1 --dir . --prefix plotsr_ &> syri_log_out.txt # syri fails if there are M in the bam cigar string, hence the reformat above
 		echo -e "#file\tname\ttags\n$PWD/ref_reduced_comp_assembly.fasta\treference\tlw:1.5\n$PWD/assembly_ILRA_reduced_comp_ref.fasta\tassembly\tlw:1.5" > genomes.txt
@@ -1368,8 +1370,14 @@ if [[ $debug == "all" || $debug == "step7" || $quality_step == "yes" ]]; then
 	asm2stats.minmaxgc.pl ../../$name.ILRA.fasta > output.minmaxgc.json
 	# https://github.com/blobtoolkit/blobtoolkit/wiki/Snail-plot#command-line
  	mkdir -p $dir/7.Stats/blobdir_results; cd $dir/7.Stats/blobdir_results
-  	blobtools create --fasta $(ls -d ../../* | egrep .fasta$) --busco $(find ../busco_results/ -name "full_table.tsv" | grep -v auto_lineage) $PWD &> blobtools.log
-   	blobtools view --plot --view snail $PWD
+	busco_tsv=$(find ../busco_results/ -name "full_table.tsv" | grep -v auto_lineage | head -1)
+	if [ -z "$busco_tsv" ]; then busco_tsv=$(find ../busco_results/ -name "full_table.tsv" | head -1); fi # Fallback to auto_lineage results
+	if [ ! -z "$busco_tsv" ]; then
+		blobtools create --fasta $(ls -d ../../* | egrep .fasta$) --busco $busco_tsv $PWD &> blobtools.log
+	else
+		blobtools create --fasta $(ls -d ../../* | egrep .fasta$) $PWD &> blobtools.log
+	fi
+	if [ -f $PWD/meta.json ]; then blobtools view --plot --view snail $PWD; fi
 
 	# Visualization of telomeres and corrected reads coverage (tapestry)
 	if [ ! -z "$correctedReads" ]; then
