@@ -164,4 +164,4 @@ dependencies:
   - pip:
       - circlator==1.5.5
       - pymummer==0.11.0
-      - pysam==0.20.0
+      - pysam==0.22.1
