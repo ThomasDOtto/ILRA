@@ -56,7 +56,7 @@ fi
 echo -e "\n\nInstalling dependencies through conda/mamba...\n\n"
 echo -e "Populating the environments based on the .yml files (keep in mind, this is frozen versions of the software)..."
 echo -e "The pathway to conda environments is $EXTERNAL_SOFTWARE_DIR/ILRA/...\n"
-$CONDA_INSTALL clean -afyq
+echo -e "Cleaning...\n" && $CONDA_INSTALL clean -afyq
 echo -e "\n\nInstalling ILRA_env...\n\n" && date
 $CONDA_INSTALL env create -c conda-forge -c bioconda --override-channels --channel-priority flexible -yq --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_1.yml --prefix $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env && echo -e "\n\nDONE... ILRA_env\n\n" && date || { echo >&2 "FATAL ERROR: Failed to install ILRA_env. Exiting script."; exit 1; }
 echo -e "\n\nInstalling ILRA_env_busco...\n\n" && date
@@ -65,7 +65,7 @@ echo -e "\n\nInstalling ILRA_env_quast...\n\n" && date
 $CONDA_INSTALL env create -c conda-forge -c bioconda --override-channels --channel-priority flexible -yq --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_3.yml --prefix $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env_quast && echo -e "\n\nDONE... ILRA_env_quast\n\n" && date || { echo >&2 "FATAL ERROR: Failed to install ILRA_env. Exiting script."; exit 1; }
 echo -e "\n\nInstalling ILRA_env_syri...\n\n" && date
 $CONDA_INSTALL env create -c conda-forge -c bioconda --override-channels --channel-priority flexible -yq --file $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_4.yml --prefix $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env_syri && echo -e "\n\nDONE... ILRA_env_syri\n\n" && date || { echo >&2 "FATAL ERROR: Failed to install ILRA_env. Exiting script."; exit 1; }
-$CONDA_INSTALL clean -afyq
+echo -e "Cleaning...\n" && $CONDA_INSTALL clean -afyq
 echo -e "\n\nInstalling bioconductor cogeqc and blobtoolkit...\n\n" && date
 $EXTERNAL_SOFTWARE_DIR/ILRA/ILRA_env_busco/bin/Rscript -e 'BiocManager::install("cogeqc")' # A package not in conda as of yet
 
